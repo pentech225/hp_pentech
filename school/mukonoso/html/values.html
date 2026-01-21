@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教室長挨拶・大切にしていること | iTeen 武庫之荘校</title>
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* メインセクション */
+        .values-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .values-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .values-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .value-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+        }
+        .value-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .value-icon {
+            font-size: 2rem;
+        }
+        .value-card p {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        .value-card ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        .value-card li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .value-highlight {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent);
+        }
+        .value-highlight p {
+            margin: 0;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        /* 教室長挨拶セクション */
+        .greeting-content {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+        .greeting-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .greeting-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            flex-shrink: 0;
+        }
+        .greeting-name {
+            flex: 1;
+        }
+        .greeting-name h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .greeting-name p {
+            color: #666;
+            font-size: 1rem;
+            margin: 0;
+        }
+        .greeting-message {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--text);
+        }
+        .greeting-message p {
+            margin-bottom: 20px;
+        }
+        .greeting-message p:last-child {
+            margin-bottom: 0;
+        }
+        .greeting-highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .header-brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-line-button {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .header-nav {
+                gap: 10px;
+            }
+            .header-nav a {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            .values-title {
+                font-size: 1.5rem;
+            }
+            .value-card {
+                padding: 20px;
+            }
+            .value-card h3 {
+                font-size: 1.2rem;
+            }
+            .greeting-content {
+                padding: 30px 20px;
+            }
+            .greeting-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .greeting-photo {
+                margin: 0 auto;
+            }
+            .greeting-message {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="values.html">大切にしていること</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="contact.html">お問い合わせ</a>
+            <a href="reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="values-section">
+        <div class="container">
+            <h1 class="values-title">大切にしていること</h1>
+            <p class="values-subtitle">iTeen 武庫之荘校がお子様の成長を支えるために、日々大切にしている想いをご紹介します</p>
+            
+            <!-- 教室長からのメッセージ -->
+            <div class="greeting-content">
+                <div class="greeting-header">
+                    <img src="../images/hikosaka_photo.png" alt="教室長 彦阪吉海" class="greeting-photo">
+                    <div class="greeting-name">
+                        <h2>彦阪吉海 教室長</h2>
+                        <p>iTeen武庫之荘校</p>
+                    </div>
+                </div>
+                
+                <div class="greeting-message">
+                    <p>兵庫県にお住まいの皆様こんにちは！</p>
+                    
+                    <p>iTeen武庫之荘校 教室長の彦阪です。</p>
+                    
+                    <p>プログラミングって、ちょっと難しそうに思えませんか？<br>
+                    でも実は、自分のアイデアが形になっていく――そんな感動を味わえる、ワクワクする"モノづくり"の世界なんです。</p>
+                    
+                    <p>iTeen武庫之荘校では、プログラミングの技術だけでなく、<span class="greeting-highlight">「自分の頭で考え、行動できる力」</span>を育てることを大切にしています。<br>
+                    将来、「これがやりたい！」と思えることに出会ったとき、迷わず一歩を踏み出せるようなスキルと経験、そして前向きな心――<br>
+                    それは、子どものうちから少しずつ育んでいけると、私は信じています。</p>
+                    
+                    <p>私自身、これまで多くの恩師に支えられ、励まされながら今の自分があります。<br>
+                    だからこそ、次は私が、子どもたちの背中をそっと押せる存在になりたい。<br>
+                    10年後、「あの教室に通って本当によかった」「ありがとう」――そう言ってもらえる教室にしたい。それが私の願いです。</p>
+                    
+                    <p>子どもたちは、自由な時間がある一方で、スマホやゲームなど、たくさんの誘惑にも囲まれています。<br>
+                    もちろん息抜きは大切。でも、ただ"消費"するだけの時間で終わらせるのは、少しもったいないとも思うのです。</p>
+                    
+                    <p>私自身、子どものころはレゴやお絵描きに夢中で、絵画教室にも通っていました。<br>
+                    何かを作って家族や友達に褒めてもらえると、「次はもっとすごいのを作ろう！」とワクワクしながら工夫を重ねていました。<br>
+                    そんな小さな体験が、今でも心の中にしっかり残っています。</p>
+                    
+                    <p>自分の手で何かを作る体験。自分でできることが増える喜び。<br>
+                    それは、きっとこれからの人生を支える、かけがえのない力になるはずです。</p>
+                    
+                    <p>iTeen武庫之荘校は、皆様のおかげで創立6年目を迎えました。<br>
+                    年齢や学校を越えて、同じ興味を持つ仲間と出会える場所。<br>
+                    アニメやゲームの話で盛り上がったり、得意なことを教え合ったり、<br>
+                    そんな何気ない時間も、きっと一生の思い出になります。</p>
+                    
+                    <p style="font-size: 1.1rem; font-weight: bold; color: var(--primary); margin-top: 30px;">
+                    まずは、ぜひ一度教室に遊びに来てください。<br>
+                    皆様にお会いできる日を、心より楽しみにしています！
+                    </p>
+                </div>
+            </div>
+            
+            <div class="value-card">
+                <h3>
+                    <span class="value-icon">🤝</span>
+                    一人ひとりに寄り添う個別指導
+                </h3>
+                <p>
+                    お子様一人ひとりの学習ペースや理解度は異なります。iTeen 武庫之荘校では、画一的なカリキュラムではなく、<strong>お子様の「今」に合わせた指導</strong>を心がけています。
+                </p>
+                <ul>
+                    <li>お子様の理解度に合わせて、丁寧に説明を繰り返します</li>
+                    <li>「わからない」をそのままにしない、徹底したサポート</li>
+                    <li>お子様の興味や目標に合わせて、学習内容を柔軟に調整</li>
+                    <li>小さな成長も見逃さず、しっかりと認めて励まします</li>
+                </ul>
+                <div class="value-highlight">
+                    <p>「置いてけぼりにしない」これが私たちの約束です。</p>
+                </div>
+            </div>
+
+            <div class="value-card">
+                <h3>
+                    <span class="value-icon">💡</span>
+                    楽しみながら学ぶ環境づくり
+                </h3>
+                <p>
+                    プログラミングは、本来とても楽しいものです。私たちは、<strong>お子様が「楽しい！」と感じられる授業</strong>を何よりも大切にしています。
+                </p>
+                <ul>
+                    <li>ゲーム感覚で学べるScratchやマインクラフトからスタート</li>
+                    <li>「できた！」という達成感を大切にしたカリキュラム</li>
+                    <li>お子様の「やりたい！」を尊重し、自由な発想を応援</li>
+                    <li>友達と一緒に作品を作る楽しさも体験できます</li>
+                </ul>
+                <div class="value-highlight">
+                    <p>楽しみながら学ぶことで、自然とプログラミングの力が身につきます。</p>
+                </div>
+            </div>
+
+            <div class="value-card">
+                <h3>
+                    <span class="value-icon">📚</span>
+                    学習習慣の定着をサポート
+                </h3>
+                <p>
+                    プログラミングのスキルだけでなく、<strong>「学習する習慣」</strong>も身につけていただきたいと考えています。将来、どんな道に進んでも役立つ力です。
+                </p>
+                <ul>
+                    <li>毎回届く「指導報告書」で、保護者様も学習内容を把握</li>
+                    <li>自習室を開放し、授業がない日も学習できる環境を提供</li>
+                    <li>学校の宿題も持ち込み可能で、総合的な学習をサポート</li>
+                </ul>
+                <div class="value-highlight">
+                    <p>学習習慣は、お子様の一生の財産になります。</p>
+                </div>
+            </div>
+
+            <div class="value-card">
+                <h3>
+                    <span class="value-icon">🤝</span>
+                    保護者様との信頼関係
+                </h3>
+                <p>
+                    お子様の成長は、保護者様との連携があってこそ実現します。私たちは、<strong>保護者様との信頼関係</strong>を何よりも大切にしています。
+                </p>
+                <ul>
+                    <li>毎回の授業後、指導報告書をメールでお送りします</li>
+                    <li>お子様の様子や成長を、こまめにお伝えします</li>
+                    <li>ご質問やご相談には、いつでもお応えします</li>
+                    <li>お子様の目標やご家庭の方針を尊重します</li>
+                </ul>
+                <div class="value-highlight">
+                    <p>保護者様と一緒に、お子様の成長を支えていきたいと考えています。</p>
+                </div>
+            </div>
+
+            <div class="value-card">
+                <h3>
+                    <span class="value-icon">💝</span>
+                    現場を知るエンジニアによる指導
+                </h3>
+                <p>
+                    教室長は、大手FAメーカーのエンジニアとして現場で活躍してきました。<strong>実際の現場で使われている技術や考え方</strong>を、お子様に直接伝えることができます。
+                </p>
+                <ul>
+                    <li>現場で培った実践的な知識と経験</li>
+                    <li>最新の技術動向にも対応した指導</li>
+                    <li>「なぜそうなるのか」を理論的に説明</li>
+                    <li>将来の進路や職業についても相談に乗ります</li>
+                </ul>
+                <div class="value-highlight">
+                    <p>現場を知るからこそ、本当に必要な力を伝えられます。</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="../index.html" class="btn-lg btn-accent" style="display: inline-block; padding: 15px 40px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 1.1rem; transition: all 0.2s;">
+                    戻る
+                </a>
+                <a href="reserve.html" class="btn-lg btn-accent" style="display: inline-block; padding: 15px 40px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 1.1rem; transition: all 0.2s;">
+                    無料体験で実感する →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+</body>
+</html>
+

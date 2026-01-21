@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ダークモードに対応させよう | 生徒作品 | iTeen 武庫之荘校</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        body.dark-mode header {
+            background: #2a2a2a;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .breadcrumb {
+            background: var(--white);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
+        }
+        body.dark-mode .breadcrumb {
+            background: #2a2a2a;
+            border-bottom-color: #444;
+        }
+        .breadcrumb a {
+            color: var(--primary);
+        }
+        .content-section {
+            padding: 40px 0;
+        }
+        .dark-mode-button {
+            background: #00CED1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        .dark-mode-button:hover {
+            background: #00B8C4;
+        }
+        body.dark-mode .dark-mode-button {
+            background: #00CED1;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .work-image {
+            max-width: 100%;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .work-image {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        body.dark-mode p {
+            color: #ffffff;
+        }
+        .description {
+            margin: 30px 0;
+            line-height: 1.8;
+        }
+        footer {
+            padding: 30px 20px;
+            text-align: center;
+            background: #444;
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+        body.dark-mode footer {
+            background: #1a1a1a;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            background: #E0951A;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../../index.html">
+            <img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo">
+        </a>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../../index.html">ホーム</a> &gt; <a href="index.html">生徒作品紹介</a> &gt; ダークモードに対応させよう
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+            <button class="dark-mode-button" id="darkModeButton">ダークモードにする</button>
+            
+            <h1>ダークモードに対応させよう</h1>
+            <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 20px;">👤 作成者: 高1 One Soul</p>
+            
+            <img src="images/dark-mode.png" alt="ダークモード対応の作品" class="work-image">
+            
+            <div class="description">
+                <p>今勉強しているJavaScriptの、参考書にあったやつのオマージュです。「ダークモードにする」という水色のボタンを押すと、背景色が黒に、文字の色が白に、そして水色のボタンが「ライトモードにする」という表記に替わります。作るのはそんなに難しくなかったのですが、ボタン一つで、好きなタイミングで複数の命令を実行することができるということに、当時は感動を覚え今もお気に入りの作品です。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+        <a href="index.html" class="back-link">作品一覧に戻る</a>
+    </footer>
+
+    <script>
+        const darkModeButton = document.getElementById('darkModeButton');
+        const body = document.body;
+        
+        // ローカルストレージからダークモードの状態を読み込む
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            body.classList.add('dark-mode');
+            darkModeButton.textContent = 'ライトモードにする';
+        }
+        
+        // ボタンクリック時の処理
+        darkModeButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                darkModeButton.textContent = 'ライトモードにする';
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                darkModeButton.textContent = 'ダークモードにする';
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>無料体験予約 | iTeen 武庫之荘校</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* 予約セクション */
+        .reservation-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .reservation-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .reservation-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .reservation-form {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+        .form-instruction {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: var(--text);
+            text-align: center;
+        }
+        .calendar-container {
+            background-color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            min-width: 0;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .month-year {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text);
+        }
+        .calendar-nav {
+            display: flex;
+            gap: 8px;
+        }
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-button:hover {
+            background-color: #357ABD;
+        }
+        .nav-button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .weekday-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--text);
+            padding: 8px 0;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 5px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            padding: 5px;
+            background-color: var(--white);
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        .calendar-day.other-month {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .calendar-day.past {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .calendar-day.selectable {
+            cursor: pointer;
+        }
+        .calendar-day.selectable:hover {
+            border-color: var(--primary);
+            background-color: #F0F7FF;
+            transform: scale(1.05);
+        }
+        .calendar-day.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        .calendar-day.today {
+            border-color: var(--accent);
+        }
+        .day-number {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+        .day-symbol {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .calendar-day.selected .day-symbol {
+            color: white;
+        }
+        .symbol-circle { color: #4CAF50; }
+        .symbol-triangle { color: #FF9800; }
+        .symbol-cross { color: #F44336; }
+        .date-section {
+            background-color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .date-section.show {
+            display: block;
+        }
+        .date-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .date-title .today-badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: normal;
+        }
+        .time-slots {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        .time-slot {
+            background-color: var(--white);
+            border: 2px solid #E0E0E0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .time-slot.available:hover {
+            border-color: var(--primary);
+            background-color: #F0F7FF;
+        }
+        .time-slot.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        .time-slot.unavailable {
+            background-color: #F5F5F5;
+            border-color: #CCCCCC;
+            color: #CCCCCC;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .time-slot-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8rem;
+        }
+        .time-slot.available .time-slot-icon {
+            color: var(--primary);
+        }
+        .time-slot.unavailable .time-slot-icon {
+            color: #CCCCCC;
+        }
+        .time-slot.selected .time-slot-icon {
+            color: white;
+        }
+        .submit-section {
+            background-color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .selected-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #F0F7FF;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: none;
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+        .selected-info.show {
+            display: block;
+        }
+        .submit-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 400px;
+        }
+        .submit-button:hover {
+            background-color: #E0951A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .submit-button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .profile-section {
+            background-color: var(--white);
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #E0E0E0;
+        }
+        .profile-message {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .school-type-selection-section {
+            background-color: var(--white);
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .school-type-selection-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .school-type-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .school-type-button {
+            background-color: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+        .school-type-button:hover {
+            background-color: #F0F7FF;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        .school-type-button.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+        .grade-selection-section {
+            background-color: var(--white);
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            display: none;
+        }
+        .grade-selection-section.show {
+            display: block;
+        }
+        .grade-selection-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .grade-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .grade-button {
+            background-color: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+        .grade-button:hover {
+            background-color: #F0F7FF;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        .grade-button.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+        .calendar-container {
+            display: none;
+        }
+        .calendar-container.show {
+            display: block;
+        }
+        .date-sections-container {
+            display: none;
+        }
+        .date-sections-container.show {
+            display: block;
+        }
+        .child-name-section {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .child-name-section.show {
+            display: block;
+        }
+        .child-name-notice {
+            background-color: #f0f8ff;
+            border-left: 4px solid var(--primary);
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        .child-name-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .child-name-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .child-name-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .child-name-input::placeholder {
+            color: #999;
+        }
+        .phone-section {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .phone-section.show {
+            display: block;
+        }
+        .phone-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .phone-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .phone-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .phone-input::placeholder {
+            color: #999;
+        }
+        .phone-input.error {
+            border-color: #F44336;
+            background-color: #ffebee;
+        }
+        .phone-error-message {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #ffebee;
+            border-left: 4px solid #F44336;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #c62828;
+            display: none;
+        }
+        .phone-error-message.show {
+            display: block;
+        }
+        .email-section {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .email-section.show {
+            display: block;
+        }
+        .email-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .email-input::placeholder {
+            color: #999;
+        }
+        .email-input.error {
+            border-color: #F44336;
+            background-color: #ffebee;
+        }
+        .email-error-message {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #ffebee;
+            border-left: 4px solid #F44336;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #c62828;
+            display: none;
+        }
+        .email-error-message.show {
+            display: block;
+        }
+        .message-section {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .message-section.show {
+            display: block;
+        }
+        .message-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .message-label .optional {
+            color: #999;
+            font-size: 0.85rem;
+            font-weight: normal;
+            margin-left: 4px;
+        }
+        .message-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            font-family: inherit;
+            min-height: 100px;
+            resize: vertical;
+        }
+        .message-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .message-textarea::placeholder {
+            color: #999;
+        }
+        .submit-section {
+            display: none;
+        }
+        .submit-section.show {
+            display: block;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 感謝ページ */
+        .thank-you-section {
+            display: none;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+        }
+        .thank-you-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            color: var(--text);
+        }
+        .thank-you-header .header-top,
+        .thank-you-header .header-brand,
+        .thank-you-header .header-logo,
+        .thank-you-header .header-school-name,
+        .thank-you-header .header-phone,
+        .thank-you-header .header-line-button,
+        .thank-you-header .header-nav,
+        .thank-you-header .header-nav a {
+            color: var(--text);
+        }
+        .thank-you-header .header-phone {
+            color: var(--primary);
+        }
+        .thank-you-footer {
+            padding: 20px;
+            text-align: center;
+            background: rgba(68, 68, 68, 0.8);
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        .thank-you-footer a {
+            color: white;
+            text-decoration: none;
+        }
+        .thank-you-footer a:hover {
+            text-decoration: underline;
+        }
+        .thank-you-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .thank-you-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .thank-you-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .thank-you-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .thank-you-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        .reservation-info-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .reservation-info-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff8e1;
+        }
+        .reservation-info-item {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 20px;
+            position: relative;
+        }
+        .reservation-info-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .expectation-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .expectation-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff8e1;
+        }
+        .expectation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .expectation-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .expectation-content {
+            flex: 1;
+        }
+        .expectation-content h4 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #fff8e1;
+        }
+        .expectation-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        .next-steps {
+            background: rgba(255, 248, 225, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 248, 225, 0.4);
+        }
+        .next-steps-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff8e1;
+        }
+        .next-steps-list {
+            text-align: left;
+            padding-left: 20px;
+        }
+        .next-steps-list li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .thank-you-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .thank-you-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .thank-you-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .thank-you-button.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        .thank-you-button.secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .header-brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-nav {
+                gap: 10px;
+            }
+            .header-nav a {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+            .calendar-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .calendar-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .calendar-weekdays {
+                gap: 3px;
+            }
+            .calendar-days {
+                gap: 3px;
+            }
+            .calendar-day {
+                padding: 3px;
+            }
+            .day-number {
+                font-size: 0.8rem;
+            }
+            .day-symbol {
+                font-size: 1rem;
+            }
+            .weekday-header {
+                font-size: 0.8rem;
+                padding: 6px 0;
+            }
+            .grade-buttons {
+                grid-template-columns: 1fr;
+            }
+            .school-type-buttons {
+                grid-template-columns: 1fr;
+            }
+            .thank-you-title {
+                font-size: 1.5rem;
+            }
+            .thank-you-subtitle {
+                font-size: 1rem;
+            }
+            .thank-you-icon {
+                font-size: 4rem;
+            }
+            .expectation-title {
+                font-size: 1.2rem;
+            }
+            .expectation-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            .expectation-content {
+                text-align: center;
+            }
+            .thank-you-actions {
+                gap: 10px;
+            }
+            .thank-you-button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="values.html">大切にしていること</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="../index.html#contact">お問い合わせ</a>
+        </nav>
+    </header>
+
+    <section class="reservation-section">
+        <div class="container">
+            <h2 class="reservation-title">📋 無料体験予約</h2>
+            
+            <!-- ハードルを下げるメッセージ -->
+            <div style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); text-align: center; border: 3px solid var(--accent);">
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 手ぶらでOK</strong> - 筆記用具やPCは教室で用意します</p>
+                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 当日予約OK</strong> - 空きがあれば当日でも予約可能です</p>
+                    <p style="font-size: 1rem; margin: 0;"><strong>✅ まずは楽しむだけでOK</strong> - 堅苦しい説明はありません</p>
+                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 完全無料</strong> - 一切費用はかかりません</p>
+                </div>
+            </div>
+            
+            <div class="reservation-form">
+                <!-- 学校区別選択セクション -->
+                <div class="school-type-selection-section" id="school-type-selection-section">
+                    <div class="school-type-selection-title">学校区別を選択してください</div>
+                    <div class="school-type-buttons">
+                        <button class="school-type-button" onclick="selectSchoolType('小学生')">小学生</button>
+                        <button class="school-type-button" onclick="selectSchoolType('中学・高校生')">中学・高校生</button>
+                        <button class="school-type-button" onclick="selectSchoolType('未就学児・その他')">未就学児・その他</button>
+                    </div>
+                </div>
+                
+                <!-- 学年選択セクション -->
+                <div class="grade-selection-section" id="grade-selection-section">
+                    <div class="grade-selection-title" id="grade-selection-title">学年を選択してください</div>
+                    <div class="grade-buttons" id="grade-buttons">
+                        <!-- 動的に生成されます -->
+                    </div>
+                </div>
+                
+                <div class="form-instruction" id="form-instruction" style="display: none;">
+                    ご希望の日付と時間帯をタップして予約を確定してください
+                </div>
+                
+                <div class="calendar-container" id="calendar-container">
+                    <div class="calendar-header">
+                        <div class="month-year" id="month-year">2025年1月</div>
+                        <div class="calendar-nav">
+                            <button class="nav-button" id="prev-month" onclick="changeMonth(-1)">← 前月</button>
+                            <button class="nav-button" id="next-month" onclick="changeMonth(1)">次月 →</button>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar-weekdays">
+                        <div class="weekday-header">日</div>
+                        <div class="weekday-header">月</div>
+                        <div class="weekday-header">火</div>
+                        <div class="weekday-header">水</div>
+                        <div class="weekday-header">木</div>
+                        <div class="weekday-header">金</div>
+                        <div class="weekday-header">土</div>
+                    </div>
+                    
+                    <div class="calendar-days" id="calendar-days"></div>
+                </div>
+                
+                <div class="date-sections-container" id="date-sections-container">
+                    <div id="date-sections"></div>
+                </div>
+                
+                <!-- 子供の名前入力セクション -->
+                <div class="child-name-section" id="child-name-section">
+                    <div class="child-name-notice">
+                        <strong>※個人情報の取り扱いについて</strong><br>
+                        ご入力いただいた情報は、無料体験の予約確認およびご連絡の目的のみに使用いたします。予約以外の目的で使用することはございません。
+                    </div>
+                    <label for="child-name-input" class="child-name-label">お子様のお名前を入力してください</label>
+                    <input 
+                        type="text" 
+                        id="child-name-input" 
+                        class="child-name-input" 
+                        placeholder="例：やまだ たろう"
+                        oninput="handleNameInput()"
+                        oncompositionstart="isComposing = true"
+                        oncompositionend="handleNameCompositionEnd()"
+                        onkeydown="handleNameKeyDown(event)"
+                        onblur="checkChildName()"
+                    >
+                </div>
+                
+                <!-- 電話番号入力セクション -->
+                <div class="phone-section" id="phone-section">
+                    <label for="phone-input" class="phone-label">電話番号を入力してください</label>
+                    <input 
+                        type="tel" 
+                        id="phone-input" 
+                        class="phone-input" 
+                        placeholder="例：09012345678"
+                        oninput="checkPhoneNumber()"
+                    >
+                    <div class="phone-error-message" id="phone-error-message">
+                        正しい電話番号を入力してください。10桁または11桁の数字を入力してください。
+                    </div>
+                </div>
+                
+                <!-- メールアドレス入力セクション -->
+                <div class="email-section" id="email-section">
+                    <label for="email-input" class="email-label">メールアドレスを入力してください<span class="optional">（任意）</span></label>
+                    <input 
+                        type="email" 
+                        id="email-input" 
+                        class="email-input" 
+                        placeholder="例：example@email.com"
+                        oninput="checkEmail()"
+                    >
+                    <div class="email-error-message" id="email-error-message">
+                        正しいメールアドレスを入力してください。
+                    </div>
+                </div>
+                
+                <!-- 自由記述欄 -->
+                <div class="message-section" id="message-section">
+                    <label for="message-textarea" class="message-label">ご質問・ご要望など<span class="optional">（任意）</span></label>
+                    <textarea 
+                        id="message-textarea" 
+                        class="message-textarea" 
+                        placeholder="ご質問やご要望がございましたら、こちらにご記入ください"
+                        oninput="updateMessage()"
+                    ></textarea>
+                </div>
+                
+                <div class="submit-section" id="submit-section">
+                    <div class="selected-info" id="selected-info"></div>
+                    <button class="submit-button" id="submit-button" onclick="submitReservation()" disabled>
+                        予約を確定する
+                    </button>
+                </div>
+
+                <!-- プロフィール/メッセージセクション -->
+                <div class="profile-section">
+                    <img src="../images/hikosaka_photo.png" alt="プロフィール" class="profile-image" onerror="this.style.display='none'">
+                    <div class="profile-message">
+                        <strong style="color: var(--primary);">小学2年生の母</strong><br>
+                        毎週楽しく通っています！プログラミングが好きになったようです。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 感謝ページ -->
+    <section class="thank-you-section" id="thank-you-section">
+        <!-- 感謝ページ用ヘッダー -->
+        <header class="thank-you-header">
+            <div class="header-top">
+                <div class="header-brand">
+                    <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                    <div class="header-school-name">武庫之荘校</div>
+                    <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+                </div>
+                <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                    💬 LINEで質問
+                </a>
+            </div>
+            <nav class="header-nav">
+                <a href="../index.html">ホーム</a>
+                <a href="../index.html#news">ニュース</a>
+                <a href="../index.html#courses">コース</a>
+                <a href="../index.html#teachers">講師</a>
+                <a href="values.html">大切にしていること</a>
+                <a href="../index.html#fee">料金</a>
+                <a href="../index.html#faq">よくある質問</a>
+                <a href="../index.html#access">アクセス</a>
+                <a href="../index.html#contact">お問い合わせ</a>
+            </nav>
+        </header>
+        
+        <div class="thank-you-container">
+            <div class="thank-you-icon">🎉</div>
+            <h2 class="thank-you-title">ご予約ありがとうございます！</h2>
+            <p class="thank-you-subtitle">無料体験授業の予約を受け付けました</p>
+            
+            <div class="reservation-info-box" id="reservation-info-box">
+                <div class="reservation-info-title">📅 予約情報</div>
+                <div class="reservation-info-item" id="reservation-date-item"></div>
+                <div class="reservation-info-item" id="reservation-time-item"></div>
+                <div class="reservation-info-item" id="reservation-name-item"></div>
+                <div class="reservation-info-item" id="reservation-phone-item" style="display: none;"></div>
+                <div class="reservation-info-item" id="reservation-email-item" style="display: none;"></div>
+                <div class="reservation-info-item" id="reservation-message-item" style="display: none;"></div>
+            </div>
+            
+            <div class="expectation-section">
+                <h3 class="expectation-title">✨ 体験授業でお楽しみいただけること</h3>
+                
+                <div class="expectation-item">
+                    <div class="expectation-icon">🎮</div>
+                    <div class="expectation-content">
+                        <h4>実際にプログラミングを体験</h4>
+                        <p>お子様の年齢や興味に合わせて、Scratchやマインクラフトなど、楽しくプログラミングを体験していただけます。初めてでも大丈夫！講師が優しくサポートします。</p>
+                    </div>
+                </div>
+                
+                <div class="expectation-item">
+                    <div class="expectation-icon">🤝</div>
+                    <div class="expectation-content">
+                        <h4>個別指導でお子様のペースに合わせて</h4>
+                        <p>一人ひとりに合わせた指導で、無理なく楽しく学べます。質問もしやすい雰囲気で、お子様の「できた！」を大切にします。</p>
+                    </div>
+                </div>
+                
+                <div class="expectation-item">
+                    <div class="expectation-icon">🏫</div>
+                    <div class="expectation-content">
+                        <h4>実際の教室の雰囲気を体験</h4>
+                        <p>教室の雰囲気や、他の生徒さんの様子もご覧いただけます。お子様が楽しく通える環境かどうか、実際にご確認ください。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="next-steps">
+                <h3 class="next-steps-title">📋 当日の流れ</h3>
+                <ul class="next-steps-list">
+                    <li><strong>1. ご来校</strong> - 教室にいらしてください（手ぶらでOK！）</li>
+                    <li><strong>2. 簡単なご説明</strong> - 教室のご紹介と、お子様の興味をお聞きします</li>
+                    <li><strong>3. プログラミング体験</strong> - 実際にプログラミングを楽しんでいただきます</li>
+                    <li><strong>4. ご質問・ご相談</strong> - 気になることは何でもお聞きください</li>
+                </ul>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
+                <p style="font-size: 1rem; line-height: 1.8; margin: 0;">
+                    <strong style="color: #fff8e1;">💝 お子様の「できた！」を一緒に喜びます</strong><br>
+                    体験授業では、お子様が楽しみながらプログラミングに触れられるよう、<br>
+                    講師が丁寧にサポートいたします。<br>
+                    お会いできるのを楽しみにしております！
+                </p>
+            </div>
+            
+            <div class="thank-you-actions">
+                <a href="../index.html" class="thank-you-button">ホームに戻る</a>
+                <a href="tel:06-6438-8277" class="thank-you-button secondary">📞 お問い合わせ: 06-6438-8277</a>
+            </div>
+        </div>
+        
+        <!-- 感謝ページ用フッター -->
+        <footer class="thank-you-footer">
+            <div class="container">
+                <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+                <p>&copy; 2025 iTeen 武庫之荘校</p>
+            </div>
+        </footer>
+    </section>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+
+    <script>
+        // 時間スロット
+        // 時間スロット（開始時刻と終了時刻のペア）
+        const timeSlots = [
+            { start: '8:10', end: '9:10' },
+            { start: '9:20', end: '10:20' },
+            { start: '10:30', end: '11:30' },
+            { start: '11:40', end: '12:30' },
+            { start: '13:40', end: '14:40' },
+            { start: '14:50', end: '15:50' },
+            { start: '16:00', end: '17:00' },
+            { start: '17:10', end: '18:10' },
+            { start: '18:20', end: '19:20' },
+            { start: '19:30', end: '20:30' },
+            { start: '20:40', end: '21:40' }
+        ];
+        
+        // 現在の日付
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // 選択された日時
+        let selectedDate = null;
+        let selectedTime = null;
+        
+        // 選択された学校区別と学年
+        let selectedSchoolType = null;
+        let selectedGrade = null;
+        
+        // 子供の名前
+        let childName = '';
+        
+        // 電話番号
+        let phoneNumber = '';
+        
+        // メールアドレス
+        let emailAddress = '';
+        
+        // 自由記述欄
+        let messageText = '';
+        
+        // IME入力状態
+        let isComposing = false;
+        
+        // 学年の定義
+        const gradeOptions = {
+            '小学生': ['小学1年生', '小学2年生', '小学3年生', '小学4年生', '小学5年生', '小学6年生'],
+            '中学・高校生': ['中学1年生', '中学2年生', '中学3年生', '高校1年生', '高校2年生', '高校3年生'],
+            '未就学児・その他': ['年少', '年中', '年長', 'その他']
+        };
+        
+        // 現在表示中の月
+        let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        
+        // 日付ごとの記号マッピング（例：丸、三角、バツ）
+        const dateSymbols = {};
+        
+        // 予約不可の日時（例：既に予約済み）
+        const unavailableTimes = {};
+        
+        // Google Calendar API設定
+        const GOOGLE_CALENDAR_CONFIG = {
+            calendarId: '16f6013dd3e06376074237fd9cf818e7287bb388ed28757e477058f90c97be52@group.calendar.google.com',
+            apiKey: 'AIzaSyCk05BaK1CeOJByKFI7ysVC5cdftqYWndw'
+        };
+        
+        // Googleカレンダーからイベントを取得
+        async function fetchGoogleCalendarEvents(startDate, endDate) {
+            try {
+                console.log('📅 Googleカレンダーから予約済み日時を取得中...');
+                const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(GOOGLE_CALENDAR_CONFIG.calendarId)}/events?` +
+                    `key=${GOOGLE_CALENDAR_CONFIG.apiKey}&` +
+                    `timeMin=${startDate.toISOString()}&` +
+                    `timeMax=${endDate.toISOString()}&` +
+                    `singleEvents=true&` +
+                    `orderBy=startTime`;
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        console.warn('⚠️ GoogleカレンダーAPI 403エラー: APIキーが無効か、カレンダーへのアクセス権限がありません。');
+                        console.warn('解決方法:');
+                        console.warn('1. Google Cloud ConsoleでAPIキーが正しく設定されているか確認');
+                        console.warn('2. Calendar APIが有効になっているか確認');
+                        console.warn('3. カレンダーが公開設定になっているか確認（設定 → カレンダーの統合 → このカレンダーを一般公開する）');
+                    } else {
+                        console.error('GoogleカレンダーAPI エラー:', response.status, response.statusText);
+                    }
+                    return [];
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error('GoogleカレンダーAPI エラー:', data.error);
+                    if (data.error.code === 403) {
+                        console.warn('⚠️ APIキーが無効か、カレンダーへのアクセス権限がありません。');
+                    }
+                    return [];
+                }
+                
+                const events = data.items || [];
+                console.log(`✅ ${events.length}件のイベントを取得しました`);
+                return events;
+            } catch (error) {
+                console.error('カレンダーイベント取得エラー:', error);
+                return [];
+            }
+        }
+        
+        // 予約済み時間帯を更新
+        async function updateUnavailableTimes() {
+            try {
+                const now = new Date();
+                const endDate = new Date(now);
+                endDate.setMonth(endDate.getMonth() + 1); // 今日から数えて1ヶ月先まで
+                
+                const events = await fetchGoogleCalendarEvents(now, endDate);
+                
+                // 予約済み時間帯をクリア
+                Object.keys(unavailableTimes).forEach(key => {
+                    delete unavailableTimes[key];
+                });
+                
+                // イベントから予約済み時間帯を抽出
+                events.forEach(event => {
+                    if (event.start && event.start.dateTime) {
+                        const eventDate = new Date(event.start.dateTime);
+                        const dateStr = formatDate(eventDate);
+                        const eventHour = eventDate.getHours();
+                        const eventMin = eventDate.getMinutes();
+                        const timeStr = `${String(eventHour).padStart(2, '0')}:${String(eventMin).padStart(2, '0')}`;
+                        
+                        // 時間スロットに一致するものを探す（開始時刻で完全一致または最も近いもの）
+                        let matchedTimeSlot = timeSlots.find(slot => slot.start === timeStr);
+                        
+                        // 完全一致がない場合、最も近い時間スロットを探す（±10分以内）
+                        if (!matchedTimeSlot) {
+                            matchedTimeSlot = timeSlots.find(slot => {
+                                const [slotHour, slotMin] = slot.start.split(':').map(Number);
+                                const timeDiff = Math.abs((eventHour * 60 + eventMin) - (slotHour * 60 + slotMin));
+                                return timeDiff <= 10; // 10分以内
+                            });
+                        }
+                        
+                        if (matchedTimeSlot) {
+                            if (!unavailableTimes[dateStr]) {
+                                unavailableTimes[dateStr] = [];
+                            }
+                            if (!unavailableTimes[dateStr].includes(matchedTimeSlot.start)) {
+                                unavailableTimes[dateStr].push(matchedTimeSlot.start);
+                            }
+                        }
+                    }
+                });
+                
+                console.log(`📌 ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}件の予約済み時間帯を登録しました`);
+                console.log('予約済み日時:', unavailableTimes);
+                
+                // カレンダーを再生成して反映
+                generateCalendar();
+                console.log('✅ カレンダーを更新しました');
+            } catch (error) {
+                console.error('予約済み時間帯の更新エラー:', error);
+            }
+        }
+        
+        // 日付をフォーマット（YYYY-MM-DD）
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // 日付文字列をフォーマット（YYYY/MM/DD (曜日)）
+        function formatDateDisplay(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const weekday = weekdays[date.getDay()];
+            return `${date.getFullYear()}/${month}/${day} (${weekday})`;
+        }
+        
+        // 今日かどうかを判定
+        function isToday(dateStr) {
+            return dateStr === formatDate(today);
+        }
+        
+        // 過去の日付かどうかを判定
+        function isPast(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date < today;
+        }
+        
+        // 1ヶ月先以降の日付かどうかを判定（今日から数えて1ヶ月後の同じ日まで）
+        // 例：今日が1月15日なら、2月15日の23:59:59まで予約可能
+        function isBeyondOneMonth(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            const oneMonthLater = new Date(today);
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+            oneMonthLater.setHours(23, 59, 59, 999); // 今日から1ヶ月後の同じ日の23:59:59まで
+            return date > oneMonthLater;
+        }
+        
+        // 日付の記号を取得（デフォルトは丸）
+        function getDateSymbol(dateStr) {
+            if (dateSymbols[dateStr]) {
+                return dateSymbols[dateStr];
+            }
+            // デフォルト：過去の日付または1ヶ月先以降の日付はバツ、それ以外は丸
+            if (isPast(dateStr) || isBeyondOneMonth(dateStr)) {
+                return 'cross';
+            }
+            return 'circle';
+        }
+        
+        // 記号の表示文字を取得
+        function getSymbolChar(symbol) {
+            switch(symbol) {
+                case 'circle': return '○';
+                case 'triangle': return '△';
+                case 'cross': return '×';
+                default: return '○';
+            }
+        }
+        
+        // 記号のクラス名を取得
+        function getSymbolClass(symbol) {
+            switch(symbol) {
+                case 'circle': return 'symbol-circle';
+                case 'triangle': return 'symbol-triangle';
+                case 'cross': return 'symbol-cross';
+                default: return 'symbol-circle';
+            }
+        }
+        
+        // カレンダーを生成
+        function generateCalendar() {
+            const container = document.getElementById('calendar-days');
+            container.innerHTML = '';
+            
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            
+            // 月の最初の日
+            const firstDay = new Date(year, month, 1);
+            // 月の最後の日
+            const lastDay = new Date(year, month + 1, 0);
+            // 月の最初の日の曜日（0=日曜日）
+            const startDay = firstDay.getDay();
+            // 月の日数
+            const daysInMonth = lastDay.getDate();
+            
+            // 前月の最後の数日を表示
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = startDay - 1; i >= 0; i--) {
+                const day = prevMonthLastDay - i;
+                const date = new Date(year, month - 1, day);
+                const dateStr = formatDate(date);
+                const dayElement = createDayElement(dateStr, day, true);
+                container.appendChild(dayElement);
+            }
+            
+            // 今月の日付
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dateStr = formatDate(date);
+                const dayElement = createDayElement(dateStr, day, false);
+                container.appendChild(dayElement);
+            }
+            
+            // 次月の最初の数日を表示（カレンダーを埋めるため）
+            const totalCells = container.children.length;
+            const remainingCells = 42 - totalCells; // 6週間分
+            for (let day = 1; day <= remainingCells; day++) {
+                const date = new Date(year, month + 1, day);
+                const dateStr = formatDate(date);
+                const dayElement = createDayElement(dateStr, day, true);
+                container.appendChild(dayElement);
+            }
+            
+            // 年月表示を更新
+            document.getElementById('month-year').textContent = 
+                `${year}年${month + 1}月`;
+            
+            // 前月ボタンの有効/無効を設定
+            const prevButton = document.getElementById('prev-month');
+            const minDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+            prevButton.disabled = currentMonth <= minDate;
+            
+            // 次月ボタンの有効/無効を設定（今日から数えて1ヶ月先まで）
+            // 例：今日が1月なら、2月まで表示可能、3月は表示不可
+            const nextButton = document.getElementById('next-month');
+            const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, 1); // 2ヶ月先の1日（3月1日）以降は表示不可
+            nextButton.disabled = currentMonth >= maxDate;
+        }
+        
+        // 日付要素を作成
+        function createDayElement(dateStr, day, isOtherMonth) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            
+            if (isOtherMonth) {
+                dayElement.classList.add('other-month');
+            }
+            
+            const isPastDate = isPast(dateStr);
+            const isBeyondOneMonthDate = isBeyondOneMonth(dateStr);
+            if (isPastDate && !isOtherMonth) {
+                dayElement.classList.add('past');
+            }
+            
+            const symbol = getDateSymbol(dateStr);
+            const symbolChar = getSymbolChar(symbol);
+            const symbolClass = getSymbolClass(symbol);
+            
+            // 記号がバツの場合、過去の日付、または1ヶ月先以降の日付は選択不可
+            if (symbol !== 'cross' && !isPastDate && !isBeyondOneMonthDate && !isOtherMonth) {
+                dayElement.classList.add('selectable');
+                dayElement.addEventListener('click', () => selectDate(dateStr, dayElement));
+            } else if (isBeyondOneMonthDate && !isOtherMonth) {
+                // 1ヶ月先以降の日付も選択不可として表示
+                dayElement.classList.add('past');
+            }
+            
+            if (isToday(dateStr) && !isOtherMonth) {
+                dayElement.classList.add('today');
+            }
+            
+            dayElement.innerHTML = `
+                <div class="day-number">${day}</div>
+                <div class="day-symbol ${symbolClass}">${symbolChar}</div>
+            `;
+            
+            return dayElement;
+        }
+        
+        // 日付を選択
+        function selectDate(dateStr, element) {
+            // 以前の選択を解除
+            document.querySelectorAll('.calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
+            });
+            
+            // 新しい選択
+            element.classList.add('selected');
+            selectedDate = dateStr;
+            selectedTime = null;
+            childName = ''; // 名前をリセット
+            phoneNumber = ''; // 電話番号をリセット
+            emailAddress = ''; // メールアドレスをリセット
+            messageText = ''; // 自由記述欄をリセット
+            document.getElementById('child-name-input').value = ''; // 入力フィールドをクリア
+            document.getElementById('phone-input').value = ''; // 電話番号入力フィールドをクリア
+            document.getElementById('email-input').value = ''; // メールアドレス入力フィールドをクリア
+            document.getElementById('message-textarea').value = ''; // 自由記述欄をクリア
+            
+            // 時間スロットセクションを表示
+            showTimeSlots(dateStr);
+            
+            // 選択情報を更新
+            updateSelectedInfo();
+            
+            // 子供の名前入力フィールドを非表示
+            document.getElementById('child-name-section').classList.remove('show');
+            // 電話番号入力フィールドを非表示
+            document.getElementById('phone-section').classList.remove('show');
+            // メールアドレス入力フィールドを非表示
+            document.getElementById('email-section').classList.remove('show');
+            
+            // 送信ボタンを無効化（時間を選択するまで）
+            document.getElementById('submit-button').disabled = true;
+            
+            // 時刻選択セクションにスクロール（少し遅延を入れて表示後にスクロール）
+            setTimeout(() => {
+                const dateSectionsContainer = document.getElementById('date-sections-container');
+                if (dateSectionsContainer) {
+                    dateSectionsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+        
+        // 時間スロットセクションを表示
+        function showTimeSlots(dateStr) {
+            // 既存のセクションを非表示
+            document.querySelectorAll('.date-section').forEach(section => {
+                section.classList.remove('show');
+            });
+            
+            // 該当する日付のセクションを探すか、新規作成
+            let dateSection = document.querySelector(`[data-date="${dateStr}"]`);
+            
+            if (!dateSection) {
+                dateSection = createDateSection(dateStr);
+                document.getElementById('date-sections').appendChild(dateSection);
+            }
+            
+            dateSection.classList.add('show');
+        }
+        
+        // 日付セクションを作成
+        function createDateSection(dateStr) {
+            const dateSection = document.createElement('div');
+            dateSection.className = 'date-section';
+            dateSection.setAttribute('data-date', dateStr);
+            
+            const dateTitle = document.createElement('div');
+            dateTitle.className = 'date-title';
+            dateTitle.innerHTML = formatDateDisplay(dateStr);
+            if (isToday(dateStr)) {
+                const todayBadge = document.createElement('span');
+                todayBadge.className = 'today-badge';
+                todayBadge.textContent = '本日';
+                dateTitle.appendChild(todayBadge);
+            }
+            dateSection.appendChild(dateTitle);
+            
+            const timeSlotsContainer = document.createElement('div');
+            timeSlotsContainer.className = 'time-slots';
+            
+            const unavailableForDate = unavailableTimes[dateStr] || [];
+            
+            timeSlots.forEach(slot => {
+                const timeSlot = document.createElement('div');
+                timeSlot.className = 'time-slot';
+                
+                const timeDisplay = `${slot.start}-${slot.end}`;
+                const isUnavailable = unavailableForDate.includes(slot.start);
+                
+                if (isUnavailable) {
+                    timeSlot.classList.add('unavailable');
+                    timeSlot.innerHTML = `
+                        <span class="time-slot-icon">×</span>
+                        <span>${timeDisplay}</span>
+                    `;
+                } else {
+                    timeSlot.classList.add('available');
+                    timeSlot.innerHTML = `
+                        <span class="time-slot-icon">◎</span>
+                        <span>${timeDisplay}</span>
+                    `;
+                    timeSlot.addEventListener('click', () => selectTimeSlot(dateStr, slot.start, timeSlot));
+                }
+                
+                timeSlotsContainer.appendChild(timeSlot);
+            });
+            
+            dateSection.appendChild(timeSlotsContainer);
+            return dateSection;
+        }
+        
+        // 時間スロットを選択
+        function selectTimeSlot(dateStr, time, element) {
+            // 選択された時間スロットの表示テキストを取得
+            const selectedTimeDisplay = element.querySelector('span:last-child').textContent;
+            
+            // 以前の選択を解除
+            document.querySelectorAll('.time-slot.selected').forEach(slot => {
+                slot.classList.remove('selected');
+                slot.classList.add('available');
+                const timeText = slot.querySelector('span:last-child').textContent;
+                slot.innerHTML = `
+                    <span class="time-slot-icon">◎</span>
+                    <span>${timeText}</span>
+                `;
+            });
+            
+            // 新しい選択
+            element.classList.remove('available');
+            element.classList.add('selected');
+            element.innerHTML = `
+                <span class="time-slot-icon">◎</span>
+                <span>${selectedTimeDisplay}</span>
+            `;
+            
+            selectedDate = dateStr;
+            selectedTime = time;
+            
+            // 送信ボタンの有効/無効を更新
+            updateSubmitButton();
+            
+            // 名前と電話番号とメールアドレスと自由記述欄をリセット
+            childName = '';
+            phoneNumber = '';
+            emailAddress = '';
+            messageText = '';
+            document.getElementById('child-name-input').value = '';
+            document.getElementById('phone-input').value = '';
+            document.getElementById('email-input').value = '';
+            document.getElementById('message-textarea').value = '';
+            
+            // 選択情報を更新
+            updateSelectedInfo();
+            
+            // 子供の名前入力フィールドを表示
+            document.getElementById('child-name-section').classList.add('show');
+            
+            // 電話番号入力フィールドは非表示
+            document.getElementById('phone-section').classList.remove('show');
+            // メールアドレス入力フィールドは非表示
+            document.getElementById('email-section').classList.remove('show');
+            
+            // 送信ボタンの有効/無効を更新（名前、電話番号、メールアドレスがリセットされたため無効になる）
+            updateSubmitButton();
+            
+            // 名前入力フィールドにスクロール
+            document.getElementById('child-name-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // 時刻を表示形式に変換（開始時刻-終了時刻）
+        function formatTimeDisplay(time) {
+            const selectedSlot = timeSlots.find(slot => slot.start === time);
+            return selectedSlot ? `${selectedSlot.start}-${selectedSlot.end}` : time;
+        }
+        
+        // 選択情報を更新する関数
+        function updateSelectedInfo() {
+            const selectedInfo = document.getElementById('selected-info');
+            let infoText = '';
+            
+            if (selectedDate && selectedTime) {
+                const timeDisplay = formatTimeDisplay(selectedTime);
+                infoText = `予約日時: ${formatDateDisplay(selectedDate)} ${timeDisplay}`;
+                
+                if (childName) {
+                    infoText += `\nお名前: ${childName}`;
+                }
+                
+                if (phoneNumber) {
+                    infoText += `\n電話番号: ${phoneNumber}`;
+                }
+                if (emailAddress) {
+                    infoText += `\nメールアドレス: ${emailAddress}`;
+                }
+                if (messageText) {
+                    infoText += `\nご質問・ご要望: ${messageText}`;
+                }
+            } else if (selectedDate) {
+                infoText = `予約日時: ${formatDateDisplay(selectedDate)}`;
+            }
+            
+            if (infoText) {
+                selectedInfo.textContent = infoText;
+                selectedInfo.classList.add('show');
+            } else {
+                selectedInfo.classList.remove('show');
+            }
+        }
+        
+        // 名前入力時の処理（IME入力中は遷移しない）
+        function handleNameInput() {
+            // IME入力中は何もしない
+            if (isComposing) {
+                return;
+            }
+            // 選択情報のみ更新（遷移はしない）
+            const nameInput = document.getElementById('child-name-input');
+            childName = nameInput.value.trim();
+            updateSelectedInfo();
+        }
+        
+        // IME入力完了時の処理
+        function handleNameCompositionEnd() {
+            isComposing = false;
+            // IME入力が完了したら、名前をチェック
+            checkChildName();
+        }
+        
+        // 名前入力フィールドのキーダウン処理
+        function handleNameKeyDown(event) {
+            // Enterキーが押されたら、IME入力が完了していなくても確定
+            if (event.key === 'Enter') {
+                isComposing = false;
+                event.preventDefault();
+                checkChildName();
+            }
+        }
+        
+        // 子供の名前をチェックして送信ボタンの有効/無効を切り替え
+        function checkChildName() {
+            const nameInput = document.getElementById('child-name-input');
+            childName = nameInput.value.trim();
+            
+            // 名前が入力されたら電話番号入力フィールドを表示
+            if (childName) {
+                document.getElementById('phone-section').classList.add('show');
+                // 電話番号入力フィールドにスクロール
+                document.getElementById('phone-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                document.getElementById('phone-section').classList.remove('show');
+                phoneNumber = '';
+                document.getElementById('phone-input').value = '';
+            }
+            
+            // メールアドレス入力欄の表示/非表示
+            if (phoneNumber && validateJapanesePhoneNumber(phoneNumber)) {
+                document.getElementById('email-section').classList.add('show');
+                // メールアドレス入力フィールドにスクロール
+                setTimeout(() => {
+                    document.getElementById('email-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else {
+                document.getElementById('email-section').classList.remove('show');
+                emailAddress = '';
+                document.getElementById('email-input').value = '';
+            }
+            
+            // 選択情報を更新
+            updateSelectedInfo();
+            
+            // 送信ボタンは電話番号が入力されるまで無効
+            checkPhoneNumber();
+        }
+        
+        // 日本国内の電話番号をバリデーション
+        function validateJapanesePhoneNumber(phone) {
+            // ハイフンやスペースを除去
+            const cleaned = phone.replace(/[-\s]/g, '');
+            
+            // 数字のみかチェック
+            if (!/^\d+$/.test(cleaned)) {
+                return false;
+            }
+            
+            // 10桁または11桁かチェック
+            if (cleaned.length !== 10 && cleaned.length !== 11) {
+                return false;
+            }
+            
+            // 0で始まるかチェック（日本国内の電話番号は0で始まる）
+            if (!cleaned.startsWith('0')) {
+                return false;
+            }
+            
+            // 携帯電話（090, 080, 070で始まる11桁）
+            if (cleaned.length === 11 && /^0[789]0/.test(cleaned)) {
+                return true;
+            }
+            
+            // 固定電話（10桁または11桁）
+            if (cleaned.length === 10 || cleaned.length === 11) {
+                // フリーダイヤル（0120, 0800など）
+                if (/^0(120|800|570|500|200|990|920|930|950|960|980|570)/.test(cleaned)) {
+                    return true;
+                }
+                // その他の固定電話
+                if (/^0[1-9]/.test(cleaned)) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        // 電話番号をチェックして送信ボタンの有効/無効を切り替え
+        function checkPhoneNumber() {
+            const phoneInput = document.getElementById('phone-input');
+            const errorMessage = document.getElementById('phone-error-message');
+            phoneNumber = phoneInput.value.trim();
+            
+            // 電話番号が入力されている場合、バリデーション
+            if (phoneNumber) {
+                const isValid = validateJapanesePhoneNumber(phoneNumber);
+                
+                if (isValid) {
+                    // 有効な電話番号
+                    phoneInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                    
+                    // メールアドレス入力欄を表示
+                    document.getElementById('email-section').classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('email-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                } else {
+                    // 無効な電話番号
+                    phoneInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    phoneNumber = ''; // 無効な場合は空にする
+                    
+                    // メールアドレス入力欄を非表示
+                    document.getElementById('email-section').classList.remove('show');
+                    emailAddress = '';
+                    document.getElementById('email-input').value = '';
+                }
+            } else {
+                // 入力がない場合はエラーを非表示
+                phoneInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+                
+                // メールアドレス入力欄を非表示
+                document.getElementById('email-section').classList.remove('show');
+                emailAddress = '';
+                document.getElementById('email-input').value = '';
+            }
+            
+            // 選択情報を更新
+            updateSelectedInfo();
+            
+            // 送信ボタンの有効/無効を更新
+            updateSubmitButton();
+        }
+        
+        // メールアドレスのバリデーション
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // メールアドレスをチェック
+        function checkEmail() {
+            const emailInput = document.getElementById('email-input');
+            const errorMessage = document.getElementById('email-error-message');
+            emailAddress = emailInput.value.trim();
+            
+            // メールアドレスが入力されている場合、バリデーション
+            if (emailAddress) {
+                const isValid = validateEmail(emailAddress);
+                
+                if (isValid) {
+                    // 有効なメールアドレス
+                    emailInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                    
+                    // 自由記述欄を表示
+                    document.getElementById('message-section').classList.add('show');
+                } else {
+                    // 無効なメールアドレス
+                    emailInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    emailAddress = ''; // 無効な場合は空にする
+                }
+            } else {
+                // 入力がない場合はエラーを非表示（任意項目なのでOK）
+                emailInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+                
+                // メールアドレスが空でも自由記述欄を表示
+                document.getElementById('message-section').classList.add('show');
+            }
+            
+            // 送信ボタンの有効/無効を更新
+            updateSubmitButton();
+        }
+        
+        // 自由記述欄を更新
+        function updateMessage() {
+            const messageTextarea = document.getElementById('message-textarea');
+            messageText = messageTextarea.value.trim();
+        }
+        
+        // 送信ボタンの有効/無効を更新
+        function updateSubmitButton() {
+            const submitButton = document.getElementById('submit-button');
+            
+            // 必須項目が入力されているかチェック（メールアドレスは任意）
+            const hasName = childName && childName.trim() !== '';
+            const hasPhone = phoneNumber && phoneNumber.trim() !== '' && validateJapanesePhoneNumber(phoneNumber);
+            const hasDate = selectedDate !== null;
+            const hasTime = selectedTime !== null;
+            
+            // 必須項目（名前、電話番号、日時）がすべて入力されている場合のみ送信ボタンを有効化
+            if (hasName && hasPhone && hasDate && hasTime) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+        
+        // 学校区別を選択
+        function selectSchoolType(schoolType) {
+            // 以前の選択を解除
+            document.querySelectorAll('.school-type-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 新しい選択
+            event.target.classList.add('selected');
+            selectedSchoolType = schoolType;
+            selectedGrade = null; // 学年をリセット
+            
+            // 学年選択ボタンを生成
+            const gradeButtonsContainer = document.getElementById('grade-buttons');
+            gradeButtonsContainer.innerHTML = '';
+            
+            const grades = gradeOptions[schoolType];
+            if (grades && grades.length > 0) {
+                grades.forEach(grade => {
+                    const button = document.createElement('button');
+                    button.className = 'grade-button';
+                    button.textContent = grade;
+                    button.onclick = function() { selectGrade(grade); };
+                    gradeButtonsContainer.appendChild(button);
+                });
+                
+                // 学年選択セクションを表示
+                document.getElementById('grade-selection-section').classList.add('show');
+                
+                // カレンダーとフォームは非表示のまま
+                document.getElementById('form-instruction').style.display = 'none';
+                document.getElementById('calendar-container').classList.remove('show');
+                document.getElementById('date-sections-container').classList.remove('show');
+                document.getElementById('submit-section').classList.remove('show');
+                
+                // 学年選択セクションにスクロール
+                document.getElementById('grade-selection-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // 学年を選択
+        function selectGrade(grade) {
+            // 以前の選択を解除
+            document.querySelectorAll('.grade-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 新しい選択
+            event.target.classList.add('selected');
+            selectedGrade = grade;
+            
+            // カレンダーとフォームを表示
+            document.getElementById('form-instruction').style.display = 'block';
+            document.getElementById('calendar-container').classList.add('show');
+            document.getElementById('date-sections-container').classList.add('show');
+            document.getElementById('submit-section').classList.add('show');
+            
+            // スクロールしてカレンダーが見えるように
+            document.getElementById('calendar-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // 月を変更（今日から数えて1ヶ月先まで）
+        function changeMonth(direction) {
+            const newMonth = new Date(currentMonth);
+            newMonth.setMonth(newMonth.getMonth() + direction);
+            
+            // 今日から1ヶ月先までしか進めない制限（2ヶ月先の1日以降は表示不可）
+            const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
+            if (direction === 1 && newMonth >= maxDate) {
+                return; // 今日から1ヶ月先を超える場合は何もしない
+            }
+            
+            currentMonth.setMonth(currentMonth.getMonth() + direction);
+            generateCalendar();
+        }
+        
+        // Google Apps ScriptのWebアプリURL（設定後、実際のURLに置き換えてください）
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBemLT63uE89nyfvSj7FOkgWSHLGg8CsfoPrBmv49Hqa0LHJutgGE8Y00Xrab--n7f/exec';
+        
+        // 予約を送信
+        function submitReservation() {
+            if (!selectedSchoolType) {
+                alert('学校区別を選択してください。');
+                return;
+            }
+            if (!selectedGrade) {
+                alert('学年を選択してください。');
+                return;
+            }
+            if (!selectedDate || !selectedTime) {
+                alert('時間帯を選択してください。');
+                return;
+            }
+            if (!childName || childName.trim() === '') {
+                alert('お子様のお名前を入力してください。');
+                document.getElementById('child-name-input').focus();
+                return;
+            }
+            if (!phoneNumber || phoneNumber.trim() === '') {
+                alert('電話番号を入力してください。');
+                document.getElementById('phone-input').focus();
+                return;
+            }
+            
+            // 電話番号のバリデーション
+            if (!validateJapanesePhoneNumber(phoneNumber)) {
+                alert('正しい電話番号を入力してください。\n日本国内の電話番号（10桁または11桁の数字）を入力してください。');
+                document.getElementById('phone-input').focus();
+                document.getElementById('phone-input').classList.add('error');
+                document.getElementById('phone-error-message').classList.add('show');
+                return;
+            }
+            
+            // メールアドレスが入力されている場合のみバリデーション（任意項目）
+            if (emailAddress && emailAddress.trim() !== '') {
+                if (!validateEmail(emailAddress)) {
+                    alert('正しいメールアドレスを入力してください。');
+                    document.getElementById('email-input').focus();
+                    document.getElementById('email-input').classList.add('error');
+                    document.getElementById('email-error-message').classList.add('show');
+                    return;
+                }
+            }
+            
+            // Google Apps Scriptが設定されている場合は、Google Apps Scriptで送信
+            if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+                sendEmailWithGoogleAppsScript();
+            } else {
+                // Google Apps Scriptが設定されていない場合は、mailtoリンクを使用
+                sendEmailWithMailto();
+            }
+        }
+        
+        // Google Apps Scriptを使用してメールを送信
+        function sendEmailWithGoogleAppsScript() {
+            // 送信ボタンを無効化
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            
+            // メール送信パラメータ
+            const emailData = {
+                to: 'iteen.mukonosou@gmail.com',
+                subject: '無料体験予約のお申し込み',
+                date: formatDateDisplay(selectedDate),
+                time: selectedTime,
+                date_raw: selectedDate,
+                school_type: selectedSchoolType,
+                grade: selectedGrade,
+                child_name: childName,
+                phone: phoneNumber,
+                email: emailAddress || '未入力',
+                message: messageText || 'なし',
+                body: `無料体験予約のお申し込みがありました。
+
+お子様のお名前: ${childName}
+電話番号: ${phoneNumber}
+メールアドレス: ${emailAddress || '未入力'}
+学校区別: ${selectedSchoolType}
+学年: ${selectedGrade}
+予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}
+${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}
+
+予約確定のため、お客様にご連絡をお願いします。
+
+---
+このメールは予約フォームから自動送信されました。
+iTeen 武庫之荘校`
+            };
+            
+            // Google Apps ScriptのWebアプリにPOSTリクエストを送信
+            console.log('📤 Google Apps Scriptに送信中...', emailData);
+            
+            // CORS対応により、レスポンスを取得可能
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors', // CORSモードでレスポンスを取得
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => {
+                // レスポンスのステータスを確認
+                if (!response.ok) {
+                    throw new Error(`HTTPエラー: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // レスポンスデータを確認
+                if (data.success) {
+                    console.log('✅ Google Apps Scriptに送信成功:', data);
+                    // 予約情報を感謝ページに表示
+                    showThankYouPage();
+                } else {
+                    // サーバー側でエラーが発生した場合
+                    console.error('❌ Google Apps Script処理エラー:', data.error);
+                    alert(`予約の送信に失敗しました。\n\nエラー: ${data.error}\n\nmailtoリンクで送信します。`);
+                    sendEmailWithMailto();
+                    
+                    submitButton.disabled = false;
+                    submitButton.textContent = '予約を確定する';
+                }
+            })
+            .catch(function(error) {
+                // 送信失敗（ネットワークエラーなど）
+                console.error('❌ Google Apps Script送信エラー:', error);
+                alert(`Google Apps Scriptへの送信に失敗しました。\n\nエラー: ${error.message}\n\nmailtoリンクで送信します。`);
+                sendEmailWithMailto();
+                
+                submitButton.disabled = false;
+                submitButton.textContent = '予約を確定する';
+            });
+        }
+        
+        // フォームをリセット
+        function resetForm() {
+            selectedDate = null;
+            selectedTime = null;
+            selectedSchoolType = null;
+            selectedGrade = null;
+            childName = '';
+            phoneNumber = '';
+            emailAddress = '';
+            messageText = '';
+            document.querySelectorAll('.calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
+            });
+            document.querySelectorAll('.time-slot.selected').forEach(slot => {
+                slot.classList.remove('selected');
+                slot.classList.add('available');
+            });
+            document.querySelectorAll('.grade-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelectorAll('.school-type-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('selected-info').classList.remove('show');
+            document.querySelectorAll('.date-section').forEach(section => {
+                section.classList.remove('show');
+            });
+            // 子供の名前入力フィールドをリセット
+            document.getElementById('child-name-input').value = '';
+            document.getElementById('child-name-section').classList.remove('show');
+            // 電話番号入力フィールドをリセット
+            document.getElementById('phone-input').value = '';
+            document.getElementById('phone-section').classList.remove('show');
+            // メールアドレス入力フィールドをリセット
+            document.getElementById('email-input').value = '';
+            document.getElementById('email-section').classList.remove('show');
+            // 自由記述欄をリセット
+            document.getElementById('message-textarea').value = '';
+            document.getElementById('message-section').classList.remove('show');
+            // カレンダーとフォームを非表示に戻す
+            document.getElementById('form-instruction').style.display = 'none';
+            document.getElementById('calendar-container').classList.remove('show');
+            document.getElementById('date-sections-container').classList.remove('show');
+            document.getElementById('submit-section').classList.remove('show');
+            document.getElementById('grade-selection-section').classList.remove('show');
+        }
+        
+        // 感謝ページを表示
+        function showThankYouPage() {
+            // 予約情報を表示
+            document.getElementById('reservation-date-item').textContent = `日付: ${formatDateDisplay(selectedDate)}`;
+            document.getElementById('reservation-time-item').textContent = `時間: ${formatTimeDisplay(selectedTime)}`;
+            document.getElementById('reservation-name-item').textContent = `お名前: ${childName}様`;
+            
+            // 電話番号を表示
+            const phoneItem = document.getElementById('reservation-phone-item');
+            if (phoneNumber && phoneNumber.trim() !== '') {
+                phoneItem.textContent = `電話番号: ${phoneNumber}`;
+                phoneItem.style.display = 'block';
+            } else {
+                phoneItem.style.display = 'none';
+            }
+            
+            // メールアドレスを表示（入力されている場合のみ）
+            const emailItem = document.getElementById('reservation-email-item');
+            if (emailAddress && emailAddress.trim() !== '') {
+                emailItem.textContent = `メールアドレス: ${emailAddress}`;
+                emailItem.style.display = 'block';
+            } else {
+                emailItem.style.display = 'none';
+            }
+            
+            // 自由記述欄を表示（入力されている場合のみ）
+            const messageItem = document.getElementById('reservation-message-item');
+            if (messageText && messageText.trim() !== '') {
+                messageItem.innerHTML = `<div style="margin-top: 10px;"><strong>ご質問・ご要望:</strong><br><div style="margin-top: 5px; white-space: pre-wrap; text-align: left;">${messageText}</div></div>`;
+                messageItem.style.display = 'block';
+            } else {
+                messageItem.style.display = 'none';
+            }
+            
+            // フォームセクションと元のヘッダー・フッターを非表示
+            document.querySelector('.reservation-section').style.display = 'none';
+            const originalHeader = document.querySelector('header:not(.thank-you-header)');
+            const originalFooter = document.querySelector('footer:not(.thank-you-footer)');
+            if (originalHeader) originalHeader.style.display = 'none';
+            if (originalFooter) originalFooter.style.display = 'none';
+            
+            // 感謝ページを表示
+            document.getElementById('thank-you-section').classList.add('show');
+            
+            // ページトップにスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // mailtoリンクを使用してメールを送信（フォールバック）
+        function sendEmailWithMailto() {
+            const subject = encodeURIComponent('無料体験予約のお申し込み');
+            const body = encodeURIComponent(
+                `無料体験予約のお申し込み\n\n` +
+                `お子様のお名前: ${childName}\n` +
+                `電話番号: ${phoneNumber}\n` +
+                `メールアドレス: ${emailAddress || '未入力'}\n` +
+                `学校区別: ${selectedSchoolType}\n` +
+                `学年: ${selectedGrade}\n` +
+                `予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}\n` +
+                `${messageText && messageText.trim() !== '' ? `\nご質問・ご要望:\n${messageText}\n` : ''}\n` +
+                `予約確定のため、お客様にご連絡をお願いします。\n\n` +
+                `---\n` +
+                `このメールは予約フォームから自動送信されました。\n` +
+                `iTeen 武庫之荘校`
+            );
+            
+            const mailtoLink = `mailto:iteen.mukonosou@gmail.com?subject=${subject}&body=${body}`;
+            window.location.href = mailtoLink;
+            
+            setTimeout(() => {
+                // メール送信後、感謝ページを表示
+                showThankYouPage();
+            }, 1000);
+        }
+        
+        // ページ読み込み時に実行
+        // カレンダーは学年選択後に表示されるため、ここでは生成のみ（非表示のまま）
+        generateCalendar();
+        
+        // 初期状態ではカレンダーとフォームを非表示
+        document.getElementById('calendar-container').classList.remove('show');
+        document.getElementById('date-sections-container').classList.remove('show');
+        document.getElementById('submit-section').classList.remove('show');
+        
+        // Googleカレンダーから予約済み日時を取得
+        updateUnavailableTimes();
+        
+        // 定期的に更新する場合（5分ごと）- 必要に応じてコメントを外す
+        // setInterval(updateUnavailableTimes, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
