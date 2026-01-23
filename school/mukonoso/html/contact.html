@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | iTeen 武庫之荘校</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* お問い合わせセクション */
+        .contact-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .contact-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .contact-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .contact-form {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .form-label .required {
+            color: #F44336;
+            margin-left: 4px;
+        }
+        .form-label .optional {
+            color: #999;
+            font-size: 0.85rem;
+            font-weight: normal;
+            margin-left: 4px;
+        }
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #999;
+        }
+        .form-input.error,
+        .form-textarea.error {
+            border-color: #F44336;
+            background-color: #ffebee;
+        }
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .form-error-message {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #ffebee;
+            border-left: 4px solid #F44336;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #c62828;
+            display: none;
+        }
+        .form-error-message.show {
+            display: block;
+        }
+        .submit-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 30px auto 0;
+        }
+        .submit-button:hover {
+            background-color: #E0951A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .submit-button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .contact-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .contact-card h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .contact-card a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1rem;
+            display: block;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        .contact-card a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        .contact-card p {
+            color: var(--text);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-modal.show {
+            display: flex;
+        }
+        .success-modal-content {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .success-message {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .success-message p {
+            margin: 10px 0;
+        }
+        .success-phone {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 15px;
+        }
+        .success-close-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .success-close-button:hover {
+            background-color: #357ABD;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .header-brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-line-button {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .header-nav {
+                gap: 10px;
+            }
+            .header-nav a {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+
+        </div>
+        <nav class="header-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="values.html">大切にしていること</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="reserve.html">無料体験予約</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                LINE
+            </a>
+        </nav>
+    </header>
+
+    <section class="contact-section">
+        <div class="container">
+            <h2 class="contact-title">📞 お問い合わせ</h2>
+            <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                メール：iteen.mukonosou@gmail.com<br>
+                電話: 06-6438-8277<br>
+                FAX: 06-6438-8278<br>
+            </p>
+            
+            <div class="contact-form">
+                <form id="contact-form" onsubmit="submitContact(event)">
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">
+                            お問い合わせ内容<span class="required">*</span>
+                        </label>
+                        <textarea 
+                            id="message" 
+                            class="form-textarea" 
+                            placeholder="ご質問やご相談内容をご記入ください"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            メールアドレス<span class="required">*</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-input" 
+                            placeholder="例：example@email.com"
+                            required
+                            oninput="validateEmail()"
+                        >
+                        <div class="form-error-message" id="email-error">
+                            正しいメールアドレスを入力してください。
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label">
+                            電話番号<span class="optional"></span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            class="form-input" 
+                            placeholder="例：09012345678"
+                            oninput="validatePhone()"
+                        >
+                        <div class="form-error-message" id="phone-error">
+                            正しい電話番号を入力してください。10桁または11桁の数字を入力してください。
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" id="submit-button">
+                        送信する
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 送信完了モーダル -->
+    <div class="success-modal" id="success-modal">
+        <div class="success-modal-content">
+            <div class="success-icon">✅</div>
+            <h2 class="success-title">お問い合わせありがとうございます</h2>
+            <div class="success-message">
+                <p>この度は、iTeen 武庫之荘校にお問い合わせいただき、誠にありがとうございます。</p>
+                <p>ご入力いただいたメールアドレスに自動応答メールをお送りしました。メールをご確認ください。</p>
+                <p>担当者より<strong>2営業日以内</strong>にご返信させていただきます。</p>
+                <p>万一、返信がない場合は、お手数ですが直接お電話でお問い合わせください。</p>
+                <div class="success-phone">
+                    <a href="tel:06-6438-8277">☎ 06-6438-8277</a>
+                </div>
+            </div>
+            <button class="success-close-button" onclick="closeSuccessModal()">閉じる</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+
+    <script>
+        // Google Apps ScriptのWebアプリURL（予約フォームと同じ）
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBemLT63uE89nyfvSj7FOkgWSHLGg8CsfoPrBmv49Hqa0LHJutgGE8Y00Xrab--n7f/exec';
+        
+        // メールアドレスのバリデーション
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const errorMessage = document.getElementById('email-error');
+            const email = emailInput.value.trim();
+            
+            if (email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const isValid = emailRegex.test(email);
+                
+                if (isValid) {
+                    emailInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                    return true;
+                } else {
+                    emailInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    return false;
+                }
+            } else {
+                emailInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+                return false;
+            }
+        }
+        
+        // 電話番号のバリデーション（予約フォームと同じロジック）
+        function validateJapanesePhoneNumber(phone) {
+            const cleaned = phone.replace(/[-\s]/g, '');
+            if (!/^\d+$/.test(cleaned)) {
+                return false;
+            }
+            if (cleaned.length !== 10 && cleaned.length !== 11) {
+                return false;
+            }
+            if (!cleaned.startsWith('0')) {
+                return false;
+            }
+            if (cleaned.length === 11 && /^0[789]0/.test(cleaned)) {
+                return true;
+            }
+            if (cleaned.length === 10 || cleaned.length === 11) {
+                if (/^0(120|800|570|500|200|990|920|930|950|960|980|570)/.test(cleaned)) {
+                    return true;
+                }
+                if (/^0[1-9]/.test(cleaned)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function validatePhone() {
+            const phoneInput = document.getElementById('phone');
+            const errorMessage = document.getElementById('phone-error');
+            const phone = phoneInput.value.trim();
+            
+            if (phone) {
+                const isValid = validateJapanesePhoneNumber(phone);
+                
+                if (isValid) {
+                    phoneInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                    return true;
+                } else {
+                    phoneInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    return false;
+                }
+            } else {
+                phoneInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+                return true; // 任意項目なので空欄はOK
+            }
+        }
+        
+        // お問い合わせを送信
+        function submitContact(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const messageInput = document.getElementById('message');
+            
+            const email = emailInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const message = messageInput.value.trim();
+            
+            // バリデーション
+            if (!validateEmail()) {
+                alert('正しいメールアドレスを入力してください。');
+                emailInput.focus();
+                return;
+            }
+            
+            if (phone && !validatePhone()) {
+                alert('正しい電話番号を入力してください。');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!message) {
+                alert('お問い合わせ内容を入力してください。');
+                messageInput.focus();
+                return;
+            }
+            
+            // 送信ボタンを無効化
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            
+            // メール送信パラメータ
+            const emailData = {
+                to: 'iteen.mukonosou@gmail.com',
+                subject: 'お問い合わせ',
+                email: email,
+                phone: phone || '未入力',
+                message: message,
+                body: `お問い合わせがありました。
+
+メールアドレス: ${email}
+電話番号: ${phone || '未入力'}
+お問い合わせ内容:
+${message}
+
+---
+このメールはお問い合わせフォームから自動送信されました。
+iTeen 武庫之荘校`,
+                // 自動応答メール用
+                replyTo: email,
+                replySubject: '【iTeen 武庫之荘校】お問い合わせありがとうございます',
+                replyBody: `${email} 様
+
+この度は、iTeen 武庫之荘校にお問い合わせいただき、誠にありがとうございます。
+
+以下の内容でお問い合わせを受け付けました。
+
+【お問い合わせ内容】
+${message}
+
+担当者より2営業日以内にご連絡させていただきます。
+お急ぎの場合は、お電話（06-6438-8277）でもお問い合わせいただけます。
+
+今後ともiTeen 武庫之荘校をよろしくお願いいたします。
+
+---
+iTeen 武庫之荘校
+電話: 06-6438-8277
+メール: iteen.mukonosou@gmail.com`
+            };
+            
+            // Google Apps ScriptのWebアプリにPOSTリクエストを送信
+            console.log('📤 お問い合わせを送信中...', emailData);
+            
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('サーバーエラー: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('✅ お問い合わせを送信完了:', data);
+                
+                if (data.success) {
+                    // フォームをリセット
+                    document.getElementById('contact-form').reset();
+                    document.getElementById('email-error').classList.remove('show');
+                    document.getElementById('phone-error').classList.remove('show');
+                    emailInput.classList.remove('error');
+                    phoneInput.classList.remove('error');
+                    
+                    submitButton.disabled = false;
+                    submitButton.textContent = '送信する';
+                    
+                    // 成功モーダルを表示
+                    showSuccessModal();
+                } else {
+                    throw new Error(data.error || '送信に失敗しました');
+                }
+            })
+            .catch(function(error) {
+                console.error('❌ お問い合わせ送信エラー:', error);
+                alert(`お問い合わせの送信に失敗しました。\n\nエラー: ${error.message}\n\nお手数ですが、直接メール（iteen.mukonosou@gmail.com）またはお電話（06-6438-8277）でお問い合わせください。`);
+                
+                submitButton.disabled = false;
+                submitButton.textContent = '送信する';
+            });
+        }
+        
+        // 成功モーダルを表示
+        function showSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('show');
+            // モーダルの背景をクリックしても閉じないようにする
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeSuccessModal();
+                }
+            });
+        }
+        
+        // 成功モーダルを閉じる
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生徒作品紹介 | iTeen 武庫之荘校</title>
+    
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* =====================================
+           [STYLE.CSS] B案デザインとモバイル最適化
+           ===================================== */
+        :root {
+            --primary: #4A90E2; /* スカイブルー (信頼) */
+            --accent: #F5A623;  /* ビタミンオレンジ (行動/情熱) */
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: var(--text); margin-top: 0; }
+        a { text-decoration: none; color: var(--primary); }
+        .container { padding: 0 20px; max-width: 600px; margin: 0 auto; }
+        
+
+        /* --- パンくずリスト --- */
+        .breadcrumb {
+            background: var(--white);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
+        }
+        .breadcrumb a {
+            color: var(--primary);
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- タイトルセクション --- */
+        .page-title-section {
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+            text-align: center;
+            padding: 40px 0;
+        }
+        .page-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .page-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        /* --- 作品一覧セクション --- */
+        .works-section {
+            padding: 40px 0;
+        }
+        .works-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        /* --- 作品カード --- */
+        .works-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .work-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .work-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .work-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+        }
+        .work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .work-iframe {
+            width: 100%;
+            max-width: 485px;
+            height: 402px;
+            margin: 0 auto;
+            display: block;
+            border: none;
+        }
+        .work-iframe-container {
+            width: 100%;
+            background: #f5f5f5;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 520px) {
+            .work-iframe {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 485 / 402;
+                max-height: 300px;
+            }
+        }
+        .work-content {
+            padding: 20px;
+        }
+        .work-category {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .work-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .work-student {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .work-description {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .work-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .work-link:hover {
+            background: #357ABD;
+        }
+        .work-link.external::after {
+            content: " ↗";
+        }
+
+        /* --- タブレット・デスクトップ対応 --- */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+            }
+            .works-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../../index.html#news">ニュース</a>
+            <a href="../../index.html#courses">コース</a>
+            <a href="../../index.html#teachers">講師</a>
+            <a href="../../html/values.html">大切にしていること</a>
+            <a href="index.html">生徒作品</a>
+            <a href="../../index.html#fee">料金</a>
+            <a href="../../index.html#faq">よくある質問</a>
+            <a href="../../index.html#access">アクセス</a>
+            <a href="../../index.html#contact">お問い合わせ</a>
+        </nav>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../../index.html">ホーム</a> &gt; <a href="../work/index.html">生徒作品紹介</a>
+    </div>
+
+    <section class="page-title-section">
+        <div class="container">
+            <h1 class="page-title">🎨 生徒作品紹介</h1>
+        </div>
+    </section>
+
+    <section class="works-section">
+        <div class="container">
+            
+            <!-- 実際の作品セクション -->
+            <div class="works-grid">
+                <!-- 作品カード 1: Scratchゲーム（実際の作品） -->
+                <div class="work-card">
+                    <div class="work-iframe-container">
+                        <iframe src="https://scratch.mit.edu/projects/1255065544/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen class="work-iframe"></iframe>
+                    </div>
+                    <div class="work-content">
+                        <span class="work-category">Scratch</span>
+                        <h3 class="work-title">アクションゲーム</h3>
+                        <p class="work-student">👤 作成者: 小学5年生</p>
+                        <p class="work-description">
+                            キャラクターを操作して敵を倒しながらステージを進むアクションゲームです。スコアシステムやライフ機能を実装しています。
+                        </p>
+                        <a href="https://scratch.mit.edu/projects/1255065544" target="_blank" class="work-link external">Scratchで開く</a>
+                    </div>
+                </div>
+
+                <!-- 作品カード 2: ダークモード（実際の作品） -->
+                <div class="work-card">
+                    <div class="work-image">
+                        <img src="images/dark-mode.png" alt="ダークモード対応の作品">
+                    </div>
+                    <div class="work-content">
+                        <span class="work-category">JavaScript</span>
+                        <h3 class="work-title">ダークモードに対応させよう</h3>
+                        <p class="work-student">👤 作成者: 高1 One Soul</p>
+                        <p class="work-description">
+                            今勉強しているJavaScriptの、参考書にあったやつのオマージュです。「ダークモードにする」という水色のボタンを押すと、背景色が黒に、文字の色が白に、そして水色のボタンが「ライトモードにする」という表記に替わります。作るのはそんなに難しくなかったのですが、ボタン一つで、好きなタイミングで複数の命令を実行することができるということに、当時は感動を覚え今もお気に入りの作品です。
+                        </p>
+                        <a href="dark-mode.html" class="work-link">作品を見る</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding:40px 20px 20px; background:#444; color:var(--white); font-size:0.8rem;">
+        <div class="container">
+            <!-- ページ地図（サイトマップ） -->
+            <div class="footer-sitemap">
+                <div class="footer-sitemap-column">
+                    <div class="footer-sitemap-title">メニュー</div>
+                    <a href="../../index.html#news" class="footer-sitemap-link">ニュース</a>
+                    <a href="../../index.html#courses" class="footer-sitemap-link">コース</a>
+                    <a href="../../index.html#teachers" class="footer-sitemap-link">講師紹介</a>
+                    <a href="index.html" class="footer-sitemap-link">生徒作品</a>
+                </div>
+                <div class="footer-sitemap-column">
+                    <div class="footer-sitemap-title">サービス</div>
+                    <a href="../../index.html#fee" class="footer-sitemap-link">料金</a>
+                    <a href="../../html/reserve.html" class="footer-sitemap-link">無料体験予約</a>
+                    <a href="../../html/values.html" class="footer-sitemap-link">教室長挨拶・大切にしていること</a>
+                    <a href="../../index.html#faq" class="footer-sitemap-link">よくある質問</a>
+                </div>
+                <div class="footer-sitemap-column">
+                    <div class="footer-sitemap-title">アクセス</div>
+                    <a href="../../index.html#access" class="footer-sitemap-link">アクセス・営業時間</a>
+                    <a href="../../index.html#contact" class="footer-sitemap-link">お問い合わせ</a>
+                    <a href="tel:06-6438-8277" class="footer-sitemap-link">☎ 06-6438-8277</a>
+                </div>
+                <div class="footer-sitemap-column">
+                    <div class="footer-sitemap-title">SNS</div>
+                    <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="footer-sitemap-link">LINE</a>
+                    <a href="https://www.instagram.com/iteen_mukonosou" target="_blank" rel="noopener noreferrer" class="footer-sitemap-link">Instagram</a>
+                    <a href="../../html/coming-soon.html" class="footer-sitemap-link">YouTube</a>
+                </div>
+            </div>
+            
+            <!-- SNSアイコン -->
+            <div class="footer-sns-icons" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="footer-sns-link" style="display: inline-block; transition: transform 0.2s;">
+                    <img src="../../images/LINE_APP_iOS.png" alt="LINE" class="footer-sns-icon" style="width: 32px; height: 32px; display: block;">
+                </a>
+                <a href="https://www.instagram.com/iteen_mukonosou/" target="_blank" rel="noopener noreferrer" class="footer-sns-link" style="display: inline-block; transition: transform 0.2s;">
+                    <img src="../../images/Instagram_Glyph_Gradient.png" alt="Instagram" class="footer-sns-icon" style="width: 32px; height: 32px; display: block;">
+                </a>
+                <a href="../../html/coming-soon.html" class="footer-sns-link" style="display: inline-block; transition: transform 0.2s;">
+                    <img src="../../images/yt_icon_red_digital.png" alt="YouTube" class="footer-sns-icon" style="width: 32px; height: 32px; display: block;">
+                </a>
+            </div>
+            
+            <!-- コピーライト -->
+            <div style="text-align: center; color:var(--white); padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                &copy; 2025 iTeen 武庫之荘校
+            </div>
+        </div>
+    </footer>
+
+    <!-- 固定体験予約ボタン -->
+    <a href="../../html/reserve.html" class="fixed-cta-btn">📋 無料体験予約（手ぶらでOK）</a>
+
+</body>
+</html>
+
