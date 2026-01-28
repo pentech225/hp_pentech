@@ -41,7 +41,7 @@
             <div class="carousel-image-wrapper">
                 <a href="#top" class="carousel-link">
                     <img src="images/school_image.png" alt="iTeen 武庫之荘校" class="carousel-main" onerror="this.style.display='none'">
-                    <img src="images/iamgegifv2.gif" alt="iTeen 武庫之荘校 GIF" class="carousel-hover" onerror="this.style.display='none'">
+                    <video src="images/event2016.mp4" class="carousel-hover carousel-video" muted loop playsinline preload="auto" onerror="this.style.display='none'"></video>
                 </a>
             </div>
             <div class="carousel-image-wrapper">
@@ -718,6 +718,32 @@
             
             // 3秒ごとに自動スクロール
             autoScrollInterval = setInterval(scrollToNext, 3000);
+        })();
+    </script>
+
+    <script>
+        // カルーセル動画のホバー時再生/停止制御
+        (function() {
+            const carouselWrappers = document.querySelectorAll('.carousel-image-wrapper');
+            
+            carouselWrappers.forEach(wrapper => {
+                const video = wrapper.querySelector('.carousel-video');
+                if (!video) return;
+                
+                // ホバー開始時：動画を再生
+                wrapper.addEventListener('mouseenter', () => {
+                    video.currentTime = 0; // 最初から再生
+                    video.play().catch(err => {
+                        console.log('Video playback failed:', err);
+                    });
+                });
+                
+                // ホバー終了時：動画を停止
+                wrapper.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0; // 最初に戻す
+                });
+            });
         })();
     </script>
 
