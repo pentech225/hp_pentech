@@ -2289,7 +2289,31 @@ iTeen 武庫之荘校`
             .catch(function(error) {
                 // 送信失敗（ネットワークエラーなど）
                 console.error('❌ Google Apps Script送信エラー:', error);
-                alert(`Google Apps Scriptへの送信に失敗しました。\n\nエラー: ${error.message}\n\nmailtoリンクで送信します。`);
+                console.error('エラー詳細:', {
+                    message: error.message,
+                    name: error.name,
+                    stack: error.stack,
+                    url: GOOGLE_APPS_SCRIPT_URL
+                });
+                
+                // より詳細なエラーメッセージを表示
+                let errorMessage = 'Google Apps Scriptへの送信に失敗しました。\n\n';
+                errorMessage += `エラー: ${error.message}\n\n`;
+                
+                // エラーの種類に応じた対処法を案内
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage += '【考えられる原因】\n';
+                    errorMessage += '1. Google Apps ScriptがWebアプリとして公開されていない\n';
+                    errorMessage += '2. Webアプリの「アクセスできるユーザー」が「全員」に設定されていない\n';
+                    errorMessage += '3. ネットワーク接続の問題\n\n';
+                    errorMessage += '【対処方法】\n';
+                    errorMessage += 'Google Apps Scriptの設定を確認してください。\n';
+                    errorMessage += '詳細は「GOOGLE_APPS_SCRIPT_SETUP.md」を参照してください。\n\n';
+                }
+                
+                errorMessage += 'mailtoリンクで送信します。';
+                
+                alert(errorMessage);
                 sendEmailWithMailto();
                 
                 submitButton.disabled = false;
