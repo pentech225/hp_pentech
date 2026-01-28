@@ -51,7 +51,7 @@ a { text-decoration: none; color: var(--primary); }
 /* カルーセル画像の統一フォーマット - 画面幅に応じて表示数を調整 */
 .top-image-carousel .carousel-image-wrapper {
     position: relative;
-    aspect-ratio: 3 / 4; /* 600x800の比率 (3:4) */
+    aspect-ratio: 3 / 2.67; /* 3:4の3分の2 (高さを約67%に削減) */
     flex-shrink: 0;
     overflow: hidden;
     border-radius: 8px;
