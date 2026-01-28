@@ -7,7 +7,12 @@
 
 // CORSヘッダーを設定するヘルパー関数
 function setCorsHeaders(output) {
-  return output.setMimeType(ContentService.MimeType.JSON)
+  if (!output) {
+    output = ContentService.createTextOutput('');
+  }
+  // Google Apps ScriptのsetHeaders()は、メソッドチェーンで使用する
+  return output
+    .setMimeType(ContentService.MimeType.JSON)
     .setHeaders({
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
@@ -17,7 +22,14 @@ function setCorsHeaders(output) {
 
 // OPTIONSリクエスト（プリフライト）に対応
 function doOptions() {
-  return setCorsHeaders(ContentService.createTextOutput(''));
+  // ContentService.createTextOutput()の戻り値に対して、メソッドチェーンでCORSヘッダーを設定
+  return ContentService.createTextOutput('')
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
 }
 
 function doPost(e) {
