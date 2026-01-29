@@ -16,6 +16,47 @@
             opacity: 1;
         }
     </style>
+    <script>
+        // 画面サイズに応じた動的調整
+        (function() {
+            function adjustLayout() {
+                const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                
+                // ヘッダーの幅を画面幅に制限
+                const header = document.querySelector('header');
+                if (header) {
+                    header.style.maxWidth = viewportWidth + 'px';
+                    header.style.width = '100%';
+                }
+                
+                // ナビゲーションの幅を調整
+                const nav = document.querySelector('.header-nav');
+                if (nav) {
+                    nav.style.maxWidth = '100%';
+                    // モバイルでは横スクロール可能にする
+                    if (viewportWidth < 768) {
+                        nav.style.overflowX = 'auto';
+                        nav.style.webkitOverflowScrolling = 'touch';
+                    }
+                }
+                
+                // スクロールパディングを動的に調整
+                if (viewportWidth < 768) {
+                    document.documentElement.style.scrollPaddingTop = '150px';
+                } else {
+                    document.documentElement.style.scrollPaddingTop = '120px';
+                }
+            }
+            
+            // ページ読み込み時とリサイズ時に実行
+            adjustLayout();
+            window.addEventListener('resize', adjustLayout);
+            window.addEventListener('orientationchange', function() {
+                setTimeout(adjustLayout, 100);
+            });
+        })();
+    </script>
 </head>
 <body>
     
