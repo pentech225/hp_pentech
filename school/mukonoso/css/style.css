@@ -57,6 +57,66 @@ a { text-decoration: none; color: var(--primary); }
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
+    touch-action: pan-y pinch-zoom; /* 縦スクロールとピンチズームは許可、横スクロールは制御 */
+}
+
+/* カルーセルナビゲーションボタン（PC版のみ表示） */
+.carousel-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.carousel-nav-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-nav-prev {
+    left: 20px;
+}
+
+.carousel-nav-next {
+    right: 20px;
+}
+
+/* PC版でのみボタンを表示 */
+@media (min-width: 769px) {
+    .top-image-section:hover .carousel-nav-button {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .carousel-nav-button {
+        display: flex;
+    }
+}
+
+/* モバイル版ではボタンを非表示 */
+@media (max-width: 768px) {
+    .carousel-nav-button {
+        display: none;
+    }
 }
 .top-image-carousel {
     display: flex;
@@ -65,6 +125,25 @@ a { text-decoration: none; color: var(--primary); }
     gap: 10px;
     padding: 0 10px;
     box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+/* PC版ではカーソルをデフォルトに */
+@media (min-width: 769px) {
+    .top-image-carousel {
+        cursor: default;
+    }
+}
+/* モバイル版ではドラッグ可能 */
+@media (max-width: 768px) {
+    .top-image-carousel {
+        cursor: grab;
+    }
+    .top-image-carousel:active {
+        cursor: grabbing;
+    }
 }
 /* カルーセル画像の統一フォーマット - 画面幅に応じて表示数を調整 */
 .top-image-carousel .carousel-image-wrapper {

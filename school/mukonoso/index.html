@@ -82,6 +82,11 @@
 
     <!-- トップ画像カルーセル -->
     <section class="top-image-section">
+        <button class="carousel-nav-button carousel-nav-prev" id="carouselPrev" aria-label="前の画像">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
         <div class="top-image-carousel" id="topImageCarousel">
             <div class="carousel-image-wrapper">
                 <a href="#top" class="carousel-link">
@@ -108,6 +113,11 @@
                 </a>
             </div>
         </div>
+        <button class="carousel-nav-button carousel-nav-next" id="carouselNext" aria-label="次の画像">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
         <div class="carousel-indicators" id="carouselIndicators">
             <span class="carousel-indicator active" data-index="0"></span>
             <span class="carousel-indicator" data-index="1"></span>

@@ -85,33 +85,57 @@
         }, 500);
     }
     
-    // スワイプ機能（タッチイベント）
+    // スワイプ機能（タッチイベント）- 改善版
+    let touchStartTime = 0;
+    let touchVelocity = 0;
+    
     carousel.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
         startPosition = currentPosition;
         isDragging = true;
+        touchVelocity = 0;
         carousel.style.transition = 'none';
+        // 自動スライドを一時停止
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
     }, { passive: true });
     
     carousel.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
+        e.preventDefault(); // 横スクロールを制御
         const currentX = e.touches[0].clientX;
         const diffX = touchStartX - currentX;
         const moveDistance = getMoveDistance();
         const offset = diffX / moveDistance;
         
+        // リアルタイムでカルーセルを移動
         carousel.style.transform = `translateX(-${(startPosition + offset) * moveDistance}px)`;
-    }, { passive: true });
+        
+        // 速度を計算（フリック検出用）
+        const currentTime = Date.now();
+        const timeDiff = currentTime - touchStartTime;
+        if (timeDiff > 0) {
+            touchVelocity = diffX / timeDiff;
+        }
+    }, { passive: false }); // preventDefaultを使うため、passive: falseに変更
     
     carousel.addEventListener('touchend', (e) => {
         if (!isDragging) return;
         isDragging = false;
         touchEndX = e.changedTouches[0].clientX;
         const diffX = touchStartX - touchEndX;
-        const threshold = 50; // スワイプの最小距離（ピクセル）
+        const timeDiff = Date.now() - touchStartTime;
+        const velocity = Math.abs(touchVelocity);
         
-        if (Math.abs(diffX) > threshold) {
-            if (diffX > 0) {
+        // スワイプの最小距離（ピクセル）または速度ベースの判定
+        const threshold = 50;
+        const velocityThreshold = 0.3; // ピクセル/ミリ秒
+        
+        if (Math.abs(diffX) > threshold || velocity > velocityThreshold) {
+            if (diffX > 0 || touchVelocity > 0) {
                 // 右にスワイプ（次の画像）
                 nextImage();
             } else {
@@ -122,65 +146,129 @@
             // スワイプ距離が足りない場合は元の位置に戻す
             updateCarousel();
         }
+        
+        // 自動スライドを再開
+        if (!autoSlideInterval) {
+            autoSlideInterval = setInterval(nextImage, 3000);
+        }
     }, { passive: true });
     
-    // マウスドラッグ機能（デスクトップ対応）
-    let mouseStartX = 0;
-    let mouseIsDown = false;
+    // PC版ではドラッグ機能を無効化（矢印ボタンを使用）
+    // モバイル版のみドラッグ機能を有効化
+    const isMobile = window.innerWidth <= 768;
     
-    // ドラッグ終了処理（どこでマウスボタンを離しても確実に処理）
-    function handleMouseUp(e) {
-        if (!mouseIsDown) return;
+    if (!isMobile) {
+        // PC版ではカーソルをポインターに変更（ドラッグ不可）
+        carousel.style.cursor = 'default';
+    } else {
+        // モバイル版のみマウスドラッグ機能を有効化（タッチデバイスでも動作）
+        let mouseStartX = 0;
+        let mouseIsDown = false;
+        let mouseStartTime = 0;
+        let mouseVelocity = 0;
         
-        mouseIsDown = false;
-        const mouseEndX = e.clientX;
-        const diffX = mouseStartX - mouseEndX;
-        const threshold = 50;
-        
-        if (Math.abs(diffX) > threshold) {
-            if (diffX > 0) {
-                nextImage();
+        // ドラッグ終了処理（どこでマウスボタンを離しても確実に処理）
+        function handleMouseUp(e) {
+            if (!mouseIsDown) return;
+            
+            mouseIsDown = false;
+            const mouseEndX = e.clientX;
+            const diffX = mouseStartX - mouseEndX;
+            const timeDiff = Date.now() - mouseStartTime;
+            const velocity = Math.abs(mouseVelocity);
+            
+            // スワイプの最小距離（ピクセル）または速度ベースの判定
+            const threshold = 50;
+            const velocityThreshold = 0.3; // ピクセル/ミリ秒
+            
+            if (Math.abs(diffX) > threshold || velocity > velocityThreshold) {
+                if (diffX > 0 || mouseVelocity > 0) {
+                    nextImage();
+                } else {
+                    prevImage();
+                }
             } else {
-                prevImage();
+                // スワイプ距離が足りない場合は元の位置に戻す
+                updateCarousel();
             }
-        } else {
-            updateCarousel();
         }
+        
+        carousel.addEventListener('mousedown', (e) => {
+            // リンク要素上でない場合のみドラッグを開始
+            if (e.target.closest('.carousel-link')) {
+                return;
+            }
+            
+            mouseIsDown = true;
+            mouseStartX = e.clientX;
+            mouseStartTime = Date.now();
+            mouseVelocity = 0;
+            startPosition = currentPosition;
+            carousel.style.transition = 'none';
+            
+            // 自動スライドを一時停止
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+                autoSlideInterval = null;
+            }
+            
+            e.preventDefault();
+            
+            // ドキュメント全体でmouseupをリッスン（確実に状態をリセット）
+            document.addEventListener('mouseup', handleMouseUp, { once: true });
+        });
+        
+        carousel.addEventListener('mousemove', (e) => {
+            if (!mouseIsDown) return;
+            const currentX = e.clientX;
+            const diffX = mouseStartX - currentX;
+            const moveDistance = getMoveDistance();
+            const offset = diffX / moveDistance;
+            
+            // リアルタイムでカルーセルを移動
+            carousel.style.transform = `translateX(-${(startPosition + offset) * moveDistance}px)`;
+            
+            // 速度を計算（フリック検出用）
+            const currentTime = Date.now();
+            const timeDiff = currentTime - mouseStartTime;
+            if (timeDiff > 0) {
+                mouseVelocity = diffX / timeDiff;
+            }
+        });
+        
+        carousel.addEventListener('mouseup', handleMouseUp);
+        
+        carousel.addEventListener('mouseleave', () => {
+            if (mouseIsDown) {
+                mouseIsDown = false;
+                updateCarousel();
+                // 自動スライドを再開
+                if (!autoSlideInterval) {
+                    autoSlideInterval = setInterval(nextImage, 3000);
+                }
+            }
+        });
     }
     
-    carousel.addEventListener('mousedown', (e) => {
-        mouseIsDown = true;
-        mouseStartX = e.clientX;
-        startPosition = currentPosition;
-        carousel.style.transition = 'none';
-        
-        // リンク要素上でない場合のみpreventDefault（リンク要素上ではカルーセルドラッグを優先）
-        if (!e.target.closest('.carousel-link')) {
+    // ナビゲーションボタン（PC版）
+    const prevButton = document.getElementById('carouselPrev');
+    const nextButton = document.getElementById('carouselNext');
+    
+    if (prevButton) {
+        prevButton.addEventListener('click', (e) => {
             e.preventDefault();
-        }
-        
-        // ドキュメント全体でmouseupをリッスン（確実に状態をリセット）
-        document.addEventListener('mouseup', handleMouseUp, { once: true });
-    });
+            e.stopPropagation();
+            prevImage();
+        });
+    }
     
-    carousel.addEventListener('mousemove', (e) => {
-        if (!mouseIsDown) return;
-        const currentX = e.clientX;
-        const diffX = mouseStartX - currentX;
-        const moveDistance = getMoveDistance();
-        const offset = diffX / moveDistance;
-        
-        carousel.style.transform = `translateX(-${(startPosition + offset) * moveDistance}px)`;
-    });
-    
-    carousel.addEventListener('mouseup', handleMouseUp);
-    
-    carousel.addEventListener('mouseleave', () => {
-        if (mouseIsDown) {
-            mouseIsDown = false;
-            updateCarousel();
-        }
-    });
+    if (nextButton) {
+        nextButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            nextImage();
+        });
+    }
     
     // インジケータークリック時の処理
     indicators.forEach((indicator, index) => {
