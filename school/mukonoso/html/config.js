@@ -16,6 +16,14 @@ const CONFIG = {
     FAX: '06-6438-8278',
     
     // LINE URL
-    LINE_URL: 'https://page.line.me/555qxcak?oat_content=url&openQrModal=true'
+    LINE_URL: 'https://page.line.me/555qxcak?oat_content=url&openQrModal=true',
+    
+    // パスワード保護設定
+    // PASSWORD_PROTECTION_ENABLED: true に設定すると、サイト全体がパスワード保護されます
+    // PASSWORD_PROTECTION_ENABLED: false に設定すると、パスワード保護が無効になります
+    PASSWORD_PROTECTION_ENABLED: true,
+    
+    // パスワード（PASSWORD_PROTECTION_ENABLEDがtrueの場合に使用）
+    PASSWORD: '123'
 };
 
