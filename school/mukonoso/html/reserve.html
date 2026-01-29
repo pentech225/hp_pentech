@@ -1038,7 +1038,7 @@
             <div class="header-brand">
                 <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
                 <div class="header-school-name">武庫之荘校</div>
-                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+                <a href="tel:" class="header-phone" id="header-phone-link">☎</a>
             </div>
             <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
                 💬 LINEで質問
@@ -1208,7 +1208,7 @@
                 <div class="header-brand">
                     <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
                     <div class="header-school-name">武庫之荘校</div>
-                    <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+                    <a href="tel:" class="header-phone" id="thank-you-header-phone-link">☎</a>
                 </div>
                 <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
                     💬 LINEで質問
@@ -1291,7 +1291,7 @@
             
             <div class="thank-you-actions">
                 <a href="../index.html" class="thank-you-button">ホームに戻る</a>
-                <a href="tel:06-6438-8277" class="thank-you-button secondary">📞 お問い合わせ: 06-6438-8277</a>
+                <a href="tel:" class="thank-you-button secondary" id="thank-you-phone-link">📞 お問い合わせ: </a>
             </div>
         </div>
         
@@ -1309,6 +1309,9 @@
         <p>&copy; 2025 iTeen 武庫之荘校</p>
     </footer>
 
+    <!-- 共通設定ファイルを読み込む -->
+    <script src="config.js"></script>
+    
     <script>
         // 時間スロット
         // 時間スロット（開始時刻と終了時刻のペア）
@@ -2157,8 +2160,7 @@
             generateCalendar();
         }
         
-        // Google Apps ScriptのWebアプリURL（設定後、実際のURLに置き換えてください）
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEm0Jf8e2YagsRsunZcl-CVoSUfxAoCor0kZuSJgcZ9lAc05WlijscjFNMxji_7C-M/exec';
+        // 設定値はconfig.jsから読み込まれる
         
         // 予約を送信
         function submitReservation() {
@@ -2206,7 +2208,7 @@
             }
             
             // Google Apps Scriptが設定されている場合は、Google Apps Scriptで送信
-            if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
                 sendEmailWithGoogleAppsScript();
             } else {
                 // Google Apps Scriptが設定されていない場合は、mailtoリンクを使用
@@ -2223,7 +2225,7 @@
             
             // メール送信パラメータ
             const emailData = {
-                to: 'iteen.mukonosou@gmail.com',
+                to: CONFIG.EMAIL,
                 subject: '無料体験予約のお申し込み',
                 date: formatDateDisplay(selectedDate),
                 time: selectedTime,
@@ -2248,15 +2250,56 @@ ${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}
 
 ---
 このメールは予約フォームから自動送信されました。
-iTeen 武庫之荘校`
+iTeen 武庫之荘校`,
+                // 自動応答メール用（メールアドレスが記載されている場合のみ）
+                replyTo: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? emailAddress.trim() : undefined,
+                replySubject: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? '【iTeen 武庫之荘校】無料体験予約のご確認' : undefined,
+                replyBody: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? `${childName} 様
+
+この度は、iTeen 武庫之荘校の無料体験予約をお申し込みいただき、誠にありがとうございます。
+
+以下の内容で予約を受け付けました。
+
+【予約内容】
+お子様のお名前: ${childName}
+電話番号: ${phoneNumber}
+学校区別: ${selectedSchoolType}
+学年: ${selectedGrade}
+予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}${messageText && messageText.trim() !== '' ? `\n\nご質問・ご要望:\n${messageText}` : ''}
+
+【当日の流れ】
+1. ご来校 - 教室にいらしてください（手ぶらでOK！）
+2. 簡単なご説明 - 教室のご紹介と、お子様の興味をお聞きします
+3. プログラミング体験 - 実際にプログラミングを楽しんでいただきます
+4. ご質問・ご相談 - 気になることは何でもお聞きください
+
+予約確定のため、担当者よりご連絡させていただきます。
+お急ぎの場合は、お電話（${CONFIG.PHONE}）でもお問い合わせいただけます。
+
+お会いできるのを楽しみにしております！
+
+---
+iTeen 武庫之荘校
+電話: ${CONFIG.PHONE}
+メール: ${CONFIG.EMAIL}` : undefined
             };
+            
+            // デバッグ用ログ
+            console.log('📧 メール送信データ確認:', {
+                hasEmail: !!emailAddress,
+                emailAddress: emailAddress,
+                hasReplyTo: !!emailData.replyTo,
+                replyTo: emailData.replyTo,
+                hasReplySubject: !!emailData.replySubject,
+                hasReplyBody: !!emailData.replyBody
+            });
             
             // Google Apps ScriptのWebアプリにPOSTリクエストを送信
             console.log('📤 Google Apps Scriptに送信中...', emailData);
             
             // Google Apps ScriptはCORSを完全にはサポートしていないため、no-corsモードを使用
             // 注意: no-corsモードではレスポンスを取得できないが、メール送信は成功する可能性がある
-            fetch(GOOGLE_APPS_SCRIPT_URL, {
+            fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', // no-corsモードでCORSエラーを回避
                 headers: {
@@ -2278,7 +2321,7 @@ iTeen 武庫之荘校`
                     message: error.message,
                     name: error.name,
                     stack: error.stack,
-                    url: GOOGLE_APPS_SCRIPT_URL
+                    url: CONFIG.GOOGLE_APPS_SCRIPT_URL
                 });
                 
                 // より詳細なエラーメッセージを表示
@@ -2419,7 +2462,7 @@ iTeen 武庫之荘校`
                 `iTeen 武庫之荘校`
             );
             
-            const mailtoLink = `mailto:iteen.mukonosou@gmail.com?subject=${subject}&body=${body}`;
+            const mailtoLink = `mailto:${CONFIG.EMAIL}?subject=${subject}&body=${body}`;
             window.location.href = mailtoLink;
             
             setTimeout(() => {
@@ -2442,6 +2485,37 @@ iTeen 武庫之荘校`
         
         // 定期的に更新する場合（5分ごと）- 必要に応じてコメントを外す
         // setInterval(updateUnavailableTimes, 5 * 60 * 1000);
+        
+        // 設定値をページに反映
+        function initializeConfig() {
+            // ヘッダーの電話番号リンク
+            const headerPhoneLink = document.getElementById('header-phone-link');
+            if (headerPhoneLink) {
+                headerPhoneLink.href = `tel:${CONFIG.PHONE}`;
+                headerPhoneLink.textContent = `☎${CONFIG.PHONE}`;
+            }
+            
+            // 感謝ページヘッダーの電話番号リンク
+            const thankYouHeaderPhoneLink = document.getElementById('thank-you-header-phone-link');
+            if (thankYouHeaderPhoneLink) {
+                thankYouHeaderPhoneLink.href = `tel:${CONFIG.PHONE}`;
+                thankYouHeaderPhoneLink.textContent = `☎${CONFIG.PHONE}`;
+            }
+            
+            // 感謝ページの電話番号リンク
+            const thankYouPhoneLink = document.getElementById('thank-you-phone-link');
+            if (thankYouPhoneLink) {
+                thankYouPhoneLink.href = `tel:${CONFIG.PHONE}`;
+                thankYouPhoneLink.textContent = `📞 お問い合わせ: ${CONFIG.PHONE}`;
+            }
+        }
+        
+        // ページ読み込み時に設定値を反映
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeConfig);
+        } else {
+            initializeConfig();
+        }
     </script>
 </body>
 </html>

@@ -397,7 +397,7 @@
             <div class="header-brand">
                 <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
                 <div class="header-school-name">武庫之荘校</div>
-                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+                <a href="tel:" class="header-phone" id="header-phone-link">☎</a>
             </div>
 
         </div>
@@ -421,9 +421,9 @@
         <div class="container">
             <h2 class="contact-title">📞 お問い合わせ</h2>
             <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
-                メール：iteen.mukonosou@gmail.com<br>
-                電話: 06-6438-8277<br>
-                FAX: 06-6438-8278<br>
+                メール：<span id="contact-email"></span><br>
+                電話: <span id="contact-phone"></span><br>
+                FAX: <span id="contact-fax"></span><br>
             </p>
             
             <div class="contact-form">
@@ -493,7 +493,7 @@
                 <p>担当者より<strong>2営業日以内</strong>にご返信させていただきます。</p>
                 <p>万一、返信がない場合は、お手数ですが直接お電話でお問い合わせください。</p>
                 <div class="success-phone">
-                    <a href="tel:06-6438-8277">☎ 06-6438-8277</a>
+                    <a href="tel:" id="success-phone-link">☎ </a>
                 </div>
             </div>
             <button class="success-close-button" onclick="closeSuccessModal()">閉じる</button>
@@ -505,9 +505,11 @@
         <p>&copy; 2025 iTeen 武庫之荘校</p>
     </footer>
 
+    <!-- 共通設定ファイルを読み込む -->
+    <script src="config.js"></script>
+    
     <script>
-        // Google Apps ScriptのWebアプリURL（予約フォームと同じ）
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBemLT63uE89nyfvSj7FOkgWSHLGg8CsfoPrBmv49Hqa0LHJutgGE8Y00Xrab--n7f/exec';
+        // 設定値はconfig.jsから読み込まれる
         
         // メールアドレスのバリデーション
         function validateEmail() {
@@ -623,7 +625,7 @@
             
             // メール送信パラメータ
             const emailData = {
-                to: 'iteen.mukonosou@gmail.com',
+                to: CONFIG.EMAIL,
                 subject: 'お問い合わせ',
                 email: email,
                 phone: phone || '未入力',
@@ -651,14 +653,14 @@ iTeen 武庫之荘校`,
 ${message}
 
 担当者より2営業日以内にご連絡させていただきます。
-お急ぎの場合は、お電話（06-6438-8277）でもお問い合わせいただけます。
+お急ぎの場合は、お電話（${CONFIG.PHONE}）でもお問い合わせいただけます。
 
 今後ともiTeen 武庫之荘校をよろしくお願いいたします。
 
 ---
 iTeen 武庫之荘校
-電話: 06-6438-8277
-メール: iteen.mukonosou@gmail.com`
+電話: ${CONFIG.PHONE}
+メール: ${CONFIG.EMAIL}`
             };
             
             // Google Apps ScriptのWebアプリにPOSTリクエストを送信
@@ -666,7 +668,7 @@ iTeen 武庫之荘校
             
             // Google Apps ScriptはCORSを完全にはサポートしていないため、no-corsモードを使用
             // 注意: no-corsモードではレスポンスを取得できないが、メール送信は成功する可能性がある
-            fetch(GOOGLE_APPS_SCRIPT_URL, {
+            fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', // no-corsモードでCORSエラーを回避
                 headers: {
@@ -694,11 +696,43 @@ iTeen 武庫之荘校
             })
             .catch(function(error) {
                 console.error('❌ お問い合わせ送信エラー:', error);
-                alert(`お問い合わせの送信に失敗しました。\n\nエラー: ${error.message}\n\nお手数ですが、直接メール（iteen.mukonosou@gmail.com）またはお電話（06-6438-8277）でお問い合わせください。`);
+                alert(`お問い合わせの送信に失敗しました。\n\nエラー: ${error.message}\n\nお手数ですが、直接メール（${CONFIG.EMAIL}）またはお電話（${CONFIG.PHONE}）でお問い合わせください。`);
                 
                 submitButton.disabled = false;
                 submitButton.textContent = '送信する';
             });
+        }
+        
+        // 設定値をページに反映
+        function initializeConfig() {
+            // ヘッダーの電話番号リンク
+            const headerPhoneLink = document.getElementById('header-phone-link');
+            if (headerPhoneLink) {
+                headerPhoneLink.href = `tel:${CONFIG.PHONE}`;
+                headerPhoneLink.textContent = `☎${CONFIG.PHONE}`;
+            }
+            
+            // お問い合わせセクションの連絡先情報
+            const contactEmail = document.getElementById('contact-email');
+            if (contactEmail) contactEmail.textContent = CONFIG.EMAIL;
+            const contactPhone = document.getElementById('contact-phone');
+            if (contactPhone) contactPhone.textContent = CONFIG.PHONE;
+            const contactFax = document.getElementById('contact-fax');
+            if (contactFax) contactFax.textContent = CONFIG.FAX;
+            
+            // 成功モーダルの電話番号リンク
+            const successPhoneLink = document.getElementById('success-phone-link');
+            if (successPhoneLink) {
+                successPhoneLink.href = `tel:${CONFIG.PHONE}`;
+                successPhoneLink.textContent = `☎ ${CONFIG.PHONE}`;
+            }
+        }
+        
+        // ページ読み込み時に設定値を反映
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeConfig);
+        } else {
+            initializeConfig();
         }
         
         // 成功モーダルを表示

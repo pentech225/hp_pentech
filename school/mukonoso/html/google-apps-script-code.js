@@ -6,30 +6,22 @@
  */
 
 // CORSヘッダーを設定するヘルパー関数
+// 注意: Google Apps ScriptではsetHeaders()が正しく動作しない場合があるため、
+// MIMEタイプのみを設定します。クライアント側ではmode: 'no-cors'を使用しているため、
+// CORSヘッダーは実際には必要ありません。
 function setCorsHeaders(output) {
   if (!output) {
     output = ContentService.createTextOutput('');
   }
-  // Google Apps ScriptのsetHeaders()は、メソッドチェーンで使用する
-  return output
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+  // MIMEタイプのみを設定（setHeaders()は使用しない）
+  return output.setMimeType(ContentService.MimeType.JSON);
 }
 
 // OPTIONSリクエスト（プリフライト）に対応
 function doOptions() {
-  // ContentService.createTextOutput()の戻り値に対して、メソッドチェーンでCORSヘッダーを設定
+  // MIMEタイプのみを設定（setHeaders()は使用しない）
   return ContentService.createTextOutput('')
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function doPost(e) {
@@ -165,7 +157,11 @@ function handleReservationForm(data) {
       grade: data.grade,
       message: data.message,
       hasBody: !!data.body,
-      bodyLength: data.body ? data.body.length : 0
+      bodyLength: data.body ? data.body.length : 0,
+      replyTo: data.replyTo,
+      replySubject: data.replySubject,
+      hasReplyBody: !!data.replyBody,
+      replyBodyLength: data.replyBody ? data.replyBody.length : 0
     });
     
     // カレンダーID（Googleカレンダーの設定から取得）
@@ -260,13 +256,141 @@ iTeen 武庫之荘校`;
     console.log('送信するメール本文:', body);
     console.log('メール本文の長さ:', body.length);
     
-    // Gmailでメールを送信
+    // Gmailでメールを送信（管理者宛）
     try {
       GmailApp.sendEmail(to, subject, body);
-      console.log('メール送信成功');
+      console.log('管理者へのメール送信成功');
     } catch (mailError) {
-      console.error('メール送信エラー:', mailError);
+      console.error('管理者へのメール送信エラー:', mailError);
       // メール送信エラーでも、カレンダー追加は成功しているので、エラーは記録するが続行
+    }
+    
+    // 自動応答メールの送信（メールアドレスが記載されている場合のみ）
+    console.log('📧 自動応答メール送信チェック開始');
+    console.log('受信データ:', {
+      hasReplyTo: !!data.replyTo,
+      replyTo: data.replyTo,
+      replyToType: typeof data.replyTo,
+      hasReplySubject: !!data.replySubject,
+      replySubject: data.replySubject,
+      hasReplyBody: !!data.replyBody,
+      replyBodyLength: data.replyBody ? data.replyBody.length : 0,
+      email: email,
+      emailType: typeof email
+    });
+    
+    // replyToが設定されているか確認
+    let replyEmail = null;
+    if (data.replyTo && data.replyTo !== null && data.replyTo !== undefined && data.replyTo !== '未入力') {
+      const trimmedReplyTo = String(data.replyTo).trim();
+      if (trimmedReplyTo !== '' && trimmedReplyTo.includes('@')) {
+        replyEmail = trimmedReplyTo;
+        console.log('✅ replyToからメールアドレスを取得:', replyEmail);
+      }
+    }
+    
+    // replyToが取得できなかった場合、emailフィールドから取得を試みる
+    if (!replyEmail && email && email !== null && email !== undefined && email !== '未入力') {
+      const trimmedEmail = String(email).trim();
+      if (trimmedEmail !== '' && trimmedEmail.includes('@')) {
+        replyEmail = trimmedEmail;
+        console.log('✅ emailフィールドからメールアドレスを取得:', replyEmail);
+      }
+    }
+    
+    console.log('📧 確認メール送信先:', replyEmail);
+    
+    // replySubjectとreplyBodyを取得
+    let replySubject = data.replySubject;
+    let replyBody = data.replyBody;
+    
+    // replySubjectが設定されていない場合、デフォルトを使用
+    if (!replySubject) {
+      replySubject = '【iTeen 武庫之荘校】無料体験予約のご確認';
+      console.log('⚠️ replySubjectが設定されていないため、デフォルトを使用');
+    }
+    
+    // replyBodyが設定されていない場合、emailフィールドから作成
+    if (!replyBody && replyEmail) {
+      replyBody = `${childName} 様
+
+この度は、iTeen 武庫之荘校の無料体験予約をお申し込みいただき、誠にありがとうございます。
+
+以下の内容で予約を受け付けました。
+
+【予約内容】
+お子様のお名前: ${childName}
+電話番号: ${phone}
+学校区別: ${schoolType}
+学年: ${grade}
+予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
+
+【当日の流れ】
+1. ご来校 - 教室にいらしてください（手ぶらでOK！）
+2. 簡単なご説明 - 教室のご紹介と、お子様の興味をお聞きします
+3. プログラミング体験 - 実際にプログラミングを楽しんでいただきます
+4. ご質問・ご相談 - 気になることは何でもお聞きください
+
+予約確定のため、担当者よりご連絡させていただきます。
+お急ぎの場合は、お電話（06-6438-8277）でもお問い合わせいただけます。
+
+お会いできるのを楽しみにしております！
+
+---
+iTeen 武庫之荘校
+電話: 06-6438-8277
+メール: iteen.mukonosou@gmail.com`;
+      console.log('⚠️ replyBodyが設定されていないため、自動生成しました');
+    }
+    
+    console.log('📧 メール送信準備完了:', {
+      replyEmail: replyEmail,
+      replySubject: replySubject,
+      hasReplyBody: !!replyBody,
+      replyBodyLength: replyBody ? replyBody.length : 0
+    });
+    
+    // メール送信の実行
+    if (replyEmail && replyEmail.includes('@') && replySubject && replyBody) {
+      try {
+        // メールアドレスの形式を簡易チェック
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(replyEmail)) {
+          console.log('📧 メール送信を実行します:', {
+            to: replyEmail,
+            subject: replySubject,
+            bodyLength: replyBody.length
+          });
+          
+          // メール送信
+          GmailApp.sendEmail(replyEmail, replySubject, replyBody);
+          
+          console.log('✅ 自動応答メール送信成功:', replyEmail);
+        } else {
+          console.log('⚠️ メールアドレスの形式が無効なため、自動応答メールを送信しません:', replyEmail);
+        }
+      } catch (replyError) {
+        console.error('❌ 自動応答メール送信エラー:', replyError);
+        console.error('エラー詳細:', {
+          message: replyError.toString(),
+          name: replyError.name,
+          stack: replyError.stack,
+          replyEmail: replyEmail,
+          replySubject: replySubject,
+          replyBodyLength: replyBody ? replyBody.length : 0
+        });
+        // 自動応答メールのエラーは記録するが続行（管理者へのメールとカレンダー追加は成功している）
+      }
+    } else {
+      console.log('⚠️ 自動応答メールを送信しません:', {
+        replyEmail: replyEmail,
+        hasReplySubject: !!replySubject,
+        hasReplyBody: !!replyBody,
+        reason: !replyEmail ? 'メールアドレスが設定されていません' : 
+                !replyEmail.includes('@') ? 'メールアドレスの形式が無効です（@が含まれていません）' :
+                !replySubject ? '件名が設定されていません' :
+                !replyBody ? '本文が設定されていません' : '不明'
+      });
     }
     
     // 成功レスポンス
