@@ -1432,7 +1432,7 @@
             try {
                 const now = new Date();
                 const endDate = new Date(now);
-                endDate.setMonth(endDate.getMonth() + 1); // 今日から数えて1ヶ月先まで
+                endDate.setMonth(endDate.getMonth() + 3); // 今日から数えて3ヶ月先まで取得
                 
                 const events = await fetchGoogleCalendarEvents(now, endDate);
                 
@@ -1441,38 +1441,86 @@
                     delete unavailableTimes[key];
                 });
                 
+                // 時間スロットの開始時刻を正規化（2桁の時:2桁の分に統一）
+                const normalizedTimeSlots = timeSlots.map(slot => {
+                    const [hour, min] = slot.start.split(':').map(Number);
+                    return {
+                        ...slot,
+                        normalizedStart: `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`,
+                        startMinutes: hour * 60 + min
+                    };
+                });
+                
+                console.log('📋 時間スロット一覧:', normalizedTimeSlots.map(s => s.normalizedStart));
+                
                 // イベントから予約済み時間帯を抽出
+                let processedCount = 0;
+                let matchedCount = 0;
+                
                 events.forEach(event => {
                     if (event.start && event.start.dateTime) {
-                        const eventDate = new Date(event.start.dateTime);
-                        const dateStr = formatDate(eventDate);
-                        const eventHour = eventDate.getHours();
-                        const eventMin = eventDate.getMinutes();
-                        const timeStr = `${String(eventHour).padStart(2, '0')}:${String(eventMin).padStart(2, '0')}`;
+                        processedCount++;
+                        const eventStartDate = new Date(event.start.dateTime);
+                        const eventEndDate = event.end && event.end.dateTime ? new Date(event.end.dateTime) : null;
+                        const dateStr = formatDate(eventStartDate);
+                        const eventStartHour = eventStartDate.getHours();
+                        const eventStartMin = eventStartDate.getMinutes();
+                        const eventStartMinutes = eventStartHour * 60 + eventStartMin;
+                        const eventStartTimeStr = `${String(eventStartHour).padStart(2, '0')}:${String(eventStartMin).padStart(2, '0')}`;
                         
-                        // 時間スロットに一致するものを探す（開始時刻で完全一致または最も近いもの）
-                        let matchedTimeSlot = timeSlots.find(slot => slot.start === timeStr);
+                        // イベントの終了時刻を計算（終了時刻がない場合は50分後と仮定）
+                        const eventEndMinutes = eventEndDate 
+                            ? eventEndDate.getHours() * 60 + eventEndDate.getMinutes()
+                            : eventStartMinutes + 50; // デフォルト50分
                         
-                        // 完全一致がない場合、最も近い時間スロットを探す（±10分以内）
+                        // 時間スロットに一致するものを探す
+                        // 1. 完全一致を探す
+                        let matchedTimeSlot = normalizedTimeSlots.find(slot => slot.normalizedStart === eventStartTimeStr);
+                        
+                        // 2. 完全一致がない場合、イベント開始時刻が時間スロットの開始時刻に最も近いものを探す（±15分以内）
                         if (!matchedTimeSlot) {
-                            matchedTimeSlot = timeSlots.find(slot => {
-                                const [slotHour, slotMin] = slot.start.split(':').map(Number);
-                                const timeDiff = Math.abs((eventHour * 60 + eventMin) - (slotHour * 60 + slotMin));
-                                return timeDiff <= 10; // 10分以内
-                            });
+                            matchedTimeSlot = normalizedTimeSlots.reduce((closest, slot) => {
+                                const timeDiff = Math.abs(eventStartMinutes - slot.startMinutes);
+                                if (!closest || timeDiff < Math.abs(eventStartMinutes - closest.startMinutes)) {
+                                    if (timeDiff <= 15) { // 15分以内
+                                        return slot;
+                                    }
+                                }
+                                return closest;
+                            }, null);
                         }
                         
-                        if (matchedTimeSlot) {
+                        // 3. イベントの時間帯と重複するすべての時間スロットを予約不可にする
+                        const overlappingSlots = normalizedTimeSlots.filter(slot => {
+                            const slotEndMinutes = slot.startMinutes + 50; // 各スロットは50分
+                            // イベントの時間帯と時間スロットが重複しているかチェック
+                            return (eventStartMinutes < slotEndMinutes && eventEndMinutes > slot.startMinutes);
+                        });
+                        
+                        if (overlappingSlots.length > 0) {
+                            matchedCount++;
                             if (!unavailableTimes[dateStr]) {
                                 unavailableTimes[dateStr] = [];
                             }
-                            if (!unavailableTimes[dateStr].includes(matchedTimeSlot.start)) {
-                                unavailableTimes[dateStr].push(matchedTimeSlot.start);
-                            }
+                            
+                            overlappingSlots.forEach(slot => {
+                                // 元の形式（'8:10'など）で保存
+                                if (!unavailableTimes[dateStr].includes(slot.start)) {
+                                    unavailableTimes[dateStr].push(slot.start);
+                                }
+                            });
+                            
+                            console.log(`📌 イベント "${event.summary || '無題'}" (${dateStr} ${eventStartTimeStr}) と重複する時間スロット:`, overlappingSlots.map(s => s.start));
+                        } else {
+                            console.warn(`⚠️ イベント "${event.summary || '無題'}" (${dateStr} ${eventStartTimeStr}) に一致する時間スロットが見つかりませんでした`);
                         }
+                    } else if (event.start && event.start.date) {
+                        // 終日イベントはスキップ
+                        console.log(`ℹ️ 終日イベント "${event.summary || '無題'}" はスキップしました`);
                     }
                 });
                 
+                console.log(`📊 処理結果: ${processedCount}件のイベントを処理し、${matchedCount}件が時間スロットと一致しました`);
                 console.log(`📌 ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}件の予約済み時間帯を登録しました`);
                 console.log('予約済み日時:', unavailableTimes);
                 

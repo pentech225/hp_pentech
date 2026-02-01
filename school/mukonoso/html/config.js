@@ -21,7 +21,7 @@ const CONFIG = {
     // パスワード保護設定
     // PASSWORD_PROTECTION_ENABLED: true に設定すると、サイト全体がパスワード保護されます
     // PASSWORD_PROTECTION_ENABLED: false に設定すると、パスワード保護が無効になります
-    PASSWORD_PROTECTION_ENABLED: true,
+    PASSWORD_PROTECTION_ENABLED: false,
     
     // パスワード（PASSWORD_PROTECTION_ENABLEDがtrueの場合に使用）
     PASSWORD: '123'
