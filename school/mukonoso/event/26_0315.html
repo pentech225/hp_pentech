@@ -6,10 +6,10 @@
     <title>武庫っ子あつまれ！ゲームプログラミング大会 | iTeen 武庫之荘校</title>
     
     <!-- パスワード保護 -->
-    <script src="config.js"></script>
-    <script src="password-check.js"></script>
+    <script src="../html/config.js"></script>
+    <script src="../html/password-check.js"></script>
     <!-- メール送信履歴管理 -->
-    <script src="email-history.js"></script>
+    <script src="../html/email-history.js"></script>
     <link rel="stylesheet" href="../css/style.css">
     <style>
         :root {
@@ -519,23 +519,23 @@
                         参加希望時間帯<span class="time-slot-required">※必須</span>
                     </label>
                     <div class="time-slot-buttons" id="time-slot-buttons">
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('1部：10:00〜10:40')">
+                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('1部：10:00〜10:40', event)">
                             <div class="time-label">1部：10:00〜10:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('2部：11:00〜11:40')">
+                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('2部：11:00〜11:40', event)">
                             <div class="time-label">2部：11:00〜11:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('3部：13:00〜13:40')">
+                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('3部：13:00〜13:40', event)">
                             <div class="time-label">3部：13:00〜13:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('4部：14:00〜14:40')">
+                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('4部：14:00〜14:40', event)">
                             <div class="time-label">4部：14:00〜14:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('5部：15:00〜15:40')">
+                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('5部：15:00〜15:40', event)">
                             <div class="time-label">5部：15:00〜15:40</div>
                             <div class="time-duration">40分</div>
                         </button>
@@ -646,9 +646,16 @@
     </footer>
 
     <!-- 共通設定ファイルを読み込む -->
-    <script src="config.js"></script>
+    <script src="../html/config.js"></script>
     
     <script>
+        // CONFIGが読み込まれているか確認
+        if (typeof CONFIG === 'undefined') {
+            console.error('CONFIGが読み込まれていません。config.jsのパスを確認してください。');
+        } else {
+            console.log('CONFIG読み込み成功:', CONFIG);
+        }
+        
         // 選択された時間帯
         let selectedTimeSlot = null;
         
@@ -665,14 +672,17 @@
         let messageText = '';
         
         // 時間帯を選択
-        function selectTimeSlot(timeSlot) {
+        function selectTimeSlot(timeSlot, event) {
             // 以前の選択を解除
             document.querySelectorAll('.time-slot-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
             
             // 新しい選択
-            event.target.closest('.time-slot-button').classList.add('selected');
+            const button = event ? event.target.closest('.time-slot-button') : document.querySelector(`.time-slot-button[onclick*="${timeSlot}"]`);
+            if (button) {
+                button.classList.add('selected');
+            }
             selectedTimeSlot = timeSlot;
             
             // 送信ボタンの有効/無効を更新
@@ -795,6 +805,11 @@
         
         // フォームを送信
         function submitEventForm() {
+            console.log('submitEventForm が呼び出されました');
+            console.log('selectedTimeSlot:', selectedTimeSlot);
+            console.log('childName:', childName);
+            console.log('phoneNumber:', phoneNumber);
+            
             if (!selectedTimeSlot) {
                 alert('参加希望時間帯を選択してください。');
                 return;
@@ -828,11 +843,20 @@
                 }
             }
             
+            // CONFIGが読み込まれているか確認
+            if (typeof CONFIG === 'undefined') {
+                console.error('CONFIGが読み込まれていません。mailtoリンクを使用します。');
+                sendEmailWithMailto();
+                return;
+            }
+            
             // Google Apps Scriptが設定されている場合は、Google Apps Scriptで送信
             if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+                console.log('Google Apps Scriptを使用して送信します');
                 sendEmailWithGoogleAppsScript();
             } else {
                 // Google Apps Scriptが設定されていない場合は、mailtoリンクを使用
+                console.log('mailtoリンクを使用して送信します');
                 sendEmailWithMailto();
             }
         }
