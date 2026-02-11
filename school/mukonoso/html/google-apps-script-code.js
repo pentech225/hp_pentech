@@ -130,6 +130,21 @@ iTeen 武庫之荘校`;
       }
     }
     
+    // Google Sheetsに履歴を保存
+    try {
+      saveToGoogleSheets('contact', {
+        timestamp: new Date().toISOString(),
+        email: email,
+        phone: phone,
+        message: message,
+        subject: subject
+      });
+      console.log('Google Sheetsに履歴を保存しました');
+    } catch (sheetError) {
+      console.error('Google Sheetsへの保存エラー:', sheetError);
+      // エラーは記録するが続行（メール送信は成功している）
+    }
+    
     // 成功レスポンス
     return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
       success: true,
@@ -393,6 +408,26 @@ iTeen 武庫之荘校
       });
     }
     
+    // Google Sheetsに履歴を保存
+    try {
+      saveToGoogleSheets('reservation', {
+        timestamp: new Date().toISOString(),
+        child_name: childName,
+        phone: phone,
+        email: email,
+        school_type: schoolType,
+        grade: grade,
+        date: dateDisplay,
+        time: timeDisplay,
+        message: message,
+        subject: subject
+      });
+      console.log('Google Sheetsに履歴を保存しました');
+    } catch (sheetError) {
+      console.error('Google Sheetsへの保存エラー:', sheetError);
+      // エラーは記録するが続行（メール送信とカレンダー追加は成功している）
+    }
+    
     // 成功レスポンス
     return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
       success: true,
@@ -408,13 +443,177 @@ iTeen 武庫之荘校
   }
 }
 
-// GETリクエストにも対応（テスト用）
+// Google Sheetsに履歴を保存する関数
+function saveToGoogleSheets(type, data) {
+  try {
+    // スプレッドシートID（新規作成する場合は、スプレッドシートを作成してIDを設定）
+    // 注意: このIDは、Google SheetsのURLから取得できます
+    // 例: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
+    const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID'; // ここにスプレッドシートIDを設定してください
+    
+    // スプレッドシートIDが設定されていない場合は、新規作成
+    let spreadsheet;
+    if (SPREADSHEET_ID === 'YOUR_SPREADSHEET_ID') {
+      // 新規スプレッドシートを作成
+      spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
+      console.log('新規スプレッドシートを作成しました:', spreadsheet.getId());
+      console.log('スプレッドシートURL:', spreadsheet.getUrl());
+      console.log('⚠️ このスプレッドシートIDをgoogle-apps-script-code.jsのSPREADSHEET_IDに設定してください:', spreadsheet.getId());
+    } else {
+      spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    }
+    
+    // シート名
+    const sheetName = 'EmailHistory';
+    let sheet = spreadsheet.getSheetByName(sheetName);
+    
+    // シートが存在しない場合は作成
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet(sheetName);
+      // ヘッダー行を追加
+      sheet.appendRow([
+        'タイムスタンプ',
+        '種類',
+        'お名前',
+        '電話番号',
+        'メールアドレス',
+        '学校区別',
+        '学年',
+        '日付',
+        '時間',
+        'メッセージ',
+        '件名'
+      ]);
+      // ヘッダー行を太字にする
+      const headerRange = sheet.getRange(1, 1, 1, 11);
+      headerRange.setFontWeight('bold');
+      headerRange.setBackground('#E0E0E0');
+    }
+    
+    // データを追加
+    if (type === 'reservation') {
+      sheet.appendRow([
+        data.timestamp,
+        '無料体験予約',
+        data.child_name || '',
+        data.phone || '',
+        data.email || '',
+        data.school_type || '',
+        data.grade || '',
+        data.date || '',
+        data.time || '',
+        data.message || '',
+        data.subject || ''
+      ]);
+    } else if (type === 'contact') {
+      sheet.appendRow([
+        data.timestamp,
+        'お問い合わせ',
+        '',
+        data.phone || '',
+        data.email || '',
+        '',
+        '',
+        '',
+        '',
+        data.message || '',
+        data.subject || ''
+      ]);
+    }
+    
+    console.log('Google Sheetsに履歴を保存しました:', { type, timestamp: data.timestamp });
+    return true;
+  } catch (error) {
+    console.error('Google Sheetsへの保存エラー:', error);
+    throw error;
+  }
+}
+
+// Google Sheetsから履歴を取得する関数（GETリクエスト用）
+function getEmailHistoryFromSheets() {
+  try {
+    const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID'; // ここにスプレッドシートIDを設定してください
+    
+    if (SPREADSHEET_ID === 'YOUR_SPREADSHEET_ID') {
+      return [];
+    }
+    
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = spreadsheet.getSheetByName('EmailHistory');
+    
+    if (!sheet) {
+      return [];
+    }
+    
+    // データを取得（ヘッダー行を除く）
+    const dataRange = sheet.getDataRange();
+    const values = dataRange.getValues();
+    
+    if (values.length <= 1) {
+      return [];
+    }
+    
+    // ヘッダー行を除いて、データをオブジェクトの配列に変換
+    const history = [];
+    for (let i = 1; i < values.length; i++) {
+      const row = values[i];
+      history.push({
+        timestamp: row[0],
+        type: row[1] === '無料体験予約' ? 'reservation' : 'contact',
+        data: {
+          child_name: row[2] || '',
+          phone: row[3] || '',
+          email: row[4] || '',
+          school_type: row[5] || '',
+          grade: row[6] || '',
+          date: row[7] || '',
+          time: row[8] || '',
+          message: row[9] || '',
+          subject: row[10] || ''
+        }
+      });
+    }
+    
+    // タイムスタンプでソート（新しい順）
+    history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    return history;
+  } catch (error) {
+    console.error('Google Sheetsからの履歴取得エラー:', error);
+    return [];
+  }
+}
+
+// GETリクエストにも対応（テスト用、履歴取得用）
 function doGet(e) {
-  return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
-    success: true,
-    message: 'iTeen予約フォーム API は正常に動作しています。',
-    note: 'このAPIはPOSTリクエストで予約データを受け取ります。'
-  })));
+  try {
+    // クエリパラメータでactionを確認
+    const action = e.parameter.action;
+    
+    if (action === 'getHistory') {
+      // 履歴を取得
+      const history = getEmailHistoryFromSheets();
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        history: history
+      })));
+    } else {
+      // デフォルトのレスポンス
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        message: 'iTeen予約フォーム API は正常に動作しています。',
+        note: 'このAPIはPOSTリクエストで予約データを受け取ります。',
+        actions: {
+          getHistory: '?action=getHistory で履歴を取得できます'
+        }
+      })));
+    }
+  } catch (error) {
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString()
+    })));
+  }
 }
 
 // テスト用関数（エディタから直接実行可能）

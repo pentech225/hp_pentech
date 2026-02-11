@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メール送信履歴 | iTeen 武庫之荘校 管理者</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../config.js"></script>
+    <script src="admin-password-check.js"></script>
+    <!-- メール送信履歴管理 -->
+    <script src="../email-history.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .control-group select,
+        .control-group input {
+            padding: 8px 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #357ABD;
+        }
+        
+        .btn-danger {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #D32F2F;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #e0f2ff 0%, #f0f8ff 100%);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .history-item {
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            padding: 20px;
+            background: var(--white);
+            transition: all 0.2s;
+        }
+        
+        .history-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 3px 10px rgba(74, 144, 226, 0.1);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .history-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .history-type.reservation {
+            background-color: var(--primary);
+        }
+        
+        .history-type.contact {
+            background-color: var(--accent);
+        }
+        
+        .history-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .history-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .history-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .history-field-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .history-field-value {
+            font-size: 1rem;
+            color: var(--text);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-group {
+                width: 100%;
+            }
+            
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 メール送信履歴</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>種類</label>
+                <select id="filter-type">
+                    <option value="all">すべて</option>
+                    <option value="reservation">無料体験予約</option>
+                    <option value="contact">お問い合わせ</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>開始日</label>
+                <input type="date" id="filter-start-date">
+            </div>
+            <div class="control-group">
+                <label>終了日</label>
+                <input type="date" id="filter-end-date">
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <label style="visibility: hidden;">フィルタ</label>
+                <button class="btn btn-primary" onclick="applyFilter()">フィルタ適用</button>
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <label style="visibility: hidden;">再読み込み</label>
+                <button class="btn btn-primary" onclick="reloadHistory()">🔄 Google Sheetsから再読み込み</button>
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <label style="visibility: hidden;">クリア</label>
+                <button class="btn btn-danger" onclick="clearHistory()">履歴をクリア</button>
+            </div>
+        </div>
+        
+        <div class="stats" id="stats">
+            <!-- 統計情報がここに表示されます -->
+        </div>
+        
+        <div class="history-list" id="history-list">
+            <!-- 履歴がここに表示されます -->
+        </div>
+    </div>
+    
+    <script>
+        let currentHistory = [];
+        
+        // ページ読み込み時に履歴を表示
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+        });
+        
+        // 履歴を読み込んで表示
+        async function loadHistory() {
+            // ローカルストレージとGoogle Sheetsの履歴をマージ
+            if (typeof getMergedEmailHistory === 'function') {
+                currentHistory = await getMergedEmailHistory();
+            } else {
+                // フォールバック: ローカルストレージのみ
+                currentHistory = getEmailHistory();
+            }
+            displayHistory(currentHistory);
+            updateStats(currentHistory);
+        }
+        
+        // フィルタを適用
+        function applyFilter() {
+            const type = document.getElementById('filter-type').value;
+            const startDate = document.getElementById('filter-start-date').value;
+            const endDate = document.getElementById('filter-end-date').value;
+            
+            const filtered = filterEmailHistory(type, startDate, endDate);
+            displayHistory(filtered);
+            updateStats(filtered);
+        }
+        
+        // 履歴を表示
+        function displayHistory(history) {
+            const listElement = document.getElementById('history-list');
+            
+            if (history.length === 0) {
+                listElement.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>送信履歴がありません</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            listElement.innerHTML = history.map(entry => {
+                const date = new Date(entry.timestamp);
+                const dateStr = date.toLocaleString('ja-JP', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                let contentHtml = '';
+                
+                if (entry.type === 'reservation') {
+                    contentHtml = `
+                        <div class="history-field">
+                            <span class="history-field-label">お子様のお名前</span>
+                            <span class="history-field-value">${entry.data.child_name || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">電話番号</span>
+                            <span class="history-field-value">${entry.data.phone || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">メールアドレス</span>
+                            <span class="history-field-value">${entry.data.email || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">学校区別</span>
+                            <span class="history-field-value">${entry.data.school_type || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">学年</span>
+                            <span class="history-field-value">${entry.data.grade || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">予約希望日時</span>
+                            <span class="history-field-value">${entry.data.date || ''} ${entry.data.time || ''}</span>
+                        </div>
+                        ${entry.data.message && entry.data.message !== 'なし' ? `
+                        <div class="history-field" style="grid-column: 1 / -1;">
+                            <span class="history-field-label">ご質問・ご要望</span>
+                            <span class="history-field-value">${entry.data.message}</span>
+                        </div>
+                        ` : ''}
+                    `;
+                } else if (entry.type === 'contact') {
+                    contentHtml = `
+                        <div class="history-field">
+                            <span class="history-field-label">メールアドレス</span>
+                            <span class="history-field-value">${entry.data.email || '未入力'}</span>
+                        </div>
+                        <div class="history-field">
+                            <span class="history-field-label">電話番号</span>
+                            <span class="history-field-value">${entry.data.phone || '未入力'}</span>
+                        </div>
+                        <div class="history-field" style="grid-column: 1 / -1;">
+                            <span class="history-field-label">お問い合わせ内容</span>
+                            <span class="history-field-value">${entry.data.message || '未入力'}</span>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-type ${entry.type}">
+                                ${entry.type === 'reservation' ? '📅 無料体験予約' : '📧 お問い合わせ'}
+                            </span>
+                            <span class="history-date">${dateStr}</span>
+                        </div>
+                        <div class="history-content">
+                            ${contentHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 統計情報を更新
+        function updateStats(history) {
+            const statsElement = document.getElementById('stats');
+            
+            const total = history.length;
+            const reservations = history.filter(h => h.type === 'reservation').length;
+            const contacts = history.filter(h => h.type === 'contact').length;
+            
+            statsElement.innerHTML = `
+                <div class="stat-card">
+                    <h3>総送信数</h3>
+                    <div class="value">${total}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>無料体験予約</h3>
+                    <div class="value">${reservations}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>お問い合わせ</h3>
+                    <div class="value">${contacts}</div>
+                </div>
+            `;
+        }
+        
+        // 履歴を再読み込み（Google Sheetsから取得）
+        async function reloadHistory() {
+            const reloadButton = event.target;
+            const originalText = reloadButton.textContent;
+            reloadButton.disabled = true;
+            reloadButton.textContent = '読み込み中...';
+            
+            try {
+                // Google Sheetsから履歴を取得
+                if (typeof getMergedEmailHistory === 'function') {
+                    currentHistory = await getMergedEmailHistory();
+                } else if (typeof getEmailHistoryFromGoogleSheets === 'function') {
+                    const sheetsHistory = await getEmailHistoryFromGoogleSheets();
+                    // Google Sheetsのデータ形式をローカル形式に変換
+                    currentHistory = sheetsHistory.map(entry => ({
+                        id: entry.timestamp || Date.now().toString(),
+                        timestamp: entry.timestamp,
+                        type: entry.type,
+                        data: entry.data
+                    }));
+                } else {
+                    alert('Google Sheetsからの履歴取得機能が利用できません。');
+                    return;
+                }
+                
+                displayHistory(currentHistory);
+                updateStats(currentHistory);
+                alert('Google Sheetsから履歴を再読み込みしました。\n' + currentHistory.length + '件の履歴を取得しました。');
+            } catch (error) {
+                console.error('履歴の再読み込みエラー:', error);
+                alert('履歴の再読み込みに失敗しました。\n\nエラー: ' + error.message);
+            } finally {
+                reloadButton.disabled = false;
+                reloadButton.textContent = originalText;
+            }
+        }
+        
+        // 履歴をクリア
+        function clearHistory() {
+            if (confirm('本当にすべての送信履歴を削除しますか？\nこの操作は取り消せません。\n\n注意: この操作はローカルストレージのみをクリアします。\nGoogle Sheetsの履歴は削除されません。')) {
+                if (clearEmailHistory()) {
+                    alert('ローカルストレージの送信履歴を削除しました。\n\nGoogle Sheetsの履歴は残っています。「Google Sheetsから再読み込み」ボタンで再表示できます。');
+                    loadHistory();
+                } else {
+                    alert('送信履歴の削除に失敗しました。');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+

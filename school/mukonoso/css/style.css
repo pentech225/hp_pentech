@@ -336,7 +336,6 @@ a { text-decoration: none; color: var(--primary); }
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border-left: 5px solid var(--accent);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .news-item:hover {
@@ -408,7 +407,6 @@ a { text-decoration: none; color: var(--primary); }
 }
 .usp-card h3 {
     font-size: 1.1rem; color: var(--primary); margin-bottom: 10px;
-    border-left: 5px solid var(--accent); padding-left: 10px;
 }
 /* ... (他のセクションのCSSは省略) ... */
 
@@ -499,7 +497,6 @@ a { text-decoration: none; color: var(--primary); }
     padding: 20px;
     border-radius: 10px;
     margin: 20px 0;
-    border-left: 5px solid var(--accent);
 }
 .fee-highlight p {
     margin: 0;
@@ -690,7 +687,6 @@ a { text-decoration: none; color: var(--primary); }
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border-left: 5px solid var(--accent);
 }
 .testimonial-header {
     display: flex;
@@ -758,7 +754,6 @@ a { text-decoration: none; color: var(--primary); }
     color: var(--primary);
     font-size: 1.2rem;
     margin-bottom: 15px;
-    border-left: 5px solid var(--accent);
     padding-left: 10px;
 }
 .pricing-table {
@@ -999,7 +994,6 @@ a { text-decoration: none; color: var(--primary); }
     font-size: 1.1rem;
     color: var(--accent);
     margin-bottom: 15px;
-    border-left: 5px solid var(--accent);
     padding-left: 10px;
 }
 .access-info p {

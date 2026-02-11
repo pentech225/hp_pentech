@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブログ | iTeen 武庫之荘校</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../config.js"></script>
+    <script src="../password-check.js"></script>
+    
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../../css/blog.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../../index.html">ホーム</a>
+            <a href="../../index.html#news">ニュース</a>
+            <a href="index.html">ブログ</a>
+            <a href="../../index.html#courses">コース</a>
+            <a href="../../index.html#teachers">講師</a>
+            <a href="../values.html">大切にしていること</a>
+            <a href="../../index.html#fee">料金</a>
+            <a href="../../index.html#faq">よくある質問</a>
+            <a href="../../index.html#access">アクセス</a>
+            <a href="../contact.html">お問い合わせ</a>
+            <a href="../reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="blog-section">
+        <div class="container">
+            <h1 class="blog-title">📝 ブログ</h1>
+            <p class="blog-subtitle">教室の日常やプログラミングのコツ、イベントレポートなどをお届けします</p>
+            
+            <!-- 
+                ============================================
+                ブログ記事を追加する方法
+                ============================================
+                
+                【新しい記事を追加する手順】
+                
+                1. 記事ファイルを作成
+                   - ARTICLE_TEMPLATE.html をコピー
+                   - ファイル名を変更（例: article-20260215.html）
+                   - 記事の内容を編集
+                
+                2. このブログ一覧に記事を追加
+                   - 下の <div class="blog-list"> の中に新しい記事のHTMLを追加
+                   - 記事は上から新しい順に並べる（最新が一番上）
+                   - 記事のリンク（href）を、作成したファイル名に変更
+                
+                3. 記事のHTML構造（コピーして使用）:
+                
+                <!-- ブログ記事X -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.02.15</span>
+                        <span class="blog-category">イベント</span>
+                    </div>
+                    <h2 class="blog-item-title">記事タイトルをここに入力</h2>
+                    <div class="blog-item-content">
+                        記事の要約や冒頭部分をここに入力します。読者の興味を引く内容にしましょう。
+                    </div>
+                    <a href="article-20260215.html" class="blog-item-link">続きを読む</a>
+                </article>
+                
+                【カテゴリの選択肢】
+                - イベント
+                - 授業レポート
+                - プログラミングのコツ
+                - 教室の様子
+                - 教室長からのメッセージ
+                - お知らせ
+                
+                【特別な強調が必要な記事の場合】
+                背景色を変更できます:
+                <article class="blog-item" style="background: linear-gradient(135deg, #fff8e1 0%, var(--white) 100%);">
+                
+                ============================================
+            -->
+            
+            <div class="blog-list">
+                <!-- ブログ記事1 - 情熱的なメッセージ -->
+                <article class="blog-item" style="background: linear-gradient(135deg, #fff8e1 0%, var(--white) 100%);">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.02.05</span>
+                        <span class="blog-category" style="background: var(--primary);">教室長からのメッセージ</span>
+                    </div>
+                    <h2 class="blog-item-title" style="color: var(--primary);">なぜ今、プログラミングなのか？<br>尼崎の子供たちを、未来の創造者に。</h2>
+                    <div class="blog-item-content" style="font-size: 1.05rem; line-height: 2;">
+                        <p style="font-weight: bold; color: var(--text); margin-bottom: 15px;">
+                            「うちの子、ゲームばかりして...」「将来が不安...」「何を習わせればいいの？」
+                        </p>
+                        <p>
+                            親御さん、その不安、よく分かります。でも、その不安を<strong style="color: var(--accent);">希望に変える</strong>のが、プログラミング教育です。
+                        </p>
+                        <p>
+                            <strong>なぜ今、プログラミングなのか？</strong><br>
+                            10年後、20年後。AIが当たり前の時代。その時、<strong>「作る側」</strong>と<strong>「使う側」</strong>、どちらになりたいですか？
+                        </p>
+                        <p>
+                            尼崎の子供たちには、<strong>「作る側」</strong>になってほしい。ゲームを遊ぶだけでなく、<strong>ゲームを作る</strong>。アプリを使うだけでなく、<strong>アプリを作る</strong>。そんな未来の創造者に。
+                        </p>
+                        <p style="font-weight: bold; color: var(--primary); margin-top: 20px;">
+                            私たちは、尼崎の子供たちの可能性を、本気で信じています。
+                        </p>
+                    </div>
+                    <a href="why-programming-now.html" class="blog-item-link">続きを読む</a>
+                </article>
+
+                <!-- ブログ記事2 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.02.09</span>
+                        <span class="blog-category">イベント</span>
+                    </div>
+                    <h2 class="blog-item-title">実学を学んでほしい</h2>
+                    <div class="blog-item-content">
+                        皆さん、お世話になっております。プログラミング教室、教室長の彦阪です。
+                        何のためにプログラミングを教えるのか、実際に子供たちのためになっているのか、自問自答をしながら教室運営を行っております。<br>
+                        結論から申しますと、行動なくして成長なし、知識のインプットだけではなく、アウトプットを最大化するような教育を心がけたいと考えています。
+                        私自身も、中学生の時頑張って受験勉強したこと、大学生の時、あきらめずに部活に食らいついて努力したこと、すべて行動が会ったからこそ、人脈も経験も身についています。
+                        ただ、覚えるだけじゃない。そこに実学が伴うか。それを追及していきます。
+                        本教室は、生徒一人ひとりに合わせてカリキュラムを組んでおります。だから、安心して通っていただいております。
+                    </div>
+                    <a href="26_0209_01.html" class="blog-item-link">続きを読む</a>
+                </article>
+                <!-- ブログ記事2 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.02.01</span>
+                        <span class="blog-category">イベント</span>
+                    </div>
+                    <h2 class="blog-item-title">節分ゲーム大会を開催しました！</h2>
+                    <div class="blog-item-content">
+                        2月1日に第6回ゲーム大会を開催しました。生徒たちが作成したScratchゲームで遊び、大盛り上がりでした！参加してくださった皆様、ありがとうございました。次回のイベントもお楽しみに！
+                    </div>
+                    <a href="article-20260201.html" class="blog-item-link">続きを読む</a>
+                </article>
+
+                <!-- ブログ記事2 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.01.20</span>
+                        <span class="blog-category">授業レポート</span>
+                    </div>
+                    <h2 class="blog-item-title">3Dプリンターでオリジナル作品を作成</h2>
+                    <div class="blog-item-content">
+                        生徒たちがBlenderで3Dモデリングを学び、3Dプリンターで実際に作品を出力しました。自分のアイデアが形になる瞬間は、いつ見ても感動的です。次はどんな作品ができるか楽しみです！
+                    </div>
+                    <a href="article-20260120.html" class="blog-item-link">続きを読む</a>
+                </article>
+
+                <!-- ブログ記事3 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.01.15</span>
+                        <span class="blog-category">プログラミングのコツ</span>
+                    </div>
+                    <h2 class="blog-item-title">Scratch検定対策のポイント</h2>
+                    <div class="blog-item-content">
+                        Scratch検定に向けて、生徒たちが一生懸命取り組んでいます。検定対策のポイントをまとめました。基本的な操作から応用まで、段階的に学習することで確実に力がつきます。
+                    </div>
+                    <a href="article-20260115.html" class="blog-item-link">続きを読む</a>
+                </article>
+
+                <!-- ブログ記事4 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2026.01.10</span>
+                        <span class="blog-category">教室の様子</span>
+                    </div>
+                    <h2 class="blog-item-title">新年の目標を立てました</h2>
+                    <div class="blog-item-content">
+                        新年を迎え、生徒たちと一緒に今年の目標を立てました。書初めも行いました。それぞれが「こんなゲームを作りたい」「この技術を学びたい」と具体的な目標を発表してくれました。一年間、一緒に頑張っていきましょう！
+                    </div>
+                    <a href="article-20260110.html" class="blog-item-link">続きを読む</a>
+                </article>
+
+                <!-- ブログ記事5 -->
+                <article class="blog-item">
+                    <div class="blog-item-header">
+                        <span class="blog-date">2025.12.25</span>
+                        <span class="blog-category">イベント</span>
+                    </div>
+                    <h2 class="blog-item-title">ハロウィンイベントを開催しました</h2>
+                    <div class="blog-item-content">
+                        お化けにまつわるイベントを開催しました。生徒たちが作成したScratchゲームで遊びました。参加してくださった皆様、ありがとうございました。次回のイベントもお楽しみに！
+                    </div>
+                    <a href="article-20251225.html" class="blog-item-link">続きを読む</a>
+                </article>
+            </div>
+
+            <!-- ページネーション -->
+            <div class="blog-pagination">
+                <a href="#" class="pagination-btn">前へ</a>
+                <a href="#" class="pagination-btn active">1</a>
+                <a href="#" class="pagination-btn">2</a>
+                <a href="#" class="pagination-btn">3</a>
+                <a href="#" class="pagination-btn">次へ</a>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="../../index.html" class="btn-lg btn-accent" style="display: inline-block; padding: 15px 40px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 1.1rem; transition: all 0.2s;">
+                    ホームに戻る
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+</body>
+</html>
+

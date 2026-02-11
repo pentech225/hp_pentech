@@ -8,6 +8,8 @@
     <!-- パスワード保護 -->
     <script src="config.js"></script>
     <script src="password-check.js"></script>
+    <!-- メール送信履歴管理 -->
+    <script src="email-history.js"></script>
     <style>
         :root {
             --primary: #4A90E2;
@@ -542,7 +544,6 @@
         }
         .child-name-notice {
             background-color: #f0f8ff;
-            border-left: 4px solid var(--primary);
             padding: 12px 15px;
             margin-bottom: 15px;
             border-radius: 4px;
@@ -616,7 +617,6 @@
             margin-top: 8px;
             padding: 8px 12px;
             background-color: #ffebee;
-            border-left: 4px solid #F44336;
             border-radius: 4px;
             font-size: 0.85rem;
             color: #c62828;
@@ -667,7 +667,6 @@
             margin-top: 8px;
             padding: 8px 12px;
             background-color: #ffebee;
-            border-left: 4px solid #F44336;
             border-radius: 4px;
             font-size: 0.85rem;
             color: #c62828;
@@ -2363,6 +2362,21 @@ iTeen 武庫之荘校
                 // no-corsモードではレスポンスを取得できないため、常に成功として扱う
                 // 実際にはメール送信が成功している可能性が高い
                 console.log('✅ Google Apps Scriptに送信しました（レスポンスは取得できませんが、メール送信は成功している可能性があります）');
+                
+                // 送信履歴を保存
+                if (typeof saveEmailHistory === 'function') {
+                    saveEmailHistory('reservation', {
+                        child_name: childName,
+                        phone: phoneNumber,
+                        email: emailAddress || '未入力',
+                        school_type: selectedSchoolType,
+                        grade: selectedGrade,
+                        date: formatDateDisplay(selectedDate),
+                        time: formatTimeDisplay(selectedTime),
+                        message: messageText || 'なし'
+                    });
+                }
+                
                 // 予約情報を感謝ページに表示
                 showThankYouPage();
             })

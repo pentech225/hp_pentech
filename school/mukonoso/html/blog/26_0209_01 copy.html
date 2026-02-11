@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+        ============================================
+        ブログ記事テンプレート - 使い方ガイド
+        ============================================
+        
+        【記事を追加する手順】
+        
+        1. このファイルをコピーして、新しいファイル名に変更してください
+           例: article-20260215.html（日付形式で命名すると管理しやすいです）
+        
+        2. 以下の項目を編集してください:
+           - <title>タグ内のタイトル
+           - .article-date の日付（YYYY.MM.DD形式）
+           - .article-category のカテゴリ（イベント、授業レポート、プログラミングのコツ、教室の様子など）
+           - .article-title の記事タイトル
+           - .article-content 内の本文
+        
+        3. ブログ一覧ページ（index.html）に記事を追加:
+           - html/blog/index.html を開く
+           - <div class="blog-list"> の中に、新しい記事のHTMLを追加
+           - 記事は上から新しい順に並べる（最新の記事が一番上）
+           - 記事のリンク（href）を、作成したファイル名に変更
+        
+        4. メインのブログページ（blog.html）にも追加:
+           - html/blog.html を開く
+           - 同様に記事を追加
+        
+        【カテゴリの例】
+        - イベント
+        - 授業レポート
+        - プログラミングのコツ
+        - 教室の様子
+        - 教室長からのメッセージ
+        - お知らせ
+        
+        【画像を追加する場合】
+        - 画像は images/ フォルダに保存
+        - <img src="../../images/画像ファイル名.png" alt="説明"> の形式で追加
+        
+        ============================================
+    -->
+    <title>【記事タイトルをここに入力】 | iTeen 武庫之荘校</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../config.js"></script>
+    <script src="../password-check.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* メインセクション */
+        .blog-article-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .article-header {
+            background: linear-gradient(135deg, #fff8e1 0%, var(--white) 100%);
+            border-radius: 15px;
+            padding: 50px 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .article-date {
+            background: var(--primary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .article-category {
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .article-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+        .article-content {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 50px 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .article-content h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid var(--accent);
+            font-weight: bold;
+        }
+        .article-content h2:first-child {
+            margin-top: 0;
+        }
+        .article-content h3 {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .article-content p {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 25px;
+            line-height: 2;
+        }
+        .article-content strong {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .article-content ul,
+        .article-content ol {
+            margin: 25px 0;
+            padding-left: 35px;
+        }
+        .article-content li {
+            margin-bottom: 15px;
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .article-content blockquote {
+            padding: 25px 30px;
+            margin: 30px 0;
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .back-to-list {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .header-brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-line-button {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .header-nav {
+                gap: 10px;
+            }
+            .header-nav a {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            .article-header {
+                padding: 30px 20px;
+            }
+            .article-title {
+                font-size: 1.8rem;
+            }
+            .article-content {
+                padding: 30px 20px;
+            }
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+            .article-content h3 {
+                font-size: 1.3rem;
+            }
+            .article-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../../index.html">ホーム</a>
+            <a href="../../index.html#news">ニュース</a>
+            <a href="index.html">ブログ</a>
+            <a href="../../index.html#courses">コース</a>
+            <a href="../../index.html#teachers">講師</a>
+            <a href="../values.html">大切にしていること</a>
+            <a href="../../index.html#fee">料金</a>
+            <a href="../../index.html#faq">よくある質問</a>
+            <a href="../../index.html#access">アクセス</a>
+            <a href="../contact.html">お問い合わせ</a>
+            <a href="../reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="blog-article-section">
+        <div class="container">
+            <!-- 
+                ============================================
+                記事ヘッダー部分 - ここを編集してください
+                ============================================
+            -->
+            <div class="article-header">
+                <!-- 日付とカテゴリを編集 -->
+                <div class="article-meta">
+                    <span class="article-date">2026.02.09</span>
+                    <!-- カテゴリを選択: イベント、授業レポート、プログラミングのコツ、教室の様子、教室長からのメッセージ、お知らせ -->
+                    <span class="article-category">イベント</span>
+                </div>
+                <!-- 記事タイトルを編集 -->
+                <h1 class="article-title">ハリネズミの概念</h1>
+            </div>
+
+            <!-- 
+                ============================================
+                記事本文部分 - ここに記事の内容を書いてください
+                ============================================
+            -->
+            <div class="article-content">
+                <!-- 冒頭の段落 -->
+                <p>
+                    生徒に何を伝えるか
+                </p>
+                
+                <!-- 見出し2を使う場合 -->
+                <h2>情熱をもって課題に打ち込んでほしい</h2>
+                <p>
+                    皆さん、お世話になっております。プログラミング教室、教室長の彦阪です。
+                    何のためにプログラミングを教えるのか、実際に子供たちのためになっているのか、自問自答をしながら教室運営を行っております。<br>
+                    結論から申しますと、行動なくして成長なし、知識のインプットだけではなく、アウトプットを最大化するような教育を心がけたいと考えています。
+                    私自身も、中学生の時頑張って受験勉強したこと、大学生の時、あきらめずに部活に食らいついて努力したこと、すべて行動が会ったからこそ、人脈も経験も身についています。
+                    ただ、覚えるだけじゃない。そこに実学が伴うか。それを追及していきます。
+                    本教室は、生徒一人ひとりに合わせてカリキュラムを組んでおります。だから、安心して通っていただいております。
+                </p>
+                
+                <!-- 見出し3を使う場合 -->
+                <h3>見出し3（中見出し）</h3>
+                <p>
+                    見出し3の下に本文を書きます。
+                </p>
+                
+                <!-- リストを使う場合 -->
+                <ul>
+                    <li>リスト項目1</li>
+                    <li>リスト項目2</li>
+                    <li>リスト項目3</li>
+                </ul>
+                
+                <!-- 強調したい部分 -->
+                <p>
+                    重要なポイントは<strong>このように強調</strong>できます。
+                </p>
+                
+                <!-- 画像を追加する場合 -->
+                <!-- 
+                <img src="../../images/画像ファイル名.png" alt="画像の説明">
+                -->
+                
+                <!-- 引用を使う場合 -->
+                <blockquote>
+                    引用文や重要なメッセージをここに入力できます。
+                </blockquote>
+                
+                <!-- 最後の段落 -->
+                <p>
+                    記事の最後の段落をここに入力してください。
+                </p>
+            </div>
+
+            <!-- 
+                ============================================
+                ナビゲーション部分 - 通常は変更不要
+                ============================================
+            -->
+            <div class="article-navigation">
+                <a href="index.html" class="nav-link">← ブログ一覧に戻る</a>
+                <a href="index.html" class="nav-link">次の記事 →</a>
+            </div>
+
+            <div class="back-to-list">
+                <a href="index.html" class="nav-link">ブログ一覧に戻る</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+</body>
+</html>
+

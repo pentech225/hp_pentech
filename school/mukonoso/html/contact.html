@@ -8,6 +8,8 @@
     <!-- パスワード保護 -->
     <script src="config.js"></script>
     <script src="password-check.js"></script>
+    <!-- メール送信履歴管理 -->
+    <script src="email-history.js"></script>
     <style>
         :root {
             --primary: #4A90E2;
@@ -206,7 +208,6 @@
             margin-top: 8px;
             padding: 8px 12px;
             background-color: #ffebee;
-            border-left: 4px solid #F44336;
             border-radius: 4px;
             font-size: 0.85rem;
             color: #c62828;
@@ -684,6 +685,15 @@ iTeen 武庫之荘校
                 // no-corsモードではレスポンスを取得できないため、常に成功として扱う
                 // 実際にはメール送信が成功している可能性が高い
                 console.log('✅ お問い合わせを送信しました（レスポンスは取得できませんが、メール送信は成功している可能性があります）');
+                
+                // 送信履歴を保存
+                if (typeof saveEmailHistory === 'function') {
+                    saveEmailHistory('contact', {
+                        email: email,
+                        phone: phone || '未入力',
+                        message: message
+                    });
+                }
                 
                 // フォームをリセット
                 document.getElementById('contact-form').reset();
