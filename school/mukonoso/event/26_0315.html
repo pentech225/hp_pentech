@@ -867,16 +867,29 @@
             submitButton.disabled = true;
             submitButton.textContent = '送信中...';
             
+            // 時間帯から時間を抽出（例: "1部：10:00〜10:40" → "10:00"）
+            let timeValue = '';
+            if (selectedTimeSlot) {
+                const timeMatch = selectedTimeSlot.match(/(\d{1,2}):(\d{2})/);
+                if (timeMatch) {
+                    timeValue = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                }
+            }
+            
             const emailData = {
                 to: CONFIG.EMAIL,
                 subject: 'ゲームプログラミング大会 参加申し込み',
-                event_type: 'game_programming_event',
-                event_date: '2026年3月15日(日)',
-                time_slot: selectedTimeSlot,
+                // Google Apps Scriptが期待する形式に合わせる
+                date: '2026年3月15日(日)',
+                date_raw: '2026-03-15', // YYYY-MM-DD形式（必須）
+                time: timeValue || '10:00', // HH:MM形式（必須）
+                time_slot: selectedTimeSlot, // 表示用
                 child_name: childName,
                 phone: phoneNumber,
                 email: emailAddress || '未入力',
                 message: messageText || 'なし',
+                school_type: 'ゲームプログラミング大会', // イベント名として使用
+                grade: '', // イベントなので学年は空
                 body: `ゲームプログラミング大会への参加申し込みがありました。
 
 お子さんのお名前: ${childName}
@@ -919,18 +932,31 @@ iTeen 子どものためのICT教育普及促進委員会
 電話: 070-2327-8083` : undefined
             };
             
+            // デバッグ用ログ
+            console.log('📧 メール送信データ確認:', {
+                hasEmail: !!emailAddress,
+                emailAddress: emailAddress,
+                hasReplyTo: !!emailData.replyTo,
+                replyTo: emailData.replyTo,
+                date_raw: emailData.date_raw,
+                time: emailData.time,
+                time_slot: emailData.time_slot
+            });
+            
             console.log('📤 Google Apps Scriptに送信中...', emailData);
             
             fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                mode: 'no-cors', // no-corsモードでCORSエラーを回避
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(emailData)
             })
             .then(() => {
-                console.log('✅ Google Apps Scriptに送信しました');
+                // no-corsモードではレスポンスを取得できないため、常に成功として扱う
+                // 実際にはメール送信が成功している可能性が高い
+                console.log('✅ Google Apps Scriptに送信しました（レスポンスは取得できませんが、メール送信は成功している可能性があります）');
                 
                 // 送信履歴を保存
                 if (typeof saveEmailHistory === 'function') {
