@@ -6,29 +6,47 @@
  */
 
 // CORSヘッダーを設定するヘルパー関数
+// 注意: Google Apps Scriptでは、setHeaders()はWebアプリとしてデプロイした場合のみ動作します
+// また、プリフライトリクエスト（OPTIONS）にはdoOptions()関数で対応する必要があります
 function setCorsHeaders(output) {
   if (!output) {
     output = ContentService.createTextOutput('');
   }
   // CORSヘッダーを設定
-  return output
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+  // Google Apps Scriptでは、setHeaders()は実際には動作しない場合があります
+  // そのため、no-corsモードを使用するか、またはHtmlServiceを使用する必要があります
+  try {
+    return output
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
+  } catch (e) {
+    // setHeaders()が失敗した場合は、MIMEタイプのみ設定
+    console.error('setHeaders() failed:', e);
+    return output.setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 // OPTIONSリクエスト（プリフライト）に対応
+// ブラウザがCORSプリフライトリクエストを送信する場合に呼び出されます
 function doOptions() {
-  return ContentService.createTextOutput('')
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+  try {
+    return ContentService.createTextOutput('')
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600'
+      });
+  } catch (e) {
+    console.error('doOptions() setHeaders() failed:', e);
+    return ContentService.createTextOutput('')
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 function doPost(e) {
@@ -436,17 +454,34 @@ iTeen 武庫之荘校
     }
     
     // 成功レスポンス
-    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+    const successResponse = {
       success: true,
       message: 'メールを送信し、カレンダーに予約を追加しました',
       eventId: event.getId(),
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString()
-    })));
+    };
+    
+    console.log('✅ 予約フォーム処理成功:', successResponse);
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(successResponse)));
     
   } catch (error) {
-    console.error('予約フォーム処理エラー:', error);
-    throw error;
+    console.error('❌ 予約フォーム処理エラー:', error);
+    console.error('エラー詳細:', {
+      message: error.toString(),
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // エラーレスポンスを返す（クライアント側でエラーを確認できるように）
+    const errorResponse = {
+      success: false,
+      error: error.toString(),
+      message: '予約フォームの処理中にエラーが発生しました: ' + error.toString()
+    };
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(errorResponse)));
   }
 }
 

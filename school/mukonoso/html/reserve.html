@@ -2409,6 +2409,10 @@ iTeen 武庫之荘校
                     console.log('⚠️ CORSエラーが発生しました。no-corsモードで再試行します...');
                     
                     // no-corsモードで再送信（レスポンスは取得できないが、メール送信は成功する可能性がある）
+                    // 注意: no-corsモードでは、リクエストは送信されますが、レスポンスを取得できないため、
+                    // エラーが発生していても検知できません。Google Apps Scriptの実行ログを確認してください。
+                    console.log('⚠️ no-corsモードで送信します。Google Apps Scriptの実行ログでメール送信の成功/失敗を確認してください。');
+                    
                     fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
@@ -2418,7 +2422,9 @@ iTeen 武庫之荘校
                         body: JSON.stringify(emailData)
                     })
                     .then(() => {
-                        console.log('✅ no-corsモードで送信しました（レスポンスは取得できませんが、メール送信は成功している可能性があります）');
+                        console.log('✅ no-corsモードでリクエストを送信しました');
+                        console.log('⚠️ 注意: レスポンスは取得できませんが、リクエストはGoogle Apps Scriptに到達しています。');
+                        console.log('⚠️ Google Apps Scriptの実行ログ（https://script.google.com/home/executions）でメール送信の成功/失敗を確認してください。');
                         
                         // 送信履歴を保存
                         if (typeof saveEmailHistory === 'function') {
@@ -2435,7 +2441,13 @@ iTeen 武庫之荘校
                         }
                         
                         // 予約情報を感謝ページに表示
+                        // 注意: no-corsモードでは、実際にメール送信が成功したかどうかを確認できないため、
+                        // ユーザーには「送信しました」と表示しますが、実際にはGoogle Apps Scriptの
+                        // 実行ログで確認する必要があります。
                         showThankYouPage();
+                        
+                        // ユーザーに注意を促す（オプション）
+                        // alert('申し込みを受け付けました。\n\n注意: メール送信の確認のため、Google Apps Scriptの実行ログを確認してください。');
                     })
                     .catch(noCorsError => {
                         console.error('❌ no-corsモードでも送信失敗:', noCorsError);
