@@ -20,6 +20,7 @@
         }
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 150px; /* ヘッダーの高さ分のオフセット */
         }
         body {
             font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
@@ -110,10 +111,28 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             width: 100%;
             padding-top: 10px;
             border-top: 1px solid #eee;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+        .header-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+        .header-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .header-nav::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+        .header-nav::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.3);
         }
         .header-nav a {
             color: var(--text);
@@ -124,6 +143,7 @@
             border-radius: 5px;
             transition: all 0.2s;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .header-nav a:hover {
             color: var(--primary);
@@ -134,6 +154,7 @@
         .reservation-section {
             padding: 50px 0;
             background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+            scroll-margin-top: 150px; /* ヘッダーの高さ分のオフセット */
         }
         .reservation-title {
             text-align: center;
@@ -958,6 +979,12 @@
         }
         
         @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 200px; /* スマホではヘッダーが高くなるため、より大きなオフセット */
+            }
+            .reservation-section {
+                scroll-margin-top: 200px; /* スマホではヘッダーが高くなるため、より大きなオフセット */
+            }
             .header-top {
                 flex-direction: column;
                 align-items: flex-start;
@@ -969,10 +996,14 @@
             }
             .header-nav {
                 gap: 10px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
             }
             .header-nav a {
                 font-size: 0.85rem;
                 padding: 5px 8px;
+                flex-shrink: 0;
             }
             .time-slots {
                 grid-template-columns: 1fr;
@@ -1650,10 +1681,16 @@
             // 送信ボタンの有効/無効を更新
             updateSubmitButton();
             
-            // 名前入力フィールドにスクロール
+            // 名前入力フィールドにスクロール（ヘッダーの高さを考慮）
             if (selectedDateTimes.length > 0) {
                 setTimeout(() => {
-                    document.getElementById('child-name-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const element = document.getElementById('child-name-section');
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementPosition - headerHeight - 20,
+                        behavior: 'smooth'
+                    });
                 }, 100);
             }
         }
@@ -1759,8 +1796,16 @@
             // 名前が入力されたら電話番号入力フィールドを表示
             if (childName) {
                 document.getElementById('phone-section').classList.add('show');
-                // 電話番号入力フィールドにスクロール
-                document.getElementById('phone-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // 電話番号入力フィールドにスクロール（ヘッダーの高さを考慮）
+                setTimeout(() => {
+                    const element = document.getElementById('phone-section');
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementPosition - headerHeight - 20,
+                        behavior: 'smooth'
+                    });
+                }, 100);
             } else {
                 document.getElementById('phone-section').classList.remove('show');
                 phoneNumber = '';
@@ -1770,9 +1815,15 @@
             // メールアドレス入力欄の表示/非表示
             if (phoneNumber && validateJapanesePhoneNumber(phoneNumber)) {
                 document.getElementById('email-section').classList.add('show');
-                // メールアドレス入力フィールドにスクロール
+                // メールアドレス入力フィールドにスクロール（ヘッダーの高さを考慮）
                 setTimeout(() => {
-                    document.getElementById('email-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const element = document.getElementById('email-section');
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementPosition - headerHeight - 20,
+                        behavior: 'smooth'
+                    });
                 }, 100);
             } else {
                 document.getElementById('email-section').classList.remove('show');
@@ -1845,7 +1896,13 @@
                     // メールアドレス入力欄を表示
                     document.getElementById('email-section').classList.add('show');
                     setTimeout(() => {
-                        document.getElementById('email-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const element = document.getElementById('email-section');
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                        window.scrollTo({
+                            top: elementPosition - headerHeight - 20,
+                            behavior: 'smooth'
+                        });
                     }, 100);
                 } else {
                     // 無効な電話番号
@@ -1975,8 +2032,16 @@
                 document.getElementById('calendar-container').classList.remove('show');
                 document.getElementById('submit-section').classList.remove('show');
                 
-                // 学年選択セクションにスクロール
-                document.getElementById('grade-selection-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // 学年選択セクションにスクロール（ヘッダーの高さを考慮）
+                setTimeout(() => {
+                    const element = document.getElementById('grade-selection-section');
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementPosition - headerHeight - 20,
+                        behavior: 'smooth'
+                    });
+                }, 100);
             }
         }
         
@@ -1996,8 +2061,16 @@
             document.getElementById('calendar-container').classList.add('show');
             document.getElementById('submit-section').classList.add('show');
             
-            // スクロールしてカレンダーが見えるように
-            document.getElementById('calendar-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // スクロールしてカレンダーが見えるように（ヘッダーの高さを考慮）
+            setTimeout(() => {
+                const element = document.getElementById('calendar-container');
+                const headerHeight = document.querySelector('header').offsetHeight;
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: elementPosition - headerHeight - 20,
+                    behavior: 'smooth'
+                });
+            }, 100);
         }
         
         
