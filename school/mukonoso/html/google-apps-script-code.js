@@ -149,7 +149,7 @@ iTeen 武庫之荘校`;
     }
     
     console.log('送信するメール本文:', body);
-    
+    /*
     // 管理者へのメール送信
     try {
       GmailApp.sendEmail(to, subject, body);
@@ -169,10 +169,11 @@ iTeen 武庫之荘校`;
         // 自動応答メールのエラーは記録するが続行
       }
     }
-    
+    */
     // Google Sheetsに履歴を保存
     try {
-      saveToGoogleSheets('contact', {
+      //saveToGoogleSheets('contact', {
+      saveToGoogleSheets2('contact', {
         timestamp: new Date().toISOString(),
         email: email,
         phone: phone,
@@ -198,9 +199,14 @@ iTeen 武庫之荘校`;
 }
 
 // 予約フォームの処理
+// 変更: 予約情報をGoogle Sheetsに保存するのみ。メール送信やカレンダー追加は行わない。
 function handleReservationForm(data) {
   try {
+    Logger.log('📝 予約フォームの処理を開始します（データ保存のみ）');
+    console.log('📝 予約フォームの処理を開始します（データ保存のみ）');
+    
     // 受信データをログに出力（デバッグ用）
+    Logger.log('📥 受信データ: ' + JSON.stringify(data));
     console.log('予約フォーム受信データ:', {
       date: data.date,
       date_raw: data.date_raw,
@@ -210,79 +216,10 @@ function handleReservationForm(data) {
       email: data.email,
       school_type: data.school_type,
       grade: data.grade,
-      message: data.message,
-      hasBody: !!data.body,
-      bodyLength: data.body ? data.body.length : 0,
-      replyTo: data.replyTo,
-      replySubject: data.replySubject,
-      hasReplyBody: !!data.replyBody,
-      replyBodyLength: data.replyBody ? data.replyBody.length : 0
+      message: data.message
     });
     
-    // カレンダーID（Googleカレンダーの設定から取得）
-    const CALENDAR_ID = '16f6013dd3e06376074237fd9cf818e7287bb388ed28757e477058f90c97be52@group.calendar.google.com';
-    
-    // 日付と時間をパース
-    const dateStr = data.date_raw || data.date; // YYYY-MM-DD形式
-    const timeStr = data.time; // HH:MM形式
-    
-    if (!dateStr || !timeStr) {
-      throw new Error('日付または時間が指定されていません。date_raw: ' + dateStr + ', time: ' + timeStr);
-    }
-    
-    console.log('日付:', dateStr, '時間:', timeStr);
-    
-    // 日時をDateオブジェクトに変換
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    
-    if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hours) || isNaN(minutes)) {
-      throw new Error('日付または時間の形式が正しくありません。dateStr: ' + dateStr + ', timeStr: ' + timeStr);
-    }
-    
-    const startTime = new Date(year, month - 1, day, hours, minutes);
-    const endTime = new Date(startTime);
-    endTime.setMinutes(endTime.getMinutes() + 50); // 50分のレッスン
-    
-    console.log('開始時刻:', startTime, '終了時刻:', endTime);
-    
-    // Googleカレンダーにイベントを追加
-    let calendar;
-    try {
-      calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-      if (!calendar) {
-        throw new Error('カレンダーが見つかりません。カレンダーIDを確認してください: ' + CALENDAR_ID);
-      }
-      console.log('カレンダー取得成功:', calendar.getName());
-    } catch (calError) {
-      throw new Error('カレンダーへのアクセスエラー: ' + calError.toString());
-    }
-    
-    const eventTitle = '無料体験予約';
-    const eventDescription = `予約フォームから自動登録\n\n予約希望日時: ${data.date} ${data.time}`;
-    
-    let event;
-    try {
-      event = calendar.createEvent(
-        eventTitle,
-        startTime,
-        endTime,
-        {
-          description: eventDescription,
-          location: 'iTeen 武庫之荘校'
-        }
-      );
-      console.log('イベント作成成功:', event.getId());
-    } catch (eventError) {
-      throw new Error('イベント作成エラー: ' + eventError.toString());
-    }
-    
-    // メール送信
-    const to = data.to || 'iteen.mukonosou@gmail.com';
-    const subject = data.subject || '無料体験予約のお申し込み';
-    
-    // メール本文の作成
-    // まず、個別フィールドから情報を組み立て（確実にすべての情報を含める）
+    // データの準備
     const childName = data.child_name ? data.child_name.trim() : '未入力';
     const phone = data.phone ? data.phone.trim() : '未入力';
     const email = data.email && data.email.trim() !== '' && data.email !== '未入力' ? data.email.trim() : '未入力';
@@ -292,201 +229,10 @@ function handleReservationForm(data) {
     const dateDisplay = data.date ? data.date.trim() : '';
     const timeDisplay = data.time ? data.time.trim() : '';
     
-    // メール本文を組み立て（bodyフィールドがあっても、個別フィールドから組み立てたものを優先）
-    let body = `無料体験予約のお申し込みがありました。
-
-お子様のお名前: ${childName}
-電話番号: ${phone}
-メールアドレス: ${email}
-学校区別: ${schoolType}
-学年: ${grade}
-予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
-
-予約確定のため、お客様にご連絡をお願いします。
-
----
-このメールは予約フォームから自動送信されました。
-iTeen 武庫之荘校`;
-    
-    Logger.log('📧 メール送信準備完了');
-    Logger.log('📧 送信先: ' + to);
-    Logger.log('📧 件名: ' + subject);
-    Logger.log('📧 メール本文の長さ: ' + body.length + '文字');
-    console.log('送信するメール本文:', body);
-    console.log('メール本文の長さ:', body.length);
-    
-    // Gmailでメールを送信（管理者宛）
-    try {
-      Logger.log('📧 メール送信を開始します...');
-      console.log('📧 メール送信を開始します...');
-      GmailApp.sendEmail(to, subject, body);
-      Logger.log('✅ 管理者へのメール送信成功');
-      Logger.log('✅ 送信先: ' + to);
-      Logger.log('✅ 件名: ' + subject);
-      console.log('✅ 管理者へのメール送信成功');
-    } catch (mailError) {
-      Logger.log('❌ 管理者へのメール送信エラー: ' + mailError.toString());
-      Logger.log('❌ エラーメッセージ: ' + mailError.message);
-      Logger.log('❌ エラースタック: ' + mailError.stack);
-      Logger.log('❌ 送信先: ' + to);
-      Logger.log('❌ 件名: ' + subject);
-      console.error('❌ 管理者へのメール送信エラー:', mailError);
-      console.error('❌ エラー詳細:', {
-        message: mailError.toString(),
-        name: mailError.name,
-        stack: mailError.stack,
-        to: to,
-        subject: subject
-      });
-      // メール送信エラーでも、カレンダー追加は成功しているので、エラーは記録するが続行
-    }
-    
-    // 自動応答メールの送信（メールアドレスが記載されている場合のみ）
-    console.log('📧 自動応答メール送信チェック開始');
-    console.log('受信データ:', {
-      hasReplyTo: !!data.replyTo,
-      replyTo: data.replyTo,
-      replyToType: typeof data.replyTo,
-      hasReplySubject: !!data.replySubject,
-      replySubject: data.replySubject,
-      hasReplyBody: !!data.replyBody,
-      replyBodyLength: data.replyBody ? data.replyBody.length : 0,
-      email: email,
-      emailType: typeof email
-    });
-    
-    // replyToが設定されているか確認
-    let replyEmail = null;
-    if (data.replyTo && data.replyTo !== null && data.replyTo !== undefined && data.replyTo !== '未入力') {
-      const trimmedReplyTo = String(data.replyTo).trim();
-      if (trimmedReplyTo !== '' && trimmedReplyTo.includes('@')) {
-        replyEmail = trimmedReplyTo;
-        console.log('✅ replyToからメールアドレスを取得:', replyEmail);
-      }
-    }
-    
-    // replyToが取得できなかった場合、emailフィールドから取得を試みる
-    if (!replyEmail && email && email !== null && email !== undefined && email !== '未入力') {
-      const trimmedEmail = String(email).trim();
-      if (trimmedEmail !== '' && trimmedEmail.includes('@')) {
-        replyEmail = trimmedEmail;
-        console.log('✅ emailフィールドからメールアドレスを取得:', replyEmail);
-      }
-    }
-    
-    console.log('📧 確認メール送信先:', replyEmail);
-    
-    // replySubjectとreplyBodyを取得
-    let replySubject = data.replySubject;
-    let replyBody = data.replyBody;
-    
-    // replySubjectが設定されていない場合、デフォルトを使用
-    if (!replySubject) {
-      replySubject = '【iTeen 武庫之荘校】無料体験予約のご確認';
-      console.log('⚠️ replySubjectが設定されていないため、デフォルトを使用');
-    }
-    
-    // replyBodyが設定されていない場合、emailフィールドから作成
-    if (!replyBody && replyEmail) {
-      replyBody = `${childName} 様
-
-この度は、iTeen 武庫之荘校の無料体験予約をお申し込みいただき、誠にありがとうございます。
-
-以下の内容で予約を受け付けました。
-
-【予約内容】
-お子様のお名前: ${childName}
-電話番号: ${phone}
-学校区別: ${schoolType}
-学年: ${grade}
-予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
-
-【当日の流れ】
-1. ご来校 - 教室にいらしてください（手ぶらでOK！）
-2. 簡単なご説明 - 教室のご紹介と、お子様の興味をお聞きします
-3. プログラミング体験 - 実際にプログラミングを楽しんでいただきます
-4. ご質問・ご相談 - 気になることは何でもお聞きください
-
-予約確定のため、担当者よりご連絡させていただきます。
-お急ぎの場合は、お電話（06-6438-8277）でもお問い合わせいただけます。
-
-お会いできるのを楽しみにしております！
-
----
-iTeen 武庫之荘校
-電話: 06-6438-8277
-メール: iteen.mukonosou@gmail.com`;
-      console.log('⚠️ replyBodyが設定されていないため、自動生成しました');
-    }
-    
-    console.log('📧 メール送信準備完了:', {
-      replyEmail: replyEmail,
-      replySubject: replySubject,
-      hasReplyBody: !!replyBody,
-      replyBodyLength: replyBody ? replyBody.length : 0
-    });
-    
-    // メール送信の実行
-    if (replyEmail && replyEmail.includes('@') && replySubject && replyBody) {
-      try {
-        // メールアドレスの形式を簡易チェック
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailRegex.test(replyEmail)) {
-          console.log('📧 メール送信を実行します:', {
-            to: replyEmail,
-            subject: replySubject,
-            bodyLength: replyBody.length
-          });
-          
-          // メール送信
-          Logger.log('📧 自動応答メール送信を開始します...');
-          Logger.log('📧 送信先: ' + replyEmail);
-          Logger.log('📧 件名: ' + replySubject);
-          Logger.log('📧 本文の長さ: ' + replyBody.length + '文字');
-          console.log('📧 自動応答メール送信を開始します...');
-          console.log('📧 送信先:', replyEmail);
-          console.log('📧 件名:', replySubject);
-          console.log('📧 本文の長さ:', replyBody.length);
-          
-          GmailApp.sendEmail(replyEmail, replySubject, replyBody);
-          
-          Logger.log('✅ 自動応答メール送信成功: ' + replyEmail);
-          console.log('✅ 自動応答メール送信成功:', replyEmail);
-        } else {
-          console.log('⚠️ メールアドレスの形式が無効なため、自動応答メールを送信しません:', replyEmail);
-        }
-      } catch (replyError) {
-        Logger.log('❌ 自動応答メール送信エラー: ' + replyError.toString());
-        Logger.log('❌ エラーメッセージ: ' + replyError.message);
-        Logger.log('❌ エラースタック: ' + replyError.stack);
-        Logger.log('❌ 送信先: ' + replyEmail);
-        Logger.log('❌ 件名: ' + replySubject);
-        console.error('❌ 自動応答メール送信エラー:', replyError);
-        console.error('❌ エラー詳細:', {
-          message: replyError.toString(),
-          name: replyError.name,
-          stack: replyError.stack,
-          replyEmail: replyEmail,
-          replySubject: replySubject,
-          replyBodyLength: replyBody ? replyBody.length : 0
-        });
-        // 自動応答メールのエラーは記録するが続行（管理者へのメールとカレンダー追加は成功している）
-      }
-    } else {
-      console.log('⚠️ 自動応答メールを送信しません:', {
-        replyEmail: replyEmail,
-        hasReplySubject: !!replySubject,
-        hasReplyBody: !!replyBody,
-        reason: !replyEmail ? 'メールアドレスが設定されていません' : 
-                !replyEmail.includes('@') ? 'メールアドレスの形式が無効です（@が含まれていません）' :
-                !replySubject ? '件名が設定されていません' :
-                !replyBody ? '本文が設定されていません' : '不明'
-      });
-    }
-    
-    // Google Sheetsに履歴を保存
+    // Google Sheetsに履歴を保存（最初に実行）
     Logger.log('📊 Google Sheetsへの保存を開始します...');
     console.log('📊 Google Sheetsへの保存を開始します...');
+    
     try {
       const sheetData = {
         timestamp: new Date().toISOString(),
@@ -497,16 +243,35 @@ iTeen 武庫之荘校
         grade: grade,
         date: dateDisplay,
         time: timeDisplay,
-        message: message,
-        subject: subject
+        message: message
       };
+      
       Logger.log('📋 保存するデータ: ' + JSON.stringify(sheetData));
       console.log('📋 保存するデータ:', sheetData);
+      
+      Logger.log('📊 saveToGoogleSheets関数を呼び出します...');
+      console.log('📊 saveToGoogleSheets関数を呼び出します...');
+      
       const result = saveToGoogleSheets('reservation', sheetData);
+      
       Logger.log('✅ Google Sheetsに履歴を保存しました。結果: ' + result);
       console.log('✅ Google Sheetsに履歴を保存しました。結果:', result);
+      
+      // 成功レスポンスを返す（メール送信やカレンダー追加は行わない）
+      const successResponse = {
+        success: true,
+        message: '予約情報を保存しました',
+        saved: true
+      };
+      
+      Logger.log('✅ 予約フォーム処理成功（データ保存のみ）');
+      console.log('✅ 予約フォーム処理成功（データ保存のみ）:', successResponse);
+      
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(successResponse)));
+      
     } catch (sheetError) {
       Logger.log('❌ Google Sheetsへの保存エラー: ' + sheetError.toString());
+      Logger.log('❌ エラーメッセージ: ' + sheetError.message);
       Logger.log('❌ エラースタック: ' + sheetError.stack);
       console.error('❌ Google Sheetsへの保存エラー:', sheetError);
       console.error('❌ エラー詳細:', {
@@ -514,21 +279,19 @@ iTeen 武庫之荘校
         name: sheetError.name,
         stack: sheetError.stack
       });
-      // エラーは記録するが続行（メール送信とカレンダー追加は成功している）
+      
+      // エラーレスポンスを返す
+      const errorResponse = {
+        success: false,
+        error: sheetError.toString(),
+        message: '予約情報の保存中にエラーが発生しました: ' + sheetError.toString()
+      };
+      
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(errorResponse)));
     }
     
-    // 成功レスポンス
-    const successResponse = {
-      success: true,
-      message: 'メールを送信し、カレンダーに予約を追加しました',
-      eventId: event.getId(),
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString()
-    };
-    
-    console.log('✅ 予約フォーム処理成功:', successResponse);
-    
-    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(successResponse)));
+    // 注意: この関数は予約情報をGoogle Sheetsに保存するのみです。
+    // メール送信やカレンダー追加の処理は削除されました。
     
   } catch (error) {
     console.error('❌ 予約フォーム処理エラー:', error);
@@ -546,6 +309,281 @@ iTeen 武庫之荘校
     };
     
     return setCorsHeaders(ContentService.createTextOutput(JSON.stringify(errorResponse)));
+  }
+}
+
+// 指定されたフォルダを取得または作成するヘルパー関数
+function getOrCreateFolder(folderPath) {
+  try {
+    Logger.log('📁 フォルダを取得または作成します: ' + folderPath);
+    console.log('📁 フォルダを取得または作成します:', folderPath);
+    
+    // DriveAppの権限を確認
+    try {
+      Logger.log('📁 DriveApp.getRootFolder()を呼び出します...');
+      console.log('📁 DriveApp.getRootFolder()を呼び出します...');
+      var rootFolder = DriveApp.getRootFolder();
+      Logger.log('✅ DriveApp.getRootFolder()成功');
+      console.log('✅ DriveApp.getRootFolder()成功');
+    } catch (driveError) {
+      Logger.log('❌ DriveApp.getRootFolder()エラー: ' + driveError.toString());
+      Logger.log('❌ エラーメッセージ: ' + driveError.message);
+      console.error('❌ DriveApp.getRootFolder()エラー:', driveError);
+      throw new Error('Google Drive APIの権限が不足しています。権限を付与してください: ' + driveError.toString());
+    }
+    
+    const folders = folderPath.split('/');
+    let currentFolder = rootFolder;
+    
+    for (let i = 0; i < folders.length; i++) {
+      const folderName = folders[i].trim();
+      if (!folderName) continue;
+      
+      Logger.log('📂 フォルダを検索: ' + folderName);
+      console.log('📂 フォルダを検索:', folderName);
+      
+      const foldersIterator = currentFolder.getFoldersByName(folderName);
+      
+      if (foldersIterator.hasNext()) {
+        // フォルダが存在する場合
+        currentFolder = foldersIterator.next();
+        Logger.log('✅ 既存のフォルダを使用: ' + folderName);
+        console.log('✅ 既存のフォルダを使用:', folderName);
+      } else {
+        // フォルダが存在しない場合、作成
+        Logger.log('📝 新しいフォルダを作成: ' + folderName);
+        console.log('📝 新しいフォルダを作成:', folderName);
+        currentFolder = currentFolder.createFolder(folderName);
+        Logger.log('✅ フォルダを作成しました: ' + folderName);
+        console.log('✅ フォルダを作成しました:', folderName);
+      }
+    }
+    
+    Logger.log('✅ フォルダパスを解決しました: ' + folderPath);
+    Logger.log('📄 フォルダID: ' + currentFolder.getId());
+    Logger.log('📄 フォルダURL: ' + currentFolder.getUrl());
+    console.log('✅ フォルダパスを解決しました:', folderPath);
+    console.log('📄 フォルダID:', currentFolder.getId());
+    console.log('📄 フォルダURL:', currentFolder.getUrl());
+    
+    return currentFolder;
+  } catch (error) {
+    Logger.log('❌ フォルダ取得/作成エラー: ' + error.toString());
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ フォルダ取得/作成エラー:', error);
+    throw new Error('フォルダの取得/作成に失敗しました: ' + error.toString());
+  }
+}
+
+// Google Sheetsに履歴を保存する関数 変更版
+function saveToGoogleSheets2(type, data) {
+  try {
+    Logger.log('📊 saveToGoogleSheets関数が呼び出されました');
+    Logger.log('📊 タイプ: ' + type);
+    Logger.log('📊 データ: ' + JSON.stringify(data));
+    console.log('📊 saveToGoogleSheets関数が呼び出されました:', { type, data });
+    
+    // スクリプトプロパティからスプレッドシートIDを取得
+    const properties = PropertiesService.getScriptProperties();
+    let spreadsheetId = properties.getProperty('GOOGLE_SHEETS_SPREADSHEET_ID');
+    
+    let spreadsheet;
+    
+    // スプレッドシートIDが保存されていない場合（初回実行時）は新規作成
+    if (!spreadsheetId) {
+      Logger.log('📝 初回実行のため、新しいスプレッドシートを作成します...');
+      console.log('📝 初回実行のため、新しいスプレッドシートを作成します...');
+      
+      try {
+        // フォルダを取得または作成
+        const targetFolder = getOrCreateFolder('pentech_info/manage_reserve');
+        
+        // スプレッドシートを作成
+        spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
+        spreadsheetId = spreadsheet.getId();
+        const spreadsheetFile = DriveApp.getFileById(spreadsheetId);
+        
+        // スプレッドシートを指定フォルダに移動
+        const currentParents = spreadsheetFile.getParents();
+        while (currentParents.hasNext()) {
+          const parent = currentParents.next();
+          parent.removeFile(spreadsheetFile);
+        }
+        targetFolder.addFile(spreadsheetFile);
+        
+        const spreadsheetUrl = spreadsheet.getUrl();
+        
+        // スクリプトプロパティにスプレッドシートIDを保存
+        properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+        
+        Logger.log('✅ 新規スプレッドシートを作成しました');
+        Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+        Logger.log('📁 保存先フォルダ: pentech_info/manage_reserve');
+        console.log('✅ 新規スプレッドシートを作成しました');
+        console.log('🔑 スプレッドシートID:', spreadsheetId);
+        console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+        console.log('📁 保存先フォルダ: pentech_info/manage_reserve');
+        console.log('💾 スプレッドシートIDをスクリプトプロパティに保存しました');
+        console.log('⚠️ このスプレッドシートURLを開いて確認してください:', spreadsheetUrl);
+        
+        // スクリプトプロパティにスプレッドシートIDを保存
+        properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+        
+        Logger.log('✅ 新規スプレッドシートを作成しました');
+        Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+        console.log('✅ 新規スプレッドシートを作成しました');
+        console.log('🔑 スプレッドシートID:', spreadsheetId);
+        console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+        console.log('💾 スプレッドシートIDをスクリプトプロパティに保存しました');
+        console.log('⚠️ このスプレッドシートURLを開いて確認してください:', spreadsheetUrl);
+      } catch (createError) {
+        Logger.log('❌ スプレッドシート作成エラー: ' + createError.toString());
+        Logger.log('❌ エラースタック: ' + createError.stack);
+        console.error('❌ スプレッドシート作成エラー:', createError);
+        console.error('❌ エラー詳細:', {
+          message: createError.toString(),
+          name: createError.name,
+          stack: createError.stack
+        });
+        throw new Error('スプレッドシートの作成に失敗しました: ' + createError.toString());
+      }
+    } else {
+      // 既存のスプレッドシートを開く
+      Logger.log('📂 既存のスプレッドシートを開こうとしています...');
+      Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+      console.log('📂 既存のスプレッドシートを開こうとしています...');
+      console.log('🔑 スプレッドシートID:', spreadsheetId);
+      
+      try {
+        spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+        Logger.log('✅ 既存のスプレッドシートを開きました: ' + spreadsheet.getName());
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheet.getUrl());
+        console.log('✅ 既存のスプレッドシートを開きました:', spreadsheet.getName());
+        console.log('📄 スプレッドシートURL:', spreadsheet.getUrl());
+      } catch (openError) {
+        Logger.log('❌ スプレッドシートを開くエラー: ' + openError.toString());
+        Logger.log('❌ エラーメッセージ: ' + openError.message);
+        Logger.log('❌ エラースタック: ' + openError.stack);
+        console.error('❌ スプレッドシートを開くエラー:', openError);
+        console.error('❌ エラー詳細:', {
+          message: openError.toString(),
+          name: openError.name,
+          stack: openError.stack
+        });
+      }
+    }
+    
+    // シート名
+    const sheetName = 'EmailHistory';
+    Logger.log('📑 シート名: ' + sheetName);
+    console.log('📑 シート名:', sheetName);
+    let sheet = spreadsheet.getSheetByName(sheetName);
+    
+    // シートが存在しない場合は作成
+    if (!sheet) {
+      Logger.log('📝 シートが存在しないため、新規作成します');
+      console.log('📝 シートが存在しないため、新規作成します');
+      sheet = spreadsheet.insertSheet(sheetName);
+      // ヘッダー行を追加
+      const headerRow = [
+        'タイムスタンプ',
+        '種類',
+        'お名前',
+        '電話番号',
+        'メールアドレス',
+        '学校区別',
+        '学年',
+        '日付',
+        '時間',
+        'メッセージ',
+        '件名'
+      ];
+      sheet.appendRow(headerRow);
+      Logger.log('✅ ヘッダー行を追加しました: ' + JSON.stringify(headerRow));
+      console.log('✅ ヘッダー行を追加しました:', headerRow);
+      // ヘッダー行を太字にする
+      const headerRange = sheet.getRange(1, 1, 1, 11);
+      headerRange.setFontWeight('bold');
+      headerRange.setBackground('#E0E0E0');
+      Logger.log('✅ ヘッダー行の書式を設定しました');
+      console.log('✅ ヘッダー行の書式を設定しました');
+    } else {
+      Logger.log('✅ 既存のシートを使用します');
+      console.log('✅ 既存のシートを使用します');
+    }
+    
+    // データを追加
+    Logger.log('📝 データを追加します...');
+    console.log('📝 データを追加します...');
+    if (type === 'reservation') {
+      const rowData = [
+        data.timestamp,
+        '無料体験予約',
+        data.child_name || '',
+        data.phone || '',
+        data.email || '',
+        data.school_type || '',
+        data.grade || '',
+        data.date || '',
+        data.time || '',
+        data.message || '',
+        data.subject || ''
+      ];
+      Logger.log('📋 追加するデータ（予約）: ' + JSON.stringify(rowData));
+      console.log('📋 追加するデータ（予約）:', rowData);
+      sheet.appendRow(rowData);
+      Logger.log('✅ データを追加しました（予約）');
+      console.log('✅ データを追加しました（予約）');
+    } else if (type === 'contact') {
+      const rowData = [
+        data.timestamp,
+        'お問い合わせ',
+        '',
+        data.phone || '',
+        data.email || '',
+        '',
+        '',
+        '',
+        '',
+        data.message || '',
+        data.subject || ''
+      ];
+      Logger.log('📋 追加するデータ（お問い合わせ）: ' + JSON.stringify(rowData));
+      console.log('📋 追加するデータ（お問い合わせ）:', rowData);
+      sheet.appendRow(rowData);
+      Logger.log('✅ データを追加しました（お問い合わせ）');
+      console.log('✅ データを追加しました（お問い合わせ）');
+    } else {
+      Logger.log('⚠️ 不明なタイプ: ' + type);
+      console.warn('⚠️ 不明なタイプ:', type);
+    }
+    
+    // データが正しく追加されたか確認
+    const lastRow = sheet.getLastRow();
+    Logger.log('📊 シートの最終行: ' + lastRow);
+    console.log('📊 シートの最終行:', lastRow);
+    if (lastRow > 0) {
+      const lastRowData = sheet.getRange(lastRow, 1, 1, 11).getValues()[0];
+      Logger.log('📋 最終行のデータ: ' + JSON.stringify(lastRowData));
+      console.log('📋 最終行のデータ:', lastRowData);
+    }
+    
+    Logger.log('✅ Google Sheetsに履歴を保存しました: タイプ=' + type + ', タイムスタンプ=' + data.timestamp);
+    console.log('✅ Google Sheetsに履歴を保存しました:', { type, timestamp: data.timestamp });
+    return true;
+  } catch (error) {
+    Logger.log('❌ Google Sheetsへの保存エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ Google Sheetsへの保存エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    throw error;
   }
 }
 
@@ -569,9 +607,37 @@ function saveToGoogleSheets(type, data) {
       console.log('📝 初回実行のため、新しいスプレッドシートを作成します...');
       
       try {
+        // フォルダを取得または作成
+        const targetFolder = getOrCreateFolder('pentech_info/manage_reserve');
+        
+        // スプレッドシートを作成
         spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
         spreadsheetId = spreadsheet.getId();
+        const spreadsheetFile = DriveApp.getFileById(spreadsheetId);
+        
+        // スプレッドシートを指定フォルダに移動
+        const currentParents = spreadsheetFile.getParents();
+        while (currentParents.hasNext()) {
+          const parent = currentParents.next();
+          parent.removeFile(spreadsheetFile);
+        }
+        targetFolder.addFile(spreadsheetFile);
+        
         const spreadsheetUrl = spreadsheet.getUrl();
+        
+        // スクリプトプロパティにスプレッドシートIDを保存
+        properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+        
+        Logger.log('✅ 新規スプレッドシートを作成しました');
+        Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+        Logger.log('📁 保存先フォルダ: pentech_info/manage_reserve');
+        console.log('✅ 新規スプレッドシートを作成しました');
+        console.log('🔑 スプレッドシートID:', spreadsheetId);
+        console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+        console.log('📁 保存先フォルダ: pentech_info/manage_reserve');
+        console.log('💾 スプレッドシートIDをスクリプトプロパティに保存しました');
+        console.log('⚠️ このスプレッドシートURLを開いて確認してください:', spreadsheetUrl);
         
         // スクリプトプロパティにスプレッドシートIDを保存
         properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
@@ -634,8 +700,22 @@ function saveToGoogleSheets(type, data) {
         console.log('📝 エラーのため、新しいスプレッドシートを作成します...');
         
         try {
+          // フォルダを取得または作成
+          const targetFolder = getOrCreateFolder('pentech_info/manage_reserve');
+          
+          // スプレッドシートを作成
           spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
           spreadsheetId = spreadsheet.getId();
+          const spreadsheetFile = DriveApp.getFileById(spreadsheetId);
+          
+          // スプレッドシートを指定フォルダに移動
+          const currentParents = spreadsheetFile.getParents();
+          while (currentParents.hasNext()) {
+            const parent = currentParents.next();
+            parent.removeFile(spreadsheetFile);
+          }
+          targetFolder.addFile(spreadsheetFile);
+          
           const spreadsheetUrl = spreadsheet.getUrl();
           
           // スクリプトプロパティに新しいスプレッドシートIDを保存
@@ -643,8 +723,10 @@ function saveToGoogleSheets(type, data) {
           
           Logger.log('✅ エラーのため新規スプレッドシートを作成しました: ' + spreadsheetId);
           Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+          Logger.log('📁 保存先フォルダ: pentech_info/manage_reserve');
           console.log('✅ エラーのため新規スプレッドシートを作成しました:', spreadsheetId);
           console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+          console.log('📁 保存先フォルダ: pentech_info/manage_reserve');
           console.log('💾 新しいスプレッドシートIDをスクリプトプロパティに保存しました');
         } catch (createError2) {
           Logger.log('❌ 新規作成も失敗しました: ' + createError2.toString());
@@ -1029,6 +1111,86 @@ function testGoogleSheetsPermission() {
     }
     
     throw new Error('Google Sheetsの権限が付与されていません: ' + error.toString());
+  }
+}
+
+// Google Drive APIの権限を確認・承認するテスト関数
+// この関数を実行すると、DriveAppの権限が正しく付与されているか確認できます
+function testGoogleDrivePermission() {
+  try {
+    Logger.log('📁 Google Drive APIの権限を確認します...');
+    console.log('📁 Google Drive APIの権限を確認します...');
+    
+    // ルートフォルダを取得してみる
+    Logger.log('📁 DriveApp.getRootFolder()を呼び出します...');
+    console.log('📁 DriveApp.getRootFolder()を呼び出します...');
+    
+    const rootFolder = DriveApp.getRootFolder();
+    const rootFolderId = rootFolder.getId();
+    const rootFolderUrl = rootFolder.getUrl();
+    
+    Logger.log('✅ Google Drive APIの権限が正しく付与されています！');
+    Logger.log('🔑 ルートフォルダID: ' + rootFolderId);
+    Logger.log('📄 ルートフォルダURL: ' + rootFolderUrl);
+    console.log('✅ Google Drive APIの権限が正しく付与されています！');
+    console.log('🔑 ルートフォルダID:', rootFolderId);
+    console.log('📄 ルートフォルダURL:', rootFolderUrl);
+    
+    // フォルダの取得/作成をテスト
+    Logger.log('📁 フォルダの取得/作成をテストします...');
+    console.log('📁 フォルダの取得/作成をテストします...');
+    
+    const testFolder = getOrCreateFolder('pentech_info/manage_reserve');
+    const testFolderId = testFolder.getId();
+    const testFolderUrl = testFolder.getUrl();
+    
+    Logger.log('✅ フォルダの取得/作成も成功しました！');
+    Logger.log('🔑 テストフォルダID: ' + testFolderId);
+    Logger.log('📄 テストフォルダURL: ' + testFolderUrl);
+    console.log('✅ フォルダの取得/作成も成功しました！');
+    console.log('🔑 テストフォルダID:', testFolderId);
+    console.log('📄 テストフォルダURL:', testFolderUrl);
+    
+    return {
+      success: true,
+      message: 'Google Drive APIの権限が正しく付与されています',
+      rootFolderId: rootFolderId,
+      rootFolderUrl: rootFolderUrl,
+      testFolderId: testFolderId,
+      testFolderUrl: testFolderUrl
+    };
+  } catch (error) {
+    Logger.log('❌ Google Drive APIの権限エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ Google Drive APIの権限エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    
+    // 権限エラーの場合の詳細メッセージ
+    if (error.toString().includes('Drive') || error.toString().includes('drive') || 
+        error.toString().includes('アクセス') || error.toString().includes('access') || 
+        error.toString().includes('permission') || error.toString().includes('権限')) {
+      Logger.log('⚠️ Google Drive APIの権限が付与されていません');
+      Logger.log('⚠️ 以下の手順で権限を付与してください：');
+      Logger.log('1. この関数を実行すると、「承認が必要です」という警告が表示されます');
+      Logger.log('2. 「承認」をクリック');
+      Logger.log('3. Googleアカウントを選択');
+      Logger.log('4. 「詳細」→「（安全ではないページ）に移動」をクリック');
+      Logger.log('5. 「許可」をクリックしてGoogle Drive APIの権限を付与');
+      console.error('⚠️ Google Drive APIの権限が付与されていません');
+      console.error('⚠️ 以下の手順で権限を付与してください：');
+      console.error('1. この関数を実行すると、「承認が必要です」という警告が表示されます');
+      console.error('2. 「承認」をクリック');
+      console.error('3. Googleアカウントを選択');
+      console.error('4. 「詳細」→「（安全ではないページ）に移動」をクリック');
+      console.error('5. 「許可」をクリックしてGoogle Drive APIの権限を付与');
+    }
+    
+    throw new Error('Google Drive APIの権限が付与されていません: ' + error.toString());
   }
 }
 
