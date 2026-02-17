@@ -10,11 +10,6 @@ const CONFIG = {
     // Google Apps ScriptのWebアプリURL
     GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzopuMxVo5JqONEXkHeSaAVldYVjNX0WGh9EtR0436gHGVbYM9LFK5S4SGjHM3AowHJ/exec',
     
-    // Google SheetsのスプレッドシートID（メール送信履歴保存用）
-    // Google SheetsのURLから取得: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
-    // 注意: この値を変更した場合、google-apps-script-code.jsのSPREADSHEET_ID_OR_URLも同じ値に更新してください
-    GOOGLE_SHEETS_SPREADSHEET_ID: '1q4BfhBe_hd2U-qE_O6j0cUPVI6wPvgsNg0qFZCyl5Yc',
-    
     // 連絡先情報
     PHONE: '06-6438-8277',
     EMAIL: 'iteen.mukonosou@gmail.com',
