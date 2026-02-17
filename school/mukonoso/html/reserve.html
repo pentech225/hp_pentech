@@ -269,6 +269,18 @@
             font-size: 1.2rem;
             font-weight: bold;
         }
+        .calendar-cell.available {
+            background-color: var(--white);
+            cursor: pointer;
+            position: relative;
+        }
+        .calendar-cell.available::before {
+            content: '○';
+            position: absolute;
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
         .calendar-cell.available:hover {
             background-color: #F0F7FF;
             border-color: var(--primary);
