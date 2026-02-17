@@ -208,14 +208,14 @@
         }
         .calendar-grid-wrapper {
             overflow-x: auto;
-            overflow-y: auto;
-            max-height: 600px;
+            overflow-y: hidden;
+            max-height: none;
             border: 1px solid #E0E0E0;
             border-radius: 8px;
         }
         .calendar-grid {
             display: grid;
-            grid-template-columns: 80px repeat(var(--days-count), minmax(100px, 1fr));
+            grid-template-columns: 45px repeat(var(--days-count), minmax(45px, 1fr));
             border-collapse: collapse;
             min-width: max-content;
         }
@@ -226,9 +226,9 @@
             z-index: 10;
             border-right: 2px solid var(--primary);
             font-weight: bold;
-            padding: 8px;
+            padding: 3px 2px;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             color: var(--text);
         }
         .date-header {
@@ -238,11 +238,11 @@
             z-index: 10;
             border-bottom: 2px solid var(--primary);
             font-weight: bold;
-            padding: 8px;
+            padding: 3px 2px;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             color: var(--text);
-            min-width: 100px;
+            min-width: 50px;
         }
         .date-header.today {
             background-color: #fff8e1;
@@ -255,16 +255,16 @@
             background-color: var(--white);
             z-index: 5;
             border-right: 2px solid var(--primary);
-            padding: 12px 8px;
+            padding: 3px 2px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             color: var(--text);
             font-weight: 500;
         }
         .calendar-cell {
             border: 1px solid #E0E0E0;
-            padding: 8px;
-            min-height: 50px;
+            padding: 2px;
+            min-height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -287,7 +287,7 @@
             content: '×';
             position: absolute;
             color: #F44336;
-            font-size: 1.2rem;
+            font-size: 0.75rem;
             font-weight: bold;
         }
         .calendar-cell.available {
@@ -299,7 +299,7 @@
             content: '○';
             position: absolute;
             color: #000000;
-            font-size: 1.2rem;
+            font-size: 0.75rem;
             font-weight: bold;
         }
         .calendar-cell.available:hover {
@@ -318,7 +318,7 @@
             content: '✓';
             position: absolute;
             color: white;
-            font-size: 1.2rem;
+            font-size: 0.75rem;
             font-weight: bold;
         }
         .date-title {
