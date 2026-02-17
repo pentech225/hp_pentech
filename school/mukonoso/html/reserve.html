@@ -1893,8 +1893,12 @@
                     phoneInput.classList.remove('error');
                     errorMessage.classList.remove('show');
                     
-                    // メールアドレス入力欄を表示
+                    // メールアドレス入力欄を表示（任意）
                     document.getElementById('email-section').classList.add('show');
+                    
+                    // 自由記述欄も表示（メールアドレスが入力されていなくても表示）
+                    document.getElementById('message-section').classList.add('show');
+                    
                     setTimeout(() => {
                         const element = document.getElementById('email-section');
                         const headerHeight = document.querySelector('header').offsetHeight;
@@ -1914,6 +1918,9 @@
                     document.getElementById('email-section').classList.remove('show');
                     emailAddress = '';
                     document.getElementById('email-input').value = '';
+                    
+                    // 自由記述欄も非表示
+                    document.getElementById('message-section').classList.remove('show');
                 }
             } else {
                 // 入力がない場合はエラーを非表示
@@ -1924,6 +1931,9 @@
                 document.getElementById('email-section').classList.remove('show');
                 emailAddress = '';
                 document.getElementById('email-input').value = '';
+                
+                // 自由記述欄も非表示
+                document.getElementById('message-section').classList.remove('show');
             }
             
             // 選択情報を更新

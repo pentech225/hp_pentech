@@ -236,6 +236,24 @@ function handleReservationForm(data) {
     const schoolType = data.school_type ? data.school_type.trim() : '未入力';
     const grade = data.grade ? data.grade.trim() : '未入力';
     const message = data.message && data.message.trim() !== '' && data.message !== 'なし' ? data.message.trim() : '';
+    
+    // 複数の予約希望日時を処理
+    let dateTimeDisplay = '';
+    if (data.date_times && Array.isArray(data.date_times) && data.date_times.length > 0) {
+      // 複数の日時がある場合
+      dateTimeDisplay = data.date_times.map((dt, index) => {
+        const dateStr = dt.date ? dt.date.trim() : '';
+        const timeStr = dt.time ? dt.time.trim() : '';
+        return `${index + 1}. ${dateStr} ${timeStr}`;
+      }).join('\n');
+    } else {
+      // 後方互換性のため、単一の日時もサポート
+      const dateDisplay = data.date ? data.date.trim() : '';
+      const timeDisplay = data.time ? data.time.trim() : '';
+      dateTimeDisplay = dateDisplay && timeDisplay ? `${dateDisplay} ${timeDisplay}` : '';
+    }
+    
+    // 後方互換性のため、単一の日時も保持
     const dateDisplay = data.date ? data.date.trim() : '';
     const timeDisplay = data.time ? data.time.trim() : '';
     
@@ -244,6 +262,15 @@ function handleReservationForm(data) {
     console.log('📊 Google Sheetsへの保存を開始します...');
     
     try {
+      // 複数の日時を文字列として保存（Google Sheets用）
+      const dateTimeString = data.date_times && Array.isArray(data.date_times) && data.date_times.length > 0
+        ? data.date_times.map((dt, index) => {
+            const dateStr = dt.date ? dt.date.trim() : '';
+            const timeStr = dt.time ? dt.time.trim() : '';
+            return `${index + 1}. ${dateStr} ${timeStr}`;
+          }).join(', ')
+        : (dateDisplay && timeDisplay ? `${dateDisplay} ${timeDisplay}` : '');
+      
       const sheetData = {
         timestamp: new Date().toISOString(),
         child_name: childName,
@@ -251,8 +278,9 @@ function handleReservationForm(data) {
         email: email,
         school_type: schoolType,
         grade: grade,
-        date: dateDisplay,
-        time: timeDisplay,
+        date: dateDisplay, // 後方互換性のため保持
+        time: timeDisplay, // 後方互換性のため保持
+        date_times: dateTimeString, // 複数の日時を文字列として保存
         message: message
       };
       
@@ -273,6 +301,9 @@ function handleReservationForm(data) {
         console.log('📧 メール通知を送信します...');
         
         const emailSubject = '【新規予約】無料体験予約のお申し込み';
+        const dateTimeLabel = data.date_times && Array.isArray(data.date_times) && data.date_times.length > 1 
+          ? `予約希望日時（${data.date_times.length}件）:` 
+          : '予約希望日時:';
         const emailBody = `新しい予約が追加されました。
 
 お子様のお名前: ${childName}
@@ -280,7 +311,8 @@ function handleReservationForm(data) {
 メールアドレス: ${email}
 学校区別: ${schoolType}
 学年: ${grade}
-予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
+${dateTimeLabel}
+${dateTimeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
 
 ---
 このメールは予約フォームから自動送信されました。
@@ -304,6 +336,9 @@ iTeen 武庫之荘校`;
         Logger.log('📱 LINE通知を送信します...');
         console.log('📱 LINE通知を送信します...');
         
+        const lineDateTimeLabel = data.date_times && Array.isArray(data.date_times) && data.date_times.length > 1 
+          ? `予約希望日時（${data.date_times.length}件）:` 
+          : '予約希望日時:';
         const lineMessage = `🔔 新しい予約が追加されました
 
 お子様のお名前: ${childName}
@@ -311,7 +346,8 @@ iTeen 武庫之荘校`;
 メールアドレス: ${email}
 学校区別: ${schoolType}
 学年: ${grade}
-予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}`;
+${lineDateTimeLabel}
+${dateTimeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}`;
         
         sendLineNotification(lineMessage);
         
