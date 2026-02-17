@@ -169,6 +169,7 @@
             border-radius: 8px;
             margin-bottom: 20px;
             overflow-x: auto;
+            overflow-y: auto;
             min-width: 0;
         }
         .calendar-header {
@@ -184,111 +185,108 @@
             font-weight: bold;
             color: var(--text);
         }
-        .calendar-nav {
-            display: flex;
-            gap: 8px;
+        .calendar-grid-wrapper {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 600px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
         }
-        .nav-button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .nav-button:hover {
-            background-color: #357ABD;
-        }
-        .nav-button:disabled {
-            background-color: #CCCCCC;
-            cursor: not-allowed;
-        }
-        .calendar-weekdays {
+        .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 5px;
-            margin-bottom: 10px;
+            grid-template-columns: 80px repeat(var(--days-count), minmax(100px, 1fr));
+            border-collapse: collapse;
+            min-width: max-content;
         }
-        .weekday-header {
-            text-align: center;
+        .time-header {
+            position: sticky;
+            left: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-right: 2px solid var(--primary);
             font-weight: bold;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .date-header {
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+            border-bottom: 2px solid var(--primary);
+            font-weight: bold;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text);
+            min-width: 100px;
+        }
+        .date-header.today {
+            background-color: #fff8e1;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .time-label {
+            position: sticky;
+            left: 0;
+            background-color: var(--white);
+            z-index: 5;
+            border-right: 2px solid var(--primary);
+            padding: 12px 8px;
+            text-align: center;
             font-size: 0.9rem;
             color: var(--text);
-            padding: 8px 0;
-            min-width: 0;
-            overflow: hidden;
+            font-weight: 500;
         }
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 5px;
-        }
-        .calendar-day {
-            aspect-ratio: 1;
+        .calendar-cell {
+            border: 1px solid #E0E0E0;
+            padding: 8px;
+            min-height: 50px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 2px solid #E0E0E0;
-            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            position: relative;
-            padding: 5px;
             background-color: var(--white);
-            min-width: 0;
-            box-sizing: border-box;
+            position: relative;
         }
-        .calendar-day.other-month {
-            opacity: 0.3;
+        .calendar-cell.past {
+            background-color: #F5F5F5;
             cursor: not-allowed;
+            opacity: 0.5;
         }
-        .calendar-day.past {
-            opacity: 0.4;
+        .calendar-cell.unavailable {
+            background-color: #FFEBEE;
             cursor: not-allowed;
+            opacity: 0.6;
         }
-        .calendar-day.selectable {
-            cursor: pointer;
-        }
-        .calendar-day.selectable:hover {
-            border-color: var(--primary);
-            background-color: #F0F7FF;
-            transform: scale(1.05);
-        }
-        .calendar-day.selected {
-            border-color: var(--primary);
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-        }
-        .calendar-day.today {
-            border-color: var(--accent);
-        }
-        .day-number {
-            font-size: 0.9rem;
-            margin-bottom: 3px;
-        }
-        .day-symbol {
+        .calendar-cell.unavailable::after {
+            content: '×';
+            position: absolute;
+            color: #F44336;
             font-size: 1.2rem;
             font-weight: bold;
         }
-        .calendar-day.selected .day-symbol {
+        .calendar-cell.available:hover {
+            background-color: #F0F7FF;
+            border-color: var(--primary);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+        .calendar-cell.selected {
+            background-color: var(--primary);
             color: white;
+            font-weight: bold;
+            border-color: var(--primary);
         }
-        .symbol-circle { color: #4CAF50; }
-        .symbol-triangle { color: #FF9800; }
-        .symbol-cross { color: #F44336; }
-        .date-section {
-            background-color: var(--white);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-        .date-section.show {
-            display: block;
+        .calendar-cell.selected::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
         .date-title {
             font-size: 0.95rem;
@@ -524,12 +522,6 @@
             display: none;
         }
         .calendar-container.show {
-            display: block;
-        }
-        .date-sections-container {
-            display: none;
-        }
-        .date-sections-container.show {
             display: block;
         }
         .child-name-section {
@@ -1099,29 +1091,14 @@
                 
                 <div class="calendar-container" id="calendar-container">
                     <div class="calendar-header">
-                        <div class="month-year" id="month-year">2025年1月</div>
-                        <div class="calendar-nav">
-                            <button class="nav-button" id="prev-month" onclick="changeMonth(-1)">← 前月</button>
-                            <button class="nav-button" id="next-month" onclick="changeMonth(1)">次月 →</button>
-                        </div>
+                        <div class="month-year" id="month-year">予約可能な日時を選択してください</div>
                     </div>
                     
-                    <div class="calendar-weekdays">
-                        <div class="weekday-header">日</div>
-                        <div class="weekday-header">月</div>
-                        <div class="weekday-header">火</div>
-                        <div class="weekday-header">水</div>
-                        <div class="weekday-header">木</div>
-                        <div class="weekday-header">金</div>
-                        <div class="weekday-header">土</div>
+                    <div class="calendar-grid-wrapper">
+                        <div class="calendar-grid" id="calendar-grid"></div>
                     </div>
-                    
-                    <div class="calendar-days" id="calendar-days"></div>
                 </div>
                 
-                <div class="date-sections-container" id="date-sections-container">
-                    <div id="date-sections"></div>
-                </div>
                 
                 <!-- 子供の名前入力セクション -->
                 <div class="child-name-section" id="child-name-section">
@@ -1316,29 +1293,21 @@
     <script src="config.js"></script>
     
     <script>
-        // 時間スロット
-        // 時間スロット（開始時刻と終了時刻のペア）
-        const timeSlots = [
-            { start: '8:10', end: '9:10' },
-            { start: '9:20', end: '10:20' },
-            { start: '10:30', end: '11:30' },
-            { start: '11:40', end: '12:30' },
-            { start: '13:40', end: '14:40' },
-            { start: '14:50', end: '15:50' },
-            { start: '16:00', end: '17:00' },
-            { start: '17:10', end: '18:10' },
-            { start: '18:20', end: '19:20' },
-            { start: '19:30', end: '20:30' },
-            { start: '20:40', end: '21:40' }
-        ];
+        // 時間スロット（8:00-20:00、1時間単位）
+        const timeSlots = [];
+        for (let hour = 8; hour <= 20; hour++) {
+            timeSlots.push({
+                start: `${hour}:00`,
+                end: `${hour + 1}:00`
+            });
+        }
         
         // 現在の日付
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
-        // 選択された日時
-        let selectedDate = null;
-        let selectedTime = null;
+        // 選択された日時（最大3つまで）
+        let selectedDateTimes = [];
         
         // 選択された学校区別と学年
         let selectedSchoolType = null;
@@ -1366,13 +1335,8 @@
             '未就学児・その他': ['年少', '年中', '年長', 'その他']
         };
         
-        // 現在表示中の月
-        let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        
-        // 日付ごとの記号マッピング（例：丸、三角、バツ）
-        const dateSymbols = {};
-        
         // 予約不可の日時（例：既に予約済み）
+        // 形式: { "2025-01-15": ["8:00", "10:00", "14:00"] }
         const unavailableTimes = {};
         
         // Google Calendar API設定
@@ -1431,7 +1395,7 @@
             try {
                 const now = new Date();
                 const endDate = new Date(now);
-                endDate.setMonth(endDate.getMonth() + 3); // 今日から数えて3ヶ月先まで取得
+                endDate.setMonth(endDate.getMonth() + 2); // 今日から数えて2ヶ月先まで取得
                 
                 const events = await fetchGoogleCalendarEvents(now, endDate);
                 
@@ -1467,31 +1431,14 @@
                         const eventStartMinutes = eventStartHour * 60 + eventStartMin;
                         const eventStartTimeStr = `${String(eventStartHour).padStart(2, '0')}:${String(eventStartMin).padStart(2, '0')}`;
                         
-                        // イベントの終了時刻を計算（終了時刻がない場合は50分後と仮定）
+                        // イベントの終了時刻を計算（終了時刻がない場合は1時間後と仮定）
                         const eventEndMinutes = eventEndDate 
                             ? eventEndDate.getHours() * 60 + eventEndDate.getMinutes()
-                            : eventStartMinutes + 50; // デフォルト50分
+                            : eventStartMinutes + 60; // デフォルト1時間
                         
-                        // 時間スロットに一致するものを探す
-                        // 1. 完全一致を探す
-                        let matchedTimeSlot = normalizedTimeSlots.find(slot => slot.normalizedStart === eventStartTimeStr);
-                        
-                        // 2. 完全一致がない場合、イベント開始時刻が時間スロットの開始時刻に最も近いものを探す（±15分以内）
-                        if (!matchedTimeSlot) {
-                            matchedTimeSlot = normalizedTimeSlots.reduce((closest, slot) => {
-                                const timeDiff = Math.abs(eventStartMinutes - slot.startMinutes);
-                                if (!closest || timeDiff < Math.abs(eventStartMinutes - closest.startMinutes)) {
-                                    if (timeDiff <= 15) { // 15分以内
-                                        return slot;
-                                    }
-                                }
-                                return closest;
-                            }, null);
-                        }
-                        
-                        // 3. イベントの時間帯と重複するすべての時間スロットを予約不可にする
+                        // イベントの時間帯と重複するすべての時間スロットを予約不可にする
                         const overlappingSlots = normalizedTimeSlots.filter(slot => {
-                            const slotEndMinutes = slot.startMinutes + 50; // 各スロットは50分
+                            const slotEndMinutes = slot.startMinutes + 60; // 各スロットは1時間
                             // イベントの時間帯と時間スロットが重複しているかチェック
                             return (eventStartMinutes < slotEndMinutes && eventEndMinutes > slot.startMinutes);
                         });
@@ -1503,7 +1450,7 @@
                             }
                             
                             overlappingSlots.forEach(slot => {
-                                // 元の形式（'8:10'など）で保存
+                                // 元の形式（'8:00'など）で保存
                                 if (!unavailableTimes[dateStr].includes(slot.start)) {
                                     unavailableTimes[dateStr].push(slot.start);
                                 }
@@ -1560,325 +1507,172 @@
             return date < today;
         }
         
-        // 1ヶ月先以降の日付かどうかを判定（今日から数えて1ヶ月後の同じ日まで）
-        // 例：今日が1月15日なら、2月15日の23:59:59まで予約可能
-        function isBeyondOneMonth(dateStr) {
+        // 2ヶ月先までの日付かどうかを判定
+        function isBeyondTwoMonths(dateStr) {
             const date = new Date(dateStr + 'T00:00:00');
-            const oneMonthLater = new Date(today);
-            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-            oneMonthLater.setHours(23, 59, 59, 999); // 今日から1ヶ月後の同じ日の23:59:59まで
-            return date > oneMonthLater;
+            const twoMonthsLater = new Date(today);
+            twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
+            twoMonthsLater.setHours(23, 59, 59, 999);
+            return date > twoMonthsLater;
         }
         
-        // 日付の記号を取得（デフォルトは丸）
-        function getDateSymbol(dateStr) {
-            if (dateSymbols[dateStr]) {
-                return dateSymbols[dateStr];
-            }
-            // デフォルト：過去の日付または1ヶ月先以降の日付はバツ、それ以外は丸
-            if (isPast(dateStr) || isBeyondOneMonth(dateStr)) {
-                return 'cross';
-            }
-            return 'circle';
-        }
-        
-        // 記号の表示文字を取得
-        function getSymbolChar(symbol) {
-            switch(symbol) {
-                case 'circle': return '○';
-                case 'triangle': return '△';
-                case 'cross': return '×';
-                default: return '○';
-            }
-        }
-        
-        // 記号のクラス名を取得
-        function getSymbolClass(symbol) {
-            switch(symbol) {
-                case 'circle': return 'symbol-circle';
-                case 'triangle': return 'symbol-triangle';
-                case 'cross': return 'symbol-cross';
-                default: return 'symbol-circle';
-            }
-        }
-        
-        // カレンダーを生成
+        // カレンダーを生成（グリッド形式）
         function generateCalendar() {
-            const container = document.getElementById('calendar-days');
-            container.innerHTML = '';
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
             
-            const year = currentMonth.getFullYear();
-            const month = currentMonth.getMonth();
+            // 今日から2ヶ月先までの日付を取得
+            const dates = [];
+            const endDate = new Date(today);
+            endDate.setMonth(endDate.getMonth() + 2);
+            endDate.setHours(23, 59, 59, 999);
             
-            // 月の最初の日
-            const firstDay = new Date(year, month, 1);
-            // 月の最後の日
-            const lastDay = new Date(year, month + 1, 0);
-            // 月の最初の日の曜日（0=日曜日）
-            const startDay = firstDay.getDay();
-            // 月の日数
-            const daysInMonth = lastDay.getDate();
-            
-            // 前月の最後の数日を表示
-            const prevMonthLastDay = new Date(year, month, 0).getDate();
-            for (let i = startDay - 1; i >= 0; i--) {
-                const day = prevMonthLastDay - i;
-                const date = new Date(year, month - 1, day);
-                const dateStr = formatDate(date);
-                const dayElement = createDayElement(dateStr, day, true);
-                container.appendChild(dayElement);
+            const currentDate = new Date(today);
+            while (currentDate <= endDate) {
+                dates.push(formatDate(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
             }
             
-            // 今月の日付
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const dateStr = formatDate(date);
-                const dayElement = createDayElement(dateStr, day, false);
-                container.appendChild(dayElement);
-            }
+            // CSS変数に日数を設定
+            grid.style.setProperty('--days-count', dates.length);
             
-            // 次月の最初の数日を表示（カレンダーを埋めるため）
-            const totalCells = container.children.length;
-            const remainingCells = 42 - totalCells; // 6週間分
-            for (let day = 1; day <= remainingCells; day++) {
-                const date = new Date(year, month + 1, day);
-                const dateStr = formatDate(date);
-                const dayElement = createDayElement(dateStr, day, true);
-                container.appendChild(dayElement);
-            }
+            // ヘッダー行を作成
+            const headerRow = document.createElement('div');
+            headerRow.className = 'time-header';
+            headerRow.textContent = '';
+            grid.appendChild(headerRow);
             
-            // 年月表示を更新
-            document.getElementById('month-year').textContent = 
-                `${year}年${month + 1}月`;
-            
-            // 前月ボタンの有効/無効を設定
-            const prevButton = document.getElementById('prev-month');
-            const minDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-            prevButton.disabled = currentMonth <= minDate;
-            
-            // 次月ボタンの有効/無効を設定（今日から数えて1ヶ月先まで）
-            // 例：今日が1月なら、2月まで表示可能、3月は表示不可
-            const nextButton = document.getElementById('next-month');
-            const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, 1); // 2ヶ月先の1日（3月1日）以降は表示不可
-            nextButton.disabled = currentMonth >= maxDate;
-        }
-        
-        // 日付要素を作成
-        function createDayElement(dateStr, day, isOtherMonth) {
-            const dayElement = document.createElement('div');
-            dayElement.className = 'calendar-day';
-            
-            if (isOtherMonth) {
-                dayElement.classList.add('other-month');
-            }
-            
-            const isPastDate = isPast(dateStr);
-            const isBeyondOneMonthDate = isBeyondOneMonth(dateStr);
-            if (isPastDate && !isOtherMonth) {
-                dayElement.classList.add('past');
-            }
-            
-            const symbol = getDateSymbol(dateStr);
-            const symbolChar = getSymbolChar(symbol);
-            const symbolClass = getSymbolClass(symbol);
-            
-            // 記号がバツの場合、過去の日付、または1ヶ月先以降の日付は選択不可
-            if (symbol !== 'cross' && !isPastDate && !isBeyondOneMonthDate && !isOtherMonth) {
-                dayElement.classList.add('selectable');
-                dayElement.addEventListener('click', () => selectDate(dateStr, dayElement));
-            } else if (isBeyondOneMonthDate && !isOtherMonth) {
-                // 1ヶ月先以降の日付も選択不可として表示
-                dayElement.classList.add('past');
-            }
-            
-            if (isToday(dateStr) && !isOtherMonth) {
-                dayElement.classList.add('today');
-            }
-            
-            dayElement.innerHTML = `
-                <div class="day-number">${day}</div>
-                <div class="day-symbol ${symbolClass}">${symbolChar}</div>
-            `;
-            
-            return dayElement;
-        }
-        
-        // 日付を選択
-        function selectDate(dateStr, element) {
-            // 以前の選択を解除
-            document.querySelectorAll('.calendar-day.selected').forEach(day => {
-                day.classList.remove('selected');
-            });
-            
-            // 新しい選択
-            element.classList.add('selected');
-            selectedDate = dateStr;
-            selectedTime = null;
-            childName = ''; // 名前をリセット
-            phoneNumber = ''; // 電話番号をリセット
-            emailAddress = ''; // メールアドレスをリセット
-            messageText = ''; // 自由記述欄をリセット
-            document.getElementById('child-name-input').value = ''; // 入力フィールドをクリア
-            document.getElementById('phone-input').value = ''; // 電話番号入力フィールドをクリア
-            document.getElementById('email-input').value = ''; // メールアドレス入力フィールドをクリア
-            document.getElementById('message-textarea').value = ''; // 自由記述欄をクリア
-            
-            // 時間スロットセクションを表示
-            showTimeSlots(dateStr);
-            
-            // 選択情報を更新
-            updateSelectedInfo();
-            
-            // 子供の名前入力フィールドを非表示
-            document.getElementById('child-name-section').classList.remove('show');
-            // 電話番号入力フィールドを非表示
-            document.getElementById('phone-section').classList.remove('show');
-            // メールアドレス入力フィールドを非表示
-            document.getElementById('email-section').classList.remove('show');
-            
-            // 送信ボタンを無効化（時間を選択するまで）
-            document.getElementById('submit-button').disabled = true;
-            
-            // 時刻選択セクションにスクロール（少し遅延を入れて表示後にスクロール）
-            setTimeout(() => {
-                const dateSectionsContainer = document.getElementById('date-sections-container');
-                if (dateSectionsContainer) {
-                    dateSectionsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 日付ヘッダーを作成
+            dates.forEach(dateStr => {
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'date-header';
+                const date = new Date(dateStr + 'T00:00:00');
+                const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const weekday = weekdays[date.getDay()];
+                dateHeader.textContent = `${month}/${day}(${weekday})`;
+                if (isToday(dateStr)) {
+                    dateHeader.classList.add('today');
                 }
-            }, 100);
-        }
-        
-        // 時間スロットセクションを表示
-        function showTimeSlots(dateStr) {
-            // 既存のセクションを非表示
-            document.querySelectorAll('.date-section').forEach(section => {
-                section.classList.remove('show');
+                grid.appendChild(dateHeader);
             });
             
-            // 該当する日付のセクションを探すか、新規作成
-            let dateSection = document.querySelector(`[data-date="${dateStr}"]`);
-            
-            if (!dateSection) {
-                dateSection = createDateSection(dateStr);
-                document.getElementById('date-sections').appendChild(dateSection);
-            }
-            
-            dateSection.classList.add('show');
-        }
-        
-        // 日付セクションを作成
-        function createDateSection(dateStr) {
-            const dateSection = document.createElement('div');
-            dateSection.className = 'date-section';
-            dateSection.setAttribute('data-date', dateStr);
-            
-            const dateTitle = document.createElement('div');
-            dateTitle.className = 'date-title';
-            dateTitle.innerHTML = formatDateDisplay(dateStr);
-            if (isToday(dateStr)) {
-                const todayBadge = document.createElement('span');
-                todayBadge.className = 'today-badge';
-                todayBadge.textContent = '本日';
-                dateTitle.appendChild(todayBadge);
-            }
-            dateSection.appendChild(dateTitle);
-            
-            const timeSlotsContainer = document.createElement('div');
-            timeSlotsContainer.className = 'time-slots';
-            
-            const unavailableForDate = unavailableTimes[dateStr] || [];
-            
+            // 時間行を作成
             timeSlots.forEach(slot => {
-                const timeSlot = document.createElement('div');
-                timeSlot.className = 'time-slot';
+                // 時間ラベル
+                const timeLabel = document.createElement('div');
+                timeLabel.className = 'time-label';
+                timeLabel.textContent = slot.start;
+                grid.appendChild(timeLabel);
                 
-                const timeDisplay = `${slot.start}-${slot.end}`;
-                const isUnavailable = unavailableForDate.includes(slot.start);
-                
-                if (isUnavailable) {
-                    timeSlot.classList.add('unavailable');
-                    timeSlot.innerHTML = `
-                        <span class="time-slot-icon">×</span>
-                        <span>${timeDisplay}</span>
-                    `;
-                } else {
-                    timeSlot.classList.add('available');
-                    timeSlot.innerHTML = `
-                        <span class="time-slot-icon">◎</span>
-                        <span>${timeDisplay}</span>
-                    `;
-                    timeSlot.addEventListener('click', () => selectTimeSlot(dateStr, slot.start, timeSlot));
-                }
-                
-                timeSlotsContainer.appendChild(timeSlot);
+                // 各日付のセルを作成
+                dates.forEach(dateStr => {
+                    const cell = document.createElement('div');
+                    cell.className = 'calendar-cell';
+                    
+                    const isPastDate = isPast(dateStr);
+                    const isBeyondTwoMonthsDate = isBeyondTwoMonths(dateStr);
+                    const unavailableForDate = unavailableTimes[dateStr] || [];
+                    const isUnavailable = unavailableForDate.includes(slot.start);
+                    
+                    if (isPastDate || isBeyondTwoMonthsDate) {
+                        cell.classList.add('past');
+                    } else if (isUnavailable) {
+                        cell.classList.add('unavailable');
+                    } else {
+                        cell.classList.add('available');
+                        cell.addEventListener('click', () => selectDateTime(dateStr, slot.start, cell));
+                    }
+                    
+                    grid.appendChild(cell);
+                });
             });
-            
-            dateSection.appendChild(timeSlotsContainer);
-            return dateSection;
         }
         
-        // 時間スロットを選択
-        function selectTimeSlot(dateStr, time, element) {
-            // 選択された時間スロットの表示テキストを取得
-            const selectedTimeDisplay = element.querySelector('span:last-child').textContent;
+        // 日時を選択（最大3つまで）
+        function selectDateTime(dateStr, time, element) {
+            const dateTimeKey = `${dateStr}_${time}`;
+            const isSelected = selectedDateTimes.some(dt => dt.key === dateTimeKey);
             
-            // 以前の選択を解除
-            document.querySelectorAll('.time-slot.selected').forEach(slot => {
-                slot.classList.remove('selected');
-                slot.classList.add('available');
-                const timeText = slot.querySelector('span:last-child').textContent;
-                slot.innerHTML = `
-                    <span class="time-slot-icon">◎</span>
-                    <span>${timeText}</span>
-                `;
-            });
+            if (isSelected) {
+                // 既に選択されている場合は選択解除
+                selectedDateTimes = selectedDateTimes.filter(dt => dt.key !== dateTimeKey);
+                element.classList.remove('selected');
+                element.classList.add('available');
+            } else {
+                // 最大3つまで選択可能
+                if (selectedDateTimes.length >= 3) {
+                    alert('予約可能な時間帯は最大3つまで選択できます。');
+                    return;
+                }
+                
+                // 新しい選択を追加
+                selectedDateTimes.push({
+                    key: dateTimeKey,
+                    date: dateStr,
+                    time: time
+                });
+                element.classList.remove('available');
+                element.classList.add('selected');
+            }
             
-            // 新しい選択
-            element.classList.remove('available');
-            element.classList.add('selected');
-            element.innerHTML = `
-                <span class="time-slot-icon">◎</span>
-                <span>${selectedTimeDisplay}</span>
-            `;
-            
-            selectedDate = dateStr;
-            selectedTime = time;
-            
-            // 送信ボタンの有効/無効を更新
-            updateSubmitButton();
-            
-            // 名前と電話番号とメールアドレスと自由記述欄をリセット
-            childName = '';
-            phoneNumber = '';
-            emailAddress = '';
-            messageText = '';
-            document.getElementById('child-name-input').value = '';
-            document.getElementById('phone-input').value = '';
-            document.getElementById('email-input').value = '';
-            document.getElementById('message-textarea').value = '';
+            // 選択可能なセルの状態を更新（3つ選択されている場合は他のセルを無効化）
+            updateCellStates();
             
             // 選択情報を更新
             updateSelectedInfo();
             
-            // 子供の名前入力フィールドを表示
-            document.getElementById('child-name-section').classList.add('show');
+            // 1つ以上選択されている場合は子供の名前入力フィールドを表示
+            if (selectedDateTimes.length > 0) {
+                document.getElementById('child-name-section').classList.add('show');
+            } else {
+                document.getElementById('child-name-section').classList.remove('show');
+            }
             
             // 電話番号入力フィールドは非表示
             document.getElementById('phone-section').classList.remove('show');
             // メールアドレス入力フィールドは非表示
             document.getElementById('email-section').classList.remove('show');
             
-            // 送信ボタンの有効/無効を更新（名前、電話番号、メールアドレスがリセットされたため無効になる）
+            // 送信ボタンの有効/無効を更新
             updateSubmitButton();
             
             // 名前入力フィールドにスクロール
-            document.getElementById('child-name-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (selectedDateTimes.length > 0) {
+                setTimeout(() => {
+                    document.getElementById('child-name-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
         }
+        
+        // セルの状態を更新（3つ選択されている場合は他のセルを無効化）
+        function updateCellStates() {
+            const allCells = document.querySelectorAll('.calendar-cell.available, .calendar-cell.selected');
+            allCells.forEach(cell => {
+                if (selectedDateTimes.length >= 3) {
+                    // 選択されていないセルは無効化
+                    if (!cell.classList.contains('selected')) {
+                        cell.classList.add('max-selected');
+                    }
+                } else {
+                    // 選択が3つ未満の場合は有効化
+                    cell.classList.remove('max-selected');
+                }
+            });
+        }
+        
         
         // 時刻を表示形式に変換（開始時刻-終了時刻）
         function formatTimeDisplay(time) {
             const selectedSlot = timeSlots.find(slot => slot.start === time);
-            return selectedSlot ? `${selectedSlot.start}-${selectedSlot.end}` : time;
+            if (selectedSlot) {
+                return `${selectedSlot.start}-${selectedSlot.end}`;
+            }
+            // フォールバック：時間に1時間を足す
+            const [hour, minute] = time.split(':').map(Number);
+            const endHour = hour + 1;
+            return `${time}-${endHour}:00`;
         }
         
         // 選択情報を更新する関数
@@ -1886,9 +1680,12 @@
             const selectedInfo = document.getElementById('selected-info');
             let infoText = '';
             
-            if (selectedDate && selectedTime) {
-                const timeDisplay = formatTimeDisplay(selectedTime);
-                infoText = `予約日時: ${formatDateDisplay(selectedDate)} ${timeDisplay}`;
+            if (selectedDateTimes.length > 0) {
+                infoText = `選択された予約日時（${selectedDateTimes.length}/3）:\n`;
+                selectedDateTimes.forEach((dt, index) => {
+                    const timeDisplay = formatTimeDisplay(dt.time);
+                    infoText += `${index + 1}. ${formatDateDisplay(dt.date)} ${timeDisplay}\n`;
+                });
                 
                 if (childName) {
                     infoText += `\nお名前: ${childName}`;
@@ -1903,8 +1700,6 @@
                 if (messageText) {
                     infoText += `\nご質問・ご要望: ${messageText}`;
                 }
-            } else if (selectedDate) {
-                infoText = `予約日時: ${formatDateDisplay(selectedDate)}`;
             }
             
             if (infoText) {
@@ -2124,11 +1919,10 @@
             // 必須項目が入力されているかチェック（メールアドレスは任意）
             const hasName = childName && childName.trim() !== '';
             const hasPhone = phoneNumber && phoneNumber.trim() !== '' && validateJapanesePhoneNumber(phoneNumber);
-            const hasDate = selectedDate !== null;
-            const hasTime = selectedTime !== null;
+            const hasDateTimes = selectedDateTimes.length > 0;
             
             // 必須項目（名前、電話番号、日時）がすべて入力されている場合のみ送信ボタンを有効化
-            if (hasName && hasPhone && hasDate && hasTime) {
+            if (hasName && hasPhone && hasDateTimes) {
                 submitButton.disabled = false;
             } else {
                 submitButton.disabled = true;
@@ -2167,7 +1961,6 @@
                 // カレンダーとフォームは非表示のまま
                 document.getElementById('form-instruction').style.display = 'none';
                 document.getElementById('calendar-container').classList.remove('show');
-                document.getElementById('date-sections-container').classList.remove('show');
                 document.getElementById('submit-section').classList.remove('show');
                 
                 // 学年選択セクションにスクロール
@@ -2189,27 +1982,12 @@
             // カレンダーとフォームを表示
             document.getElementById('form-instruction').style.display = 'block';
             document.getElementById('calendar-container').classList.add('show');
-            document.getElementById('date-sections-container').classList.add('show');
             document.getElementById('submit-section').classList.add('show');
             
             // スクロールしてカレンダーが見えるように
             document.getElementById('calendar-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        // 月を変更（今日から数えて1ヶ月先まで）
-        function changeMonth(direction) {
-            const newMonth = new Date(currentMonth);
-            newMonth.setMonth(newMonth.getMonth() + direction);
-            
-            // 今日から1ヶ月先までしか進めない制限（2ヶ月先の1日以降は表示不可）
-            const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-            if (direction === 1 && newMonth >= maxDate) {
-                return; // 今日から1ヶ月先を超える場合は何もしない
-            }
-            
-            currentMonth.setMonth(currentMonth.getMonth() + direction);
-            generateCalendar();
-        }
         
         // 設定値はconfig.jsから読み込まれる
         
@@ -2223,8 +2001,8 @@
                 alert('学年を選択してください。');
                 return;
             }
-            if (!selectedDate || !selectedTime) {
-                alert('時間帯を選択してください。');
+            if (selectedDateTimes.length === 0) {
+                alert('予約希望日時を選択してください（最大3つまで）。');
                 return;
             }
             if (!childName || childName.trim() === '') {
@@ -2274,13 +2052,19 @@
             submitButton.disabled = true;
             submitButton.textContent = '送信中...';
             
+            // 選択された日時を文字列に変換
+            const dateTimeStrings = selectedDateTimes.map(dt => 
+                `${formatDateDisplay(dt.date)} ${formatTimeDisplay(dt.time)}`
+            ).join('\n');
+            
             // メール送信パラメータ
             const emailData = {
                 to: CONFIG.EMAIL,
                 subject: '無料体験予約のお申し込み',
-                date: formatDateDisplay(selectedDate),
-                time: selectedTime,
-                date_raw: selectedDate,
+                date: selectedDateTimes.length > 0 ? formatDateDisplay(selectedDateTimes[0].date) : '',
+                time: selectedDateTimes.length > 0 ? selectedDateTimes[0].time : '',
+                date_raw: selectedDateTimes.length > 0 ? selectedDateTimes[0].date : '',
+                date_times: selectedDateTimes, // 複数の日時を配列で送信
                 school_type: selectedSchoolType,
                 grade: selectedGrade,
                 child_name: childName,
@@ -2294,7 +2078,8 @@
 メールアドレス: ${emailAddress || '未入力'}
 学校区別: ${selectedSchoolType}
 学年: ${selectedGrade}
-予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}
+予約希望日時（${selectedDateTimes.length}件）:
+${dateTimeStrings}
 ${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}
 
 予約確定のため、お客様にご連絡をお願いします。
@@ -2316,7 +2101,8 @@ iTeen 武庫之荘校`,
 電話番号: ${phoneNumber}
 学校区別: ${selectedSchoolType}
 学年: ${selectedGrade}
-予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}${messageText && messageText.trim() !== '' ? `\n\nご質問・ご要望:\n${messageText}` : ''}
+予約希望日時（${selectedDateTimes.length}件）:
+${dateTimeStrings}${messageText && messageText.trim() !== '' ? `\n\nご質問・ご要望:\n${messageText}` : ''}
 
 【当日の流れ】
 1. ご来校 - 教室にいらしてください（手ぶらでOK！）
@@ -2376,8 +2162,9 @@ iTeen 武庫之荘校
                         email: emailAddress || '未入力',
                         school_type: selectedSchoolType,
                         grade: selectedGrade,
-                        date: formatDateDisplay(selectedDate),
-                        time: formatTimeDisplay(selectedTime),
+                        date_times: selectedDateTimes.map(dt => 
+                            `${formatDateDisplay(dt.date)} ${formatTimeDisplay(dt.time)}`
+                        ).join(', '),
                         message: messageText || 'なし'
                     });
                 }
@@ -2410,20 +2197,19 @@ iTeen 武庫之荘校
         
         // フォームをリセット
         function resetForm() {
-            selectedDate = null;
-            selectedTime = null;
+            selectedDateTimes = [];
             selectedSchoolType = null;
             selectedGrade = null;
             childName = '';
             phoneNumber = '';
             emailAddress = '';
             messageText = '';
-            document.querySelectorAll('.calendar-day.selected').forEach(day => {
-                day.classList.remove('selected');
+            document.querySelectorAll('.calendar-cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+                cell.classList.add('available');
             });
-            document.querySelectorAll('.time-slot.selected').forEach(slot => {
-                slot.classList.remove('selected');
-                slot.classList.add('available');
+            document.querySelectorAll('.calendar-cell.max-selected').forEach(cell => {
+                cell.classList.remove('max-selected');
             });
             document.querySelectorAll('.grade-button').forEach(btn => {
                 btn.classList.remove('selected');
@@ -2432,9 +2218,6 @@ iTeen 武庫之荘校
                 btn.classList.remove('selected');
             });
             document.getElementById('selected-info').classList.remove('show');
-            document.querySelectorAll('.date-section').forEach(section => {
-                section.classList.remove('show');
-            });
             // 子供の名前入力フィールドをリセット
             document.getElementById('child-name-input').value = '';
             document.getElementById('child-name-section').classList.remove('show');
@@ -2450,7 +2233,6 @@ iTeen 武庫之荘校
             // カレンダーとフォームを非表示に戻す
             document.getElementById('form-instruction').style.display = 'none';
             document.getElementById('calendar-container').classList.remove('show');
-            document.getElementById('date-sections-container').classList.remove('show');
             document.getElementById('submit-section').classList.remove('show');
             document.getElementById('grade-selection-section').classList.remove('show');
         }
@@ -2458,8 +2240,12 @@ iTeen 武庫之荘校
         // 感謝ページを表示
         function showThankYouPage() {
             // 予約情報を表示
-            document.getElementById('reservation-date-item').textContent = `日付: ${formatDateDisplay(selectedDate)}`;
-            document.getElementById('reservation-time-item').textContent = `時間: ${formatTimeDisplay(selectedTime)}`;
+            const dateTimeText = selectedDateTimes.map((dt, index) => 
+                `${index + 1}. ${formatDateDisplay(dt.date)} ${formatTimeDisplay(dt.time)}`
+            ).join('\n');
+            
+            document.getElementById('reservation-date-item').textContent = `予約希望日時（${selectedDateTimes.length}件）:`;
+            document.getElementById('reservation-time-item').innerHTML = `<pre style="text-align: left; margin: 10px 0;">${dateTimeText}</pre>`;
             document.getElementById('reservation-name-item').textContent = `お名前: ${childName}様`;
             
             // 電話番号を表示
@@ -2505,6 +2291,10 @@ iTeen 武庫之荘校
         
         // mailtoリンクを使用してメールを送信（フォールバック）
         function sendEmailWithMailto() {
+            const dateTimeText = selectedDateTimes.map((dt, index) => 
+                `${index + 1}. ${formatDateDisplay(dt.date)} ${formatTimeDisplay(dt.time)}`
+            ).join('\n');
+            
             const subject = encodeURIComponent('無料体験予約のお申し込み');
             const body = encodeURIComponent(
                 `無料体験予約のお申し込み\n\n` +
@@ -2513,7 +2303,7 @@ iTeen 武庫之荘校
                 `メールアドレス: ${emailAddress || '未入力'}\n` +
                 `学校区別: ${selectedSchoolType}\n` +
                 `学年: ${selectedGrade}\n` +
-                `予約希望日時: ${formatDateDisplay(selectedDate)} ${formatTimeDisplay(selectedTime)}\n` +
+                `予約希望日時（${selectedDateTimes.length}件）:\n${dateTimeText}\n` +
                 `${messageText && messageText.trim() !== '' ? `\nご質問・ご要望:\n${messageText}\n` : ''}\n` +
                 `予約確定のため、お客様にご連絡をお願いします。\n\n` +
                 `---\n` +
@@ -2536,7 +2326,6 @@ iTeen 武庫之荘校
         
         // 初期状態ではカレンダーとフォームを非表示
         document.getElementById('calendar-container').classList.remove('show');
-        document.getElementById('date-sections-container').classList.remove('show');
         document.getElementById('submit-section').classList.remove('show');
         
         // Googleカレンダーから予約済み日時を取得
