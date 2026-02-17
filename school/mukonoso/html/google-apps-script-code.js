@@ -71,6 +71,16 @@ function doPost(e) {
     Logger.log('📥 受信データ: ' + JSON.stringify(data));
     console.log('📥 受信データ:', data);
     
+    // リクエストタイプを判定
+    const requestType = data.type;
+    
+    if (requestType === 'save_article') {
+      // 記事保存の処理
+      Logger.log('📝 記事保存の処理を開始');
+      console.log('📝 記事保存の処理を開始');
+      return handleArticleSave(data.data);
+    }
+    
     // 問い合わせフォームか予約フォームかを判定
     const isContactForm = data.message && !data.date_raw && !data.date;
     Logger.log('📋 フォームタイプ判定: ' + (isContactForm ? 'お問い合わせ' : '予約'));
@@ -1488,5 +1498,453 @@ function setLineMessagingAPICredentials() {
     console.error('❌ LINE Messaging APIの認証情報の設定に失敗しました:', error);
     return false;
   }
+}
+
+// 記事保存の処理
+function handleArticleSave(articleData) {
+  try {
+    Logger.log('📝 記事保存処理を開始');
+    console.log('📝 記事保存処理を開始');
+    Logger.log('📝 記事データ: ' + JSON.stringify(articleData));
+    console.log('📝 記事データ:', articleData);
+    
+    // データの検証
+    if (!articleData.title || !articleData.date || !articleData.category || !articleData.html) {
+      throw new Error('記事データが不完全です。タイトル、日付、カテゴリ、HTMLコンテンツが必要です。');
+    }
+    
+    // ブログフォルダのパス
+    const blogFolderPath = 'pentech_info/blog';
+    
+    // ブログフォルダを取得または作成
+    Logger.log('📁 ブログフォルダを取得または作成: ' + blogFolderPath);
+    console.log('📁 ブログフォルダを取得または作成:', blogFolderPath);
+    const blogFolder = getOrCreateFolder(blogFolderPath);
+    
+    if (!blogFolder) {
+      throw new Error('ブログフォルダの取得に失敗しました。');
+    }
+    
+    // HTMLテンプレートを読み込んで記事HTMLを生成
+    const articleHtml = generateArticleHTML(articleData);
+    
+    // ファイル名を生成
+    const filename = articleData.filename || `article_${Date.now()}.html`;
+    
+    // ファイルを作成
+    Logger.log('📄 ファイルを作成: ' + filename);
+    console.log('📄 ファイルを作成:', filename);
+    const file = blogFolder.createFile(filename, articleHtml, 'text/html');
+    
+    Logger.log('✅ 記事ファイルを作成しました: ' + file.getName());
+    console.log('✅ 記事ファイルを作成しました:', file.getName());
+    Logger.log('✅ ファイルID: ' + file.getId());
+    console.log('✅ ファイルID:', file.getId());
+    
+    // ブログ一覧に追加（オプション）
+    // 注意: ブログ一覧ファイルの編集は、Google Apps Scriptから直接は難しいため、
+    // 手動で追加するか、別の方法を検討する必要があります
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: '記事を保存しました',
+      filename: filename,
+      fileId: file.getId(),
+      fileUrl: file.getUrl()
+    })));
+    
+  } catch (error) {
+    Logger.log('❌ 記事保存エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ 記事保存エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString(),
+      message: error.message
+    })));
+  }
+}
+
+// 記事HTMLを生成する関数
+function generateArticleHTML(articleData) {
+  // 記事テンプレートHTML
+  const template = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${articleData.title} | iTeen 武庫之荘校</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../config.js"></script>
+    <script src="../password-check.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* メインセクション */
+        .blog-article-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .article-header {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .article-date {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .article-category {
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .article-title {
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+        .article-content {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .article-content h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+        }
+        .article-content h3 {
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+        .article-content p {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .article-content ul,
+        .article-content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        .article-content li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .article-content blockquote {
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .back-to-list {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .header-brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-line-button {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+            .header-nav {
+                gap: 10px;
+            }
+            .header-nav a {
+                font-size: 0.85rem;
+                padding: 5px 8px;
+            }
+            .article-header {
+                padding: 25px 20px;
+            }
+            .article-title {
+                font-size: 1.5rem;
+            }
+            .article-content {
+                padding: 25px 20px;
+            }
+            .article-content h2 {
+                font-size: 1.4rem;
+            }
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../../index.html">ホーム</a>
+            <a href="../../index.html#news">ニュース</a>
+            <a href="index.html">ブログ</a>
+            <a href="../../index.html#courses">コース</a>
+            <a href="../../index.html#teachers">講師</a>
+            <a href="../values.html">大切にしていること</a>
+            <a href="../../index.html#fee">料金</a>
+            <a href="../../index.html#faq">よくある質問</a>
+            <a href="../../index.html#access">アクセス</a>
+            <a href="../contact.html">お問い合わせ</a>
+            <a href="../reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="blog-article-section">
+        <div class="container">
+            <!-- 記事ヘッダー -->
+            <div class="article-header">
+                <div class="article-meta">
+                    <span class="article-date">${articleData.date}</span>
+                    <span class="article-category">${articleData.category}</span>
+                </div>
+                <h1 class="article-title">${articleData.title}</h1>
+            </div>
+
+            <!-- 記事本文 -->
+            <div class="article-content">
+                ${articleData.html}
+            </div>
+
+            <!-- ナビゲーション -->
+            <div class="article-navigation">
+                <a href="index.html" class="nav-link">← ブログ一覧に戻る</a>
+            </div>
+
+            <div class="back-to-list">
+                <a href="index.html" class="nav-link">ブログ一覧に戻る</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+</body>
+</html>`;
+  
+  return template;
 }
 
