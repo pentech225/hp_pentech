@@ -516,6 +516,9 @@ iTeen 武庫之荘校
 // Google Sheetsに履歴を保存する関数
 function saveToGoogleSheets(type, data) {
   try {
+    Logger.log('📊 saveToGoogleSheets関数が呼び出されました');
+    Logger.log('📊 タイプ: ' + type);
+    Logger.log('📊 データ: ' + JSON.stringify(data));
     console.log('📊 saveToGoogleSheets関数が呼び出されました:', { type, data });
     
     // スクリプトプロパティからスプレッドシートIDを取得
@@ -526,56 +529,104 @@ function saveToGoogleSheets(type, data) {
     
     // スプレッドシートIDが保存されていない場合（初回実行時）は新規作成
     if (!spreadsheetId) {
+      Logger.log('📝 初回実行のため、新しいスプレッドシートを作成します...');
       console.log('📝 初回実行のため、新しいスプレッドシートを作成します...');
-      spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
-      spreadsheetId = spreadsheet.getId();
-      const spreadsheetUrl = spreadsheet.getUrl();
       
-      // スクリプトプロパティにスプレッドシートIDを保存
-      properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
-      
-      console.log('✅ 新規スプレッドシートを作成しました');
-      console.log('🔑 スプレッドシートID:', spreadsheetId);
-      console.log('📄 スプレッドシートURL:', spreadsheetUrl);
-      console.log('💾 スプレッドシートIDをスクリプトプロパティに保存しました');
-      console.log('⚠️ このスプレッドシートURLを開いて確認してください:', spreadsheetUrl);
+      try {
+        spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
+        spreadsheetId = spreadsheet.getId();
+        const spreadsheetUrl = spreadsheet.getUrl();
+        
+        // スクリプトプロパティにスプレッドシートIDを保存
+        properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+        
+        Logger.log('✅ 新規スプレッドシートを作成しました');
+        Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+        console.log('✅ 新規スプレッドシートを作成しました');
+        console.log('🔑 スプレッドシートID:', spreadsheetId);
+        console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+        console.log('💾 スプレッドシートIDをスクリプトプロパティに保存しました');
+        console.log('⚠️ このスプレッドシートURLを開いて確認してください:', spreadsheetUrl);
+      } catch (createError) {
+        Logger.log('❌ スプレッドシート作成エラー: ' + createError.toString());
+        Logger.log('❌ エラースタック: ' + createError.stack);
+        console.error('❌ スプレッドシート作成エラー:', createError);
+        console.error('❌ エラー詳細:', {
+          message: createError.toString(),
+          name: createError.name,
+          stack: createError.stack
+        });
+        throw new Error('スプレッドシートの作成に失敗しました: ' + createError.toString());
+      }
     } else {
       // 既存のスプレッドシートを開く
+      Logger.log('📂 既存のスプレッドシートを開こうとしています...');
+      Logger.log('🔑 スプレッドシートID: ' + spreadsheetId);
+      console.log('📂 既存のスプレッドシートを開こうとしています...');
+      console.log('🔑 スプレッドシートID:', spreadsheetId);
+      
       try {
-        console.log('📂 既存のスプレッドシートを開こうとしています...');
-        console.log('🔑 スプレッドシートID:', spreadsheetId);
         spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+        Logger.log('✅ 既存のスプレッドシートを開きました: ' + spreadsheet.getName());
+        Logger.log('📄 スプレッドシートURL: ' + spreadsheet.getUrl());
         console.log('✅ 既存のスプレッドシートを開きました:', spreadsheet.getName());
         console.log('📄 スプレッドシートURL:', spreadsheet.getUrl());
       } catch (openError) {
+        Logger.log('❌ スプレッドシートを開くエラー: ' + openError.toString());
+        Logger.log('❌ エラーメッセージ: ' + openError.message);
+        Logger.log('❌ エラースタック: ' + openError.stack);
         console.error('❌ スプレッドシートを開くエラー:', openError);
         console.error('❌ エラー詳細:', {
           message: openError.toString(),
           name: openError.name,
           stack: openError.stack
         });
+        
+        // アクセス権限エラーの場合の詳細メッセージ
+        if (openError.toString().includes('アクセス') || openError.toString().includes('access') || openError.toString().includes('permission')) {
+          Logger.log('⚠️ アクセス権限エラーの可能性があります');
+          Logger.log('⚠️ スプレッドシートID: ' + spreadsheetId);
+          Logger.log('⚠️ このスプレッドシートが存在するか、アクセス権限があるか確認してください');
+          console.error('⚠️ アクセス権限エラーの可能性があります');
+          console.error('⚠️ スプレッドシートID:', spreadsheetId);
+          console.error('⚠️ このスプレッドシートが存在するか、アクセス権限があるか確認してください');
+        }
+        
         // エラーの場合は新規作成
+        Logger.log('📝 エラーのため、新しいスプレッドシートを作成します...');
         console.log('📝 エラーのため、新しいスプレッドシートを作成します...');
-        spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
-        spreadsheetId = spreadsheet.getId();
-        const spreadsheetUrl = spreadsheet.getUrl();
         
-        // スクリプトプロパティに新しいスプレッドシートIDを保存
-        properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
-        
-        console.log('✅ エラーのため新規スプレッドシートを作成しました:', spreadsheetId);
-        console.log('📄 スプレッドシートURL:', spreadsheetUrl);
-        console.log('💾 新しいスプレッドシートIDをスクリプトプロパティに保存しました');
+        try {
+          spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
+          spreadsheetId = spreadsheet.getId();
+          const spreadsheetUrl = spreadsheet.getUrl();
+          
+          // スクリプトプロパティに新しいスプレッドシートIDを保存
+          properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+          
+          Logger.log('✅ エラーのため新規スプレッドシートを作成しました: ' + spreadsheetId);
+          Logger.log('📄 スプレッドシートURL: ' + spreadsheetUrl);
+          console.log('✅ エラーのため新規スプレッドシートを作成しました:', spreadsheetId);
+          console.log('📄 スプレッドシートURL:', spreadsheetUrl);
+          console.log('💾 新しいスプレッドシートIDをスクリプトプロパティに保存しました');
+        } catch (createError2) {
+          Logger.log('❌ 新規作成も失敗しました: ' + createError2.toString());
+          console.error('❌ 新規作成も失敗しました:', createError2);
+          throw new Error('スプレッドシートの作成に失敗しました: ' + createError2.toString());
+        }
       }
     }
     
     // シート名
     const sheetName = 'EmailHistory';
+    Logger.log('📑 シート名: ' + sheetName);
     console.log('📑 シート名:', sheetName);
     let sheet = spreadsheet.getSheetByName(sheetName);
     
     // シートが存在しない場合は作成
     if (!sheet) {
+      Logger.log('📝 シートが存在しないため、新規作成します');
       console.log('📝 シートが存在しないため、新規作成します');
       sheet = spreadsheet.insertSheet(sheetName);
       // ヘッダー行を追加
@@ -593,17 +644,21 @@ function saveToGoogleSheets(type, data) {
         '件名'
       ];
       sheet.appendRow(headerRow);
+      Logger.log('✅ ヘッダー行を追加しました: ' + JSON.stringify(headerRow));
       console.log('✅ ヘッダー行を追加しました:', headerRow);
       // ヘッダー行を太字にする
       const headerRange = sheet.getRange(1, 1, 1, 11);
       headerRange.setFontWeight('bold');
       headerRange.setBackground('#E0E0E0');
+      Logger.log('✅ ヘッダー行の書式を設定しました');
       console.log('✅ ヘッダー行の書式を設定しました');
     } else {
+      Logger.log('✅ 既存のシートを使用します');
       console.log('✅ 既存のシートを使用します');
     }
     
     // データを追加
+    Logger.log('📝 データを追加します...');
     console.log('📝 データを追加します...');
     if (type === 'reservation') {
       const rowData = [
@@ -619,8 +674,10 @@ function saveToGoogleSheets(type, data) {
         data.message || '',
         data.subject || ''
       ];
+      Logger.log('📋 追加するデータ（予約）: ' + JSON.stringify(rowData));
       console.log('📋 追加するデータ（予約）:', rowData);
       sheet.appendRow(rowData);
+      Logger.log('✅ データを追加しました（予約）');
       console.log('✅ データを追加しました（予約）');
     } else if (type === 'contact') {
       const rowData = [
@@ -636,24 +693,33 @@ function saveToGoogleSheets(type, data) {
         data.message || '',
         data.subject || ''
       ];
+      Logger.log('📋 追加するデータ（お問い合わせ）: ' + JSON.stringify(rowData));
       console.log('📋 追加するデータ（お問い合わせ）:', rowData);
       sheet.appendRow(rowData);
+      Logger.log('✅ データを追加しました（お問い合わせ）');
       console.log('✅ データを追加しました（お問い合わせ）');
     } else {
+      Logger.log('⚠️ 不明なタイプ: ' + type);
       console.warn('⚠️ 不明なタイプ:', type);
     }
     
     // データが正しく追加されたか確認
     const lastRow = sheet.getLastRow();
+    Logger.log('📊 シートの最終行: ' + lastRow);
     console.log('📊 シートの最終行:', lastRow);
     if (lastRow > 0) {
       const lastRowData = sheet.getRange(lastRow, 1, 1, 11).getValues()[0];
+      Logger.log('📋 最終行のデータ: ' + JSON.stringify(lastRowData));
       console.log('📋 最終行のデータ:', lastRowData);
     }
     
+    Logger.log('✅ Google Sheetsに履歴を保存しました: タイプ=' + type + ', タイムスタンプ=' + data.timestamp);
     console.log('✅ Google Sheetsに履歴を保存しました:', { type, timestamp: data.timestamp });
     return true;
   } catch (error) {
+    Logger.log('❌ Google Sheetsへの保存エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
     console.error('❌ Google Sheetsへの保存エラー:', error);
     console.error('❌ エラー詳細:', {
       message: error.toString(),

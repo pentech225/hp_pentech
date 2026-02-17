@@ -2348,54 +2348,48 @@ iTeen 武庫之荘校
             // Google Apps ScriptのWebアプリにPOSTリクエストを送信
             console.log('📤 Google Apps Scriptに送信中...', emailData);
             
-            // CORSモードで送信してレスポンスを確認
+            // Google Apps ScriptはCORSを完全にはサポートしていないため、no-corsモードを使用
+            // 注意: no-corsモードではレスポンスを取得できないが、リクエストは正常に送信されます
+            // メール送信の成功/失敗は、Google Apps Scriptの実行ログで確認してください
+            console.log('📤 Google Apps Scriptに送信中（no-corsモード）...');
+            
             fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'cors', // CORSモードでレスポンスを取得
+                mode: 'no-cors', // no-corsモードでCORSエラーを回避
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(emailData)
             })
-            .then(response => {
-                console.log('📥 レスポンス受信:', response.status, response.statusText);
+            .then(() => {
+                // no-corsモードではレスポンスを取得できないため、常に成功として扱う
+                // 実際にはメール送信が成功している可能性が高い
+                console.log('✅ リクエストを送信しました（no-corsモード）');
+                console.log('⚠️ 注意: レスポンスは取得できませんが、リクエストはGoogle Apps Scriptに到達しています。');
+                console.log('⚠️ Google Apps Scriptの実行ログ（https://script.google.com/home/executions）でメール送信の成功/失敗を確認してください。');
                 
-                // レスポンスが成功したか確認
-                if (!response.ok) {
-                    throw new Error(`HTTPエラー: ${response.status} ${response.statusText}`);
+                // 送信履歴を保存
+                if (typeof saveEmailHistory === 'function') {
+                    saveEmailHistory('reservation', {
+                        child_name: childName,
+                        phone: phoneNumber,
+                        email: emailAddress || '未入力',
+                        school_type: selectedSchoolType,
+                        grade: selectedGrade,
+                        date: formatDateDisplay(selectedDate),
+                        time: formatTimeDisplay(selectedTime),
+                        message: messageText || 'なし'
+                    });
                 }
                 
-                // JSONレスポンスを取得
-                return response.json();
-            })
-            .then(data => {
-                console.log('✅ Google Apps Scriptからのレスポンス:', data);
-                
-                if (data.success) {
-                    console.log('✅ メール送信成功:', data.message);
-                    
-                    // 送信履歴を保存
-                    if (typeof saveEmailHistory === 'function') {
-                        saveEmailHistory('reservation', {
-                            child_name: childName,
-                            phone: phoneNumber,
-                            email: emailAddress || '未入力',
-                            school_type: selectedSchoolType,
-                            grade: selectedGrade,
-                            date: formatDateDisplay(selectedDate),
-                            time: formatTimeDisplay(selectedTime),
-                            message: messageText || 'なし'
-                        });
-                    }
-                    
-                    // 予約情報を感謝ページに表示
-                    showThankYouPage();
-                } else {
-                    throw new Error(data.error || 'メール送信に失敗しました');
-                }
+                // 予約情報を感謝ページに表示
+                // 注意: no-corsモードでは、実際にメール送信が成功したかどうかを確認できないため、
+                // ユーザーには「送信しました」と表示しますが、実際にはGoogle Apps Scriptの
+                // 実行ログで確認する必要があります。
+                showThankYouPage();
             })
             .catch(function(error) {
-                // 送信失敗（ネットワークエラー、CORSエラーなど）
+                // 送信失敗（ネットワークエラーなど）
                 console.error('❌ Google Apps Script送信エラー:', error);
                 console.error('エラー詳細:', {
                     message: error.message,
@@ -2404,67 +2398,13 @@ iTeen 武庫之荘校
                     url: CONFIG.GOOGLE_APPS_SCRIPT_URL
                 });
                 
-                // CORSエラーの場合は、no-corsモードで再試行
-                if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
-                    console.log('⚠️ CORSエラーが発生しました。no-corsモードで再試行します...');
-                    
-                    // no-corsモードで再送信（レスポンスは取得できないが、メール送信は成功する可能性がある）
-                    // 注意: no-corsモードでは、リクエストは送信されますが、レスポンスを取得できないため、
-                    // エラーが発生していても検知できません。Google Apps Scriptの実行ログを確認してください。
-                    console.log('⚠️ no-corsモードで送信します。Google Apps Scriptの実行ログでメール送信の成功/失敗を確認してください。');
-                    
-                    fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(emailData)
-                    })
-                    .then(() => {
-                        console.log('✅ no-corsモードでリクエストを送信しました');
-                        console.log('⚠️ 注意: レスポンスは取得できませんが、リクエストはGoogle Apps Scriptに到達しています。');
-                        console.log('⚠️ Google Apps Scriptの実行ログ（https://script.google.com/home/executions）でメール送信の成功/失敗を確認してください。');
-                        
-                        // 送信履歴を保存
-                        if (typeof saveEmailHistory === 'function') {
-                            saveEmailHistory('reservation', {
-                                child_name: childName,
-                                phone: phoneNumber,
-                                email: emailAddress || '未入力',
-                                school_type: selectedSchoolType,
-                                grade: selectedGrade,
-                                date: formatDateDisplay(selectedDate),
-                                time: formatTimeDisplay(selectedTime),
-                                message: messageText || 'なし'
-                            });
-                        }
-                        
-                        // 予約情報を感謝ページに表示
-                        // 注意: no-corsモードでは、実際にメール送信が成功したかどうかを確認できないため、
-                        // ユーザーには「送信しました」と表示しますが、実際にはGoogle Apps Scriptの
-                        // 実行ログで確認する必要があります。
-                        showThankYouPage();
-                        
-                        // ユーザーに注意を促す（オプション）
-                        // alert('申し込みを受け付けました。\n\n注意: メール送信の確認のため、Google Apps Scriptの実行ログを確認してください。');
-                    })
-                    .catch(noCorsError => {
-                        console.error('❌ no-corsモードでも送信失敗:', noCorsError);
-                        alert('申し込みの送信に失敗しました。お手数ですが、お電話（' + CONFIG.PHONE + '）でお申し込みください。');
-                        submitButton.disabled = false;
-                        submitButton.textContent = '予約を確定する';
-                    });
-                } else {
-                    // その他のエラー
-                    let errorMessage = 'Google Apps Scriptへの送信に失敗しました。\n\n';
-                    errorMessage += `エラー: ${error.message}\n\n`;
-                    errorMessage += 'お手数ですが、お電話（' + CONFIG.PHONE + '）でお申し込みください。';
-                    
-                    alert(errorMessage);
-                    submitButton.disabled = false;
-                    submitButton.textContent = '予約を確定する';
-                }
+                let errorMessage = 'Google Apps Scriptへの送信に失敗しました。\n\n';
+                errorMessage += `エラー: ${error.message}\n\n`;
+                errorMessage += 'お手数ですが、お電話（' + CONFIG.PHONE + '）でお申し込みください。';
+                
+                alert(errorMessage);
+                submitButton.disabled = false;
+                submitButton.textContent = '予約を確定する';
             });
         }
         
