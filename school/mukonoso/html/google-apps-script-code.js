@@ -308,15 +308,36 @@ function handleReservationForm(data) {
 このメールは予約フォームから自動送信されました。
 iTeen 武庫之荘校`;
     
+    Logger.log('📧 メール送信準備完了');
+    Logger.log('📧 送信先: ' + to);
+    Logger.log('📧 件名: ' + subject);
+    Logger.log('📧 メール本文の長さ: ' + body.length + '文字');
     console.log('送信するメール本文:', body);
     console.log('メール本文の長さ:', body.length);
     
     // Gmailでメールを送信（管理者宛）
     try {
+      Logger.log('📧 メール送信を開始します...');
+      console.log('📧 メール送信を開始します...');
       GmailApp.sendEmail(to, subject, body);
-      console.log('管理者へのメール送信成功');
+      Logger.log('✅ 管理者へのメール送信成功');
+      Logger.log('✅ 送信先: ' + to);
+      Logger.log('✅ 件名: ' + subject);
+      console.log('✅ 管理者へのメール送信成功');
     } catch (mailError) {
-      console.error('管理者へのメール送信エラー:', mailError);
+      Logger.log('❌ 管理者へのメール送信エラー: ' + mailError.toString());
+      Logger.log('❌ エラーメッセージ: ' + mailError.message);
+      Logger.log('❌ エラースタック: ' + mailError.stack);
+      Logger.log('❌ 送信先: ' + to);
+      Logger.log('❌ 件名: ' + subject);
+      console.error('❌ 管理者へのメール送信エラー:', mailError);
+      console.error('❌ エラー詳細:', {
+        message: mailError.toString(),
+        name: mailError.name,
+        stack: mailError.stack,
+        to: to,
+        subject: subject
+      });
       // メール送信エラーでも、カレンダー追加は成功しているので、エラーは記録するが続行
     }
     
@@ -418,15 +439,30 @@ iTeen 武庫之荘校
           });
           
           // メール送信
+          Logger.log('📧 自動応答メール送信を開始します...');
+          Logger.log('📧 送信先: ' + replyEmail);
+          Logger.log('📧 件名: ' + replySubject);
+          Logger.log('📧 本文の長さ: ' + replyBody.length + '文字');
+          console.log('📧 自動応答メール送信を開始します...');
+          console.log('📧 送信先:', replyEmail);
+          console.log('📧 件名:', replySubject);
+          console.log('📧 本文の長さ:', replyBody.length);
+          
           GmailApp.sendEmail(replyEmail, replySubject, replyBody);
           
+          Logger.log('✅ 自動応答メール送信成功: ' + replyEmail);
           console.log('✅ 自動応答メール送信成功:', replyEmail);
         } else {
           console.log('⚠️ メールアドレスの形式が無効なため、自動応答メールを送信しません:', replyEmail);
         }
       } catch (replyError) {
+        Logger.log('❌ 自動応答メール送信エラー: ' + replyError.toString());
+        Logger.log('❌ エラーメッセージ: ' + replyError.message);
+        Logger.log('❌ エラースタック: ' + replyError.stack);
+        Logger.log('❌ 送信先: ' + replyEmail);
+        Logger.log('❌ 件名: ' + replySubject);
         console.error('❌ 自動応答メール送信エラー:', replyError);
-        console.error('エラー詳細:', {
+        console.error('❌ エラー詳細:', {
           message: replyError.toString(),
           name: replyError.name,
           stack: replyError.stack,
@@ -912,5 +948,87 @@ iTeen 武庫之荘校
   const result = doPost(mockE);
   console.log('問い合わせフォームテスト結果:', result.getContent());
   return result;
+}
+
+// Google Sheetsの権限を確認・承認するテスト関数
+// この関数を実行すると、SpreadsheetAppの権限が正しく付与されているか確認できます
+function testGoogleSheetsPermission() {
+  try {
+    Logger.log('📊 Google Sheetsの権限を確認します...');
+    console.log('📊 Google Sheetsの権限を確認します...');
+    
+    // テスト用のスプレッドシートを作成してみる
+    Logger.log('📝 テスト用のスプレッドシートを作成します...');
+    console.log('📝 テスト用のスプレッドシートを作成します...');
+    
+    const testSpreadsheet = SpreadsheetApp.create('テスト - Google Sheets権限確認');
+    const testSpreadsheetId = testSpreadsheet.getId();
+    const testSpreadsheetUrl = testSpreadsheet.getUrl();
+    
+    Logger.log('✅ Google Sheetsの権限が正しく付与されています！');
+    Logger.log('🔑 テスト用スプレッドシートID: ' + testSpreadsheetId);
+    Logger.log('📄 テスト用スプレッドシートURL: ' + testSpreadsheetUrl);
+    console.log('✅ Google Sheetsの権限が正しく付与されています！');
+    console.log('🔑 テスト用スプレッドシートID:', testSpreadsheetId);
+    console.log('📄 テスト用スプレッドシートURL:', testSpreadsheetUrl);
+    
+    // テスト用のシートにデータを書き込んでみる
+    const testSheet = testSpreadsheet.getActiveSheet();
+    testSheet.getRange(1, 1).setValue('テスト');
+    testSheet.getRange(1, 2).setValue('成功');
+    testSheet.getRange(2, 1).setValue('権限');
+    testSheet.getRange(2, 2).setValue('正常');
+    
+    Logger.log('✅ データの書き込みも成功しました！');
+    console.log('✅ データの書き込みも成功しました！');
+    
+    // テスト用のスプレッドシートを削除（オプション）
+    // コメントアウトしているので、確認後に手動で削除してください
+    // DriveApp.getFileById(testSpreadsheetId).setTrashed(true);
+    
+    Logger.log('📄 テスト用スプレッドシートURL: ' + testSpreadsheetUrl);
+    Logger.log('⚠️ このURLを開いて、スプレッドシートが作成されているか確認してください');
+    Logger.log('⚠️ 確認後、手動でスプレッドシートを削除してください');
+    console.log('📄 テスト用スプレッドシートURL:', testSpreadsheetUrl);
+    console.log('⚠️ このURLを開いて、スプレッドシートが作成されているか確認してください');
+    console.log('⚠️ 確認後、手動でスプレッドシートを削除してください');
+    
+    return {
+      success: true,
+      message: 'Google Sheetsの権限が正しく付与されています',
+      spreadsheetId: testSpreadsheetId,
+      spreadsheetUrl: testSpreadsheetUrl
+    };
+  } catch (error) {
+    Logger.log('❌ Google Sheetsの権限エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ Google Sheetsの権限エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    
+    // 権限エラーの場合の詳細メッセージ
+    if (error.toString().includes('アクセス') || error.toString().includes('access') || error.toString().includes('permission') || error.toString().includes('権限')) {
+      Logger.log('⚠️ Google Sheetsの権限が付与されていません');
+      Logger.log('⚠️ 以下の手順で権限を付与してください：');
+      Logger.log('1. この関数を実行すると、「承認が必要です」という警告が表示されます');
+      Logger.log('2. 「承認」をクリック');
+      Logger.log('3. Googleアカウントを選択');
+      Logger.log('4. 「詳細」→「（安全ではないページ）に移動」をクリック');
+      Logger.log('5. 「許可」をクリックしてGoogle Sheetsの権限を付与');
+      console.error('⚠️ Google Sheetsの権限が付与されていません');
+      console.error('⚠️ 以下の手順で権限を付与してください：');
+      console.error('1. この関数を実行すると、「承認が必要です」という警告が表示されます');
+      console.error('2. 「承認」をクリック');
+      console.error('3. Googleアカウントを選択');
+      console.error('4. 「詳細」→「（安全ではないページ）に移動」をクリック');
+      console.error('5. 「許可」をクリックしてGoogle Sheetsの権限を付与');
+    }
+    
+    throw new Error('Google Sheetsの権限が付与されていません: ' + error.toString());
+  }
 }
 
