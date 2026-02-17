@@ -157,3 +157,137 @@ async function getMergedEmailHistory() {
     }
 }
 
+// テスト関数: saveEmailHistory関数の動作確認
+function testSaveEmailHistory() {
+    console.log('🧪 saveEmailHistory関数のテストを開始します...');
+    
+    // テストデータ1: 予約フォーム
+    const testData1 = {
+        child_name: 'テスト太郎',
+        phone: '09012345678',
+        email: 'test@example.com',
+        school_type: '小学生',
+        grade: '小学3年生',
+        date: '2026/2/25 (水)',
+        time: '8:10',
+        message: 'テストメッセージ'
+    };
+    
+    // テストデータ2: お問い合わせフォーム
+    const testData2 = {
+        email: 'contact@example.com',
+        phone: '09087654321',
+        message: 'お問い合わせテスト'
+    };
+    
+    try {
+        // テスト1: 予約フォームの履歴を保存
+        console.log('📝 テスト1: 予約フォームの履歴を保存');
+        const result1 = saveEmailHistory('reservation', testData1);
+        console.log('結果:', result1 ? '✅ 成功' : '❌ 失敗');
+        
+        // テスト2: お問い合わせフォームの履歴を保存
+        console.log('📝 テスト2: お問い合わせフォームの履歴を保存');
+        const result2 = saveEmailHistory('contact', testData2);
+        console.log('結果:', result2 ? '✅ 成功' : '❌ 失敗');
+        
+        // テスト3: 履歴を取得して確認
+        console.log('📝 テスト3: 履歴を取得して確認');
+        const history = getEmailHistory();
+        console.log('履歴件数:', history.length);
+        console.log('履歴内容:', history);
+        
+        // テスト4: 最新の履歴を確認
+        if (history.length > 0) {
+            console.log('📝 テスト4: 最新の履歴を確認');
+            const latest = history[0];
+            console.log('最新の履歴:', latest);
+            console.log('ID:', latest.id);
+            console.log('タイムスタンプ:', latest.timestamp);
+            console.log('タイプ:', latest.type);
+            console.log('データ:', latest.data);
+        }
+        
+        // テスト5: ローカルストレージを直接確認
+        console.log('📝 テスト5: ローカルストレージを直接確認');
+        const stored = localStorage.getItem('email_history');
+        console.log('ローカルストレージの内容:', stored);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            console.log('パース後の内容:', parsed);
+            console.log('件数:', parsed.length);
+        }
+        
+        console.log('✅ テスト完了');
+        return {
+            success: true,
+            test1: result1,
+            test2: result2,
+            historyCount: history.length,
+            history: history
+        };
+    } catch (error) {
+        console.error('❌ テストエラー:', error);
+        return {
+            success: false,
+            error: error.toString()
+        };
+    }
+}
+
+// テスト関数: 履歴のクリアと再保存のテスト
+function testClearAndSave() {
+    console.log('🧪 履歴のクリアと再保存のテストを開始します...');
+    
+    try {
+        // 現在の履歴を確認
+        const beforeClear = getEmailHistory();
+        console.log('クリア前の履歴件数:', beforeClear.length);
+        
+        // 履歴をクリア
+        console.log('📝 履歴をクリア');
+        const clearResult = clearEmailHistory();
+        console.log('結果:', clearResult ? '✅ 成功' : '❌ 失敗');
+        
+        // クリア後の履歴を確認
+        const afterClear = getEmailHistory();
+        console.log('クリア後の履歴件数:', afterClear.length);
+        
+        // 新しい履歴を保存
+        console.log('📝 新しい履歴を保存');
+        const testData = {
+            child_name: 'クリア後テスト',
+            phone: '09011111111',
+            email: 'cleartest@example.com',
+            school_type: '中学生',
+            grade: '中学1年生',
+            date: '2026/2/26 (木)',
+            time: '10:30',
+            message: 'クリア後のテスト'
+        };
+        const saveResult = saveEmailHistory('reservation', testData);
+        console.log('結果:', saveResult ? '✅ 成功' : '❌ 失敗');
+        
+        // 保存後の履歴を確認
+        const afterSave = getEmailHistory();
+        console.log('保存後の履歴件数:', afterSave.length);
+        console.log('保存後の履歴:', afterSave);
+        
+        console.log('✅ テスト完了');
+        return {
+            success: true,
+            beforeClear: beforeClear.length,
+            afterClear: afterClear.length,
+            afterSave: afterSave.length,
+            clearResult: clearResult,
+            saveResult: saveResult
+        };
+    } catch (error) {
+        console.error('❌ テストエラー:', error);
+        return {
+            success: false,
+            error: error.toString()
+        };
+    }
+}
+
