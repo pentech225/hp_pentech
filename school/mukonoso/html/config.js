@@ -8,7 +8,7 @@
 // Google Apps ScriptのWebアプリURL
 const CONFIG = {
     // Google Apps ScriptのWebアプリURL
-    GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbx8L4_fbUZypbCqtQ1TB4zAFfidD5M9E5WKiAJMU74vvW47QsuY3SCMy2GdeX1L4Pk/exec',
+    GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyGWLE6Z574DGYk6BQqaksJ_UdSyJndAh7Fkf7AlzG_8vNku6BEKpTDCIRNz_2FwYqP/exec',
     
     // 連絡先情報
     PHONE: '06-6438-8277',
