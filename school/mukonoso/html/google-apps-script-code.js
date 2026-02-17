@@ -257,6 +257,63 @@ function handleReservationForm(data) {
       Logger.log('✅ Google Sheetsに履歴を保存しました。結果: ' + result);
       console.log('✅ Google Sheetsに履歴を保存しました。結果:', result);
       
+      // メール通知を送信（保存成功後）
+      try {
+        Logger.log('📧 メール通知を送信します...');
+        console.log('📧 メール通知を送信します...');
+        
+        const emailSubject = '【新規予約】無料体験予約のお申し込み';
+        const emailBody = `新しい予約が追加されました。
+
+お子様のお名前: ${childName}
+電話番号: ${phone}
+メールアドレス: ${email}
+学校区別: ${schoolType}
+学年: ${grade}
+予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}
+
+---
+このメールは予約フォームから自動送信されました。
+iTeen 武庫之荘校`;
+        
+        GmailApp.sendEmail('iteen.mukonosou@gmail.com', emailSubject, emailBody);
+        
+        Logger.log('✅ メール通知を送信しました');
+        console.log('✅ メール通知を送信しました');
+      } catch (emailError) {
+        Logger.log('⚠️ メール通知の送信に失敗しました: ' + emailError.toString());
+        Logger.log('⚠️ エラーメッセージ: ' + emailError.message);
+        console.warn('⚠️ メール通知の送信に失敗しました:', emailError);
+        // メール通知のエラーは記録するが続行（データ保存は成功している）
+      }
+      
+      // LINE通知を送信（保存成功後、LINE Notifyが利用可能な場合のみ）
+      // 注意: LINE Notifyは2025年3月31日にサービス終了予定
+      // 代替手段としてLINE Messaging APIまたはメール通知を推奨
+      try {
+        Logger.log('📱 LINE通知を送信します...');
+        console.log('📱 LINE通知を送信します...');
+        
+        const lineMessage = `🔔 新しい予約が追加されました
+
+お子様のお名前: ${childName}
+電話番号: ${phone}
+メールアドレス: ${email}
+学校区別: ${schoolType}
+学年: ${grade}
+予約希望日時: ${dateDisplay} ${timeDisplay}${message ? `\n\nご質問・ご要望:\n${message}` : ''}`;
+        
+        sendLineNotification(lineMessage);
+        
+        Logger.log('✅ LINE通知を送信しました');
+        console.log('✅ LINE通知を送信しました');
+      } catch (lineError) {
+        Logger.log('⚠️ LINE通知の送信に失敗しました: ' + lineError.toString());
+        Logger.log('⚠️ エラーメッセージ: ' + lineError.message);
+        console.warn('⚠️ LINE通知の送信に失敗しました:', lineError);
+        // LINE通知のエラーは記録するが続行（データ保存は成功している）
+      }
+      
       // 成功レスポンスを返す（メール送信やカレンダー追加は行わない）
       const successResponse = {
         success: true,
@@ -1191,6 +1248,245 @@ function testGoogleDrivePermission() {
     }
     
     throw new Error('Google Drive APIの権限が付与されていません: ' + error.toString());
+  }
+}
+
+// LINE通知を送信する関数
+function sendLineNotification(message) {
+  try {
+    Logger.log('📱 LINE通知を送信開始');
+    console.log('📱 LINE通知を送信開始');
+    
+    // スクリプトプロパティからLINE Notifyトークンを取得
+    const properties = PropertiesService.getScriptProperties();
+    const lineNotifyToken = properties.getProperty('LINE_NOTIFY_TOKEN');
+    
+    if (!lineNotifyToken) {
+      Logger.log('⚠️ LINE Notifyトークンが設定されていません');
+      Logger.log('⚠️ スクリプトプロパティに「LINE_NOTIFY_TOKEN」を設定してください');
+      console.warn('⚠️ LINE Notifyトークンが設定されていません');
+      console.warn('⚠️ スクリプトプロパティに「LINE_NOTIFY_TOKEN」を設定してください');
+      throw new Error('LINE Notifyトークンが設定されていません。スクリプトプロパティに「LINE_NOTIFY_TOKEN」を設定してください。');
+    }
+    
+    // LINE Notify APIのエンドポイント
+    const url = 'https://notify-api.line.me/api/notify';
+    
+    // リクエストオプション
+    const options = {
+      'method': 'post',
+      'headers': {
+        'Authorization': 'Bearer ' + lineNotifyToken,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      'payload': {
+        'message': message
+      }
+    };
+    
+    Logger.log('📱 LINE Notify APIにリクエストを送信します...');
+    console.log('📱 LINE Notify APIにリクエストを送信します...');
+    
+    // LINE Notify APIにリクエストを送信
+    const response = UrlFetchApp.fetch(url, options);
+    const responseCode = response.getResponseCode();
+    const responseText = response.getContentText();
+    
+    Logger.log('📱 LINE Notify APIレスポンスコード: ' + responseCode);
+    Logger.log('📱 LINE Notify APIレスポンス: ' + responseText);
+    console.log('📱 LINE Notify APIレスポンスコード:', responseCode);
+    console.log('📱 LINE Notify APIレスポンス:', responseText);
+    
+    if (responseCode === 200) {
+      Logger.log('✅ LINE通知を送信しました');
+      console.log('✅ LINE通知を送信しました');
+      return true;
+    } else {
+      Logger.log('❌ LINE通知の送信に失敗しました。レスポンスコード: ' + responseCode);
+      Logger.log('❌ レスポンス: ' + responseText);
+      console.error('❌ LINE通知の送信に失敗しました。レスポンスコード:', responseCode);
+      console.error('❌ レスポンス:', responseText);
+      throw new Error('LINE通知の送信に失敗しました。レスポンスコード: ' + responseCode + ', レスポンス: ' + responseText);
+    }
+  } catch (error) {
+    Logger.log('❌ LINE通知送信エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ LINE通知送信エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    throw error;
+  }
+}
+
+// LINE Notifyトークンを設定する関数（初回設定用）
+// 注意: LINE Notifyは2025年3月31日にサービス終了予定
+// 代替手段としてLINE Messaging APIまたはメール通知を推奨
+function setLineNotifyToken() {
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    
+    // ここにLINE Notifyトークンを設定してください
+    // トークンは https://notify-bot.line.me/ で取得できます
+    // 注意: LINE Notifyは2025年3月31日にサービス終了予定
+    const token = 'YOUR_LINE_NOTIFY_TOKEN_HERE';
+    
+    if (token === 'YOUR_LINE_NOTIFY_TOKEN_HERE') {
+      Logger.log('⚠️ トークンを設定してください');
+      Logger.log('⚠️ setLineNotifyToken関数内の「YOUR_LINE_NOTIFY_TOKEN_HERE」を実際のトークンに置き換えてください');
+      Logger.log('⚠️ 注意: LINE Notifyは2025年3月31日にサービス終了予定です');
+      console.warn('⚠️ トークンを設定してください');
+      console.warn('⚠️ setLineNotifyToken関数内の「YOUR_LINE_NOTIFY_TOKEN_HERE」を実際のトークンに置き換えてください');
+      console.warn('⚠️ 注意: LINE Notifyは2025年3月31日にサービス終了予定です');
+      return false;
+    }
+    
+    properties.setProperty('LINE_NOTIFY_TOKEN', token);
+    Logger.log('✅ LINE Notifyトークンを設定しました');
+    Logger.log('⚠️ 注意: LINE Notifyは2025年3月31日にサービス終了予定です');
+    console.log('✅ LINE Notifyトークンを設定しました');
+    console.warn('⚠️ 注意: LINE Notifyは2025年3月31日にサービス終了予定です');
+    return true;
+  } catch (error) {
+    Logger.log('❌ LINE Notifyトークンの設定に失敗しました: ' + error.toString());
+    console.error('❌ LINE Notifyトークンの設定に失敗しました:', error);
+    return false;
+  }
+}
+
+// LINE Messaging APIで通知を送信する関数（LINE Notifyの代替手段）
+// 注意: この関数を使用するには、LINE Developersコンソールでチャネルを作成し、
+// チャネルアクセストークンとユーザーIDを設定する必要があります
+// 詳細は LINE_MESSAGING_API_SETUP.md を参照してください
+function sendLineMessagingAPI(message) {
+  try {
+    Logger.log('📱 LINE Messaging APIで通知を送信開始');
+    console.log('📱 LINE Messaging APIで通知を送信開始');
+    
+    // スクリプトプロパティから認証情報を取得
+    const properties = PropertiesService.getScriptProperties();
+    const channelAccessToken = properties.getProperty('LINE_CHANNEL_ACCESS_TOKEN');
+    const userId = properties.getProperty('LINE_USER_ID');
+    
+    if (!channelAccessToken) {
+      Logger.log('⚠️ LINE_CHANNEL_ACCESS_TOKENが設定されていません');
+      Logger.log('⚠️ スクリプトプロパティに「LINE_CHANNEL_ACCESS_TOKEN」を設定してください');
+      Logger.log('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      console.warn('⚠️ LINE_CHANNEL_ACCESS_TOKENが設定されていません');
+      console.warn('⚠️ スクリプトプロパティに「LINE_CHANNEL_ACCESS_TOKEN」を設定してください');
+      console.warn('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      throw new Error('LINE_CHANNEL_ACCESS_TOKENが設定されていません。スクリプトプロパティに「LINE_CHANNEL_ACCESS_TOKEN」を設定してください。');
+    }
+    
+    if (!userId) {
+      Logger.log('⚠️ LINE_USER_IDが設定されていません');
+      Logger.log('⚠️ スクリプトプロパティに「LINE_USER_ID」を設定してください');
+      Logger.log('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      console.warn('⚠️ LINE_USER_IDが設定されていません');
+      console.warn('⚠️ スクリプトプロパティに「LINE_USER_ID」を設定してください');
+      console.warn('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      throw new Error('LINE_USER_IDが設定されていません。スクリプトプロパティに「LINE_USER_ID」を設定してください。');
+    }
+    
+    // LINE Messaging APIのエンドポイント
+    const url = 'https://api.line.me/v2/bot/message/push';
+    
+    // リクエストボディ
+    const payload = {
+      'to': userId,
+      'messages': [
+        {
+          'type': 'text',
+          'text': message
+        }
+      ]
+    };
+    
+    // リクエストオプション
+    const options = {
+      'method': 'post',
+      'headers': {
+        'Authorization': 'Bearer ' + channelAccessToken,
+        'Content-Type': 'application/json'
+      },
+      'payload': JSON.stringify(payload)
+    };
+    
+    Logger.log('📱 LINE Messaging APIにリクエストを送信します...');
+    console.log('📱 LINE Messaging APIにリクエストを送信します...');
+    
+    // LINE Messaging APIにリクエストを送信
+    const response = UrlFetchApp.fetch(url, options);
+    const responseCode = response.getResponseCode();
+    const responseText = response.getContentText();
+    
+    Logger.log('📱 LINE Messaging APIレスポンスコード: ' + responseCode);
+    Logger.log('📱 LINE Messaging APIレスポンス: ' + responseText);
+    console.log('📱 LINE Messaging APIレスポンスコード:', responseCode);
+    console.log('📱 LINE Messaging APIレスポンス:', responseText);
+    
+    if (responseCode === 200) {
+      Logger.log('✅ LINE Messaging APIで通知を送信しました');
+      console.log('✅ LINE Messaging APIで通知を送信しました');
+      return true;
+    } else {
+      Logger.log('❌ LINE Messaging APIの送信に失敗しました。レスポンスコード: ' + responseCode);
+      Logger.log('❌ レスポンス: ' + responseText);
+      console.error('❌ LINE Messaging APIの送信に失敗しました。レスポンスコード:', responseCode);
+      console.error('❌ レスポンス:', responseText);
+      throw new Error('LINE Messaging APIの送信に失敗しました。レスポンスコード: ' + responseCode + ', レスポンス: ' + responseText);
+    }
+  } catch (error) {
+    Logger.log('❌ LINE Messaging API送信エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ LINE Messaging API送信エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    throw error;
+  }
+}
+
+// LINE Messaging APIの認証情報を設定する関数（初回設定用）
+// この関数を実行して、チャネルアクセストークンとユーザーIDを設定してください
+// 詳細は LINE_MESSAGING_API_SETUP.md を参照してください
+function setLineMessagingAPICredentials() {
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    
+    // ここにLINE Messaging APIの認証情報を設定してください
+    // チャネルアクセストークンは LINE Developersコンソールで取得できます
+    // ユーザーIDは友だち追加後に取得できます
+    const channelAccessToken = 'YOUR_CHANNEL_ACCESS_TOKEN_HERE';
+    const userId = 'YOUR_USER_ID_HERE';
+    
+    if (channelAccessToken === 'YOUR_CHANNEL_ACCESS_TOKEN_HERE' || 
+        userId === 'YOUR_USER_ID_HERE') {
+      Logger.log('⚠️ チャネルアクセストークンとユーザーIDを設定してください');
+      Logger.log('⚠️ setLineMessagingAPICredentials関数内の値を実際の値に置き換えてください');
+      Logger.log('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      console.warn('⚠️ チャネルアクセストークンとユーザーIDを設定してください');
+      console.warn('⚠️ setLineMessagingAPICredentials関数内の値を実際の値に置き換えてください');
+      console.warn('⚠️ 詳細は LINE_MESSAGING_API_SETUP.md を参照してください');
+      return false;
+    }
+    
+    properties.setProperty('LINE_CHANNEL_ACCESS_TOKEN', channelAccessToken);
+    properties.setProperty('LINE_USER_ID', userId);
+    
+    Logger.log('✅ LINE Messaging APIの認証情報を設定しました');
+    console.log('✅ LINE Messaging APIの認証情報を設定しました');
+    return true;
+  } catch (error) {
+    Logger.log('❌ LINE Messaging APIの認証情報の設定に失敗しました: ' + error.toString());
+    console.error('❌ LINE Messaging APIの認証情報の設定に失敗しました:', error);
+    return false;
   }
 }
 
