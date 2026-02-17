@@ -489,20 +489,48 @@ iTeen 武庫之荘校
 function saveToGoogleSheets(type, data) {
   try {
     // スプレッドシートID（新規作成する場合は、スプレッドシートを作成してIDを設定）
-    // 注意: このIDは、Google SheetsのURLから取得できます
+    // 注意: このIDは、config.jsのGOOGLE_SHEETS_SPREADSHEET_IDと同じ値に設定してください
+    // 注意: config.jsの値を変更した場合、この値も同じ値に更新してください
     // 例: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
-    const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID'; // ここにスプレッドシートIDを設定してください
+    // URLまたはIDのどちらでも指定可能です
+    const SPREADSHEET_ID_OR_URL = '1q4BfhBe_hd2U-qE_O6j0cUPVI6wPvgsNg0qFZCyl5Yc'; // config.jsのGOOGLE_SHEETS_SPREADSHEET_IDと同じ値に設定
+    
+    // URLからIDを抽出する関数
+    function extractSpreadsheetId(idOrUrl) {
+      if (!idOrUrl || idOrUrl === 'YOUR_SPREADSHEET_ID') {
+        return null;
+      }
+      // URL形式の場合、IDを抽出
+      const match = idOrUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (match) {
+        return match[1];
+      }
+      // 既にID形式の場合、そのまま返す
+      return idOrUrl;
+    }
+    
+    // スプレッドシートIDを取得
+    const spreadsheetId = extractSpreadsheetId(SPREADSHEET_ID_OR_URL);
     
     // スプレッドシートIDが設定されていない場合は、新規作成
     let spreadsheet;
-    if (SPREADSHEET_ID === 'YOUR_SPREADSHEET_ID') {
+    if (!spreadsheetId) {
       // 新規スプレッドシートを作成
       spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
       console.log('新規スプレッドシートを作成しました:', spreadsheet.getId());
       console.log('スプレッドシートURL:', spreadsheet.getUrl());
-      console.log('⚠️ このスプレッドシートIDをgoogle-apps-script-code.jsのSPREADSHEET_IDに設定してください:', spreadsheet.getId());
+      console.log('⚠️ このスプレッドシートIDをgoogle-apps-script-code.jsのSPREADSHEET_ID_OR_URLに設定してください:', spreadsheet.getId());
     } else {
-      spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+      try {
+        spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+        console.log('既存のスプレッドシートを開きました:', spreadsheet.getName());
+      } catch (openError) {
+        console.error('スプレッドシートを開くエラー:', openError);
+        // エラーの場合は新規作成
+        spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - メール送信履歴');
+        console.log('エラーのため新規スプレッドシートを作成しました:', spreadsheet.getId());
+        console.log('⚠️ このスプレッドシートIDをgoogle-apps-script-code.jsのSPREADSHEET_ID_OR_URLに設定してください:', spreadsheet.getId());
+      }
     }
     
     // シート名
@@ -574,13 +602,32 @@ function saveToGoogleSheets(type, data) {
 // Google Sheetsから履歴を取得する関数（GETリクエスト用）
 function getEmailHistoryFromSheets() {
   try {
-    const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID'; // ここにスプレッドシートIDを設定してください
+    // saveToGoogleSheetsと同じIDを使用
+    // 注意: このIDは、config.jsのGOOGLE_SHEETS_SPREADSHEET_IDと同じ値に設定してください
+    // 注意: config.jsの値を変更した場合、この値も同じ値に更新してください
+    const SPREADSHEET_ID_OR_URL = '1q4BfhBe_hd2U-qE_O6j0cUPVI6wPvgsNg0qFZCyl5Yc'; // config.jsのGOOGLE_SHEETS_SPREADSHEET_IDと同じ値に設定
     
-    if (SPREADSHEET_ID === 'YOUR_SPREADSHEET_ID') {
+    // URLからIDを抽出する関数
+    function extractSpreadsheetId(idOrUrl) {
+      if (!idOrUrl || idOrUrl === 'YOUR_SPREADSHEET_ID') {
+        return null;
+      }
+      // URL形式の場合、IDを抽出
+      const match = idOrUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (match) {
+        return match[1];
+      }
+      // 既にID形式の場合、そのまま返す
+      return idOrUrl;
+    }
+    
+    const spreadsheetId = extractSpreadsheetId(SPREADSHEET_ID_OR_URL);
+    
+    if (!spreadsheetId) {
       return [];
     }
     
-    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
     const sheet = spreadsheet.getSheetByName('EmailHistory');
     
     if (!sheet) {
