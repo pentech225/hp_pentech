@@ -21,6 +21,7 @@ const keyframes3={
         '50% 20% 50% 50% /40% 40% 60% 60%',
         '50% 40% 20% 40% /40% 50% 50% 80%',
         '50% 50% 50% 20%/40% 40% 60% 60%',
+        '20% 50% 50% 70%/50% 50% 70% 50%'
     ]
 }
 
@@ -38,12 +39,14 @@ const options2={
     delay:5000,
     duration:1000,
     easing:'ease',
+    fill:'forwards',
 }
 const options3={
     delay:7000,
     duration:8000,
     direction:'alternate',
     iterations:Infinity,
+    fill:'both',
 }
 
 heading.animate(keyframes,options);
