@@ -1336,9 +1336,9 @@
     <script src="config.js"></script>
     
     <script>
-        // 時間スロット（8:00-20:00、1時間単位）
+        // 時間スロット（7:00-22:00、1時間単位）
         const timeSlots = [];
-        for (let hour = 8; hour <= 20; hour++) {
+        for (let hour = 7; hour <= 22; hour++) {
             timeSlots.push({
                 start: `${hour}:00`,
                 end: `${hour + 1}:00`
@@ -1466,6 +1466,14 @@
                 events.forEach(event => {
                     if (event.start && event.start.dateTime) {
                         processedCount++;
+                        
+                        // 「体験可能枠」というタイトルのイベントは予約可能として扱うため、スキップ
+                        const eventTitle = event.summary || '';
+                        if (eventTitle.includes('体験可能枠')) {
+                            console.log(`ℹ️ イベント "${eventTitle}" は体験可能枠のため、予約可能として扱います`);
+                            return; // このイベントはスキップして、予約不可リストに追加しない
+                        }
+                        
                         const eventStartDate = new Date(event.start.dateTime);
                         const eventEndDate = event.end && event.end.dateTime ? new Date(event.end.dateTime) : null;
                         const dateStr = formatDate(eventStartDate);
@@ -1499,13 +1507,18 @@
                                 }
                             });
                             
-                            console.log(`📌 イベント "${event.summary || '無題'}" (${dateStr} ${eventStartTimeStr}) と重複する時間スロット:`, overlappingSlots.map(s => s.start));
+                            console.log(`📌 イベント "${eventTitle}" (${dateStr} ${eventStartTimeStr}) と重複する時間スロット:`, overlappingSlots.map(s => s.start));
                         } else {
-                            console.warn(`⚠️ イベント "${event.summary || '無題'}" (${dateStr} ${eventStartTimeStr}) に一致する時間スロットが見つかりませんでした`);
+                            console.warn(`⚠️ イベント "${eventTitle}" (${dateStr} ${eventStartTimeStr}) に一致する時間スロットが見つかりませんでした`);
                         }
                     } else if (event.start && event.start.date) {
                         // 終日イベントはスキップ
-                        console.log(`ℹ️ 終日イベント "${event.summary || '無題'}" はスキップしました`);
+                        const eventTitle = event.summary || '';
+                        if (eventTitle.includes('体験可能枠')) {
+                            console.log(`ℹ️ 終日イベント "${eventTitle}" は体験可能枠のため、予約可能として扱います`);
+                        } else {
+                            console.log(`ℹ️ 終日イベント "${eventTitle}" はスキップしました`);
+                        }
                     }
                 });
                 
