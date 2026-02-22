@@ -1629,7 +1629,7 @@ function handleArticlePublish(articleData) {
     }
     
     // ブログフォルダのパス
-    const blogFolderPath = 'pentech_info/blog';
+    const blogFolderPath = 'pentech_info/hp_pentech/school/mukonoso/html/blog';
     
     // ブログフォルダを取得または作成
     Logger.log('📁 ブログフォルダを取得または作成: ' + blogFolderPath);
