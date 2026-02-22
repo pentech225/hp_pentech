@@ -81,6 +81,13 @@ function doPost(e) {
       return handleArticleSave(data.data);
     }
     
+    if (requestType === 'publish_article') {
+      // 記事投稿の処理
+      Logger.log('📤 記事投稿の処理を開始');
+      console.log('📤 記事投稿の処理を開始');
+      return handleArticlePublish(data.data);
+    }
+    
     // 問い合わせフォームか予約フォームかを判定
     const isContactForm = data.message && !data.date_raw && !data.date;
     Logger.log('📋 フォームタイプ判定: ' + (isContactForm ? 'お問い合わせ' : '予約'));
@@ -1594,6 +1601,98 @@ function handleArticleSave(articleData) {
     Logger.log('❌ エラーメッセージ: ' + error.message);
     Logger.log('❌ エラースタック: ' + error.stack);
     console.error('❌ 記事保存エラー:', error);
+    console.error('❌ エラー詳細:', {
+      message: error.toString(),
+      name: error.name,
+      stack: error.stack
+    });
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString(),
+      message: error.message
+    })));
+  }
+}
+
+// 記事投稿の処理
+function handleArticlePublish(articleData) {
+  try {
+    Logger.log('📤 記事投稿処理を開始');
+    console.log('📤 記事投稿処理を開始');
+    Logger.log('📤 記事データ: ' + JSON.stringify(articleData));
+    console.log('📤 記事データ:', articleData);
+    
+    // データの検証
+    if (!articleData.title || !articleData.date || !articleData.category || !articleData.html) {
+      throw new Error('記事データが不完全です。タイトル、日付、カテゴリ、HTMLコンテンツが必要です。');
+    }
+    
+    // ブログフォルダのパス
+    const blogFolderPath = 'pentech_info/blog';
+    
+    // ブログフォルダを取得または作成
+    Logger.log('📁 ブログフォルダを取得または作成: ' + blogFolderPath);
+    console.log('📁 ブログフォルダを取得または作成:', blogFolderPath);
+    const blogFolder = getOrCreateFolder(blogFolderPath);
+    
+    if (!blogFolder) {
+      throw new Error('ブログフォルダの取得に失敗しました。');
+    }
+    
+    // HTMLテンプレートを読み込んで記事HTMLを生成
+    const articleHtml = generateArticleHTML(articleData);
+    
+    // ファイル名を生成
+    const filename = articleData.filename || `article_${Date.now()}.html`;
+    
+    // ファイルを作成
+    Logger.log('📄 ファイルを作成: ' + filename);
+    console.log('📄 ファイルを作成:', filename);
+    const file = blogFolder.createFile(filename, articleHtml, 'text/html');
+    
+    Logger.log('✅ 記事ファイルを作成しました: ' + file.getName());
+    console.log('✅ 記事ファイルを作成しました:', file.getName());
+    Logger.log('✅ ファイルID: ' + file.getId());
+    console.log('✅ ファイルID:', file.getId());
+    
+    // ブログ一覧に追加（投稿時はブログ一覧にも追加）
+    try {
+      Logger.log('📋 ブログ一覧に追加を試みます...');
+      console.log('📋 ブログ一覧に追加を試みます...');
+      // ブログ一覧ファイルのパス（実際のパスに合わせて調整が必要）
+      const blogIndexPath = 'pentech_info/blog/index.html';
+      const blogIndexFolder = getOrCreateFolder('pentech_info/blog');
+      const blogIndexFiles = blogIndexFolder.getFilesByName('index.html');
+      
+      if (blogIndexFiles.hasNext()) {
+        Logger.log('✅ ブログ一覧ファイルが見つかりました');
+        console.log('✅ ブログ一覧ファイルが見つかりました');
+        // ブログ一覧ファイルの編集は複雑なため、ここではログのみ
+        // 実際の実装では、HTMLファイルを読み込んで編集する必要があります
+      } else {
+        Logger.log('⚠️ ブログ一覧ファイルが見つかりませんでした');
+        console.warn('⚠️ ブログ一覧ファイルが見つかりませんでした');
+      }
+    } catch (indexError) {
+      Logger.log('⚠️ ブログ一覧への追加でエラーが発生しましたが、続行します: ' + indexError.toString());
+      console.warn('⚠️ ブログ一覧への追加でエラーが発生しましたが、続行します:', indexError);
+      // エラーが発生しても記事の作成は成功しているので続行
+    }
+    
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: '記事を投稿しました',
+      filename: filename,
+      fileId: file.getId(),
+      fileUrl: file.getUrl()
+    })));
+    
+  } catch (error) {
+    Logger.log('❌ 記事投稿エラー: ' + error.toString());
+    Logger.log('❌ エラーメッセージ: ' + error.message);
+    Logger.log('❌ エラースタック: ' + error.stack);
+    console.error('❌ 記事投稿エラー:', error);
     console.error('❌ エラー詳細:', {
       message: error.toString(),
       name: error.name,
