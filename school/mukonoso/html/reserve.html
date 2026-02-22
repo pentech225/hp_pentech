@@ -281,14 +281,24 @@
         .calendar-cell.unavailable {
             background-color: #FFEBEE;
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 1;
         }
         .calendar-cell.unavailable::after {
             content: '×';
             position: absolute;
             color: #F44336;
-            font-size: 0.75rem;
+            font-size: 1.2rem;
             font-weight: bold;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            line-height: 1;
+            display: block;
+        }
+        .calendar-cell.unavailable::before {
+            content: '';
+            display: none;
         }
         .calendar-cell.available {
             background-color: var(--white);
@@ -1464,14 +1474,14 @@
                 let matchedCount = 0;
                 const availableSlots = {}; // 「体験可能枠」のイベントがある時間帯を記録
                 
+                // まず「体験可能枠」のイベントを処理
                 events.forEach(event => {
                     if (event.start && event.start.dateTime) {
-                        processedCount++;
                         const eventTitle = event.summary || '';
                         
-                        // 「体験可能枠」というタイトルのイベントは予約可能として扱う
+                        // 「体験可能枠」というタイトルのイベントを読み込んで処理
                         if (eventTitle.includes('体験可能枠')) {
-                            console.log(`ℹ️ イベント "${eventTitle}" は体験可能枠のため、予約可能として扱います`);
+                            console.log(`✅ 体験可能枠イベントを検出: "${eventTitle}"`);
                             
                             const eventStartDate = new Date(event.start.dateTime);
                             const eventEndDate = event.end && event.end.dateTime ? new Date(event.end.dateTime) : null;
@@ -1479,6 +1489,7 @@
                             const eventStartHour = eventStartDate.getHours();
                             const eventStartMin = eventStartDate.getMinutes();
                             const eventStartMinutes = eventStartHour * 60 + eventStartMin;
+                            const eventStartTimeStr = `${String(eventStartHour).padStart(2, '0')}:${String(eventStartMin).padStart(2, '0')}`;
                             
                             // イベントの終了時刻を計算（終了時刻がない場合は1時間後と仮定）
                             const eventEndMinutes = eventEndDate 
@@ -1498,9 +1509,25 @@
                                 overlappingSlots.forEach(slot => {
                                     if (!availableSlots[dateStr].includes(slot.start)) {
                                         availableSlots[dateStr].push(slot.start);
+                                        console.log(`  → ${dateStr} ${slot.start} を体験可能枠として登録`);
                                     }
                                 });
+                                console.log(`✅ 体験可能枠 "${eventTitle}" (${dateStr} ${eventStartTimeStr}) の時間帯を処理しました:`, overlappingSlots.map(s => s.start));
+                            } else {
+                                console.warn(`⚠️ 体験可能枠 "${eventTitle}" (${dateStr} ${eventStartTimeStr}) に一致する時間スロットが見つかりませんでした`);
                             }
+                        }
+                    }
+                });
+                
+                // 次に、体験可能枠以外のイベントを処理して予約不可リストに追加
+                events.forEach(event => {
+                    if (event.start && event.start.dateTime) {
+                        processedCount++;
+                        const eventTitle = event.summary || '';
+                        
+                        // 「体験可能枠」のイベントはスキップ（既に処理済み）
+                        if (eventTitle.includes('体験可能枠')) {
                             return; // このイベントは予約不可リストに追加しない
                         }
                         
@@ -1552,26 +1579,31 @@
                     }
                 });
                 
-                // 「体験可能枠」のイベントがある時間帯を unavailableTimes から削除
+                // 「体験可能枠」のイベントがある時間帯を unavailableTimes から削除（予約可能として確実に表示）
+                console.log('📋 体験可能枠の時間帯を処理中...', availableSlots);
                 Object.keys(availableSlots).forEach(dateStr => {
                     if (unavailableTimes[dateStr]) {
                         availableSlots[dateStr].forEach(timeSlot => {
                             const index = unavailableTimes[dateStr].indexOf(timeSlot);
                             if (index > -1) {
                                 unavailableTimes[dateStr].splice(index, 1);
-                                console.log(`✅ "${dateStr}" の "${timeSlot}" を体験可能枠として予約可能にしました`);
+                                console.log(`✅ "${dateStr}" の "${timeSlot}" を体験可能枠として予約可能にしました（予約不可リストから削除）`);
                             }
                         });
                         // 空の配列になったら削除
                         if (unavailableTimes[dateStr].length === 0) {
                             delete unavailableTimes[dateStr];
                         }
+                    } else {
+                        // 予約不可リストに含まれていない場合もログ出力
+                        console.log(`ℹ️ "${dateStr}" の体験可能枠時間帯は既に予約可能です:`, availableSlots[dateStr]);
                     }
                 });
                 
                 console.log(`📊 処理結果: ${processedCount}件のイベントを処理し、${matchedCount}件が時間スロットと一致しました`);
                 console.log(`📌 ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}件の予約済み時間帯を登録しました`);
                 console.log('予約済み日時:', unavailableTimes);
+                console.log('体験可能枠の時間帯:', availableSlots);
                 
                 // カレンダーを再生成して反映
                 generateCalendar();
@@ -1683,6 +1715,10 @@
                         cell.classList.add('past');
                     } else if (isUnavailable) {
                         cell.classList.add('unavailable');
+                        // デバッグ用: unavailableクラスが適用されたことを確認
+                        if (dateStr === formatDate(today) || dateStr === formatDate(new Date(today.getTime() + 24*60*60*1000))) {
+                            console.log(`🔴 予約不可セル: ${dateStr} ${slot.start}`);
+                        }
                     } else {
                         cell.classList.add('available');
                         cell.addEventListener('click', () => selectDateTime(dateStr, slot.start, cell));
