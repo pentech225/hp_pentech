@@ -281,14 +281,24 @@
         .calendar-cell.unavailable {
             background-color: #FFEBEE;
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 1;
         }
         .calendar-cell.unavailable::after {
             content: '×';
             position: absolute;
             color: #F44336;
-            font-size: 0.75rem;
+            font-size: 1.2rem;
             font-weight: bold;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            line-height: 1;
+            display: block;
+        }
+        .calendar-cell.unavailable::before {
+            content: '';
+            display: none;
         }
         .calendar-cell.available {
             background-color: var(--white);
@@ -1572,6 +1582,7 @@
                 console.log(`📊 処理結果: ${processedCount}件のイベントを処理し、${matchedCount}件が時間スロットと一致しました`);
                 console.log(`📌 ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}件の予約済み時間帯を登録しました`);
                 console.log('予約済み日時:', unavailableTimes);
+                console.log('体験可能枠の時間帯:', availableSlots);
                 
                 // カレンダーを再生成して反映
                 generateCalendar();
@@ -1683,6 +1694,10 @@
                         cell.classList.add('past');
                     } else if (isUnavailable) {
                         cell.classList.add('unavailable');
+                        // デバッグ用: unavailableクラスが適用されたことを確認
+                        if (dateStr === formatDate(today) || dateStr === formatDate(new Date(today.getTime() + 24*60*60*1000))) {
+                            console.log(`🔴 予約不可セル: ${dateStr} ${slot.start}`);
+                        }
                     } else {
                         cell.classList.add('available');
                         cell.addEventListener('click', () => selectDateTime(dateStr, slot.start, cell));
