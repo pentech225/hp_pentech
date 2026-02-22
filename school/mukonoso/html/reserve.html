@@ -219,6 +219,34 @@
             border-collapse: collapse;
             min-width: max-content;
         }
+        .date-header-container {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 2px solid var(--primary);
+        }
+        .date-header-date {
+            font-weight: bold;
+            padding: 2px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text);
+            border-bottom: 1px solid #E0E0E0;
+        }
+        .date-header-weekday {
+            font-weight: normal;
+            padding: 2px;
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--text);
+        }
+        .date-header-container.today .date-header-date {
+            background-color: #fff8e1;
+            color: var(--accent);
+        }
+        .date-header-container.today .date-header-weekday {
+            background-color: #fff8e1;
+            color: var(--accent);
+        }
         .time-header {
             position: sticky;
             left: 0;
@@ -279,16 +307,15 @@
             opacity: 0.5;
         }
         .calendar-cell.unavailable {
-            background-color: #FFEBEE;
+            background-color: #d4d4d4;
             cursor: not-allowed;
             opacity: 1;
         }
         .calendar-cell.unavailable::after {
-            content: '×';
+            content: '-';
             position: absolute;
-            color: #F44336;
+            color: #444444;
             font-size: 1.2rem;
-            font-weight: bold;
             z-index: 10;
             top: 50%;
             left: 50%;
@@ -306,14 +333,14 @@
             position: relative;
         }
         .calendar-cell.available::before {
-            content: '○';
+            content: '〇';
             position: absolute;
-            color: #000000;
+            color: #00b445;
             font-size: 0.75rem;
             font-weight: bold;
         }
         .calendar-cell.available:hover {
-            background-color: #F0F7FF;
+            color: #b2ffbc;
             border-color: var(--primary);
             transform: scale(1.05);
             z-index: 1;
@@ -1109,16 +1136,6 @@
         <div class="container">
             <h2 class="reservation-title">📋 無料体験予約</h2>
             
-            <!-- ハードルを下げるメッセージ -->
-            <div style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); text-align: center; border: 3px solid var(--accent);">
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 手ぶらでOK</strong> - 筆記用具やPCは教室で用意します</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 当日予約OK</strong> - 空きがあれば当日でも予約可能です</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ まずは楽しむだけでOK</strong> - 堅苦しい説明はありません</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 完全無料</strong> - 一切費用はかかりません</p>
-                </div>
-            </div>
-            
             <div class="reservation-form">
                 <!-- 学校区別選択セクション -->
                 <div class="school-type-selection-section" id="school-type-selection-section">
@@ -1139,12 +1156,12 @@
                 </div>
                 
                 <div class="form-instruction" id="form-instruction" style="display: none;">
-                    ご希望の日付と時間帯をタップして予約を確定してください
+                    ご希望の日付と時間帯を選択してください（1つ以上、最大3つまで選択可能です）
                 </div>
                 
                 <div class="calendar-container" id="calendar-container">
                     <div class="calendar-header">
-                        <div class="month-year" id="month-year">予約可能な日時を選択してください</div>
+                        <div class="month-year" id="month-year">予約可能な日時を選択してください（3つまで選択可能）</div>
                     </div>
                     
                     <div class="calendar-grid-wrapper">
@@ -1469,23 +1486,49 @@
                 
                 console.log('📋 時間スロット一覧:', normalizedTimeSlots.map(s => s.normalizedStart));
                 
+                // すべての日付のすべての時間スロットを初期状態で予約不可として設定
+                // （体験可能枠の時間帯のみ後で予約可能に変更）
+                const allDates = [];
+                const calendarEndDate = new Date(today);
+                calendarEndDate.setMonth(calendarEndDate.getMonth() + 2);
+                calendarEndDate.setHours(23, 59, 59, 999);
+                const currentDate = new Date(today);
+                while (currentDate <= calendarEndDate) {
+                    allDates.push(formatDate(currentDate));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // すべての日付のすべての時間スロットを予約不可として初期化
+                allDates.forEach(dateStr => {
+                    unavailableTimes[dateStr] = [];
+                    normalizedTimeSlots.forEach(slot => {
+                        unavailableTimes[dateStr].push(slot.start);
+                    });
+                });
+                
+                console.log(`🔴 初期状態: すべての時間スロットを予約不可として設定しました（${allDates.length}日 × ${normalizedTimeSlots.length}スロット）`);
+                
                 // イベントから予約済み時間帯を抽出
                 let processedCount = 0;
                 let matchedCount = 0;
                 const availableSlots = {}; // 「体験可能枠」のイベントがある時間帯を記録
                 
                 // まず「体験可能枠」のイベントを処理
+                console.log('📋 体験可能枠イベントの読み込みを開始します...');
+                let availableSlotCount = 0;
+                
                 events.forEach(event => {
                     if (event.start && event.start.dateTime) {
                         const eventTitle = event.summary || '';
                         
                         // 「体験可能枠」というタイトルのイベントを読み込んで処理
                         if (eventTitle.includes('体験可能枠')) {
-                            console.log(`✅ 体験可能枠イベントを検出: "${eventTitle}"`);
-                            
+                            availableSlotCount++;
+                            console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+                            console.log(`📅 体験可能枠イベント #${availableSlotCount} を読み込み中...`);
+                            console.log(`   タイトル: "${eventTitle}"`);
                             const eventStartDate = new Date(event.start.dateTime);
                             const eventEndDate = event.end && event.end.dateTime ? new Date(event.end.dateTime) : null;
-                            const dateStr = formatDate(eventStartDate);
                             const eventStartHour = eventStartDate.getHours();
                             const eventStartMin = eventStartDate.getMinutes();
                             const eventStartMinutes = eventStartHour * 60 + eventStartMin;
@@ -1496,26 +1539,88 @@
                                 ? eventEndDate.getHours() * 60 + eventEndDate.getMinutes()
                                 : eventStartMinutes + 60; // デフォルト1時間
                             
-                            // このイベントと重複する時間スロットを記録
-                            const overlappingSlots = normalizedTimeSlots.filter(slot => {
-                                const slotEndMinutes = slot.startMinutes + 60;
-                                return (eventStartMinutes < slotEndMinutes && eventEndMinutes > slot.startMinutes);
-                            });
+                            const eventEndHour = Math.floor(eventEndMinutes / 60);
+                            const eventEndMin = eventEndMinutes % 60;
+                            const eventEndTimeStr = `${String(eventEndHour).padStart(2, '0')}:${String(eventEndMin).padStart(2, '0')}`;
                             
-                            if (overlappingSlots.length > 0) {
-                                if (!availableSlots[dateStr]) {
-                                    availableSlots[dateStr] = [];
+                            // イベントが複数の日付にまたがる場合を考慮して、各日付ごとに処理
+                            const startDateStr = formatDate(eventStartDate);
+                            const endDateStr = eventEndDate ? formatDate(eventEndDate) : startDateStr;
+                            
+                            // イベントがまたがるすべての日付を処理
+                            const processedDates = [];
+                            const currentDate = new Date(eventStartDate);
+                            currentDate.setHours(0, 0, 0, 0);
+                            const endDate = new Date(eventEndDate || eventStartDate);
+                            endDate.setHours(23, 59, 59, 999);
+                            
+                            const daysDiff = Math.ceil((endDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                            
+                            console.log(`   開始日時: ${startDateStr} ${eventStartTimeStr}`);
+                            console.log(`   終了日時: ${endDateStr} ${eventEndTimeStr}`);
+                            console.log(`   期間: ${startDateStr === endDateStr ? '1日' : `${daysDiff}日間`}`);
+                            
+                            while (currentDate <= endDate) {
+                                const dateStr = formatDate(currentDate);
+                                const isFirstDay = dateStr === startDateStr;
+                                const isLastDay = dateStr === endDateStr;
+                                
+                                // この日付でのイベントの開始時刻と終了時刻を計算
+                                let dayStartMinutes, dayEndMinutes;
+                                if (isFirstDay && isLastDay) {
+                                    // 同じ日の場合
+                                    dayStartMinutes = eventStartMinutes;
+                                    dayEndMinutes = eventEndMinutes;
+                                } else if (isFirstDay) {
+                                    // 最初の日の場合
+                                    dayStartMinutes = eventStartMinutes;
+                                    dayEndMinutes = 24 * 60; // その日の終わりまで
+                                } else if (isLastDay) {
+                                    // 最後の日の場合
+                                    dayStartMinutes = 0; // その日の始まりから
+                                    dayEndMinutes = eventEndMinutes;
+                                } else {
+                                    // 中間の日の場合
+                                    dayStartMinutes = 0;
+                                    dayEndMinutes = 24 * 60;
                                 }
-                                overlappingSlots.forEach(slot => {
-                                    if (!availableSlots[dateStr].includes(slot.start)) {
-                                        availableSlots[dateStr].push(slot.start);
-                                        console.log(`  → ${dateStr} ${slot.start} を体験可能枠として登録`);
-                                    }
+                                
+                                // この日付でのイベントと重複するすべての時間スロットを記録
+                                const overlappingSlots = normalizedTimeSlots.filter(slot => {
+                                    const slotEndMinutes = slot.startMinutes + 60;
+                                    // イベントの時間帯と時間スロットが重複しているかチェック
+                                    // イベント開始 < スロット終了 かつ イベント終了 > スロット開始
+                                    const isOverlapping = (dayStartMinutes < slotEndMinutes && dayEndMinutes > slot.startMinutes);
+                                    return isOverlapping;
                                 });
-                                console.log(`✅ 体験可能枠 "${eventTitle}" (${dateStr} ${eventStartTimeStr}) の時間帯を処理しました:`, overlappingSlots.map(s => s.start));
-                            } else {
-                                console.warn(`⚠️ 体験可能枠 "${eventTitle}" (${dateStr} ${eventStartTimeStr}) に一致する時間スロットが見つかりませんでした`);
+                                
+                                if (overlappingSlots.length > 0) {
+                                    if (!availableSlots[dateStr]) {
+                                        availableSlots[dateStr] = [];
+                                    }
+                                    const addedSlots = [];
+                                    overlappingSlots.forEach(slot => {
+                                        if (!availableSlots[dateStr].includes(slot.start)) {
+                                            availableSlots[dateStr].push(slot.start);
+                                            addedSlots.push(slot.start);
+                                        }
+                                    });
+                                    processedDates.push(dateStr);
+                                    const dayStartTimeStr = `${String(Math.floor(dayStartMinutes / 60)).padStart(2, '0')}:${String(dayStartMinutes % 60).padStart(2, '0')}`;
+                                    const dayEndTimeStr = `${String(Math.floor(dayEndMinutes / 60)).padStart(2, '0')}:${String(dayEndMinutes % 60).padStart(2, '0')}`;
+                                    console.log(`   📍 ${dateStr} (${dayStartTimeStr} - ${dayEndTimeStr}): ${addedSlots.length}個のスロットを登録`);
+                                    console.log(`      → 登録されたスロット:`, addedSlots);
+                                } else {
+                                    console.log(`   ⚠️ ${dateStr}: 該当する時間スロットが見つかりませんでした`);
+                                }
+                                
+                                // 次の日へ
+                                currentDate.setDate(currentDate.getDate() + 1);
                             }
+                            
+                            console.log(`✅ 体験可能枠 "${eventTitle}" の処理が完了しました`);
+                            console.log(`   処理した日付: ${processedDates.length}日 (${processedDates.join(', ')})`);
+                            console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
                         }
                     }
                 });
@@ -1580,25 +1685,31 @@
                 });
                 
                 // 「体験可能枠」のイベントがある時間帯を unavailableTimes から削除（予約可能として確実に表示）
-                console.log('📋 体験可能枠の時間帯を処理中...', availableSlots);
+                console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                console.log(`📋 体験可能枠の処理結果:`);
+                console.log(`   検出された体験可能枠イベント数: ${availableSlotCount}件`);
+                console.log(`   処理された日付数: ${Object.keys(availableSlots).length}日`);
+                console.log(`   体験可能枠の時間帯:`, availableSlots);
+                console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+                console.log('🔄 予約不可リストから体験可能枠の時間帯を削除中...');
+                let removedCount = 0;
                 Object.keys(availableSlots).forEach(dateStr => {
                     if (unavailableTimes[dateStr]) {
                         availableSlots[dateStr].forEach(timeSlot => {
                             const index = unavailableTimes[dateStr].indexOf(timeSlot);
                             if (index > -1) {
                                 unavailableTimes[dateStr].splice(index, 1);
-                                console.log(`✅ "${dateStr}" の "${timeSlot}" を体験可能枠として予約可能にしました（予約不可リストから削除）`);
+                                removedCount++;
                             }
                         });
                         // 空の配列になったら削除
                         if (unavailableTimes[dateStr].length === 0) {
                             delete unavailableTimes[dateStr];
                         }
-                    } else {
-                        // 予約不可リストに含まれていない場合もログ出力
-                        console.log(`ℹ️ "${dateStr}" の体験可能枠時間帯は既に予約可能です:`, availableSlots[dateStr]);
                     }
                 });
+                console.log(`✅ 体験可能枠の時間帯 ${removedCount}個を予約可能にしました`);
+                console.log(`📊 最終的な予約不可時間帯数: ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}個`);
                 
                 console.log(`📊 処理結果: ${processedCount}件のイベントを処理し、${matchedCount}件が時間スロットと一致しました`);
                 console.log(`📌 ${Object.keys(unavailableTimes).reduce((sum, date) => sum + unavailableTimes[date].length, 0)}件の予約済み時間帯を登録しました`);
@@ -1671,26 +1782,45 @@
             // CSS変数に日数を設定
             grid.style.setProperty('--days-count', dates.length);
             
-            // ヘッダー行を作成
+            // ヘッダー行を作成（空のセル）
             const headerRow = document.createElement('div');
             headerRow.className = 'time-header';
             headerRow.textContent = '';
             grid.appendChild(headerRow);
             
-            // 日付ヘッダーを作成
+            // 日付ヘッダーを作成（2行構成）
             dates.forEach(dateStr => {
-                const dateHeader = document.createElement('div');
-                dateHeader.className = 'date-header';
+                const dateHeaderContainer = document.createElement('div');
+                dateHeaderContainer.className = 'date-header-container';
+                dateHeaderContainer.style.position = 'sticky';
+                dateHeaderContainer.style.top = '0';
+                dateHeaderContainer.style.backgroundColor = 'var(--white)';
+                dateHeaderContainer.style.zIndex = '10';
+                
                 const date = new Date(dateStr + 'T00:00:00');
                 const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
                 const month = date.getMonth() + 1;
                 const day = date.getDate();
                 const weekday = weekdays[date.getDay()];
-                dateHeader.textContent = `${month}/${day}(${weekday})`;
+                
+                // 日付部分（2/22）
+                const dateHeaderDate = document.createElement('div');
+                dateHeaderDate.className = 'date-header-date';
+                dateHeaderDate.textContent = `${month}/${day}`;
+                
+                // 曜日部分（日）
+                const dateHeaderWeekday = document.createElement('div');
+                dateHeaderWeekday.className = 'date-header-weekday';
+                dateHeaderWeekday.textContent = weekday;
+                
+                dateHeaderContainer.appendChild(dateHeaderDate);
+                dateHeaderContainer.appendChild(dateHeaderWeekday);
+                
                 if (isToday(dateStr)) {
-                    dateHeader.classList.add('today');
+                    dateHeaderContainer.classList.add('today');
                 }
-                grid.appendChild(dateHeader);
+                
+                grid.appendChild(dateHeaderContainer);
             });
             
             // 時間行を作成
@@ -1762,10 +1892,24 @@
             // 選択情報を更新
             updateSelectedInfo();
             
-            // 1つ以上選択されている場合は子供の名前入力フィールドを表示
+            // 1つ以上選択されたら次のステップに進める
             if (selectedDateTimes.length > 0) {
+                // 1つ以上選択されたら子供の名前入力フィールドを表示
                 document.getElementById('child-name-section').classList.add('show');
+                // 名前入力フィールドにスクロール（ヘッダーの高さを考慮）
+                if (selectedDateTimes.length === 1) {
+                    setTimeout(() => {
+                        const element = document.getElementById('child-name-section');
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                        window.scrollTo({
+                            top: elementPosition - headerHeight - 20,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
             } else {
+                // 選択がない場合は名前入力フィールドを非表示
                 document.getElementById('child-name-section').classList.remove('show');
             }
             
@@ -1776,19 +1920,6 @@
             
             // 送信ボタンの有効/無効を更新
             updateSubmitButton();
-            
-            // 名前入力フィールドにスクロール（ヘッダーの高さを考慮）
-            if (selectedDateTimes.length > 0) {
-                setTimeout(() => {
-                    const element = document.getElementById('child-name-section');
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                    window.scrollTo({
-                        top: elementPosition - headerHeight - 20,
-                        behavior: 'smooth'
-                    });
-                }, 100);
-            }
         }
         
         // セルの状態を更新（3つ選択されている場合は他のセルを無効化）
@@ -1826,11 +1957,14 @@
             let infoText = '';
             
             if (selectedDateTimes.length > 0) {
-                infoText = `選択された予約日時（${selectedDateTimes.length}/3）:\n`;
+                infoText = `選択された予約日時:\n`;
                 selectedDateTimes.forEach((dt, index) => {
                     const timeDisplay = formatTimeDisplay(dt.time);
                     infoText += `${index + 1}. ${formatDateDisplay(dt.date)} ${timeDisplay}\n`;
                 });
+                if (selectedDateTimes.length < 3) {
+                    infoText += `\n※最大3つまで選択可能です（現在${selectedDateTimes.length}つ選択中）\n`;
+                }
                 
                 if (childName) {
                     infoText += `\nお名前: ${childName}`;
@@ -2094,9 +2228,9 @@
             // 必須項目が入力されているかチェック（メールアドレスは任意）
             const hasName = childName && childName.trim() !== '';
             const hasPhone = phoneNumber && phoneNumber.trim() !== '' && validateJapanesePhoneNumber(phoneNumber);
-            const hasDateTimes = selectedDateTimes.length > 0;
+            const hasDateTimes = selectedDateTimes.length > 0; // 1つ以上選択必須
             
-            // 必須項目（名前、電話番号、日時）がすべて入力されている場合のみ送信ボタンを有効化
+            // 必須項目（名前、電話番号、日時1つ以上）がすべて入力されている場合のみ送信ボタンを有効化
             if (hasName && hasPhone && hasDateTimes) {
                 submitButton.disabled = false;
             } else {
@@ -2193,7 +2327,7 @@
                 return;
             }
             if (selectedDateTimes.length === 0) {
-                alert('予約希望日時を選択してください（最大3つまで）。');
+                alert('予約希望日時を1つ以上選択してください（最大3つまで）。');
                 return;
             }
             if (!childName || childName.trim() === '') {
@@ -2435,7 +2569,7 @@ iTeen 武庫之荘校
                 `${index + 1}. ${formatDateDisplay(dt.date)} ${formatTimeDisplay(dt.time)}`
             ).join('\n');
             
-            document.getElementById('reservation-date-item').textContent = `予約希望日時（${selectedDateTimes.length}件）:`;
+            document.getElementById('reservation-date-item').textContent = `予約希望日時:`;
             document.getElementById('reservation-time-item').innerHTML = `<pre style="text-align: left; margin: 10px 0;">${dateTimeText}</pre>`;
             document.getElementById('reservation-name-item').textContent = `お名前: ${childName}様`;
             
