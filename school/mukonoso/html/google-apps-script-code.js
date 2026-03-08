@@ -1043,6 +1043,33 @@ function doGet(e) {
         success: true,
         history: history
       })));
+    } else if (action === 'getArticles') {
+      // ブログ記事一覧を取得
+      const articles = getArticlesFromSheets();
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        articles: articles
+      })));
+    } else if (action === 'getArticle') {
+      // 単一記事を取得
+      const id = e.parameter.id;
+      if (!id) {
+        return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+          success: false,
+          error: 'idパラメータが必要です'
+        })));
+      }
+      const article = getArticleById(id);
+      if (!article) {
+        return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+          success: false,
+          error: '記事が見つかりません'
+        })));
+      }
+      return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        article: article
+      })));
     } else {
       // デフォルトのレスポンス
       return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
@@ -1050,7 +1077,9 @@ function doGet(e) {
         message: 'iTeen予約フォーム API は正常に動作しています。',
         note: 'このAPIはPOSTリクエストで予約データを受け取ります。',
         actions: {
-          getHistory: '?action=getHistory で履歴を取得できます'
+          getHistory: '?action=getHistory で履歴を取得できます',
+          getArticles: '?action=getArticles でブログ記事一覧を取得できます',
+          getArticle: '?action=getArticle&id=xxx で記事詳細を取得できます'
         }
       })));
     }
@@ -1584,9 +1613,15 @@ function handleArticleSave(articleData) {
     Logger.log('✅ ファイルID: ' + file.getId());
     console.log('✅ ファイルID:', file.getId());
     
-    // ブログ一覧に追加（オプション）
-    // 注意: ブログ一覧ファイルの編集は、Google Apps Scriptから直接は難しいため、
-    // 手動で追加するか、別の方法を検討する必要があります
+    // ブログ一覧用にGoogle Sheetsに記事データを保存
+    try {
+      saveArticleToSheets(articleData, file.getId());
+      Logger.log('✅ ブログ記事一覧用にSheetsに保存しました');
+      console.log('✅ ブログ記事一覧用にSheetsに保存しました');
+    } catch (sheetError) {
+      Logger.log('⚠️ Sheetsへの保存でエラー（記事作成は成功）: ' + sheetError.toString());
+      console.warn('⚠️ Sheetsへの保存でエラー（記事作成は成功）:', sheetError);
+    }
     
     return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
       success: true,
@@ -1656,28 +1691,14 @@ function handleArticlePublish(articleData) {
     Logger.log('✅ ファイルID: ' + file.getId());
     console.log('✅ ファイルID:', file.getId());
     
-    // ブログ一覧に追加（投稿時はブログ一覧にも追加）
+    // ブログ一覧用にGoogle Sheetsに記事データを保存
     try {
-      Logger.log('📋 ブログ一覧に追加を試みます...');
-      console.log('📋 ブログ一覧に追加を試みます...');
-      // ブログ一覧ファイルのパス（実際のパスに合わせて調整が必要）
-      const blogIndexPath = 'pentech_info/blog/index.html';
-      const blogIndexFolder = getOrCreateFolder('pentech_info/blog');
-      const blogIndexFiles = blogIndexFolder.getFilesByName('index.html');
-      
-      if (blogIndexFiles.hasNext()) {
-        Logger.log('✅ ブログ一覧ファイルが見つかりました');
-        console.log('✅ ブログ一覧ファイルが見つかりました');
-        // ブログ一覧ファイルの編集は複雑なため、ここではログのみ
-        // 実際の実装では、HTMLファイルを読み込んで編集する必要があります
-      } else {
-        Logger.log('⚠️ ブログ一覧ファイルが見つかりませんでした');
-        console.warn('⚠️ ブログ一覧ファイルが見つかりませんでした');
-      }
-    } catch (indexError) {
-      Logger.log('⚠️ ブログ一覧への追加でエラーが発生しましたが、続行します: ' + indexError.toString());
-      console.warn('⚠️ ブログ一覧への追加でエラーが発生しましたが、続行します:', indexError);
-      // エラーが発生しても記事の作成は成功しているので続行
+      saveArticleToSheets(articleData, file.getId());
+      Logger.log('✅ ブログ記事一覧用にSheetsに保存しました');
+      console.log('✅ ブログ記事一覧用にSheetsに保存しました');
+    } catch (sheetError) {
+      Logger.log('⚠️ Sheetsへの保存でエラー（記事作成は成功）: ' + sheetError.toString());
+      console.warn('⚠️ Sheetsへの保存でエラー（記事作成は成功）:', sheetError);
     }
     
     return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
@@ -1705,6 +1726,104 @@ function handleArticlePublish(articleData) {
       message: error.message
     })));
   }
+}
+
+// 記事をGoogle Sheetsに保存（ブログ一覧表示用）
+function saveArticleToSheets(articleData, fileId) {
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    let spreadsheetId = properties.getProperty('GOOGLE_SHEETS_SPREADSHEET_ID');
+    
+    if (!spreadsheetId) {
+      throw new Error('スプレッドシートが設定されていません。先に予約フォーム等を1回実行してください。');
+    }
+    
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    let sheet = spreadsheet.getSheetByName('BlogArticles');
+    
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet('BlogArticles');
+      sheet.appendRow(['id', 'timestamp', 'title', 'date', 'category', 'html', 'filename', 'excerpt']);
+      sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#E0E0E0');
+    }
+    
+    const id = 'art_' + Date.now();
+    const timestamp = new Date().toISOString();
+    const excerpt = (articleData.html || '').replace(/<[^>]+>/g, '').substring(0, 200);
+    
+    sheet.appendRow([
+      id,
+      timestamp,
+      articleData.title || '',
+      articleData.date || '',
+      articleData.category || '',
+      articleData.html || '',
+      articleData.filename || '',
+      excerpt
+    ]);
+    
+    Logger.log('✅ 記事をBlogArticlesシートに保存しました: ' + id);
+    return id;
+  } catch (error) {
+    Logger.log('❌ saveArticleToSheetsエラー: ' + error.toString());
+    throw error;
+  }
+}
+
+// Google Sheetsからブログ記事一覧を取得
+function getArticlesFromSheets() {
+  try {
+    const properties = PropertiesService.getScriptProperties();
+    const spreadsheetId = properties.getProperty('GOOGLE_SHEETS_SPREADSHEET_ID');
+    
+    if (!spreadsheetId) {
+      return [];
+    }
+    
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    const sheet = spreadsheet.getSheetByName('BlogArticles');
+    
+    if (!sheet) {
+      return [];
+    }
+    
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) {
+      return [];
+    }
+    
+    const data = sheet.getRange(2, 1, lastRow, 8).getValues();
+    const articles = data.map(function(row) {
+      return {
+        id: row[0],
+        timestamp: row[1],
+        title: row[2],
+        date: row[3],
+        category: row[4],
+        html: row[5],
+        filename: row[6],
+        excerpt: row[7]
+      };
+    });
+    
+    // 日付の新しい順にソート
+    articles.sort(function(a, b) {
+      const dateA = (a.date || '').replace(/\./g, '-');
+      const dateB = (b.date || '').replace(/\./g, '-');
+      return new Date(dateB) - new Date(dateA);
+    });
+    
+    return articles;
+  } catch (error) {
+    Logger.log('❌ getArticlesFromSheetsエラー: ' + error.toString());
+    return [];
+  }
+}
+
+// IDで記事を取得
+function getArticleById(id) {
+  const articles = getArticlesFromSheets();
+  return articles.find(function(a) { return a.id === id; }) || null;
 }
 
 // 記事HTMLを生成する関数

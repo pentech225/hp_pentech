@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事を読み込み中... | iTeen 武庫之荘校</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../config.js"></script>
+    <script src="../password-check.js"></script>
+    
+    <!-- 共通CSS -->
+    <link rel="stylesheet" href="../../css/blog.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../../index.html">ホーム</a>
+            <a href="../../index.html#news">ニュース</a>
+            <a href="index.html">ブログ</a>
+            <a href="../../index.html#courses">コース</a>
+            <a href="../../index.html#teachers">講師</a>
+            <a href="../values.html">大切にしていること</a>
+            <a href="../../index.html#fee">料金</a>
+            <a href="../../index.html#faq">よくある質問</a>
+            <a href="../../index.html#access">アクセス</a>
+            <a href="../contact.html">お問い合わせ</a>
+            <a href="../reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="blog-article-section">
+        <div class="container">
+            <div id="article-loading" style="text-align: center; padding: 60px; color: #666;">
+                記事を読み込み中...
+            </div>
+            <div id="article-content" style="display: none;">
+                <div class="article-header">
+                    <div class="article-meta">
+                        <span class="article-date" id="article-date"></span>
+                        <span class="article-category" id="article-category"></span>
+                    </div>
+                    <h1 class="article-title" id="article-title"></h1>
+                </div>
+                <div class="article-content" id="article-body"></div>
+            </div>
+            <div id="article-error" style="display: none; text-align: center; padding: 60px; color: #666;">
+                <p>記事が見つかりませんでした。</p>
+                <a href="index.html" class="nav-link">ブログ一覧に戻る</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="article-navigation" id="article-nav" style="display: none;">
+        <a href="index.html" class="nav-link">← ブログ一覧に戻る</a>
+    </div>
+
+    <div class="back-to-list">
+        <a href="index.html" class="nav-link">ブログ一覧に戻る</a>
+    </div>
+
+    <footer>
+        <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+
+    <script>
+        async function loadArticle() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            
+            const loadingEl = document.getElementById('article-loading');
+            const contentEl = document.getElementById('article-content');
+            const errorEl = document.getElementById('article-error');
+            const navEl = document.getElementById('article-nav');
+
+            if (!id) {
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                if (typeof CONFIG === 'undefined' || !CONFIG.GOOGLE_APPS_SCRIPT_URL) {
+                    throw new Error('設定がありません');
+                }
+                const url = CONFIG.GOOGLE_APPS_SCRIPT_URL + '?action=getArticle&id=' + encodeURIComponent(id);
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success && data.article) {
+                    const article = data.article;
+                    document.title = article.title + ' | iTeen 武庫之荘校';
+                    document.getElementById('article-date').textContent = article.date;
+                    document.getElementById('article-category').textContent = article.category;
+                    document.getElementById('article-title').textContent = article.title;
+                    document.getElementById('article-body').innerHTML = article.html || article.excerpt || '';
+                    
+                    loadingEl.style.display = 'none';
+                    contentEl.style.display = 'block';
+                    navEl.style.display = 'block';
+                } else {
+                    throw new Error(data.error || '記事を取得できませんでした');
+                }
+            } catch (err) {
+                console.error('記事の読み込みエラー:', err);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        loadArticle();
+    </script>
+</body>
+</html>
