@@ -282,6 +282,27 @@
             font-size: 0.9rem;
             opacity: 0.8;
         }
+        .time-slot-button.full {
+            background-color: #F5F5F5;
+            border-color: #E0E0E0;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .time-slot-button.full:hover {
+            border-color: #E0E0E0;
+            background-color: #F5F5F5;
+        }
+        .time-slot-button .full-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #F44336;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
         
         /* フォーム入力 */
         .form-group {
@@ -509,23 +530,24 @@
                         参加希望時間帯<span class="time-slot-required">※必須</span>
                     </label>
                     <div class="time-slot-buttons" id="time-slot-buttons">
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('1部：10:00〜10:40', event)">
+                        <button type="button" class="time-slot-button full" data-time-slot="1部：10:00〜10:40" data-full="true" onclick="selectTimeSlot('1部：10:00〜10:40', event)">
                             <div class="time-label">1部：10:00〜10:40</div>
                             <div class="time-duration">40分</div>
+                            <span class="full-badge">満席</span>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('2部：11:00〜11:40', event)">
+                        <button type="button" class="time-slot-button" data-time-slot="2部：11:00〜11:40" onclick="selectTimeSlot('2部：11:00〜11:40', event)">
                             <div class="time-label">2部：11:00〜11:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('3部：13:00〜13:40', event)">
+                        <button type="button" class="time-slot-button" data-time-slot="3部：13:00〜13:40" onclick="selectTimeSlot('3部：13:00〜13:40', event)">
                             <div class="time-label">3部：13:00〜13:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('4部：14:00〜14:40', event)">
+                        <button type="button" class="time-slot-button" data-time-slot="4部：14:00〜14:40" onclick="selectTimeSlot('4部：14:00〜14:40', event)">
                             <div class="time-label">4部：14:00〜14:40</div>
                             <div class="time-duration">40分</div>
                         </button>
-                        <button type="button" class="time-slot-button" onclick="selectTimeSlot('5部：15:00〜15:40', event)">
+                        <button type="button" class="time-slot-button" data-time-slot="5部：15:00〜15:40" onclick="selectTimeSlot('5部：15:00〜15:40', event)">
                             <div class="time-label">5部：15:00〜15:40</div>
                             <div class="time-duration">40分</div>
                         </button>
@@ -661,16 +683,24 @@
         // 自由記述欄
         let messageText = '';
         
+        // 満席の時間帯（選択不可）
+        const FULL_TIME_SLOTS = ['1部：10:00〜10:40'];
+        
         // 時間帯を選択
         function selectTimeSlot(timeSlot, event) {
+            // 満席の場合は選択不可
+            if (FULL_TIME_SLOTS.includes(timeSlot)) {
+                return;
+            }
+            
             // 以前の選択を解除
             document.querySelectorAll('.time-slot-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
             
             // 新しい選択
-            const button = event ? event.target.closest('.time-slot-button') : document.querySelector(`.time-slot-button[onclick*="${timeSlot}"]`);
-            if (button) {
+            const button = event ? event.target.closest('.time-slot-button') : document.querySelector(`.time-slot-button[data-time-slot="${timeSlot}"]`);
+            if (button && !button.dataset.full) {
                 button.classList.add('selected');
             }
             selectedTimeSlot = timeSlot;
