@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スケジュール | NPO法人 阪神つばめ学習会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner container">
+      <div class="site-logo">
+        <a href="index.html">
+          <span class="logo-icon">🕊</span>
+          <span class="logo-text">
+            <span class="logo-main">阪神つばめ学習会</span>
+            <span class="logo-sub">NPO法人 | 武庫教室</span>
+          </span>
+        </a>
+      </div>
+      <nav class="global-nav" id="globalNav">
+        <ul>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html" class="active">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <div class="container">
+      <ol><li><a href="index.html">ホーム</a></li><li>スケジュール</li></ol>
+    </div>
+  </div>
+
+  <div class="page-hero">
+    <h1>スケジュール</h1>
+    <p>武庫之荘教室の開催日程</p>
+  </div>
+
+  <main>
+    <section class="section-pad">
+      <div class="container">
+        <h2 class="section-title">開催カレンダー</h2>
+        <p class="section-lead">武庫之荘教室の開催日程です。祝日・年末年始は休講となる場合があります。</p>
+        <div class="calendar-wrap" style="max-width:900px;margin:0 auto;">
+          <!-- Google Calendar埋め込み（実装時にカレンダーIDを差し替え） -->
+          <iframe
+            src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID%40group.calendar.google.com&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&hl=ja"
+            style="border:0"
+            width="100%"
+            height="600"
+            frameborder="0"
+            scrolling="no"
+            title="阪神つばめ学習会 スケジュール">
+          </iframe>
+          <p class="calendar-note">カレンダーが表示されない場合、ブラウザの設定をご確認ください。</p>
+        </div>
+
+        <!-- 直近の開催日一覧 -->
+        <div style="max-width:600px;margin:40px auto 0;">
+          <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:16px;color:var(--color-primary);">直近の開催日</h3>
+          <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+            <thead>
+              <tr style="background:var(--color-primary);color:#fff;">
+                <th style="padding:10px 16px;text-align:left;">日付</th>
+                <th style="padding:10px 16px;text-align:left;">時間</th>
+                <th style="padding:10px 16px;text-align:left;">場所</th>
+                <th style="padding:10px 16px;text-align:left;">備考</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:10px 16px;">2026年4月4日（土）</td>
+                <td style="padding:10px 16px;">14:00〜17:00</td>
+                <td style="padding:10px 16px;">武庫之荘教室</td>
+                <td style="padding:10px 16px;"><span class="tag tag-accent">新年度初回</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);background:var(--color-bg-light);">
+                <td style="padding:10px 16px;">2026年4月18日（土）</td>
+                <td style="padding:10px 16px;">14:00〜17:00</td>
+                <td style="padding:10px 16px;">武庫之荘教室</td>
+                <td style="padding:10px 16px;"></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);">
+                <td style="padding:10px 16px;">2026年5月9日（土）</td>
+                <td style="padding:10px 16px;">14:00〜17:00</td>
+                <td style="padding:10px 16px;">武庫之荘教室</td>
+                <td style="padding:10px 16px;"></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--color-border);background:var(--color-bg-light);">
+                <td style="padding:10px 16px;">2026年5月23日（土）</td>
+                <td style="padding:10px 16px;">14:00〜17:00</td>
+                <td style="padding:10px 16px;">武庫之荘教室</td>
+                <td style="padding:10px 16px;"></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.78rem;color:var(--color-text-light);margin-top:10px;">※スケジュールは変更になる場合があります。最新情報はLINE公式アカウントにてご確認ください。</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <div class="footer-logo"><span class="logo-icon">🕊</span><span class="logo-main">阪神つばめ学習会</span></div>
+        <p class="footer-desc">武庫之荘を拠点に、経済的に厳しいご家庭の子どもたちへ無料の学習支援を行うNPO法人です。</p>
+      </div>
+      <div class="footer-col">
+        <h4>サイトマップ</h4>
+        <ul class="footer-nav">
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>お問い合わせ</h4>
+        <p>活動や参加についてのご質問はLINEまたはメールでお気軽にどうぞ。</p>
+        <a href="https://lin.ee/XXXXXX" class="btn-line-sm" target="_blank" rel="noopener">LINE公式アカウント</a>
+        <a href="contact.html" class="btn-secondary-sm mt-8">メールで問い合わせ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright &copy; 2026 NPO法人 阪神つばめ学習会 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const globalNav = document.getElementById('globalNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      globalNav.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPO法人 阪神つばめ学習会 | 武庫之荘の無料学習支援</title>
+  <meta name="description" content="NPO法人阪神つばめ学習会は、武庫之荘を拠点に経済的に厳しいご家庭の子どもたちへ無料の個別学習支援を行っています。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="site-header">
+    <div class="header-inner container">
+      <div class="site-logo">
+        <a href="index.html">
+          <span class="logo-icon">🕊</span>
+          <span class="logo-text">
+            <span class="logo-main">阪神つばめ学習会</span>
+            <span class="logo-sub">NPO法人 | 武庫教室</span>
+          </span>
+        </a>
+      </div>
+      <nav class="global-nav" id="globalNav">
+        <ul>
+          <li><a href="index.html" class="active">ホーム</a></li>
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <p class="hero-catch-sub">武庫之荘から、子どもたちの未来を支える</p>
+        <h1 class="hero-catch">学ぶ機会を、<br>すべての子どもに。</h1>
+        <p class="hero-desc">NPO法人阪神つばめ学習会は、経済的な事情に関わらず<br>すべての子どもが学べる環境を目指す無料学習支援団体です。</p>
+        <div class="hero-buttons">
+          <a href="apply.html" class="btn btn-primary">参加を申し込む</a>
+          <a href="volunteer.html" class="btn btn-outline">ボランティア登録</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- お知らせ -->
+    <section class="news-bar">
+      <div class="container">
+        <span class="news-label">お知らせ</span>
+        <ul class="news-list">
+          <li><span class="news-date">2026.03.27</span> <a href="#">令和8年度 武庫之荘教室 生徒募集を開始しました</a></li>
+          <li><span class="news-date">2026.03.10</span> <a href="#">NPO法人として正式設立いたしました</a></li>
+          <li><span class="news-date">2026.02.20</span> <a href="#">ボランティア講師を募集しています</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- つばめとは -->
+    <section class="about-intro section-pad">
+      <div class="container">
+        <h2 class="section-title">つばめ学習会とは？</h2>
+        <p class="section-lead">教育格差をなくし、すべての子どもたちが自分の夢を追いかけられる社会を目指して活動しています。</p>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>無料の個別指導</h3>
+            <p>講師1名が生徒2〜4名を担当する個別指導スタイル。宿題サポートから受験対策まで、一人ひとりのペースに合わせて学習を支援します。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>地域密着・武庫之荘</h3>
+            <p>阪急武庫之荘駅近くに拠点を置き、地域の子どもたちが気軽に通える環境を整えています。阪神間の学習格差解消を目指します。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌱</div>
+            <h3>社会還元の循環</h3>
+            <p>「つばめ」は、支援を受けた子どもたちがいつか地域や社会に恩返しする循環を象徴しています。学びを通じた人材育成を大切にしています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- スケジュール -->
+    <section class="schedule-section section-pad bg-light">
+      <div class="container">
+        <h2 class="section-title">直近のスケジュール</h2>
+        <p class="section-lead">武庫之荘教室の開催日程です。参加ご希望の方はお気軽にお問い合わせください。</p>
+        <div class="calendar-wrap">
+          <!-- Google Calendar埋め込み（実装時にカレンダーIDを差し替え） -->
+          <iframe
+            src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID%40group.calendar.google.com&ctz=Asia%2FTokyo&mode=AGENDA&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&hl=ja"
+            style="border:0"
+            width="100%"
+            height="400"
+            frameborder="0"
+            scrolling="no"
+            title="阪神つばめ学習会 スケジュール">
+          </iframe>
+          <p class="calendar-note">※カレンダーが表示されない場合は<a href="schedule.html">スケジュールページ</a>をご覧ください。</p>
+        </div>
+        <div class="text-center mt-32">
+          <a href="schedule.html" class="btn btn-secondary">スケジュール詳細を見る</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 教室MAP -->
+    <section class="map-section section-pad">
+      <div class="container">
+        <h2 class="section-title">教室案内</h2>
+        <div class="classroom-info-wrap">
+          <div class="classroom-info">
+            <h3 class="classroom-name">武庫之荘教室</h3>
+            <dl class="info-table">
+              <dt>住所</dt>
+              <dd>兵庫県尼崎市武庫之荘（詳細は申込後にお知らせします）</dd>
+              <dt>最寄駅</dt>
+              <dd>阪急神戸線「武庫之荘」駅 徒歩圏内</dd>
+              <dt>開催日</dt>
+              <dd>毎週土曜日（月2〜3回）</dd>
+              <dt>時間</dt>
+              <dd>14:00〜17:00</dd>
+              <dt>対象</dt>
+              <dd>小学生・中学生</dd>
+            </dl>
+            <a href="classroom.html" class="btn btn-secondary mt-16">教室詳細を見る</a>
+          </div>
+          <div class="classroom-map">
+            <!-- Google Maps埋め込み（実装時にエンベッドURLを差し替え） -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.0!2d135.4!3d34.73!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z5YKZ5bCx5LmL6I2J!5e0!3m2!1sja!2sjp!4v0"
+              width="100%"
+              height="300"
+              style="border:0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="武庫之荘教室 地図">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ボランティアCTA -->
+    <section class="volunteer-cta section-pad bg-primary">
+      <div class="container text-center">
+        <h2 class="cta-title">講師ボランティアを募集しています</h2>
+        <p class="cta-desc">大学生・社会人問わず、教育に関心のある方ならどなたでもご参加いただけます。<br>週1回から、あなたのペースで子どもたちの学びを支えてください。</p>
+        <div class="cta-buttons">
+          <a href="volunteer.html" class="btn btn-white">ボランティア詳細を見る</a>
+          <a href="https://lin.ee/XXXXXX" class="btn btn-line" target="_blank" rel="noopener">
+            <span class="line-icon">LINE</span>で問い合わせる
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 活動報告 -->
+    <section class="blog-section section-pad bg-light">
+      <div class="container">
+        <h2 class="section-title">活動報告</h2>
+        <p class="section-lead">日々の学習会の様子をお伝えします。</p>
+        <div class="blog-grid">
+          <article class="blog-card">
+            <div class="blog-thumb blog-thumb-placeholder"></div>
+            <div class="blog-body">
+              <span class="blog-date">2026.03.20</span>
+              <h3><a href="#">第1回 武庫之荘教室を開催しました</a></h3>
+              <p>初回の開催に12名の生徒が参加。講師陣との個別指導が始まりました。</p>
+            </div>
+          </article>
+          <article class="blog-card">
+            <div class="blog-thumb blog-thumb-placeholder"></div>
+            <div class="blog-body">
+              <span class="blog-date">2026.03.05</span>
+              <h3><a href="#">設立記念イベントを開催しました</a></h3>
+              <p>NPO法人設立を記念したキックオフイベントを武庫之荘で実施しました。</p>
+            </div>
+          </article>
+          <article class="blog-card">
+            <div class="blog-thumb blog-thumb-placeholder"></div>
+            <div class="blog-body">
+              <span class="blog-date">2026.02.15</span>
+              <h3><a href="#">ボランティア説明会を開催しました</a></h3>
+              <p>10名の方にご参加いただき、活動内容や指導方法についてお伝えしました。</p>
+            </div>
+          </article>
+        </div>
+        <div class="text-center mt-32">
+          <a href="blog.html" class="btn btn-secondary">活動報告をもっと見る</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 寄付 -->
+    <section class="donate-section section-pad">
+      <div class="container text-center">
+        <h2 class="section-title">ご支援のお願い</h2>
+        <p class="section-lead">阪神つばめ学習会は、皆様のご寄付・ご支援によって運営されています。<br>子どもたちの学びを守るために、どうかお力をお貸しください。</p>
+        <a href="donate.html" class="btn btn-accent">寄付・支援の方法を見る</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <div class="footer-logo">
+          <span class="logo-icon">🕊</span>
+          <span class="logo-main">阪神つばめ学習会</span>
+        </div>
+        <p class="footer-desc">武庫之荘を拠点に、経済的に厳しいご家庭の子どもたちへ無料の学習支援を行うNPO法人です。</p>
+      </div>
+      <div class="footer-col">
+        <h4>サイトマップ</h4>
+        <ul class="footer-nav">
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>お問い合わせ</h4>
+        <p>活動や参加についてのご質問は<br>LINEまたはメールでお気軽にどうぞ。</p>
+        <a href="https://lin.ee/XXXXXX" class="btn btn-line-sm" target="_blank" rel="noopener">LINE公式アカウント</a>
+        <a href="contact.html" class="btn btn-secondary-sm mt-8">メールで問い合わせ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright &copy; 2026 NPO法人 阪神つばめ学習会 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ハンバーガーメニュー
+    const hamburger = document.getElementById('hamburger');
+    const globalNav = document.getElementById('globalNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      globalNav.classList.toggle('open');
+    });
+  </script>
+
+</body>
+</html>

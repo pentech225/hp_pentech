@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ | NPO法人 阪神つばめ学習会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner container">
+      <div class="site-logo">
+        <a href="index.html">
+          <span class="logo-icon">🕊</span>
+          <span class="logo-text">
+            <span class="logo-main">阪神つばめ学習会</span>
+            <span class="logo-sub">NPO法人 | 武庫教室</span>
+          </span>
+        </a>
+      </div>
+      <nav class="global-nav" id="globalNav">
+        <ul>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html" class="active">お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <div class="container">
+      <ol><li><a href="index.html">ホーム</a></li><li>お問い合わせ</li></ol>
+    </div>
+  </div>
+
+  <div class="page-hero">
+    <h1>お問い合わせ</h1>
+    <p>ご質問・ご相談はお気軽にどうぞ</p>
+  </div>
+
+  <main>
+    <section class="section-pad">
+      <div class="container">
+
+        <!-- LINE優先案内 -->
+        <div style="max-width:680px;margin:0 auto 48px;text-align:center;padding:32px;background:var(--color-bg-light);border-radius:var(--radius);border:1px solid var(--color-border);">
+          <p style="font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:12px;">最短でつながるにはLINEが便利です</p>
+          <p style="font-size:0.88rem;color:var(--color-text-light);margin-bottom:20px;">お問い合わせ・参加申し込みともにLINEからが一番スムーズにご対応できます。</p>
+          <a href="https://lin.ee/XXXXXX" class="btn btn-line" target="_blank" rel="noopener">
+            <span class="line-icon">LINE</span>公式アカウントを追加する
+          </a>
+        </div>
+
+        <!-- メールフォーム -->
+        <h2 class="section-title">メールでのお問い合わせ</h2>
+        <p class="section-lead">3営業日以内にご返信いたします。</p>
+        <form style="max-width:620px;margin:0 auto;" action="#" method="post">
+          <div class="form-group">
+            <label class="form-label">お名前 <span class="required">必須</span></label>
+            <input type="text" class="form-input" placeholder="例：山田 花子" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">メールアドレス <span class="required">必須</span></label>
+            <input type="email" class="form-input" placeholder="example@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">お問い合わせ種別 <span class="required">必須</span></label>
+            <select class="form-select" required>
+              <option value="">選択してください</option>
+              <option>生徒の参加について</option>
+              <option>ボランティア・講師について</option>
+              <option>寄付・支援について</option>
+              <option>メディア・取材について</option>
+              <option>その他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">お問い合わせ内容 <span class="required">必須</span></label>
+            <textarea class="form-textarea" placeholder="ご質問・ご相談内容をご記入ください。" required></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-accent">送信する</button>
+          </div>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <div class="footer-logo"><span class="logo-icon">🕊</span><span class="logo-main">阪神つばめ学習会</span></div>
+        <p class="footer-desc">武庫之荘を拠点に、経済的に厳しいご家庭の子どもたちへ無料の学習支援を行うNPO法人です。</p>
+      </div>
+      <div class="footer-col">
+        <h4>サイトマップ</h4>
+        <ul class="footer-nav">
+          <li><a href="about.html">法人概要</a></li>
+          <li><a href="classroom.html">教室案内</a></li>
+          <li><a href="schedule.html">スケジュール</a></li>
+          <li><a href="apply.html">参加申し込み</a></li>
+          <li><a href="volunteer.html">ボランティア募集</a></li>
+          <li><a href="blog.html">活動報告</a></li>
+          <li><a href="donate.html">寄付・支援</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>お問い合わせ</h4>
+        <p>活動や参加についてのご質問はLINEまたはメールでお気軽にどうぞ。</p>
+        <a href="https://lin.ee/XXXXXX" class="btn-line-sm" target="_blank" rel="noopener">LINE公式アカウント</a>
+        <a href="contact.html" class="btn-secondary-sm mt-8">メールで問い合わせ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Copyright &copy; 2026 NPO法人 阪神つばめ学習会 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const globalNav = document.getElementById('globalNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      globalNav.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

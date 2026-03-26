@@ -1,0 +1,171 @@
+/* ===========================
+   阪神つばめ学習会 - レスポンシブ
+   =========================== */
+
+/* ============================
+   タブレット (〜1024px)
+   ============================ */
+@media (max-width: 1024px) {
+  :root { --gap: 24px; }
+
+  .global-nav ul li a { padding: 6px 8px; font-size: 0.75rem; }
+
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .classroom-info-wrap {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .footer-inner .footer-col:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ============================
+   スマートフォン (〜768px)
+   ============================ */
+@media (max-width: 768px) {
+  /* ヘッダー */
+  .hamburger { display: flex; }
+
+  .global-nav {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30, 58, 66, 0.97);
+    z-index: 999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 32px;
+    transform: translateX(100%);
+    transition: transform 0.28s ease;
+    overflow-y: auto;
+  }
+  .global-nav.open { transform: translateX(0); }
+
+  .global-nav ul {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    max-width: 320px;
+  }
+  .global-nav ul li a {
+    display: block;
+    padding: 14px 24px;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0;
+  }
+  .global-nav ul li a:hover,
+  .global-nav ul li a.active {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  /* HEROは最小高さを下げる */
+  .hero { min-height: 400px; }
+  .hero-catch { font-size: 1.8rem; }
+  .hero-desc { font-size: 0.9rem; }
+  .hero-buttons { flex-direction: column; align-items: flex-start; }
+  .hero-buttons .btn { width: 100%; max-width: 260px; justify-content: center; }
+
+  /* お知らせ */
+  .news-bar .container { flex-direction: column; }
+  .news-label { padding: 8px 16px; }
+  .news-list { flex-direction: column; padding: 4px 0; }
+  .news-list li {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 16px;
+    white-space: normal;
+  }
+  .news-list li:last-child { border-bottom: none; }
+
+  /* セクション */
+  .section-pad { padding: 48px 0; }
+  .section-title { font-size: 1.4rem; }
+
+  /* 特徴グリッド */
+  .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  /* 教室MAP */
+  .classroom-info-wrap {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* ブロググリッド */
+  .blog-grid { grid-template-columns: 1fr; gap: 20px; }
+
+  /* CTA */
+  .cta-title { font-size: 1.3rem; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .cta-buttons .btn { width: 100%; max-width: 280px; justify-content: center; }
+
+  /* フッター */
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 40px;
+    padding-bottom: 28px;
+  }
+
+  /* ボタン全般 */
+  .btn { padding: 11px 22px; font-size: 0.85rem; }
+
+  /* 統計グリッド */
+  .stats-grid { grid-template-columns: 1fr; gap: 0; }
+  .stat-item { padding: 20px 16px; border-bottom: 1px solid var(--color-border); }
+  .stat-item:last-child { border-bottom: none; }
+}
+
+/* ============================
+   スモールスマホ (〜480px)
+   ============================ */
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+
+  .hero-catch { font-size: 1.55rem; }
+  .hero-catch-sub { font-size: 0.82rem; }
+
+  .logo-main { font-size: 0.92rem; }
+  .logo-sub { display: none; }
+
+  .section-title { font-size: 1.25rem; }
+
+  .page-hero { padding: 36px 0 32px; }
+  .page-hero h1 { font-size: 1.4rem; }
+
+  .info-table { grid-template-columns: 70px 1fr; font-size: 0.84rem; }
+
+  .calendar-wrap iframe { height: 320px; }
+}
+
+/* ============================
+   プリント
+   ============================ */
+@media print {
+  .site-header,
+  .hamburger,
+  .hero-buttons,
+  .volunteer-cta,
+  .site-footer { display: none; }
+
+  .hero { min-height: auto; padding: 24px 0; }
+  .hero-catch { color: var(--color-text); font-size: 1.6rem; }
+
+  body { font-size: 12pt; }
+  .section-pad { padding: 24px 0; }
+}

@@ -1,0 +1,326 @@
+/* ===========================
+   阪神つばめ学習会 - コンポーネント
+   =========================== */
+
+/* ============================
+   ボタン
+   ============================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 28px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+/* プライマリ（青緑） */
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+.btn-primary:hover {
+  background: var(--color-accent-dk);
+  border-color: var(--color-accent-dk);
+  color: #fff;
+}
+
+/* セカンダリ */
+.btn-secondary {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+.btn-secondary:hover {
+  background: var(--color-primary-dk);
+  border-color: var(--color-primary-dk);
+  color: #fff;
+}
+
+/* アウトライン（ヒーロー用） */
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255,255,255,0.75);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
+  color: #fff;
+}
+
+/* ホワイト（CTAセクション用） */
+.btn-white {
+  background: #fff;
+  color: var(--color-primary);
+  border-color: #fff;
+}
+.btn-white:hover {
+  background: rgba(255,255,255,0.9);
+  color: var(--color-primary-dk);
+}
+
+/* アクセント */
+.btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+  padding: 14px 40px;
+  font-size: 1rem;
+}
+.btn-accent:hover {
+  background: var(--color-accent-dk);
+  border-color: var(--color-accent-dk);
+  color: #fff;
+}
+
+/* LINE */
+.btn-line {
+  background: var(--color-line);
+  color: #fff;
+  border-color: var(--color-line);
+}
+.btn-line:hover {
+  background: #00a000;
+  border-color: #00a000;
+  color: #fff;
+}
+.line-icon {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.25);
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+}
+
+/* 小サイズボタン */
+.btn-secondary-sm {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.4);
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.btn-secondary-sm:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.7);
+}
+
+.btn-line-sm {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--color-line);
+  color: #fff;
+  border: none;
+  transition: background var(--transition);
+  text-decoration: none;
+}
+.btn-line-sm:hover { background: #00a000; color: #fff; }
+
+/* ============================
+   パンくずリスト
+   ============================ */
+.breadcrumb {
+  padding: 10px 0;
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-light);
+}
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  list-style: none;
+}
+.breadcrumb li + li::before {
+  content: '›';
+  margin-right: 4px;
+  color: var(--color-border);
+}
+.breadcrumb a { color: var(--color-primary); }
+
+/* ============================
+   ページヒーロー（内部ページ用）
+   ============================ */
+.page-hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #5aacbc 100%);
+  color: #fff;
+  padding: 48px 0 44px;
+  text-align: center;
+}
+.page-hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.page-hero p {
+  font-size: 0.9rem;
+  opacity: 0.88;
+  letter-spacing: 0.05em;
+}
+
+/* ============================
+   カード共通
+   ============================ */
+.card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+/* ============================
+   タグ・バッジ
+   ============================ */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  color: var(--color-text-light);
+}
+.tag-primary {
+  background: rgba(58,125,140,0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.tag-accent {
+  background: rgba(240,165,0,0.1);
+  border-color: var(--color-accent);
+  color: var(--color-accent-dk);
+}
+
+/* ============================
+   フォーム
+   ============================ */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+.form-label .required {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.7rem;
+  background: #e05252;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(58,125,140,0.15);
+}
+.form-textarea { min-height: 140px; resize: vertical; }
+
+/* ============================
+   アラート・通知
+   ============================ */
+.alert {
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  border-left: 4px solid;
+}
+.alert-info {
+  background: rgba(58,125,140,0.08);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dk);
+}
+.alert-warning {
+  background: rgba(240,165,0,0.08);
+  border-color: var(--color-accent);
+  color: #8a5e00;
+}
+
+/* ============================
+   セパレータ
+   ============================ */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 40px 0;
+}
+
+/* ============================
+   数字・実績カウンター
+   ============================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+  text-align: center;
+}
+.stat-item { padding: 24px; }
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-number span { font-size: 1.2rem; }
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}

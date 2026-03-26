@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"D:/10_program/00_hp/hp_pentech/school/mukonoso/html\" && rm GOOGLE_APPS_SCRIPT_SETUP.md GOOGLE_APPS_SCRIPT_EXPLANATION.md GOOGLE_APPS_SCRIPT_LOG_CHECK.md GOOGLE_APPS_SCRIPT_TROUBLESHOOTING.md GOOGLE_SHEETS_SETUP.md GOOGLE_SHEETS_VERIFICATION.md GOOGLE_SHEETS_PERMISSION_SETUP.md GOOGLE_SHEETS_ACCESS_PERMISSION.md GOOGLE_SHEETS_PROPERTIES_SERVICE_SETUP.md GOOGLE_SHEETS_HISTORY_SETUP.md GOOGLE_SHEETS_WRITE_PROCESS.md CALENDAR_IDENTIFICATION.md CALENDAR_MANUAL.md CALENDAR_USAGE.md GOOGLE_CALENDAR_SETUP.md CLOUD_LOGS_EXPLANATION.md CLOUD_LOGS_EXPLORER_ACCESS.md GCP_PROJECT_NUMBER_GUIDE.md WEB_APP_LOGS_EXPLANATION.md GOOGLE_DRIVE_PERMISSION_ISSUE.md EMAIL_HISTORY_TEST.md EMAIL_TROUBLESHOOTING.md LINE_MESSAGING_API_SETUP.md LINE_NOTIFY_MIGRATION.md LINE_NOTIFY_SETUP.md NOTIFICATION_OPTIONS.md SETUP_GUIDE.md DEPLOYMENT_VERIFICATION.md && echo \"削除完了\")",
+      "Bash(ls \"D:/10_program/00_hp/hp_pentech/school/mukonoso/html/\"*.md)",
+      "Bash(ls \"D:/10_program/00_hp/hp_pentech/school/mukonoso/html/blog/\" && echo \"---\" && ls \"D:/10_program/00_hp/hp_pentech/school/mukonoso/html/\" | grep \"\\\\.md$\")",
+      "WebFetch(domain:www.pentech.info)",
+      "Bash(cd \"D:/10_program/00_hp/hp_pentech\" && gh run list --limit 3)"
+    ]
+  }
+}
