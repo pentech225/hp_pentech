@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武庫っ子あつまれ！ゲームプログラミング大会 | iTeen 武庫之荘校</title>
+    
+    <!-- パスワード保護 -->
+    <script src="../html/config.js"></script>
+    <script src="../html/password-check.js"></script>
+    <!-- メール送信履歴管理 -->
+    <script src="../html/email-history.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo {
+            max-height: 50px;
+            width: auto;
+        }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover {
+            opacity: 0.8;
+        }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover {
+            text-decoration: underline;
+        }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover {
+            color: var(--primary);
+            background-color: #f0f8ff;
+        }
+        
+        /* イベントセクション */
+        .event-section {
+            padding: 50px 0;
+        }
+        .event-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .event-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .event-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .event-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .event-icon {
+            font-size: 2rem;
+        }
+        .event-card p {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        .event-card ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        .event-card li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .event-highlight {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .event-highlight p {
+            margin: 0;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .event-info-box {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .event-info-box h4 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .event-info-box p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+        .event-info-box ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 時間帯選択ボタン */
+        .time-slot-selection {
+            margin-bottom: 30px;
+        }
+        .time-slot-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 15px;
+            display: block;
+        }
+        .time-slot-required {
+            color: #F44336;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        .time-slot-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .time-slot-button {
+            background-color: var(--white);
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            color: var(--text);
+            position: relative;
+        }
+        .time-slot-button:hover {
+            border-color: var(--primary);
+            background-color: #F0F7FF;
+        }
+        .time-slot-button.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        .time-slot-button .time-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .time-slot-button .time-duration {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .time-slot-button.full {
+            background-color: #F5F5F5;
+            border-color: #E0E0E0;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .time-slot-button.full:hover {
+            border-color: #E0E0E0;
+            background-color: #F5F5F5;
+        }
+        .time-slot-button .full-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #F44336;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+        
+        /* フォーム入力 */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-label .required {
+            color: #F44336;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        .form-label .optional {
+            color: #666;
+            font-size: 0.85rem;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-input.error {
+            border-color: #F44336;
+            background-color: #ffebee;
+        }
+        .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .error-message {
+            color: #F44336;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .form-notice {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* 送信ボタン */
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .submit-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 400px;
+        }
+        .submit-button:hover:not(:disabled) {
+            background-color: #E0951A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .submit-button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 感謝ページ */
+        .thank-you-section {
+            display: none;
+            padding: 50px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .thank-you-section.show {
+            display: block;
+        }
+        .thank-you-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+        .reservation-info-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .reservation-info-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .reservation-info-item {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+    </header>
+
+    <!-- イベント情報セクション -->
+    <section class="event-section" style="background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);">
+        <div class="container">
+            <h1 class="event-title">第2回 武庫っ子あつまれ！ゲームプログラミング大会</h1>
+            <p class="event-subtitle">主催：iTeen 子どものためのICT教育普及促進委員会<br>
+                私たちは子どもたちの「未来を切り拓く力」を育てる活動を全国で推進しています。
+                </p>
+            
+            <div>
+                <h3>
+                    <span class="event-icon"></span>
+                    イベント概要
+                </h3>
+                <p>
+                    プログラミングが初めてのお子さんにも分かりやすく、楽しくその仕組みや魅力を伝える啓蒙イベントです。Scratchゲームのプレイ（マウスやキーボード操作練習）という基本から、コードの改造を行うことで変数や各種プログラミング処理の意味を体感してもらいます。
+                </p>
+            </div>
+
+            <div>
+                <p><strong>開催日時：</strong>2026年5月3日(日)</p>
+                <p><strong>会場：</strong>尼崎市立武庫西生涯学習プラザ 2F 小会議室</p>
+                <p><strong>住所：</strong>〒661-0041 兵庫県尼崎市武庫の里１丁目１３−２９</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6555.565737575518!2d135.38247847705554!3d34.76106207996966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000f18e4dbd056d%3A0x5320902a0d65b860!2z5bC85bSO5biC56uLIOatpuW6q-ilvyDnlJ_mtq_lrabnv5Ljg5fjg6njgrY!5e0!3m2!1sja!2sjp!4v1771730391326!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p><strong>対象：</strong>プログラミングに興味のあるお子さん。年中年長の兄弟もご一緒できます。</p>
+                <p><strong>備考：</strong>保護者同伴大歓迎・お子様だけでもご参加できます。</p>
+                <p><strong>参加費：</strong>無料</p>
+                <p><strong>連絡先：</strong>070-2327-8083（担当：彦阪 吉海）</p>
+                <p><strong>持ち物：</strong>なし（USBメモリご持参でゲームデータをお持ち帰りいただけます）</p>
+            </div>
+
+            <div>
+                <h3>
+                    <span class="event-icon"></span>
+                    プログラム内容
+                </h3>
+
+                <div style="margin: 20px 0;">
+                    <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 10px;">
+                        【ステップ1】タイピングチャレンジ！（10分）
+                    </h4>
+                    <p>
+                        お子様のレベルに応じたタイピング問題を用意しております。<br>
+                    </p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 10px;">
+                        【ステップ2】ゲームをプレイしてみよう！（10分）
+                    </h4>
+                    <p>
+                        見本のゲームにそって、参加するお子さんが自分だけのゲームづくりに挑戦！<br>
+                        想像力を膨らませて、様々なアルゴリズムで構築されたゲームをプレイします！
+                    </p>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 10px;">
+                        【ステップ3】ゲーム改造でもりあがろう！（10分）
+                    </h4>
+                    <p>
+                        完成したゲームに、もっとワクワクをプラス！<br>
+                        ・思わず「あっ！」と驚く仕掛けが盛りだくさん！<br><br>
+                        コーチのアドバイスで、作品をさらにパワーアップ！
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- フォームセクション -->
+    <section class="event-section" id="form-section">
+        <div class="container">
+            <h2 class="event-title" style="font-size: 1.8rem;">参加申し込み</h2>
+            <p class="event-subtitle" style="font-size: 1rem;">以下のフォームにご記入の上、送信してください</p>
+            
+            <div class="event-card">
+
+                
+                <!-- 時間帯選択 -->
+                <div class="time-slot-selection">
+                    <label class="time-slot-label">
+                        参加希望時間帯<span class="time-slot-required">※必須</span>
+                    </label>
+                    <div class="time-slot-buttons" id="time-slot-buttons">
+                        <button type="button" class="time-slot-button full" data-time-slot="1部：10:00〜10:30" onclick="selectTimeSlot('1部：10:00〜10:30', event)">
+                            <div class="time-label">1部：10:00〜10:30</div>
+                            <div class="time-duration">30分</div>
+                        </button>
+                        <button type="button" class="time-slot-button full" data-time-slot="2部：11:00〜11:30" onclick="selectTimeSlot('2部：11:00〜11:30', event)">
+                            <div class="time-label">2部：11:00〜11:30</div>
+                            <div class="time-duration">30分</div>
+                        </button>
+                        <button type="button" class="time-slot-button full" data-time-slot="3部：13:00〜13:30" onclick="selectTimeSlot('3部：13:00〜13:30', event)">
+                            <div class="time-label">3部：13:00〜13:30</div>
+                            <div class="time-duration">30分</div>
+                        </button>
+                        <button type="button" class="time-slot-button full" data-time-slot="4部：14:00〜14:30" onclick="selectTimeSlot('4部：14:00〜14:30', event)">
+                            <div class="time-label">4部：14:00〜14:30</div>
+                            <div class="time-duration">30分</div>
+                        </button>
+                        <button type="button" class="time-slot-button" data-time-slot="5部：15:00〜15:30" onclick="selectTimeSlot('5部：15:00〜15:30', event)">
+                            <div class="time-label">5部：15:00〜15:30</div>
+                            <div class="time-duration">30分</div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- お子さんのお名前 -->
+                <div class="form-group">
+                    <label for="child-name-input" class="form-label">
+                        お子さんのお名前<span class="required">※必須</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="child-name-input" 
+                        class="form-input" 
+                        placeholder="例：やまだ たろう"
+                        oninput="handleNameInput()"
+                    >
+                </div>
+                
+                <!-- 電話番号 -->
+                <div class="form-group">
+                    <label for="phone-input" class="form-label">
+                        お電話番号<span class="required">※必須</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone-input" 
+                        class="form-input" 
+                        placeholder="例：09012345678"
+                        oninput="checkPhoneNumber()"
+                    >
+                    <div class="error-message" id="phone-error-message">
+                        正しい電話番号を入力してください。10桁または11桁の数字を入力してください。
+                    </div>
+                </div>
+                
+                <!-- メールアドレス -->
+                <div class="form-group">
+                    <label for="email-input" class="form-label">
+                        メールアドレス<span class="optional">（任意）</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email-input" 
+                        class="form-input" 
+                        placeholder="例：example@email.com"
+                        oninput="checkEmail()"
+                    >
+                    <div class="error-message" id="email-error-message">
+                        正しいメールアドレスを入力してください。
+                    </div>
+                </div>
+                
+                <!-- その他ご質問など -->
+                <div class="form-group">
+                    <label for="message-textarea" class="form-label">
+                        その他ご質問など<span class="optional">（任意）</span>
+                    </label>
+                    <textarea 
+                        id="message-textarea" 
+                        class="form-textarea" 
+                        placeholder="ご質問やご要望がございましたら、こちらにご記入ください"
+                        oninput="updateMessage()"
+                    ></textarea>
+                </div>
+                
+                <!-- 送信ボタン -->
+                <div class="submit-section">
+                    <button class="submit-button" id="submit-button" onclick="submitEventForm()" disabled>
+                        申し込みを送信する
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 感謝ページ -->
+    <section class="thank-you-section" id="thank-you-section">
+        <div class="thank-you-container">
+            <div class="reservation-info-box" id="reservation-info-box">
+                <div class="reservation-info-title">📅 申し込み内容</div>
+                <div class="reservation-info-item" id="reservation-time-item"></div>
+                <div class="reservation-info-item" id="reservation-name-item"></div>
+                <div class="reservation-info-item" id="reservation-phone-item"></div>
+                <div class="reservation-info-item" id="reservation-email-item" style="display: none;"></div>
+                <div class="reservation-info-item" id="reservation-message-item" style="display: none;"></div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
+                <p style="font-size: 1rem; line-height: 1.8; margin: 0;">
+                    <strong style="color: #fff8e1;">🎮 当日をお楽しみに！</strong><br>
+                    イベント当日は、尼崎市立武庫西生涯学習プラザ 2F 小会議室にお越しください。<br>
+                    お会いできるのを楽しみにしております！
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html" style="display: inline-block; padding: 12px 30px; background: white; color: var(--primary); text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">ホームに戻る</a>
+                <a href="tel:070-2327-8083" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">📞 お問い合わせ: 070-2327-8083</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2026 iTeen 武庫之荘校</p>
+    </footer>
+
+    <!-- 共通設定ファイルを読み込む -->
+    <script src="../html/config.js"></script>
+    
+    <script>
+        // CONFIGが読み込まれているか確認
+        if (typeof CONFIG === 'undefined') {
+            console.error('CONFIGが読み込まれていません。config.jsのパスを確認してください。');
+        } else {
+            console.log('CONFIG読み込み成功:', CONFIG);
+        }
+        
+        // 選択された時間帯
+        let selectedTimeSlot = null;
+        
+        // 子供の名前
+        let childName = '';
+        
+        // 電話番号
+        let phoneNumber = '';
+        
+        // メールアドレス
+        let emailAddress = '';
+        
+        // 自由記述欄
+        let messageText = '';
+        
+        // 満席の時間帯（選択不可）
+        const FULL_TIME_SLOTS = ['1部：10:00〜10:40'];
+        
+        // 時間帯を選択
+        function selectTimeSlot(timeSlot, event) {
+            // 満席の場合は選択不可
+            if (FULL_TIME_SLOTS.includes(timeSlot)) {
+                return;
+            }
+            
+            // 以前の選択を解除
+            document.querySelectorAll('.time-slot-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 新しい選択
+            const button = event ? event.target.closest('.time-slot-button') : document.querySelector(`.time-slot-button[data-time-slot="${timeSlot}"]`);
+            if (button && !button.dataset.full) {
+                button.classList.add('selected');
+            }
+            selectedTimeSlot = timeSlot;
+            
+            // 送信ボタンの有効/無効を更新
+            updateSubmitButton();
+        }
+        
+        // 名前を入力
+        function handleNameInput() {
+            const nameInput = document.getElementById('child-name-input');
+            childName = nameInput.value.trim();
+            updateSubmitButton();
+        }
+        
+        // 電話番号のバリデーション
+        function validateJapanesePhoneNumber(phone) {
+            if (!phone) return false;
+            
+            // ハイフンやスペースを除去
+            const cleaned = phone.replace(/[-\s]/g, '');
+            
+            // 数字のみかチェック
+            if (!/^\d+$/.test(cleaned)) {
+                return false;
+            }
+            
+            // 携帯電話（090, 080, 070で始まる11桁）
+            if (cleaned.length === 11 && /^0[789]0/.test(cleaned)) {
+                return true;
+            }
+            
+            // 固定電話（10桁または11桁）
+            if (cleaned.length === 10 || cleaned.length === 11) {
+                // フリーダイヤル（0120, 0800など）
+                if (/^0(120|800|570|500|200|990|920|930|950|960|980|570)/.test(cleaned)) {
+                    return true;
+                }
+                // その他の固定電話
+                if (/^0[1-9]/.test(cleaned)) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        // 電話番号をチェック
+        function checkPhoneNumber() {
+            const phoneInput = document.getElementById('phone-input');
+            const errorMessage = document.getElementById('phone-error-message');
+            phoneNumber = phoneInput.value.trim();
+            
+            if (phoneNumber) {
+                const isValid = validateJapanesePhoneNumber(phoneNumber);
+                
+                if (isValid) {
+                    phoneInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                } else {
+                    phoneInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    phoneNumber = '';
+                }
+            } else {
+                phoneInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+            }
+            
+            updateSubmitButton();
+        }
+        
+        // メールアドレスのバリデーション
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // メールアドレスをチェック
+        function checkEmail() {
+            const emailInput = document.getElementById('email-input');
+            const errorMessage = document.getElementById('email-error-message');
+            emailAddress = emailInput.value.trim();
+            
+            if (emailAddress) {
+                const isValid = validateEmail(emailAddress);
+                
+                if (isValid) {
+                    emailInput.classList.remove('error');
+                    errorMessage.classList.remove('show');
+                } else {
+                    emailInput.classList.add('error');
+                    errorMessage.classList.add('show');
+                    emailAddress = '';
+                }
+            } else {
+                emailInput.classList.remove('error');
+                errorMessage.classList.remove('show');
+            }
+        }
+        
+        // 自由記述欄を更新
+        function updateMessage() {
+            const messageTextarea = document.getElementById('message-textarea');
+            messageText = messageTextarea.value.trim();
+        }
+        
+        // 送信ボタンの有効/無効を更新
+        function updateSubmitButton() {
+            const submitButton = document.getElementById('submit-button');
+            
+            const hasTimeSlot = selectedTimeSlot !== null;
+            const hasName = childName && childName.trim() !== '';
+            const hasPhone = phoneNumber && phoneNumber.trim() !== '' && validateJapanesePhoneNumber(phoneNumber);
+            
+            if (hasTimeSlot && hasName && hasPhone) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+        
+        // フォームを送信
+        function submitEventForm() {
+            console.log('submitEventForm が呼び出されました');
+            console.log('selectedTimeSlot:', selectedTimeSlot);
+            console.log('childName:', childName);
+            console.log('phoneNumber:', phoneNumber);
+            
+            if (!selectedTimeSlot) {
+                alert('参加希望時間帯を選択してください。');
+                return;
+            }
+            if (!childName || childName.trim() === '') {
+                alert('お子さんのお名前を入力してください。');
+                document.getElementById('child-name-input').focus();
+                return;
+            }
+            if (!phoneNumber || phoneNumber.trim() === '') {
+                alert('電話番号を入力してください。');
+                document.getElementById('phone-input').focus();
+                return;
+            }
+            
+            if (!validateJapanesePhoneNumber(phoneNumber)) {
+                alert('正しい電話番号を入力してください。\n日本国内の電話番号（10桁または11桁の数字）を入力してください。');
+                document.getElementById('phone-input').focus();
+                document.getElementById('phone-input').classList.add('error');
+                document.getElementById('phone-error-message').classList.add('show');
+                return;
+            }
+            
+            if (emailAddress && emailAddress.trim() !== '') {
+                if (!validateEmail(emailAddress)) {
+                    alert('正しいメールアドレスを入力してください。');
+                    document.getElementById('email-input').focus();
+                    document.getElementById('email-input').classList.add('error');
+                    document.getElementById('email-error-message').classList.add('show');
+                    return;
+                }
+            }
+            
+            // CONFIGが読み込まれているか確認
+            if (typeof CONFIG === 'undefined') {
+                console.error('CONFIGが読み込まれていません。mailtoリンクを使用します。');
+                sendEmailWithMailto();
+                return;
+            }
+            
+            // Google Apps Scriptが設定されている場合は、Google Apps Scriptで送信
+            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+                console.log('Google Apps Scriptを使用して送信します');
+                sendEmailWithGoogleAppsScript();
+            } else {
+                // Google Apps Scriptが設定されていない場合は、mailtoリンクを使用
+                console.log('mailtoリンクを使用して送信します');
+                sendEmailWithMailto();
+            }
+        }
+        
+        // Google Apps Scriptを使用してメールを送信
+        function sendEmailWithGoogleAppsScript() {
+            const submitButton = document.getElementById('submit-button');
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            
+            // 時間帯から時間を抽出（例: "1部：10:00〜10:40" → "10:00"）
+            let timeValue = '';
+            if (selectedTimeSlot) {
+                const timeMatch = selectedTimeSlot.match(/(\d{1,2}):(\d{2})/);
+                if (timeMatch) {
+                    timeValue = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                }
+            }
+            
+            const emailData = {
+                to: CONFIG.EMAIL,
+                subject: 'ゲームプログラミング大会 参加申し込み',
+                // Google Apps Scriptが期待する形式に合わせる
+                date: '2026年3月15日(日)',
+                date_raw: '2026-03-15', // YYYY-MM-DD形式（必須）
+                time: timeValue || '10:00', // HH:MM形式（必須）
+                time_slot: selectedTimeSlot, // 表示用
+                child_name: childName,
+                phone: phoneNumber,
+                email: emailAddress || '未入力',
+                message: messageText || 'なし',
+                school_type: 'ゲームプログラミング大会', // イベント名として使用
+                grade: '', // イベントなので学年は空
+                body: `ゲームプログラミング大会への参加申し込みがありました。
+
+お子さんのお名前: ${childName}
+電話番号: ${phoneNumber}
+メールアドレス: ${emailAddress || '未入力'}
+参加希望時間帯: ${selectedTimeSlot}
+${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}
+
+参加確定のため、お客様にご連絡をお願いします。
+
+---
+このメールはイベント申し込みフォームから自動送信されました。
+iTeen 武庫之荘校`,
+                replyTo: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? emailAddress.trim() : undefined,
+                replySubject: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? '【iTeen 武庫之荘校】ゲームプログラミング大会 参加申し込みのご確認' : undefined,
+                replyBody: emailAddress && emailAddress.trim() !== '' && emailAddress !== '未入力' ? `${childName} 様
+
+この度は、武庫っ子あつまれ！ゲームプログラミング大会への参加申し込みをお申し込みいただき、誠にありがとうございます。
+
+以下の内容で申し込みを受け付けました。
+
+【申し込み内容】
+お子さんのお名前: ${childName}
+電話番号: ${phoneNumber}
+参加希望時間帯: ${selectedTimeSlot}${messageText && messageText.trim() !== '' ? `\n\nご質問・ご要望:\n${messageText}` : ''}
+
+【イベント情報】
+開催日時: 2026年3月15日(日) ${selectedTimeSlot}
+会場: 尼崎市立武庫西生涯学習プラザ 2F 小会議室
+住所: 〒661-0041 兵庫県尼崎市武庫の里１丁目１３−２９
+
+参加確定のため、担当者よりご連絡させていただきます。
+お急ぎの場合は、お電話（070-2327-8083）でもお問い合わせいただけます。
+
+お会いできるのを楽しみにしております！
+
+---
+iTeen 子どものためのICT教育普及促進委員会
+担当: 彦阪 吉海
+電話: 070-2327-8083` : undefined
+            };
+            
+            // デバッグ用ログ
+            console.log('📧 メール送信データ確認:', {
+                hasEmail: !!emailAddress,
+                emailAddress: emailAddress,
+                hasReplyTo: !!emailData.replyTo,
+                replyTo: emailData.replyTo,
+                date_raw: emailData.date_raw,
+                time: emailData.time,
+                time_slot: emailData.time_slot
+            });
+            
+            console.log('📤 Google Apps Scriptに送信中...', emailData);
+            
+            fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // no-corsモードでCORSエラーを回避
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(() => {
+                // no-corsモードではレスポンスを取得できないため、常に成功として扱う
+                // 実際にはメール送信が成功している可能性が高い
+                console.log('✅ Google Apps Scriptに送信しました（レスポンスは取得できませんが、メール送信は成功している可能性があります）');
+                
+                // 送信履歴を保存
+                if (typeof saveEmailHistory === 'function') {
+                    saveEmailHistory('event', {
+                        child_name: childName,
+                        phone: phoneNumber,
+                        email: emailAddress || '',
+                        time_slot: selectedTimeSlot,
+                        message: messageText || '',
+                        event_type: 'game_programming_event',
+                        event_date: '2026年3月15日(日)'
+                    });
+                }
+                
+                // 感謝ページを表示
+                showThankYouPage();
+            })
+            .catch(error => {
+                console.error('❌ 送信エラー:', error);
+                alert('申し込みの送信に失敗しました。お手数ですが、お電話（070-2327-8083）でお申し込みください。');
+                submitButton.disabled = false;
+                submitButton.textContent = '申し込みを送信する';
+            });
+        }
+        
+        // mailtoリンクを使用してメールを送信
+        function sendEmailWithMailto() {
+            const subject = encodeURIComponent('ゲームプログラミング大会 参加申し込み');
+            const body = encodeURIComponent(`ゲームプログラミング大会への参加申し込み
+
+お子さんのお名前: ${childName}
+電話番号: ${phoneNumber}
+メールアドレス: ${emailAddress || '未入力'}
+参加希望時間帯: ${selectedTimeSlot}
+${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}`);
+            
+            window.location.href = `mailto:${CONFIG.EMAIL}?subject=${subject}&body=${body}`;
+            
+            // 送信履歴を保存
+            if (typeof saveEmailHistory === 'function') {
+                saveEmailHistory('event', {
+                    child_name: childName,
+                    phone: phoneNumber,
+                    email: emailAddress || '',
+                    time_slot: selectedTimeSlot,
+                    message: messageText || '',
+                    event_type: 'game_programming_event',
+                    event_date: '2026年3月15日(日)'
+                });
+            }
+            
+            // 感謝ページを表示
+            showThankYouPage();
+        }
+        
+        // 感謝ページを表示
+        function showThankYouPage() {
+            // フォームセクションとイベント情報セクションを非表示
+            const formSection = document.getElementById('form-section');
+            const eventInfoSection = document.querySelector('.event-section');
+            if (formSection) formSection.style.display = 'none';
+            if (eventInfoSection) eventInfoSection.style.display = 'none';
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('footer').style.display = 'none';
+            
+            // 感謝ページを表示
+            const thankYouSection = document.getElementById('thank-you-section');
+            thankYouSection.classList.add('show');
+            
+            // 申し込み内容を表示
+            document.getElementById('reservation-time-item').textContent = `参加希望時間帯: ${selectedTimeSlot}`;
+            document.getElementById('reservation-name-item').textContent = `お子さんのお名前: ${childName}`;
+            document.getElementById('reservation-phone-item').textContent = `電話番号: ${phoneNumber}`;
+            
+            if (emailAddress && emailAddress.trim() !== '') {
+                document.getElementById('reservation-email-item').textContent = `メールアドレス: ${emailAddress}`;
+                document.getElementById('reservation-email-item').style.display = 'block';
+            }
+            
+            if (messageText && messageText.trim() !== '') {
+                document.getElementById('reservation-message-item').textContent = `ご質問・ご要望: ${messageText}`;
+                document.getElementById('reservation-message-item').style.display = 'block';
+            }
+            
+            // ページトップにスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
