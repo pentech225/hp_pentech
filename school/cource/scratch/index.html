@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スクラッチまなびば</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header id="header">
+    <div id="header-left" onclick="navigate('home')">
+      <span id="header-mascot">🐱</span>
+      <span id="header-title">スクラッチまなびば</span>
+    </div>
+    <button class="btn btn-typing" onclick="navigate('typing')">⌨️ タイピング</button>
+  </header>
+
+  <div id="wrapper">
+    <nav id="sidebar">
+      <div id="nav-inner"></div>
+    </nav>
+    <main id="main"></main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
