@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>PenTech 学習ガイド</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+
+  <header id="sp-header">
+    <span id="sp-logo">🐱</span>
+    <span id="sp-title">PenTech 学習ガイド</span>
+    <button id="btn-settings" title="設定">⚙️</button>
+  </header>
+
+  <nav id="sp-nav">
+    <select id="chapter-sel" class="sp-select"></select>
+    <select id="lesson-sel"  class="sp-select"></select>
+  </nav>
+
+  <main id="sp-main"></main>
+
+  <div id="sp-settings" class="hidden">
+    <h2>設定</h2>
+
+    <div class="setting-row">
+      <label for="setting-rate">話す速さ</label>
+      <div class="setting-control">
+        <input type="range" id="setting-rate" min="0.5" max="2.0" step="0.1" value="1.2">
+        <span id="setting-rate-val">1.2</span>
+      </div>
+      <div class="setting-preview-btns">
+        <button id="btn-rate-test">▶ 試し聞き</button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <label for="setting-pitch">声の高さ</label>
+      <div class="setting-control">
+        <input type="range" id="setting-pitch" min="0.5" max="2.0" step="0.1" value="1.8">
+        <span id="setting-pitch-val">1.8</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="sp-footer">
+    <button id="btn-prev" class="nav-btn">← もどる</button>
+    <span id="lesson-progress"></span>
+    <button id="btn-next" class="nav-btn nav-btn-next">つぎへ →</button>
+  </div>
+
+  <div id="tsuyu-area">
+    <div id="tsuyu-bubble"></div>
+    <div id="tsuyu-stage"></div>
+    <button id="btn-volume" title="音量切り替え">🔊</button>
+  </div>
+
+  <script src="scratchblocks.min.js"></script>
+  <script src="translations.min.js"></script>
+  <script src="tsukuyomi.js"></script>
+  <script src="lessons.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

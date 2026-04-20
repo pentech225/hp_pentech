@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>音声テスト</title>
+  <style>
+    body { font-family: sans-serif; padding: 24px; background: #f5f5f5; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 20px; }
+    #test-text { width: 100%; padding: 8px; font-size: 16px; margin-bottom: 12px; box-sizing: border-box; }
+    .controls { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+    label { font-size: 13px; }
+    input[type=range] { width: 100px; }
+    #voice-list { display: grid; gap: 8px; }
+    .voice-row {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .voice-row.playing { border-color: #4c97ff; background: #eef4ff; }
+    .voice-row.ja { border-left: 4px solid #ff6680; }
+    .voice-name { flex: 1; font-size: 13px; }
+    .voice-lang { font-size: 11px; color: #888; min-width: 50px; }
+    button.play-btn {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid #4c97ff;
+      background: #4c97ff;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    button.play-btn:hover { background: #2a7de1; }
+    #count { color: #888; font-size: 13px; margin-bottom: 8px; }
+    .filter-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .filter-btn {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid #aaa;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .filter-btn.active { background: #ff6680; color: white; border-color: #ff6680; }
+  </style>
+</head>
+<body>
+
+<h1>Web Speech API — 全ボイス試聴</h1>
+
+<textarea id="test-text" rows="2">こんにちは！つくよみちゃんです。今日はスクラッチを一緒に勉強しましょう！</textarea>
+
+<div class="controls">
+  <label>速さ: <input type="range" id="rate" min="0.5" max="2" step="0.1" value="1.0"> <span id="rate-val">1.0</span></label>
+  <label>ピッチ: <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1.0"> <span id="pitch-val">1.0</span></label>
+  <button onclick="speechSynthesis.cancel()" style="padding:5px 12px;cursor:pointer">⏹ 停止</button>
+</div>
+
+<div class="filter-row">
+  <button class="filter-btn active" onclick="filterVoices('all', this)">すべて</button>
+  <button class="filter-btn" onclick="filterVoices('ja', this)">日本語のみ</button>
+</div>
+
+<div id="count"></div>
+<div id="voice-list">読み込み中...</div>
+
+<script>
+let allVoices = [];
+
+document.getElementById('rate').addEventListener('input', e => {
+  document.getElementById('rate-val').textContent = parseFloat(e.target.value).toFixed(1);
+});
+document.getElementById('pitch').addEventListener('input', e => {
+  document.getElementById('pitch-val').textContent = parseFloat(e.target.value).toFixed(1);
+});
+
+function speak(voice) {
+  const text = document.getElementById('test-text').value;
+  const rate  = parseFloat(document.getElementById('rate').value);
+  const pitch = parseFloat(document.getElementById('pitch').value);
+
+  speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = voice;
+  utter.lang  = voice.lang;
+  utter.rate  = rate;
+  utter.pitch = pitch;
+
+  // 再生中ハイライト
+  document.querySelectorAll('.voice-row').forEach(r => r.classList.remove('playing'));
+  const row = document.querySelector(`[data-name="${CSS.escape(voice.name)}"]`);
+  if (row) row.classList.add('playing');
+  utter.onend = () => { if (row) row.classList.remove('playing'); };
+
+  speechSynthesis.speak(utter);
+}
+
+function buildList(voices) {
+  const list = document.getElementById('voice-list');
+  if (voices.length === 0) {
+    list.innerHTML = '<p style="color:#888">該当するボイスがありません</p>';
+    return;
+  }
+
+  document.getElementById('count').textContent =
+    `${voices.length} 件 （日本語: ${voices.filter(v => v.lang.startsWith('ja')).length} 件）`;
+
+  list.innerHTML = voices.map(v => `
+    <div class="voice-row ${v.lang.startsWith('ja') ? 'ja' : ''}" data-name="${v.name}">
+      <span class="voice-lang">${v.lang}</span>
+      <span class="voice-name">${v.name}${v.localService ? ' 🖥' : ' ☁'}</span>
+      <button class="play-btn" onclick="speakByName('${v.name.replace(/'/g,"\\'")}')">▶ 再生</button>
+    </div>
+  `).join('');
+}
+
+function speakByName(name) {
+  const v = allVoices.find(v => v.name === name);
+  if (v) speak(v);
+}
+
+function filterVoices(lang, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = lang === 'ja'
+    ? allVoices.filter(v => v.lang.startsWith('ja'))
+    : allVoices;
+  buildList(filtered);
+}
+
+function loadVoices() {
+  allVoices = speechSynthesis.getVoices();
+  if (allVoices.length === 0) return;
+  // 日本語を上に並び替え
+  allVoices.sort((a, b) => {
+    if (a.lang.startsWith('ja') && !b.lang.startsWith('ja')) return -1;
+    if (!a.lang.startsWith('ja') && b.lang.startsWith('ja')) return 1;
+    return a.lang.localeCompare(b.lang);
+  });
+  buildList(allVoices);
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+</script>
+</body>
+</html>

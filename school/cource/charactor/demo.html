@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>つくよみちゃん デモ</title>
+  <link rel="stylesheet" href="tsukuyomi.css">
+  <style>
+    body { font-family: sans-serif; padding: 24px; background: #e8f4f8; }
+    button { margin: 6px; padding: 8px 16px; cursor: pointer; border-radius: 6px; border: 1px solid #aaa; }
+    h2 { margin-top: 24px; }
+  </style>
+</head>
+<body>
+
+<h1>つくよみちゃん デモ</h1>
+
+<h2>腕ポーズ</h2>
+<button onclick="tsuyu.pose('front','front')">両手おなか前</button>
+<button onclick="tsuyu.pose('up','front')">左手を上げる</button>
+<button onclick="tsuyu.pose('side','side')">両腕を横に伸ばす</button>
+<button onclick="tsuyu.pose('chest','chest')">両手を胸に当てる</button>
+<button onclick="tsuyu.pose('front','up')">右手を上げる</button>
+
+<h2>表情</h2>
+<button onclick="tsuyu.express('normal',false,false)">通常</button>
+<button onclick="tsuyu.express('normal',true,true)">にっこり</button>
+<button onclick="tsuyu.express('weak',false,false)">弱気</button>
+<button onclick="tsuyu.express('strong',false,false)">強気</button>
+
+<h2>喋る</h2>
+<button onclick="tsuyu.say('こんにちは！つくよみちゃんです。よろしくね！')">あいさつ</button>
+<button onclick="tsuyu.say('今日はスクラッチを一緒に勉強しよう！')">授業開始</button>
+<button onclick="async()=>{ tsuyu.pose('up','front'); tsuyu.express('strong',false,false); await tsuyu.say('ここが大事なポイントだよ！'); tsuyu.pose('front','front'); tsuyu.express('normal',true,false); }()">ポイント解説</button>
+
+<script src="tsukuyomi.js"></script>
+<script>
+  const tsuyu = new Tsukuyomi('./tsukuyomi/');
+</script>
+</body>
+</html>

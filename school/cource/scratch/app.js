@@ -57,6 +57,16 @@ function scratchLink(url, embedId) {
 }
 
 /* ============================================================
+   2.5. Scratch ブロック ヘルパー
+   ============================================================ */
+
+function scratchBlock(code) {
+  const trimmed = code.split('\n').map(line => line.trim()).join('\n');
+  const escaped = trimmed.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `<pre class="scratchblocks">${escaped}</pre>`;
+}
+
+/* ============================================================
    3. データ定義
    ============================================================ */
 
@@ -542,6 +552,303 @@ function defaultStep2(title) {
   `;
 }
 
+/* ---- テニスゲームコース ---- */
+const TENNIS_COURSE = [
+  /* 0 */ {
+    id: 'tennis-0', num: 1, total: 7,
+    title: 'テニスゲームをしってみよう',
+    prev: 'tennis', next: 'tennis-1',
+    content: () => `
+      <h3>どんなゲーム？</h3>
+      <p><ruby>二人<rt>ふたり</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>ぶテニスゲームです！</p>
+
+      <div class="tennis-rules">
+        <div class="tennis-rule-row">
+          <span class="tennis-rule-label">Aさん（<ruby>左<rt>ひだり</rt></ruby>のキャラクター）</span>
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> で<ruby>移動<rt>いどう</rt></ruby></span>
+        </div>
+        <div class="tennis-rule-row">
+          <span class="tennis-rule-label">Bさん（<ruby>右<rt>みぎ</rt></ruby>のキャラクター）</span>
+          <span><ruby>矢印<rt>やじるし</rt></ruby>キーで<ruby>移動<rt>いどう</rt></ruby></span>
+        </div>
+        <div class="tennis-rule-row">
+          <span class="tennis-rule-label">サーブ</span>
+          <span><kbd>Space</kbd> キー</span>
+        </div>
+        <div class="tennis-rule-row">
+          <span class="tennis-rule-label"><ruby>勝利<rt>しょうり</rt></ruby>じょうけん</span>
+          <span>30<ruby>点<rt>てん</rt></ruby>で<ruby>勝利<rt>しょうり</rt></ruby>！</span>
+        </div>
+        <div class="tennis-rule-row">
+          <span class="tennis-rule-label">おもしろルール</span>
+          <span><ruby>点<rt>てん</rt></ruby>を<ruby>取<rt>と</rt></ruby>るほど<ruby>体<rt>からだ</rt></ruby>が<ruby>小<rt>ちい</rt></ruby>さくなる！</span>
+        </div>
+      </div>
+
+      <h3>とうじょうするキャラクター</h3>
+      <div class="tennis-chars">
+        <div class="tennis-char">
+          <div class="tennis-char-icon">🎾👧</div>
+          <strong>マリー</strong>
+          <p><ruby>左側<rt>ひだりがわ</rt></ruby>のプレイヤー</p>
+        </div>
+        <div class="tennis-char">
+          <div class="tennis-char-icon">🎾👩</div>
+          <strong>ルーシー</strong>
+          <p><ruby>右側<rt>みぎがわ</rt></ruby>のプレイヤー</p>
+        </div>
+        <div class="tennis-char">
+          <div class="tennis-char-icon">🎾</div>
+          <strong>ボール</strong>
+          <p>テニスボール</p>
+        </div>
+      </div>
+
+      <h3>まず<ruby>問題<rt>もんだい</rt></ruby>のプロジェクトをひらこう！</h3>
+      <div class="warn-box">
+        <span class="warn-icon">📌</span>
+        <p>サインインして「リミックス」をクリックしよう！</p>
+      </div>
+      <div style="margin:16px 0">
+        <a href="https://scratch.mit.edu/projects/1305358210" target="_blank" rel="noopener" class="btn btn-scratch">
+          🔗 もんだいのプロジェクトをひらく
+        </a>
+      </div>
+    `
+  },
+
+  /* 1 */ {
+    id: 'tennis-1', num: 2, total: 7,
+    title: 'マリーのスプライトをえらぼう',
+    prev: 'tennis-0', next: 'tennis-2',
+    content: () => `
+      <h3>マリーのスプライトをえらぼう</h3>
+      <p>スプライトいちらんから <strong>マリー</strong> をクリックしよう。</p>
+
+      <h3>こんなブロックを<ruby>組<rt>く</rt></ruby>もう</h3>
+      <p>みどりのはたをおしたとき、マリーが<ruby>正<rt>ただ</rt></ruby>しいばしょからはじまるようにします。</p>
+
+      ${scratchBlock(`緑のはたが押されたとき :: hat events
+大きさを (50) ％にする :: looks
+x座標を (-200) 、y座標を (0) にする :: motion
+(90) 度に向ける :: motion
+[うえW、したS、みぎD、ひだりA v] と (2) 秒言う :: looks
+[さーぶは、すべーすきー v] と (2) 秒言う :: looks
+[あるくコスチュームばんごう v] を (1) にする :: variables
+ずっと :: control
+end`)}
+
+      <div class="hint-box">
+        <strong>💡 ヒント</strong>
+        <p>「<ruby>変数<rt>へんすう</rt></ruby>」のなかに「A<ruby>選手<rt>せんしゅ</rt></ruby> ▼ を (0) にする」というオレンジのブロックがあるよ。これが「あるくコスチュームばんごう ▼ を にする」になるよ！</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-icon">✅</span>
+        <p>ブロックを<ruby>組<rt>く</rt></ruby>んだら、みどりのはたをおして、マリーが<ruby>正<rt>ただ</rt></ruby>しいばしょにいるか<ruby>確<rt>たし</rt></ruby>かめよう！</p>
+      </div>
+    `
+  },
+
+  /* 2 */ {
+    id: 'tennis-2', num: 3, total: 7,
+    title: 'マリーをWASDでうごかそう',
+    prev: 'tennis-1', next: 'tennis-3',
+    content: () => `
+      <h3>ずっとのなかに、うごきのブロックをいれよう</h3>
+      <p>「ずっと」のなかに、4つの「もし」ブロックをいれます。</p>
+
+      ${scratchBlock(`ずっと :: control
+  もし <[w v] キーが押された :: sensing> なら :: control
+    y座標を (10) ずつ変える :: motion
+  end
+  もし <[s v] キーが押された :: sensing> なら :: control
+    y座標を (-10) ずつ変える :: motion
+  end
+  もし <[a v] キーが押された :: sensing> なら :: control
+    x座標を (-10) ずつ変える :: motion
+  end
+  もし <[d v] キーが押された :: sensing> なら :: control
+    x座標を (10) ずつ変える :: motion
+  end
+end`)}
+
+      <h3>キーとうごきのかんけい</h3>
+      <table class="tennis-key-table">
+        <tr><th>キー</th><th>うごき</th></tr>
+        <tr><td><kbd>W</kbd></td><td>y<ruby>座標<rt>ざひょう</rt></ruby>＋10（<ruby>上<rt>うえ</rt></ruby>へ）</td></tr>
+        <tr><td><kbd>S</kbd></td><td>y<ruby>座標<rt>ざひょう</rt></ruby>－10（<ruby>下<rt>した</rt></ruby>へ）</td></tr>
+        <tr><td><kbd>A</kbd></td><td>x<ruby>座標<rt>ざひょう</rt></ruby>－10（<ruby>左<rt>ひだり</rt></ruby>へ）</td></tr>
+        <tr><td><kbd>D</kbd></td><td>x<ruby>座標<rt>ざひょう</rt></ruby>＋10（<ruby>右<rt>みぎ</rt></ruby>へ）</td></tr>
+      </table>
+
+      <div class="warn-box">
+        <span class="warn-icon">✅</span>
+        <p>みどりのはたをおして、WASDキーでマリーがうごくか<ruby>確<rt>たし</rt></ruby>かめよう！</p>
+      </div>
+    `
+  },
+
+  /* 3 */ {
+    id: 'tennis-3', num: 4, total: 7,
+    title: 'あるくアニメーションをつけよう',
+    prev: 'tennis-2', next: 'tennis-4',
+    content: () => `
+      <h3>うごくたびにコスチュームをかえよう</h3>
+      <p>キーがおされたとき、<ruby>歩<rt>ある</rt></ruby>くアニメーションがながれるようにします。</p>
+      <p>ピンクのブロック「あるくコスチューム<ruby>変更<rt>へんこう</rt></ruby>」を、それぞれのうごきブロックの<ruby>下<rt>した</rt></ruby>にいれよう！</p>
+
+      ${scratchBlock(`ずっと :: control
+  もし <[w v] キーが押された :: sensing> なら :: control
+    y座標を (10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+  end
+  もし <[s v] キーが押された :: sensing> なら :: control
+    y座標を (-10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+  end
+  もし <[a v] キーが押された :: sensing> なら :: control
+    x座標を (-10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+  end
+  もし <[d v] キーが押された :: sensing> なら :: control
+    x座標を (10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+  end
+end`)}
+
+      <div class="warn-box">
+        <span class="warn-icon">✅</span>
+        <p>みどりのはたをおして、マリーがうごくときにアニメーションするか<ruby>確<rt>たし</rt></ruby>かめよう！</p>
+      </div>
+    `
+  },
+
+  /* 4 */ {
+    id: 'tennis-4', num: 5, total: 7,
+    title: 'コートのそとにでないようにしよう',
+    prev: 'tennis-3', next: 'tennis-5',
+    content: () => `
+      <h3>コートのそとにでてしまうね</h3>
+      <p>いまのじょうたいで、みどりのはたをおしてあそんでみよう。</p>
+      <p>マリーがコートの<ruby>右側<rt>みぎがわ</rt></ruby>にいってしまうね。</p>
+      <p>Aキーのブロックを<ruby>改造<rt>かいぞう</rt></ruby>して、x<ruby>座標<rt>ざひょう</rt></ruby>が <strong>-40</strong> より<ruby>大<rt>おお</rt></ruby>きくなりすぎたら、<ruby>反対<rt>はんたい</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>るようにしよう！</p>
+
+      ${scratchBlock(`ずっと :: control
+  もし <[a v] キーが押された :: sensing> なら :: control
+    x座標を (-10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+    もし <(x座標) > (-40) :: operators> なら :: control
+      x座標を (-10) ずつ変える :: motion
+    end
+  end
+  もし <[d v] キーが押された :: sensing> なら :: control
+    x座標を (10) ずつ変える :: motion
+    あるくコスチューム変更 :: custom
+  end
+end`)}
+
+      <div class="hint-box">
+        <strong>💡 ヒント</strong>
+        <p>「もし x<ruby>座標<rt>ざひょう</rt></ruby> &gt; -40 なら」は、「x<ruby>座標<rt>ざひょう</rt></ruby>が -40 より<ruby>右<rt>みぎ</rt></ruby>にいったら」という<ruby>意味<rt>いみ</rt></ruby>だよ。そのとき x<ruby>座標<rt>ざひょう</rt></ruby>を -10 してもどそう！</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-icon">✅</span>
+        <p>みどりのはたをおして、マリーがコートの<ruby>外<rt>そと</rt></ruby>にでなくなったか<ruby>確<rt>たし</rt></ruby>かめよう！</p>
+      </div>
+    `
+  },
+
+  /* 5 */ {
+    id: 'tennis-5', num: 6, total: 7,
+    title: 'ボールをうつアニメーション',
+    prev: 'tennis-4', next: 'tennis-6',
+    content: () => `
+      <h3>ボールにあたったら、ラケットをふろう！</h3>
+      <p>マリーがボールに<ruby>触<rt>ふ</rt></ruby>れたとき、ラケットをふるアニメーションをつけよう。</p>
+      <p>ピンクのブロック「うつ」を<ruby>使<rt>つか</rt></ruby>うよ。じぶんで<ruby>考<rt>かんが</rt></ruby>えてみよう！</p>
+
+      <p>「ずっと」のなかに、「もしボールにふれたなら」ブロックをいれて、「うつ」をよびだそう。</p>
+
+      ${scratchBlock(`ずっと :: control
+  // （うえのうごきブロックはそのまま）
+  もし <[ボール v] に触れた :: sensing> なら :: control
+    うつ :: custom
+  end
+end`)}
+
+      <div class="hint-box">
+        <strong>💡 ヒント</strong>
+        <p>「ボール ▼ にふれた」は「しらべる」（みずいろ）のブロックだよ。<br>
+        「うつ」はピンクの「<ruby>定義<rt>ていぎ</rt></ruby>」ブロックだよ。</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-icon">✅</span>
+        <p>みどりのはたをおして、ボールにあたったときにマリーがラケットをふるか<ruby>確<rt>たし</rt></ruby>かめよう！</p>
+      </div>
+    `
+  },
+
+  /* 6 */ {
+    id: 'tennis-6', num: 7, total: 7,
+    title: 'ルーシーもうごかそう！（ついかもんだい）',
+    prev: 'tennis-5', next: null,
+    content: () => `
+      <h3>マリーのコードをルーシーに<ruby>使<rt>つか</rt></ruby>おう！</h3>
+      <p>マリーのコードは<ruby>完成<rt>かんせい</rt></ruby>したね！<br>
+      でも、ルーシーはまだ「いた（バー）」のままだよ。</p>
+      <p>マリーのコードをコピーして、ルーシーも<ruby>人間<rt>にんげん</rt></ruby>のコスチュームでうごかせるようにしよう！</p>
+
+      <h3>やりかた</h3>
+      <div class="step-box">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <strong>マリーのスクリプトを<ruby>右<rt>みぎ</rt></ruby>クリック</strong>
+          <p>スクリプトエリアのブロックを<ruby>右<rt>みぎ</rt></ruby>クリックして「コピー」しよう。</p>
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <strong>ルーシーのスプライトにうつる</strong>
+          <p>スプライトいちらんの「ルーシー」をクリックして、コピーしたブロックをはりつけよう。</p>
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <strong>WASD → <ruby>矢印<rt>やじるし</rt></ruby>キーにかえる</strong>
+          <p>ルーシーは<ruby>矢印<rt>やじるし</rt></ruby>キーで<ruby>操作<rt>そうさ</rt></ruby>するので、キーのなまえをかえよう。<br>
+          W → ↑、S → ↓、A → ←、D → →</p>
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <strong>はじめのばしょを<ruby>右側<rt>みぎがわ</rt></ruby>にかえる</strong>
+          <p>ルーシーの<ruby>初期<rt>しょき</rt></ruby> x<ruby>座標<rt>ざひょう</rt></ruby>を <strong>200</strong> にしよう（マリーとは<ruby>反対<rt>はんたい</rt></ruby>がわ）。</p>
+        </div>
+      </div>
+      <div class="step-box">
+        <div class="step-circle">5</div>
+        <div class="step-body">
+          <strong>コスチュームをルーシーのものにかえる</strong>
+          <p>コスチュームタブで、ルーシーのコスチュームを<ruby>設定<rt>せってい</rt></ruby>しよう。<ruby>左右<rt>さゆう</rt></ruby><ruby>反転<rt>はんてん</rt></ruby>もわすれずに！</p>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-icon">🎉</span>
+        <p><strong>おめでとう！テニスゲームの<ruby>完成<rt>かんせい</rt></ruby>です！</strong><br>
+        <ruby>回答<rt>かいとう</rt></ruby>はこちら：
+        <a href="https://scratch.mit.edu/projects/1305359887" target="_blank" rel="noopener" class="link-inline">scratch.mit.edu/projects/1305359887</a></p>
+      </div>
+    `
+  }
+];
+
 /* ---- チャプターメタ ---- */
 const CHAPTER_META = {
   2: { label: `${rb('第','だい')}2${rb('章','しょう')}`, sublabel: `${rb('初歩','しょほ')}${rb('編','へん')}`, desc: 'かんたんなゲームをつくってみよう', icon: '🌱', color: '#A8E6CF', games: [1,2,3,4,5] },
@@ -653,6 +960,17 @@ function renderHome() {
           <h3>タイピング れんしゅう</h3>
         </div>
         <p>ひらがなやアルファベットのタイピングをれんしゅうしよう！スコアをきろくできるよ。</p>
+      </div>
+
+      <div class="chapter-card" onclick="navigate('tennis')">
+        <div class="chapter-card-header">
+          <span class="chapter-card-icon">🎾</span>
+          <h3>テニスゲームをつくろう</h3>
+        </div>
+        <p><ruby>本格的<rt>ほんかくてき</rt></ruby>な2<ruby>人<rt>にん</rt></ruby>たいせんテニスゲームをつくろう！（7ステップ）</p>
+        <div class="lesson-chips">
+          ${TENNIS_COURSE.map(l => `<span class="lesson-chip" onclick="event.stopPropagation();navigate('${l.id}')">${l.num}. ${l.title}</span>`).join('')}
+        </div>
       </div>
     </div>
   `;
@@ -873,6 +1191,27 @@ function renderTyping() {
   `;
 }
 
+/* ---- テニスコース一覧 ---- */
+function renderTennisIndex() {
+  const cards = TENNIS_COURSE.map(l => `
+    <div class="lesson-card" onclick="navigate('${l.id}')">
+      <span class="card-num">${l.num}</span>
+      <h4>${l.title}</h4>
+    </div>`).join('');
+  return `
+    <h2 class="chapter-overview-title">🎾 テニスゲームをつくろう</h2>
+    <p class="chapter-overview-sub"><ruby>本格的<rt>ほんかくてき</rt></ruby>な2<ruby>人<rt>にん</rt></ruby>たいせんテニスゲームをスクラッチでつくってみよう！（7ステップ）</p>
+
+    <div class="warn-box" style="margin-bottom:24px">
+      <span class="warn-icon">🎮</span>
+      <p><ruby>完成<rt>かんせい</rt></ruby>ゲームをさきにみてみよう：
+      <a href="https://scratch.mit.edu/projects/1305359887" target="_blank" rel="noopener" class="link-inline">かんせいゲームをひらく</a></p>
+    </div>
+
+    <div class="lesson-grid">${cards}</div>
+  `;
+}
+
 /* ---- 付録ページ ---- */
 function renderAppendix() {
   return `
@@ -912,6 +1251,7 @@ function getPageHTML(pageId) {
   if (pageId === 'chapter5')  return renderChapterOverview(5);
   if (pageId === 'appendix')  return renderAppendix();
   if (pageId === 'typing')    return renderTyping();
+  if (pageId === 'tennis')    return renderTennisIndex();
 
   if (pageId.startsWith('prologue-')) {
     const n = parseInt(pageId.split('-')[1], 10);
@@ -928,6 +1268,11 @@ function getPageHTML(pageId) {
     const game = GAMES.find(g => g.id === id);
     return renderGameLesson(game);
   }
+  if (pageId.startsWith('tennis-')) {
+    const n = parseInt(pageId.split('-')[1], 10);
+    const lesson = TENNIS_COURSE[n];
+    return lesson ? renderLesson(lesson) : `<p>ページがみつかりません。</p>`;
+  }
 
   return `<p>ページがみつかりません。（ID: ${esc(pageId)}）</p>`;
 }
@@ -938,6 +1283,10 @@ function showPage(pageId) {
   window.scrollTo(0, 0);
   updateNavHighlight(pageId);
   if (pageId === 'typing') renderScoreTable();
+  scratchblocks.renderMatching('#main pre.scratchblocks', {
+    style: 'scratch3',
+    languages: ['ja']
+  });
 }
 
 function navigate(pageId) {
@@ -1008,6 +1357,14 @@ function renderSidebar() {
       ${c5}
     </div>
 
+    <div class="nav-chapter-header" onclick="toggleNav('tennis')">
+      <span>🎾 テニスゲーム</span><span class="nav-toggle">▼</span>
+    </div>
+    <div class="nav-lessons" id="nav-lessons-tennis">
+      <div class="nav-item" data-page="tennis" onclick="navigate('tennis')">いちらん</div>
+      ${TENNIS_COURSE.map(l => `<div class="nav-item" data-page="${l.id}" onclick="navigate('${l.id}')">${l.num}. ${l.title}</div>`).join('')}
+    </div>
+
     <div class="nav-divider"></div>
     <div class="nav-item" data-page="appendix" onclick="navigate('appendix')" style="padding-left:16px">📎 付録</div>
     <div class="nav-item" data-page="typing"   onclick="navigate('typing')"   style="padding-left:16px">⌨️ タイピング</div>
@@ -1038,6 +1395,8 @@ function updateNavHighlight(pageId) {
   };
 
   let openId = autoOpen[pageId];
+  if (!openId && pageId === 'tennis') openId = 'tennis';
+  if (!openId && pageId.startsWith('tennis-')) openId = 'tennis';
   if (!openId && pageId.startsWith('game-')) {
     const gid = parseInt(pageId.split('-')[1], 10);
     const g = GAMES.find(x => x.id === gid);

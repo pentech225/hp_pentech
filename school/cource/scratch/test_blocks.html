@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ScratchBlocks テスト</title>
+    <script src="https://cdn.jsdelivr.net/npm/scratchblocks@latest/build/scratchblocks.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scratchblocks@latest/build/translations.min.js"></script>
+
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f0f0f0; }
+        .block-container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h3 { color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="block-container">
+        <div id="scratch-content"></div>
+    </div>
+
+    <script>
+        // 教材システムを模した scratchBlock 関数
+        // 彦阪さんのコードに合わせて、テキストを受け取って描画用のタグを返す仕組み
+        function scratchBlock(code) {
+            // scratchblocks.render() を呼び出すためのコンテナを返す
+            return `<pre class="blocks">${code}</pre>`;
+        }
+
+        // データの定義（実際の教材データのシミュレーション）
+        const lesson = {
+            title: 'ずっとのなかに、うごきのブロックをいれよう',
+            content: () => `
+                <h3>${lesson.title}</h3>
+                <p>「ずっと」のなかに、4つの「もし」ブロックをいれます。</p>
+                ${scratchBlock(`
+ずっと :: control
+もし <[w v] キーが押された :: sensing> なら :: control
+  y座標を (10) ずつ変える :: motion
+end
+もし <[s v] キーが押された :: sensing> なら :: control
+  y座標を (-10) ずつ変える :: motion
+end
+もし <[a v] キーが押された :: sensing> なら :: control
+  x座標を (-10) ずつ変える :: motion
+end
+もし <[d v] キーが押された :: sensing> なら :: control
+  x座標を (10) ずつ変える :: motion
+end
+end`)}
+            `
+        };
+
+        // 画面への描画
+        const target = document.getElementById('scratch-content');
+        target.innerHTML = lesson.content();
+
+        // ScratchBlocksのレンダリング実行
+        scratchblocks.renderMatching('pre.blocks', {
+            style: 'scratch3', // スクラッチ3.0風のデザイン
+            languages: ['ja']  // 日本語対応
+        });
+    </script>
+</body>
+</html>

@@ -716,3 +716,92 @@ rt {
 .appendix-card:hover { box-shadow: var(--shadow-hv); transform: translateX(4px); }
 .appendix-card h3 { font-size: var(--fs-large); color: var(--c-heading); font-weight: 800; margin-bottom: 6px; }
 .appendix-card p  { font-size: var(--fs-small); color: var(--c-muted); }
+
+
+/* ===== テニスコース 固有スタイル ===== */
+.tennis-rules {
+  background: #fff0f7;
+  border: 2px solid var(--c-pink);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin: 16px 0;
+}
+
+.tennis-rule-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--c-border);
+  font-size: var(--fs-base);
+  flex-wrap: wrap;
+}
+.tennis-rule-row:last-child { border-bottom: none; }
+
+.tennis-rule-label {
+  font-weight: 700;
+  min-width: 180px;
+  color: var(--c-heading);
+}
+
+.tennis-chars {
+  display: flex;
+  gap: 14px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.tennis-char {
+  flex: 1;
+  min-width: 110px;
+  background: #fff0f7;
+  border: 2px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.tennis-char-icon { font-size: 32px; margin-bottom: 8px; }
+.tennis-char strong { color: var(--c-heading); font-size: var(--fs-large); display: block; margin-bottom: 4px; }
+.tennis-char p { font-size: var(--fs-small); color: var(--c-muted); margin: 0; }
+
+.tennis-key-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: var(--fs-base);
+}
+.tennis-key-table th,
+.tennis-key-table td {
+  border: 2px solid var(--c-border);
+  padding: 10px 16px;
+  text-align: left;
+}
+.tennis-key-table th { background: var(--c-pink); color: #fff; font-weight: 700; }
+.tennis-key-table tr:nth-child(even) td { background: #fff5f8; }
+
+kbd {
+  display: inline-block;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-bottom: 3px solid #999;
+  border-radius: 5px;
+  padding: 1px 8px;
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+.hint-box {
+  background: #fffbe6;
+  border: 2px solid #ffe44d;
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin: 16px 0;
+}
+.hint-box strong { color: #b07d00; font-size: var(--fs-base); display: block; margin-bottom: 6px; }
+.hint-box p { font-size: var(--fs-small); margin: 0; }
+
+.link-inline { color: var(--c-heading); text-decoration: underline; font-weight: 700; }
+.link-inline:hover { opacity: 0.75; }
