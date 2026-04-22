@@ -303,6 +303,31 @@
             padding: 3px 10px;
             border-radius: 4px;
         }
+        .time-slot-button .remaining-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+        .remaining-badge.status-full {
+            background-color: #F44336;
+            color: white;
+        }
+        .remaining-badge.status-few {
+            background-color: #FF9800;
+            color: white;
+        }
+        .remaining-badge.status-ok {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        .time-slot-button.selected .remaining-badge.status-ok {
+            background-color: rgba(255,255,255,0.3);
+            color: white;
+        }
         
         /* フォーム入力 */
         .form-group {
@@ -457,13 +482,45 @@
     </header>
 
     <!-- イベント情報セクション -->
-    <section class="event-section" style="background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);">
+    <section class="event-section0" style="background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);">
         <div class="container">
             <h1 class="event-title">第2回 武庫っ子あつまれ！ゲームプログラミング大会</h1>
             <p class="event-subtitle">主催：iTeen 子どものためのICT教育普及促進委員会<br>
                 私たちは子どもたちの「未来を切り拓く力」を育てる活動を全国で推進しています。
                 </p>
-            
+                <!-- チラシセクション -->
+        </div>
+    </section>
+    <section id="flyer-section" style="background: #f5f5f5; padding: 30px 0;">
+        <div class="container" style="text-align: center;">
+            <!-- チラシ＋動画オーバーレイ -->
+            <div style="max-width: 800px; margin: 0 auto; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15); position: relative;">
+                <!-- チラシPNG -->
+                <img src="img/260503武庫之荘後援イベント.png" alt="武庫っ子あつまれ！ゲームプログラミング大会 チラシ" style="width: 100%; display: block;">
+
+                <!-- 動画オーバーレイ -->
+                <!-- 位置微調整: top/left をパーセントで変更。サイズは width で調整 -->
+                <video
+                    id="flyer-video"
+                    src="img/0422(3).mp4"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    style="
+                        position: absolute;
+                        top: 61%;
+                        left: 4%;
+                        width: 70%;
+                        border-radius: 8px;
+                        pointer-events: none;
+                    "
+                ></video>
+            </div>
+        </div>
+    </section>
+    <section class="event-section" style="background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);">
+        <div class="container">
             <div>
                 <h3>
                     <span class="event-icon"></span>
@@ -482,7 +539,8 @@
                 <p><strong>対象：</strong>プログラミングに興味のあるお子さん。年中年長の兄弟もご一緒できます。</p>
                 <p><strong>備考：</strong>保護者同伴大歓迎・お子様だけでもご参加できます。</p>
                 <p><strong>参加費：</strong>無料</p>
-                <p><strong>連絡先：</strong>070-2327-8083（担当：彦阪 吉海）</p>
+                <p><strong>連絡先：</strong><a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true">公式ライン</a></p>
+                <p><strong>携帯：</strong>070-2327-8083（担当：彦阪 吉海）</p>
                 <p><strong>持ち物：</strong>なし（USBメモリご持参でゲームデータをお持ち帰りいただけます）</p>
             </div>
 
@@ -494,7 +552,7 @@
 
                 <div style="margin: 20px 0;">
                     <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 10px;">
-                        【ステップ1】タイピングチャレンジ！（10分）
+                        【ステップ1】タイピングチャレンジ！（5分）
                     </h4>
                     <p>
                         お子様のレベルに応じたタイピング問題を用意しております。<br>
@@ -517,7 +575,7 @@
                     </h4>
                     <p>
                         完成したゲームに、もっとワクワクをプラス！<br>
-                        ・思わず「あっ！」と驚く仕掛けが盛りだくさん！<br><br>
+                        思わず「あっ！」と驚く仕掛けが盛りだくさん！<br><br>
                         コーチのアドバイスで、作品をさらにパワーアップ！
                     </p>
                 </div>
@@ -539,42 +597,28 @@
                     <label class="time-slot-label">
                         参加希望時間帯<span class="time-slot-required">※必須</span>
                     </label>
-                    <div class="time-slot-buttons" id="time-slot-buttons">
-                        <button type="button" class="time-slot-button full" data-time-slot="1部：10:00〜10:30" onclick="selectTimeSlot('1部：10:00〜10:30', event)">
-                            <div class="time-label">1部：10:00〜10:30</div>
-                            <div class="time-duration">30分</div>
-                        </button>
-                        <button type="button" class="time-slot-button full" data-time-slot="2部：11:00〜11:30" onclick="selectTimeSlot('2部：11:00〜11:30', event)">
-                            <div class="time-label">2部：11:00〜11:30</div>
-                            <div class="time-duration">30分</div>
-                        </button>
-                        <button type="button" class="time-slot-button full" data-time-slot="3部：13:00〜13:30" onclick="selectTimeSlot('3部：13:00〜13:30', event)">
-                            <div class="time-label">3部：13:00〜13:30</div>
-                            <div class="time-duration">30分</div>
-                        </button>
-                        <button type="button" class="time-slot-button full" data-time-slot="4部：14:00〜14:30" onclick="selectTimeSlot('4部：14:00〜14:30', event)">
-                            <div class="time-label">4部：14:00〜14:30</div>
-                            <div class="time-duration">30分</div>
-                        </button>
-                        <button type="button" class="time-slot-button" data-time-slot="5部：15:00〜15:30" onclick="selectTimeSlot('5部：15:00〜15:30', event)">
-                            <div class="time-label">5部：15:00〜15:30</div>
-                            <div class="time-duration">30分</div>
-                        </button>
-                    </div>
+                    <div class="time-slot-buttons" id="time-slot-buttons"></div>
                 </div>
                 
                 <!-- お子さんのお名前 -->
                 <div class="form-group">
-                    <label for="child-name-input" class="form-label">
+                    <label class="form-label">
                         お子さんのお名前<span class="required">※必須</span>
                     </label>
-                    <input 
-                        type="text" 
-                        id="child-name-input" 
-                        class="form-input" 
-                        placeholder="例：やまだ たろう"
-                        oninput="handleNameInput()"
-                    >
+                    <div id="child-names-container">
+                        <div class="child-name-row">
+                            <input
+                                type="text"
+                                id="child-name-input"
+                                class="form-input child-name-input"
+                                placeholder="例：やまだ たろう"
+                                oninput="handleNameInput()"
+                            >
+                        </div>
+                    </div>
+                    <button type="button" id="add-child-btn" onclick="addChildName()" style="margin-top:10px; background:none; border:2px dashed #ccc; border-radius:8px; width:100%; padding:10px; color:#999; font-size:0.95rem; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='#ccc';this.style.color='#999'">
+                        ＋ 兄弟・お友達を追加
+                    </button>
                 </div>
                 
                 <!-- 電話番号 -->
@@ -655,7 +699,7 @@
             </div>
             
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="index.html" style="display: inline-block; padding: 12px 30px; background: white; color: var(--primary); text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">ホームに戻る</a>
+                <a href="../index.html" style="display: inline-block; padding: 12px 30px; background: white; color: var(--primary); text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">ホームに戻る</a>
                 <a href="tel:070-2327-8083" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">📞 お問い合わせ: 070-2327-8083</a>
             </div>
         </div>
@@ -679,42 +723,108 @@
         
         // 選択された時間帯
         let selectedTimeSlot = null;
-        
+
         // 子供の名前
         let childName = '';
-        
+
         // 電話番号
         let phoneNumber = '';
-        
+
         // メールアドレス
         let emailAddress = '';
-        
+
         // 自由記述欄
         let messageText = '';
-        
-        // 満席の時間帯（選択不可）
-        const FULL_TIME_SLOTS = ['1部：10:00〜10:40'];
-        
-        // 時間帯を選択
-        function selectTimeSlot(timeSlot, event) {
-            // 満席の場合は選択不可
-            if (FULL_TIME_SLOTS.includes(timeSlot)) {
+
+        // ---- 枠数管理（フォールバック値：GAS取得失敗時に使用） ----
+        const TIME_SLOTS = [
+            { id: '1部：10:00〜10:30', capacity: 10, registered: 10 },
+            { id: '2部：11:00〜11:30', capacity: 10, registered: 10 },
+            { id: '3部：13:00〜13:30', capacity: 10, registered: 10 },
+            { id: '4部：14:00〜14:30', capacity: 10, registered: 10 },
+            { id: '5部：15:00〜15:30', capacity: 10, registered: 0  },
+        ];
+
+        function getRemainingLabel(remaining) {
+            if (remaining <= 0) return { text: '満席', cls: 'status-full' };
+            if (remaining === 1) return { text: 'あと1人', cls: 'status-few' };
+            if (remaining <= 3)  return { text: `あと${remaining}人`, cls: 'status-few' };
+            return { text: `あと${remaining}人`, cls: 'status-ok' };
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('time-slot-buttons');
+            container.innerHTML = '';
+            TIME_SLOTS.forEach(slot => {
+                const remaining = slot.capacity - slot.registered;
+                const isFull = remaining <= 0;
+                const badge = getRemainingLabel(remaining);
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'time-slot-button' + (isFull ? ' full' : '');
+                btn.dataset.timeSlot = slot.id;
+                if (!isFull) {
+                    btn.onclick = (e) => selectTimeSlot(slot.id, e);
+                }
+                btn.innerHTML = `
+                    <div class="time-label">${slot.id}</div>
+                    <div class="time-duration">30分</div>
+                    <span class="remaining-badge ${badge.cls}">${badge.text}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // イベント専用GAS URLを取得
+        function getEventScriptUrl() {
+            if (typeof CONFIG === 'undefined') return null;
+            return CONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL || null;
+        }
+
+        // GASから枠数を取得して反映
+        async function loadSlotsFromGAS() {
+            const url = getEventScriptUrl();
+            if (!url) {
+                renderTimeSlots();
                 return;
             }
-            
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                if (json.ok && json.slots) {
+                    TIME_SLOTS.forEach(slot => {
+                        const s = json.slots[slot.id];
+                        if (s) {
+                            slot.capacity   = s.capacity;
+                            slot.registered = s.registered;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn('枠数の取得に失敗しました。フォールバック値を使用します。', e);
+            }
+            renderTimeSlots();
+        }
+
+        // 初期描画
+        loadSlotsFromGAS();
+
+        // 時間帯を選択
+        function selectTimeSlot(timeSlot, event) {
+            const slot = TIME_SLOTS.find(s => s.id === timeSlot);
+            if (!slot || slot.capacity - slot.registered <= 0) return;
+
             // 以前の選択を解除
             document.querySelectorAll('.time-slot-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            
+
             // 新しい選択
             const button = event ? event.target.closest('.time-slot-button') : document.querySelector(`.time-slot-button[data-time-slot="${timeSlot}"]`);
-            if (button && !button.dataset.full) {
-                button.classList.add('selected');
-            }
+            if (button) button.classList.add('selected');
             selectedTimeSlot = timeSlot;
-            
-            // 送信ボタンの有効/無効を更新
+
             updateSubmitButton();
         }
         
@@ -723,6 +833,53 @@
             const nameInput = document.getElementById('child-name-input');
             childName = nameInput.value.trim();
             updateSubmitButton();
+        }
+
+        // 追加の子供名を取得（1人目を除く）
+        function getExtraChildNames() {
+            return Array.from(document.querySelectorAll('.child-name-input'))
+                .slice(1)
+                .map(el => el.value.trim())
+                .filter(v => v !== '');
+        }
+
+        // 兄弟・友達を追加
+        function addChildName() {
+            const container = document.getElementById('child-names-container');
+            const index = container.querySelectorAll('.child-name-row').length + 1;
+
+            const row = document.createElement('div');
+            row.className = 'child-name-row';
+            row.style.cssText = 'display:flex; gap:8px; margin-top:8px; align-items:center;';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-input child-name-input';
+            input.placeholder = `例：やまだ はなこ`;
+            input.style.flex = '1';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.textContent = '✕';
+            removeBtn.style.cssText = 'flex-shrink:0; width:36px; height:36px; border:2px solid #ccc; border-radius:8px; background:none; color:#999; font-size:1rem; cursor:pointer; padding:0; transition:all 0.2s;';
+            removeBtn.onmouseover = () => { removeBtn.style.borderColor = '#F44336'; removeBtn.style.color = '#F44336'; };
+            removeBtn.onmouseout  = () => { removeBtn.style.borderColor = '#ccc';    removeBtn.style.color = '#999';    };
+            removeBtn.onclick = () => {
+                row.remove();
+                // 3人以上になったら＋ボタンを再表示
+                document.getElementById('add-child-btn').style.display = '';
+            };
+
+            row.appendChild(input);
+            row.appendChild(removeBtn);
+            container.appendChild(row);
+            input.focus();
+
+            // 5人まで（1人目＋追加4人）
+            const total = container.querySelectorAll('.child-name-row').length;
+            if (total >= 5) {
+                document.getElementById('add-child-btn').style.display = 'none';
+            }
         }
         
         // 電話番号のバリデーション
@@ -879,9 +1036,9 @@
                 return;
             }
             
-            // Google Apps Scriptが設定されている場合は、Google Apps Scriptで送信
-            if (CONFIG.GOOGLE_APPS_SCRIPT_URL && CONFIG.GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
-                console.log('Google Apps Scriptを使用して送信します');
+            // イベント専用GASが設定されている場合はそちらで送信
+            if (CONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL && CONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL !== '') {
+                console.log('イベント専用Google Apps Scriptを使用して送信します');
                 sendEmailWithGoogleAppsScript();
             } else {
                 // Google Apps Scriptが設定されていない場合は、mailtoリンクを使用
@@ -914,6 +1071,7 @@
                 time: timeValue || '10:00', // HH:MM形式（必須）
                 time_slot: selectedTimeSlot, // 表示用
                 child_name: childName,
+                extra_names: getExtraChildNames().join('、'),
                 phone: phoneNumber,
                 email: emailAddress || '未入力',
                 message: messageText || 'なし',
@@ -921,7 +1079,7 @@
                 grade: '', // イベントなので学年は空
                 body: `ゲームプログラミング大会への参加申し込みがありました。
 
-お子さんのお名前: ${childName}
+お子さんのお名前: ${childName}${getExtraChildNames().length ? '、' + getExtraChildNames().join('、') : ''}
 電話番号: ${phoneNumber}
 メールアドレス: ${emailAddress || '未入力'}
 参加希望時間帯: ${selectedTimeSlot}
@@ -974,7 +1132,7 @@ iTeen 子どものためのICT教育普及促進委員会
             
             console.log('📤 Google Apps Scriptに送信中...', emailData);
             
-            fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+            fetch(CONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors', // no-corsモードでCORSエラーを回避
                 headers: {
@@ -1048,6 +1206,8 @@ ${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}`);
             const eventInfoSection = document.querySelector('.event-section');
             if (formSection) formSection.style.display = 'none';
             if (eventInfoSection) eventInfoSection.style.display = 'none';
+            const flyerSection = document.getElementById('flyer-section');
+            if (flyerSection) flyerSection.style.display = 'none';
             document.querySelector('header').style.display = 'none';
             document.querySelector('footer').style.display = 'none';
             
