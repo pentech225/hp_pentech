@@ -571,7 +571,7 @@
 
                 <div style="margin: 20px 0;">
                     <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 10px;">
-                        【ステップ3】ゲーム改造でもりあがろう！（10分）
+                        【ステップ3】ゲーム改造でもりあがろう！（15分）
                     </h4>
                     <p>
                         完成したゲームに、もっとワクワクをプラス！<br>
@@ -736,13 +736,13 @@
         // 自由記述欄
         let messageText = '';
 
-        // ---- 枠数管理（フォールバック値：GAS取得失敗時に使用） ----
+        // ---- 枠数管理（フォールバック値：GAS取得失敗時に使用。registeredは常に0） ----
         const TIME_SLOTS = [
-            { id: '1部：10:00〜10:30', capacity: 10, registered: 10 },
-            { id: '2部：11:00〜11:30', capacity: 10, registered: 10 },
-            { id: '3部：13:00〜13:30', capacity: 10, registered: 10 },
-            { id: '4部：14:00〜14:30', capacity: 10, registered: 10 },
-            { id: '5部：15:00〜15:30', capacity: 10, registered: 0  },
+            { id: '1部：10:00〜10:30', capacity: 10, registered: 0 },
+            { id: '2部：11:00〜11:30', capacity: 10, registered: 0 },
+            { id: '3部：13:00〜13:30', capacity: 10, registered: 0 },
+            { id: '4部：14:00〜14:30', capacity: 10, registered: 0 },
+            { id: '5部：15:00〜15:30', capacity: 10, registered: 0 },
         ];
 
         function getRemainingLabel(remaining) {
@@ -782,15 +782,18 @@
             return CONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL || null;
         }
 
-        // GASから枠数を取得して反映
+        // GASから枠数を取得して反映（ページ読み込み時に必ず実行）
         async function loadSlotsFromGAS() {
             const url = getEventScriptUrl();
             if (!url) {
+                console.warn('GAS URLが設定されていません。フォールバック値を使用します。');
                 renderTimeSlots();
                 return;
             }
+            // キャッシュバスターを付与して常に最新データを取得
+            const cacheBustedUrl = url + (url.includes('?') ? '&' : '?') + '_t=' + Date.now();
             try {
-                const res = await fetch(url);
+                const res = await fetch(cacheBustedUrl);
                 const json = await res.json();
                 if (json.ok && json.slots) {
                     TIME_SLOTS.forEach(slot => {
@@ -800,9 +803,12 @@
                             slot.registered = s.registered;
                         }
                     });
+                    console.log('✅ シートから枠数を取得しました:', json.slots);
+                } else {
+                    console.warn('GASのレスポンス形式が想定外です:', json);
                 }
             } catch (e) {
-                console.warn('枠数の取得に失敗しました。フォールバック値を使用します。', e);
+                console.warn('枠数の取得に失敗しました。フォールバック値（全空き）を使用します。', e);
             }
             renderTimeSlots();
         }
