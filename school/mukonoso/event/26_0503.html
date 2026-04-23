@@ -606,14 +606,25 @@
                         お子さんのお名前<span class="required">※必須</span>
                     </label>
                     <div id="child-names-container">
-                        <div class="child-name-row">
+                        <div class="child-name-row" style="display:flex; gap:8px; align-items:center;">
                             <input
                                 type="text"
                                 id="child-name-input"
                                 class="form-input child-name-input"
                                 placeholder="例：やまだ たろう"
                                 oninput="handleNameInput()"
+                                style="flex:1;"
                             >
+                            <select class="form-input child-grade-select" style="width:130px; flex-shrink:0; padding:12px 8px;">
+                                <option value="">学年</option>
+                                <option value="小学1年生">小学1年生</option>
+                                <option value="小学2年生">小学2年生</option>
+                                <option value="小学3年生">小学3年生</option>
+                                <option value="小学4年生">小学4年生</option>
+                                <option value="小学5年生">小学5年生</option>
+                                <option value="小学6年生">小学6年生</option>
+                                <option value="その他">その他</option>
+                            </select>
                         </div>
                     </div>
                     <button type="button" id="add-child-btn" onclick="addChildName()" style="margin-top:10px; background:none; border:2px dashed #ccc; border-radius:8px; width:100%; padding:10px; color:#999; font-size:0.95rem; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='#ccc';this.style.color='#999'">
@@ -849,6 +860,20 @@
                 .filter(v => v !== '');
         }
 
+        // 全員の名前＋学年を取得
+        function getChildrenWithGrades() {
+            return Array.from(document.querySelectorAll('.child-name-row')).map(row => {
+                const name  = row.querySelector('.child-name-input')?.value.trim() || '';
+                const grade = row.querySelector('.child-grade-select')?.value || '';
+                return { name, grade };
+            }).filter(c => c.name !== '');
+        }
+
+        // 名前＋学年を "やまだ たろう（小学3年生）" 形式に整形
+        function formatChildEntry(c) {
+            return c.grade ? `${c.name}（${c.grade}）` : c.name;
+        }
+
         // 兄弟・友達を追加
         function addChildName() {
             const container = document.getElementById('child-names-container');
@@ -864,6 +889,16 @@
             input.placeholder = `例：やまだ はなこ`;
             input.style.flex = '1';
 
+            const gradeSelect = document.createElement('select');
+            gradeSelect.className = 'form-input child-grade-select';
+            gradeSelect.style.cssText = 'width:130px; flex-shrink:0; padding:12px 8px;';
+            ['', '小学1年生', '小学2年生', '小学3年生', '小学4年生', '小学5年生', '小学6年生', 'その他'].forEach((g, i) => {
+                const opt = document.createElement('option');
+                opt.value = g;
+                opt.textContent = i === 0 ? '学年' : g;
+                gradeSelect.appendChild(opt);
+            });
+
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.textContent = '✕';
@@ -877,6 +912,7 @@
             };
 
             row.appendChild(input);
+            row.appendChild(gradeSelect);
             row.appendChild(removeBtn);
             container.appendChild(row);
             input.focus();
@@ -1078,6 +1114,7 @@
                 time_slot: selectedTimeSlot, // 表示用
                 child_name: childName,
                 extra_names: getExtraChildNames().join('、'),
+                children_detail: getChildrenWithGrades().map(formatChildEntry).join('、'),
                 phone: phoneNumber,
                 email: emailAddress || '未入力',
                 message: messageText || 'なし',
@@ -1085,7 +1122,7 @@
                 grade: '', // イベントなので学年は空
                 body: `ゲームプログラミング大会への参加申し込みがありました。
 
-お子さんのお名前: ${childName}${getExtraChildNames().length ? '、' + getExtraChildNames().join('、') : ''}
+お子さんのお名前: ${getChildrenWithGrades().map(formatChildEntry).join('、')}
 電話番号: ${phoneNumber}
 メールアドレス: ${emailAddress || '未入力'}
 参加希望時間帯: ${selectedTimeSlot}
@@ -1105,7 +1142,7 @@ iTeen 武庫之荘校`,
 以下の内容で申し込みを受け付けました。
 
 【申し込み内容】
-お子さんのお名前: ${childName}
+お子さんのお名前: ${getChildrenWithGrades().map(formatChildEntry).join('、')}
 電話番号: ${phoneNumber}
 参加希望時間帯: ${selectedTimeSlot}${messageText && messageText.trim() !== '' ? `\n\nご質問・ご要望:\n${messageText}` : ''}
 
@@ -1180,7 +1217,7 @@ iTeen 子どものためのICT教育普及促進委員会
             const subject = encodeURIComponent('ゲームプログラミング大会 参加申し込み');
             const body = encodeURIComponent(`ゲームプログラミング大会への参加申し込み
 
-お子さんのお名前: ${childName}
+お子さんのお名前: ${getChildrenWithGrades().map(formatChildEntry).join('、')}
 電話番号: ${phoneNumber}
 メールアドレス: ${emailAddress || '未入力'}
 参加希望時間帯: ${selectedTimeSlot}
