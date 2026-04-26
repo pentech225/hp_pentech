@@ -22,51 +22,165 @@ const CHAPTERS = [
       {
         id: 'menu-1',
         title: 'ようこそ！',
-        voice: 'PenTechがくしゅうガイドへようこそ！まずは、マウスのれんしゅうをしてから、スクラッチをはじめましょう！',
+        voice: 'プログラミングがくしゅうガイドへようこそ！このガイドには7つのセクションがあります。じぶんのレベルにあったところからはじめよう！',
         pose: ['up', 'front'],
         brow: 'normal',
         content: `
-<h3>ようこそ！PenTech ${rb('学習','がくしゅう')}ガイドへ</h3>
-<p>スクラッチプログラミングをいっしょにまなぼう！</p>
+<h3>ようこそ！プログラミング${rb('学習','がくしゅう')}ガイドへ</h3>
 
-<div style="background:#fff3e0;border:3px solid #ff9800;border-radius:12px;padding:14px;margin:12px 0">
-  <div style="font-weight:bold;font-size:14px;margin-bottom:10px;text-align:center">🖱️ まず${rb('最初','さいしょ')}にやってみよう！</div>
+<a href="https://scratch.mit.edu/mystuff/" target="_blank"
+   style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#ff6680,#e6003d);color:white;text-decoration:none;padding:11px 16px;border-radius:10px;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(230,0,61,0.35);margin:8px 0">
+  <span style="font-size:22px">🐱</span> スクラッチをひらく →
+</a>
+
+<p style="font-size:11px;color:#666;margin:2px 0 8px">セクションをえらんではじめよう！</p>
+
+<style>
+.toc-card{display:flex;align-items:center;gap:10px;border-radius:8px;padding:9px 12px;font-size:12px;cursor:pointer;transition:filter 0.15s,transform 0.1s;border-width:2px;border-style:solid;text-align:left;width:100%;background:inherit}
+.toc-card:hover{filter:brightness(0.93);transform:scale(1.01)}
+.toc-card:active{transform:scale(0.98)}
+.toc-card-icon{font-size:22px;flex-shrink:0}
+</style>
+<div style="display:flex;flex-direction:column;gap:6px;margin:10px 0">
+  <button class="toc-card" data-navigate="mouse" style="background:#e3f2fd;border-color:#90caf9">
+    <span class="toc-card-icon">🖱️</span>
+    <span><strong>① マウス練習</strong><br><span style="color:#555;font-size:11px">クリックとドラッグをれんしゅうしよう</span></span>
+  </button>
+  <button class="toc-card" data-navigate="typing" style="background:#e8f5e9;border-color:#a5d6a7">
+    <span class="toc-card-icon">⌨️</span>
+    <span><strong>② タイピング練習</strong><br><span style="color:#555;font-size:11px">キーボードにじしんをつけよう</span></span>
+  </button>
+  <button class="toc-card" data-navigate="scratch-basic" style="background:#fff8e1;border-color:#ffe082">
+    <span class="toc-card-icon">📗</span>
+    <span><strong>③ スクラッチ${rb('初級','しょきゅう')}</strong><br><span style="color:#555;font-size:11px">スクラッチのきほんをまなぼう</span></span>
+  </button>
+  <button class="toc-card" data-navigate="motion" style="background:#fff3e0;border-color:#ffcc80">
+    <span class="toc-card-icon">📘</span>
+    <span><strong>④ スクラッチ${rb('中級','ちゅうきゅう')}</strong><br><span style="color:#555;font-size:11px">うごきのブロックをつかいこなそう</span></span>
+  </button>
+  <button class="toc-card" data-navigate="tennis" style="background:#fce4ec;border-color:#f48fb1">
+    <span class="toc-card-icon">🏆</span>
+    <span><strong>⑤ スクラッチ${rb('上級','じょうきゅう')}</strong><br><span style="color:#555;font-size:11px">テニスゲームをつくろう！</span></span>
+  </button>
+  <button class="toc-card" data-navigate="3dkey" style="background:#f3e5f5;border-color:#ce93d8">
+    <span class="toc-card-icon">🖨️</span>
+    <span><strong>⑥ 3D${rb('印刷','いんさつ')}（プリンター）</strong><br><span style="color:#555;font-size:11px">オリジナルキーホルダーをつくろう</span></span>
+  </button>
+  <button class="toc-card" data-navigate="prologue" style="background:#e8eaf6;border-color:#9fa8da">
+    <span class="toc-card-icon">🔑</span>
+    <span><strong>⑦ アカウントのつくりかた</strong><br><span style="color:#555;font-size:11px">スクラッチにサインインしよう</span></span>
+  </button>
+</div>
+        `
+      },
+    ]
+  },
+
+  /* ======================================================
+     マウス練習
+     ====================================================== */
+  {
+    id: 'mouse',
+    title: '🖱️ マウス練習',
+    lessons: [
+      {
+        id: 'mouse-1',
+        title: 'マウスをれんしゅうしよう！',
+        voice: 'スクラッチをはじめるまえに、まずはマウスのれんしゅうをしよう！クリックとドラッグがじょうずになれば、スクラッチもかんたんになるよ！',
+        pose: ['up', 'front'],
+        brow: 'normal',
+        content: `
+<h3>🖱️ まずマウスのれんしゅうをしよう！</h3>
+<p>スクラッチでは、クリックとドラッグをよくつかうよ。ゲームでたのしくれんしゅうしよう！</p>
+
+<div style="background:#fff3e0;border:3px solid #ff9800;border-radius:12px;padding:14px;margin:8px 0">
+  <div style="font-weight:bold;font-size:13px;margin-bottom:10px;text-align:center">🎮 やってみよう！</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <a href="https://hirara.net/gallery/ynot/swf/ecgm_Tako.html" target="_blank"
-       style="display:block;background:linear-gradient(135deg,#ef5350,#b71c1c);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:14px;font-weight:bold;box-shadow:0 4px 10px rgba(183,28,28,0.35);line-height:1.6">
+       style="display:block;background:linear-gradient(135deg,#ef5350,#b71c1c);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(183,28,28,0.35);line-height:1.6">
       🐙 たこやきゲーム<br>
-      <span style="font-size:11px;font-weight:normal;opacity:0.92">タイミングよくクリックしよう！</span>
-    </a>  
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">タイミングよくマウスをうごかそう！</span>
+    </a>
     <a href="https://piyocom.com/app_mole.html" target="_blank"
-       style="display:block;background:linear-gradient(135deg,#ff7043,#ff9800);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:14px;font-weight:bold;box-shadow:0 4px 10px rgba(255,120,0,0.35);line-height:1.6">
+       style="display:block;background:linear-gradient(135deg,#ff7043,#ff9800);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(255,120,0,0.35);line-height:1.6">
       🐭 モグラたたきゲーム<br>
       <span style="font-size:11px;font-weight:normal;opacity:0.92">クリックのれんしゅうはここから！</span>
     </a>
     <a href="https://hirara.net/gallery/ynot/swf/ecgm_Kingyo.html" target="_blank"
-       style="display:block;background:linear-gradient(135deg,#29b6f6,#0288d1);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:14px;font-weight:bold;box-shadow:0 4px 10px rgba(2,136,209,0.35);line-height:1.6">
+       style="display:block;background:linear-gradient(135deg,#29b6f6,#0288d1);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(2,136,209,0.35);line-height:1.6">
       🐟 きんぎょすくいゲーム<br>
       <span style="font-size:11px;font-weight:normal;opacity:0.92">マウスをうごかすれんしゅう！</span>
+    </a>
+    <a href="https://hirara.net/gallery/ynot/swf/ecgm_Kakigori.html" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#26c6da,#006064);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(0,96,100,0.35);line-height:1.6">
+      🍧 かきごおりゲーム<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">ドラッグのれんしゅうはここ！</span>
     </a>
   </div>
 </div>
 
-<h4 style="margin:14px 0 6px">このガイドの${rb('内容','ないよう')}</h4>
-<div style="display:flex;flex-direction:column;gap:6px">
-  <div style="background:#e3f2fd;border-left:4px solid #1976d2;border-radius:6px;padding:8px 10px;font-size:12px">
-    🎬 <strong>はじめてのスクラッチ</strong><br>
-    <span style="color:#555">ブロックのドラッグをおぼえよう</span>
+<div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:8px;padding:10px;margin:8px 0;font-size:12px;line-height:1.8">
+  <strong>💡 なにをれんしゅうするの？</strong><br>
+  🖱️ <strong>クリック</strong>… ボタンやゲームをおす<br>
+  🖱️ <strong>ドラッグ</strong>… ブロックをコードエリアにうごかす<br>
+  🖱️ <strong>ダブルクリック</strong>… ブロックをつかう
+</div>
+        `
+      },
+    ]
+  },
+
+  /* ======================================================
+     タイピング練習
+     ====================================================== */
+  {
+    id: 'typing',
+    title: '⌨️ タイピング練習',
+    lessons: [
+      {
+        id: 'typing-1',
+        title: 'タイピングにちょうせん！',
+        voice: 'スクラッチをつかうまえに、キーボードのれんしゅうをしておこう！ゲームをやりながらたのしくれんしゅうできるよ！',
+        pose: ['up', 'front'],
+        brow: 'normal',
+        content: `
+<h3>⌨️ キーボードをれんしゅうしよう！</h3>
+<p>スクラッチでもキーボードをたくさんつかうよ。ゲームでたのしくれんしゅうしよう！</p>
+
+<div style="background:#e8f5e9;border:3px solid #4caf50;border-radius:12px;padding:14px;margin:10px 0">
+  <div style="font-weight:bold;font-size:13px;margin-bottom:10px;text-align:center">🌟 はじめてのひとはここから！</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="https://n-typing.com/" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#43a047,#1b5e20);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(27,94,32,0.35);line-height:1.6">
+      🐣 ナレッジタイピング（${rb('初心者','しょしんしゃ')}むけ）<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">ローマ字からていねいにまなべる！</span>
+    </a>
+    <a href="https://manabi-gakushu.benesse.ne.jp/gakushu/typing/nihongonyuryoku.html" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#1e88e5,#0d47a1);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(13,71,161,0.35);line-height:1.6">
+      📝 ベネッセ にほんご${rb('入力','にゅうりょく')}れんしゅう<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">ひらがな・カタカナ・かんじもOK！</span>
+    </a>
   </div>
-  <div style="background:#f3e5f5;border-left:4px solid #7b1fa2;border-radius:6px;padding:8px 10px;font-size:12px">
-    🔑 <strong>プロローグ</strong>（アカウント）<br>
-    <span style="color:#555">サービスのかいいんしょうをつくろう</span>
-  </div>
-  <div style="background:#e8f5e9;border-left:4px solid #388e3c;border-radius:6px;padding:8px 10px;font-size:12px">
-    🧩 <strong>${rb('第','だい')}1${rb('章','しょう')} スクラッチをはじめよう</strong><br>
-    <span style="color:#555">がめんのみかた・きほんそうさ</span>
-  </div>
-  <div style="background:#fff8e1;border-left:4px solid #f57f17;border-radius:6px;padding:8px 10px;font-size:12px">
-    🎾 <strong>テニスコース</strong><br>
-    <span style="color:#555">テニスゲームをつくろう！</span>
+</div>
+
+<div style="background:#fff3e0;border:3px solid #ff9800;border-radius:12px;padding:14px;margin:10px 0">
+  <div style="font-weight:bold;font-size:13px;margin-bottom:10px;text-align:center">🔥 もっとれんしゅうしたいひとへ</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="https://keyx0.net/pop/" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#f57c00,#e65100);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(230,81,0,0.35);line-height:1.6">
+      🎮 POPタイピングbr>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">ポップなゲームでたのしくれんしゅう！</span>
+    </a>
+    <a href="https://keyx0.net/map/" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#7b1fa2,#4a148c);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(74,20,140,0.35);line-height:1.6">
+      🗺️ 県名当てタイピング<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">キーのばしょをおぼえながられんしゅう！</span>
+    </a>
+    <a href="https://sushida.net/play.html" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#e53935,#b71c1c);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(183,28,28,0.35);line-height:1.6">
+      🍣 ${rb('寿司打','すしだ')}<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">ていばんのタイピングゲーム！スピードに${rb('挑戦','ちょうせん')}！</span>
+    </a>
   </div>
 </div>
         `
@@ -75,12 +189,132 @@ const CHAPTERS = [
   },
 
   /* ======================================================
-     はじめてのスクラッチ
+     3Dキーホルダー
      ====================================================== */
   {
-    id: 'intro',
-    title: 'はじめてのスクラッチ',
+    id: '3dkey',
+    title: '🖨️ 3Dキーホルダー',
     lessons: [
+      {
+        id: '3dkey-1',
+        title: 'キーホルダーをつくろう！',
+        voice: 'じぶんのなまえをにゅうりょくするだけで、オリジナルの3Dプリンターキーホルダーがつくれるよ！せんせいといっしょにちょうせんしてみよう！',
+        pose: ['up', 'front'],
+        brow: 'normal',
+        content: `
+<h3>🖨️ オリジナルキーホルダーをつくろう！</h3>
+<p>じぶんのなまえをいれるだけで、3Dプリンターでつくれるキーホルダーがかんたんにデザインできるよ！</p>
+
+<a href="https://makerworld.com/ja/makerlab/parametricModelMaker?designId=1934276&from=model_page&modelName=Name_keychain.scad&scadUrl=https%3A%2F%2Fmakerworld.bblmw.com%2Fmakerworld%2Fmodel%2FDSM00000001934276%2Fmsfile%2F2025-10-28_8c475d2d26b99.scad%3Fat%3D1768804563%26exp%3D1768804863%26key%3D1530b67a90850929540bcf901508a6e7%26uid%3D3256304943&unikey=83a663f1-4330-4f17-977c-40ab2401ec95"
+   target="_blank"
+   style="display:block;background:linear-gradient(135deg,#8e24aa,#4a148c);color:white;text-decoration:none;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(74,20,140,0.4);line-height:1.7;margin:10px 0;text-align:center">
+  🔗 キーホルダーメーカーをひらく →<br>
+  <span style="font-size:10px;font-weight:normal;opacity:0.9">MakerWorld / Parametric Model Maker</span>
+</a>
+
+<div style="background:#e8f5e9;border:2px solid #66bb6a;border-radius:8px;padding:10px;margin:8px 0;font-size:12px;line-height:1.8">
+  <strong>✅ つくりかたのながれ</strong><br>
+  ① サイトをひらく<br>
+
+  <div>
+    <img src="img/3Dプリンタキーホルダー1.png" style="height:500px;width:auto;border-radius:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.18)">
+  </div>
+  ② <strong>Your name</strong> にじぶんのなまえをにゅうりょく<br>
+  ③ フォントやサイズをかくにんして、一番下の「Generate」ボタンを押そう。文字どおしが分かれていないか注意してね。<br>
+  <div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:10px;padding:12px;margin:8px 0">
+    <div style="font-weight:bold;font-size:12px;color:#6a1b9a;margin-bottom:8px">🔧 せってい${rb('項目','こうもく')}のせつめい（${rb('英語','えいご')}→にほんご）</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <thead>
+        <tr style="background:#7b1fa2;color:white">
+          <th style="padding:5px 6px;text-align:left;border-radius:4px 0 0 0">英語</th>
+          <th style="padding:5px 6px;text-align:left;border-radius:0 4px 0 0">にほんご</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:white;border-bottom:1px solid #e1bee7">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Your name</td>
+          <td style="padding:6px 6px">いれたいなまえ・もじをにゅうりょく</td>
+        </tr>
+        <tr style="background:#fce4ec;border-bottom:1px solid #e1bee7">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Font</td>
+          <td style="padding:6px 6px">もじのデザイン（フォント）をえらぶ</td>
+        </tr>
+        <tr style="background:white;border-bottom:1px solid #e1bee7">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Font Size</td>
+          <td style="padding:6px 6px">もじのおおきさ（すうじがおおきいほどおおきくなる）</td>
+        </tr>
+        <tr style="background:#fce4ec;border-bottom:1px solid #e1bee7">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Text height</td>
+          <td style="padding:6px 6px">もじのもりあがりのたかさ（mm）</td>
+        </tr>
+        <tr style="background:white;border-bottom:1px solid #e1bee7">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Back height</td>
+          <td style="padding:6px 6px">うらめんのあつさ（mm）</td>
+        </tr>
+        <tr style="background:#fce4ec">
+          <td style="padding:6px 6px;font-weight:bold;color:#4a148c">Border size</td>
+          <td style="padding:6px 6px">まわりのふちのあつさ（mm）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  ④ デザインが決まったら、「Download」ボタンでファイルをほぞん<br>
+  <div>
+    <img src="img/3Dプリンタキーホルダー2.png" style="height:90px;width:auto;border-radius:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.18)">
+    右上のDownloadボタンをおすと、パソコンにファイルがほぞんされるよ！<br>
+    <img src="img/3Dプリンタキーホルダー3.png" style="height:180px;width:auto;border-radius:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.18)">
+    3MFを選択してほぞんしよう！<br>
+    <img src="img/3Dプリンタキーホルダー4.png" style="height:1px;width:auto;border-radius:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.18)">
+    A1(3Dプリンターの種類)をえらんでConfirmボタンをクリック<br>
+    <img src="img/3Dプリンタキーホルダー5.png" style="height:180px;width:auto;border-radius:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.18)">
+    デスクトップに保存しよう。ファイル名は自分の名前と作品名を入れてね。例）やまだたろう_キーホルダー.3mf<br>
+    </div>
+  ⑤ せんせいに3Dプリンターでいんさつしてもらおう！
+</div>
+        `
+      },
+    ]
+  },
+
+  /* ======================================================
+     スクラッチ初級
+     ====================================================== */
+  {
+    id: 'scratch-basic',
+    title: '📗 スクラッチ初級',
+    lessons: [
+      {
+        id: 'lesson-1-1',
+        title: 'スクラッチとは',
+        voice: 'スクラッチは、ブロックをくみあわせてゲームやアニメーションをつくれる、プログラミングのツールです！むずかしいコードはかかなくていいよ！',
+        pose: ['up', 'front'],
+        brow: 'normal',
+        content: `
+          <h3>スクラッチとは？</h3>
+          <p>スクラッチは、MITメディアラボが${rb('開発','かいはつ')}した${rb('無料','むりょう')}のプログラミング${rb('学習','がくしゅう')}ツールです。</p>
+          <ul>
+            <li>🧩 ブロックをくみあわせてプログラムをつくる</li>
+            <li>🎮 ゲームやアニメーションがつくれる</li>
+            <li>🌏 ${rb('世界中','せかいじゅう')}のこどもたちがつかっている</li>
+          </ul>
+        `
+      },
+      {
+        id: 'lesson-1-3',
+        title: 'スクラッチのがめん',
+        voice: 'スクラッチのがめんは3つのエリアにわかれています。ひだりのブロックエリア、まんなかのコードエリア、そしてみぎのステージです！',
+        pose: ['side', 'front'],
+        brow: 'normal',
+        content: `
+          <h3>スクラッチのがめんをみてみよう</h3>
+          <p>スクラッチのがめんは大きく3つにわかれています：</p>
+          <ul>
+            <li>🟦 <strong>ブロックエリア</strong>（ひだり）… つかえるブロックがならんでいる</li>
+            <li>⬜ <strong>コードエリア</strong>（まんなか）… ブロックをくみあわせるばしょ</li>
+            <li>🟩 <strong>ステージ</strong>（みぎ）… プログラムがうごくばしょ</li>
+          </ul>
+        `
+      },
       {
         id: 'intro-1',
         title: '10ほうごかしてみよう',
@@ -228,7 +462,7 @@ const CHAPTERS = [
      ====================================================== */
   {
     id: 'prologue',
-    title: 'プロローグ',
+    title: '🔑 アカウントのつくりかた',
     lessons: [
       {
         id: 'prologue-1',
@@ -275,53 +509,11 @@ const CHAPTERS = [
   },
 
   /* ======================================================
-     第1章
-     ====================================================== */
-  {
-    id: 'chapter1',
-    title: `${rb('第','だい')}1${rb('章','しょう')} スクラッチをはじめよう`,
-    lessons: [
-      {
-        id: 'lesson-1-1',
-        title: 'スクラッチとは',
-        voice: 'スクラッチは、ブロックをくみあわせてゲームやアニメーションをつくれる、プログラミングのツールです！むずかしいコードはかかなくていいよ！',
-        pose: ['up', 'front'],
-        brow: 'normal',
-        content: `
-          <h3>スクラッチとは？</h3>
-          <p>スクラッチは、MITメディアラボが${rb('開発','かいはつ')}した${rb('無料','むりょう')}のプログラミング${rb('学習','がくしゅう')}ツールです。</p>
-          <ul>
-            <li>🧩 ブロックをくみあわせてプログラムをつくる</li>
-            <li>🎮 ゲームやアニメーションがつくれる</li>
-            <li>🌏 ${rb('世界中','せかいじゅう')}のこどもたちがつかっている</li>
-          </ul>
-        `
-      },
-      {
-        id: 'lesson-1-3',
-        title: 'スクラッチのがめん',
-        voice: 'スクラッチのがめんは3つのエリアにわかれています。ひだりのブロックエリア、まんなかのコードエリア、そしてみぎのステージです！',
-        pose: ['side', 'front'],
-        brow: 'normal',
-        content: `
-          <h3>スクラッチのがめんをみてみよう</h3>
-          <p>スクラッチのがめんは大きく3つにわかれています：</p>
-          <ul>
-            <li>🟦 <strong>ブロックエリア</strong>（ひだり）… つかえるブロックがならんでいる</li>
-            <li>⬜ <strong>コードエリア</strong>（まんなか）… ブロックをくみあわせるばしょ</li>
-            <li>🟩 <strong>ステージ</strong>（みぎ）… プログラムがうごくばしょ</li>
-          </ul>
-        `
-      },
-    ]
-  },
-
-  /* ======================================================
      うごきのきほん
      ====================================================== */
   {
     id: 'motion',
-    title: 'うごきのきほん',
+    title: '📘 スクラッチ中級',
     lessons: [
 
       /* ---- motion-1: ステージってどこ？ ---- */
@@ -1061,7 +1253,7 @@ const CHAPTERS = [
      ====================================================== */
   {
     id: 'tennis',
-    title: 'テニスコース',
+    title: '🏆 スクラッチ上級',
     lessons: [
       {
         id: 'tennis-1',

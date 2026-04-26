@@ -8,9 +8,13 @@
  *    - "申込一覧"  ← 自動作成されます
  *    - "枠管理"   ← 自動作成されます（initSheets() を1回実行してください）
  * 4. このスクリプトをデプロイ → ウェブアプリ → アクセス：全員
+ *
+ * 【申込一覧シートの列構成】
+ * 申込日時 | 時間帯 | お子さんのお名前 | 学年 | 電話番号 | メールアドレス | ご質問
+ * ※ 子ども1人につき1行。2人申し込みなら2行追加。
  */
 
-const SPREADSHEET_ID = '1RJAoO36Cdvrcm8MmO2rG4tMj_5b1hSTIVXTGhBfWXRs'; // ← ここにスプレッドシートIDを貼る
+const SPREADSHEET_ID = '1RJAoO36Cdvrcm8MmO2rG4tMj_5b1hSTIVXTGhBfWXRs';
 const SHEET_REGISTRATIONS = '申込一覧';
 const SHEET_SLOTS = '枠管理';
 
@@ -18,11 +22,11 @@ const SHEET_SLOTS = '枠管理';
 function initSheets() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-  // 申込一覧シート
+  // 申込一覧シート（1人1行・学年を独立列）
   let regSheet = ss.getSheetByName(SHEET_REGISTRATIONS);
   if (!regSheet) regSheet = ss.insertSheet(SHEET_REGISTRATIONS);
   if (regSheet.getLastRow() === 0) {
-    regSheet.appendRow(['申込日時', '時間帯', 'お子さんのお名前', '人数', '電話番号', 'メールアドレス', 'ご質問']);
+    regSheet.appendRow(['申込日時', '時間帯', 'お子さんのお名前', '学年', '電話番号', 'メールアドレス', 'ご質問']);
     regSheet.getRange(1, 1, 1, 7).setFontWeight('bold');
   }
 
@@ -76,22 +80,31 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-    // 参加人数を算出（1人目 + 追加人数）
-    const extraNames = (data.extra_names || '').split('、').map(s => s.trim()).filter(s => s !== '');
-    const allNames = [data.child_name || ''].concat(extraNames).filter(s => s !== '').join('、');
-    const participantCount = 1 + extraNames.length;
+    // 参加者リストを構築（children 配列優先、なければ旧フォーマットからフォールバック）
+    const children = (data.children && data.children.length > 0)
+      ? data.children
+      : buildChildrenFromLegacy(data);
+    const participantCount = children.length;
 
-    // 申込一覧に追記（1行に全員分の名前）
+    // メール用の全員名（例: "やまだ たろう（小学3年生）、やまだ はなこ（小学1年生）"）
+    const childrenDetail = children
+      .map(c => c.grade ? `${c.name}（${c.grade}）` : c.name)
+      .join('、');
+
+    // 申込一覧に追記（子ども1人につき1行）
     const regSheet = ss.getSheetByName(SHEET_REGISTRATIONS);
-    regSheet.appendRow([
-      new Date(),
-      data.time_slot || '',
-      allNames,
-      participantCount + '名',
-      data.phone     || '',
-      data.email     || '',
-      data.message   || '',
-    ]);
+    const timestamp = new Date();
+    children.forEach(child => {
+      regSheet.appendRow([
+        timestamp,
+        data.time_slot || '',
+        child.name  || '',
+        child.grade || '',
+        data.phone  || '',
+        data.email  || '',
+        data.message || '',
+      ]);
+    });
 
     // 枠管理シートの申込数を参加人数分だけ加算
     const slotSheet = ss.getSheetByName(SHEET_SLOTS);
@@ -104,11 +117,11 @@ function doPost(e) {
     }
 
     // 運営へのメール通知
-    sendNotificationEmail(data);
+    sendNotificationEmail(data, childrenDetail, participantCount);
 
     // 申込者へのメール（メアドがある場合）
     if (data.email && data.email !== '未入力') {
-      sendConfirmationEmail(data);
+      sendConfirmationEmail(data, childrenDetail);
     }
 
     return ContentService
@@ -121,14 +134,25 @@ function doPost(e) {
   }
 }
 
+// 旧フォーマット（child_name + extra_names）から children 配列を生成するフォールバック
+function buildChildrenFromLegacy(data) {
+  const first = { name: data.child_name || '', grade: '' };
+  const extras = (data.extra_names || '')
+    .split('、')
+    .map(s => s.trim())
+    .filter(s => s !== '')
+    .map(name => ({ name, grade: '' }));
+  return [first, ...extras].filter(c => c.name !== '');
+}
+
 // ---- 運営メール ----
-function sendNotificationEmail(data) {
+function sendNotificationEmail(data, childrenDetail, participantCount) {
   const to = 'iteen.mukonosou@gmail.com';
   const subject = '【申し込み】ゲームプログラミング大会';
   const body = `新しい申し込みがありました。
 
 時間帯：${data.time_slot}
-お子さんのお名前：${data.child_name}
+お子さんのお名前：${childrenDetail}（${participantCount}名）
 電話番号：${data.phone}
 メールアドレス：${data.email || '未入力'}
 ご質問：${data.message || 'なし'}
@@ -142,7 +166,7 @@ iTeen 武庫之荘校 自動送信`;
 }
 
 // ---- 申込者への確認メール ----
-function sendConfirmationEmail(data) {
+function sendConfirmationEmail(data, childrenDetail) {
   const subject = '【iTeen 武庫之荘校】ゲームプログラミング大会 参加申し込みのご確認';
   const body = `${data.child_name} 様
 
@@ -150,7 +174,7 @@ function sendConfirmationEmail(data) {
 
 【申し込み内容】
 時間帯：${data.time_slot}
-お子さんのお名前：${data.child_name}
+お子さんのお名前：${childrenDetail}
 電話番号：${data.phone}
 ${data.message ? `ご質問：${data.message}\n` : ''}
 【イベント情報】

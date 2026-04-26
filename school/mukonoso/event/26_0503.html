@@ -652,7 +652,7 @@
                 <!-- メールアドレス -->
                 <div class="form-group">
                     <label for="email-input" class="form-label">
-                        メールアドレス<span class="optional">（任意）</span>
+                        メールアドレス<span class="optional"></span>
                     </label>
                     <input 
                         type="email" 
@@ -1114,6 +1114,7 @@
                 time_slot: selectedTimeSlot, // 表示用
                 child_name: childName,
                 extra_names: getExtraChildNames().join('、'),
+                children: getChildrenWithGrades(), // [{name, grade}, ...] 1人1行用
                 children_detail: getChildrenWithGrades().map(formatChildEntry).join('、'),
                 phone: phoneNumber,
                 email: emailAddress || '未入力',
@@ -1260,7 +1261,7 @@ ${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}`);
             
             // 申し込み内容を表示
             document.getElementById('reservation-time-item').textContent = `参加希望時間帯: ${selectedTimeSlot}`;
-            document.getElementById('reservation-name-item').textContent = `お子さんのお名前: ${childName}`;
+            document.getElementById('reservation-name-item').textContent = `お子さんのお名前: ${getChildrenWithGrades().map(formatChildEntry).join('、')}`;
             document.getElementById('reservation-phone-item').textContent = `電話番号: ${phoneNumber}`;
             
             if (emailAddress && emailAddress.trim() !== '') {

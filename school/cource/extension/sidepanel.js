@@ -8,6 +8,7 @@ const btnPrev     = document.getElementById('btn-prev');
 const btnNext     = document.getElementById('btn-next');
 const progress    = document.getElementById('lesson-progress');
 let   _cleanup    = null;
+const _spokenLessons = new Set();
 
 /* ===== ドロップダウン初期化 ===== */
 CHAPTERS.forEach(ch => {
@@ -44,7 +45,10 @@ function showLesson(lesson) {
   const [left, right] = lesson.pose;
   tsuyu.pose(left, right);
   tsuyu.express(lesson.brow, false, false);
-  tsuyu.say(lesson.voice);
+  if (!_spokenLessons.has(lesson.id)) {
+    _spokenLessons.add(lesson.id);
+    tsuyu.say(lesson.voice);
+  }
 
   if (lesson.onShow) _cleanup = lesson.onShow() || null;
 
@@ -66,6 +70,18 @@ function updateFooter() {
   btnPrev.disabled = isFirst;
   btnNext.disabled = isLast;
 }
+
+/* ===== 目次カードのクリック（イベント委譲） ===== */
+main.addEventListener('click', e => {
+  const btn = e.target.closest('[data-navigate]');
+  if (!btn) return;
+  const chapterId = btn.dataset.navigate;
+  const ch = CHAPTERS.find(c => c.id === chapterId);
+  if (!ch) return;
+  chapterSel.value = chapterId;
+  populateLessonSelect(ch.lessons);
+  showLesson(ch.lessons[0]);
+});
 
 /* ===== イベント ===== */
 chapterSel.addEventListener('change', () => {
