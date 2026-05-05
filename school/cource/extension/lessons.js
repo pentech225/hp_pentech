@@ -10,6 +10,43 @@ function sb(code) {
   return `<pre class="blocks">${code}</pre>`;
 }
 
+/* ===== 動画セクション生成ヘルパー ===== */
+function makeVideoLesson(src, id, title, label, startTime, endTime) {
+  return {
+    id,
+    title,
+    voice: `${label}をみてみよう！`,
+    pose: ['up', 'front'],
+    brow: 'normal',
+    content: `
+<div style="background:#e3f2fd;border-left:4px solid #1976d2;border-radius:0 8px 8px 0;padding:10px 14px;margin:0 0 10px;font-size:14px;font-weight:bold;color:#1565c0">${label}</div>
+<video id="lesson-video" src="${src}" controls style="width:100%;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.18);display:block"></video>
+<div id="cue-hint" style="display:none;background:#e8f5e9;border:2px solid #4caf50;border-radius:8px;padding:10px;margin:8px 0;font-size:13px;text-align:center;font-weight:bold">▶ 「つぎへ →」ボタンをおして続きをみよう！</div>
+    `,
+    onShow() {
+      const video = document.getElementById('lesson-video');
+      const hint  = document.getElementById('cue-hint');
+      let stopped = false;
+      video.currentTime = startTime;
+      video.play().catch(() => {});
+      function onTimeUpdate() {
+        if (stopped || endTime == null) return;
+        if (video.currentTime >= endTime) {
+          video.currentTime = endTime;
+          video.pause();
+          stopped = true;
+          if (hint) hint.style.display = 'block';
+        }
+      }
+      video.addEventListener('timeupdate', onTimeUpdate);
+      return () => {
+        video.removeEventListener('timeupdate', onTimeUpdate);
+        video.pause();
+      };
+    }
+  };
+}
+
 const CHAPTERS = [
 
   /* ======================================================
@@ -42,6 +79,10 @@ const CHAPTERS = [
 .toc-card-icon{font-size:22px;flex-shrink:0}
 </style>
 <div style="display:flex;flex-direction:column;gap:6px;margin:10px 0">
+  <button class="toc-card" data-navigate="intro" style="background:#fce4ec;border-color:#f48fb1">
+    <span class="toc-card-icon">🎬</span>
+    <span><strong>0章 はじめに</strong><br><span style="color:#555;font-size:11px">動画でながれをかくにんしよう</span></span>
+  </button>
   <button class="toc-card" data-navigate="mouse" style="background:#e3f2fd;border-color:#90caf9">
     <span class="toc-card-icon">🖱️</span>
     <span><strong>① マウス練習</strong><br><span style="color:#555;font-size:11px">クリックとドラッグをれんしゅうしよう</span></span>
@@ -73,6 +114,29 @@ const CHAPTERS = [
 </div>
         `
       },
+    ]
+  },
+
+  /* ======================================================
+     0章 はじめに（動画セクション）
+     ====================================================== */
+  {
+    id: 'intro',
+    title: '0章 はじめに',
+    lessons: [
+      // ── 動画①：スクラッチ大全解説 ──────────────────────
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-01', '① サインイン方法',           '① サインイン方法',            0,   32 ),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-02', '② 言語の選択',               '② 言語の選択',                32,  57 ),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-03', '③ スクラッチの各場所の説明', '③ スクラッチの各場所の説明',  57,  98 ),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-04', '④ スプライトの追加',         '④ スプライトの追加',          98,  129),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-05', '⑤ ステージ座標の説明',       '⑤ ステージ座標の説明',        129, 206),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-06', '⑥ ブロックの追加',           '⑥ ブロックの追加',            206, 271),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-07', '⑦ スプライトをもう一度追加', '⑦ スプライトをもう一度追加',  271, 300),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-08', '⑧ 背景の変更',               '⑧ 背景の変更',                300, 346),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-09', '⑨ 旗の説明',                 '⑨ 旗の説明',                  346, 381),
+      makeVideoLesson('mov/0章スクラッチ大全解説_v1.mp4', 'intro-10', '⑩ ファイルの保存',           '⑩ ファイルの保存',            381, null),
+      // ── 動画②：サンプル01〜06 ────────────────────────────
+      makeVideoLesson('mov/sample01to06_v1.mp4',          'intro-s1', 'サンプル01〜06をみよう',     'サンプル01〜06',              0,   null),
     ]
   },
 
@@ -180,6 +244,11 @@ const CHAPTERS = [
        style="display:block;background:linear-gradient(135deg,#e53935,#b71c1c);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(183,28,28,0.35);line-height:1.6">
       🍣 ${rb('寿司打','すしだ')}<br>
       <span style="font-size:11px;font-weight:normal;opacity:0.92">ていばんのタイピングゲーム！スピードに${rb('挑戦','ちょうせん')}！</span>
+    </a>
+    <a href="https://www.edclub.com/sportal/program-16/8928.play" target="_blank"
+       style="display:block;background:linear-gradient(135deg,#00897b,#004d40);color:white;text-decoration:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:bold;box-shadow:0 4px 10px rgba(0,77,64,0.35);line-height:1.6">
+      🌐 TypingClub（EdClub）<br>
+      <span style="font-size:11px;font-weight:normal;opacity:0.92">えいごのタイピングにもちょうせんしよう！</span>
     </a>
   </div>
 </div>

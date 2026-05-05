@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🖱️ マウス練習 | PenTech</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Maru Gothic Pro', sans-serif;
+      font-size: 14px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #f7f9fc 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px 16px 40px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .game-link {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 1.6;
+      margin-bottom: 8px;
+      transition: transform 0.1s, filter 0.15s;
+    }
+
+    .game-link:hover { filter: brightness(0.93); transform: scale(1.01); }
+    .game-link:active { transform: scale(0.97); }
+    .game-link:last-child { margin-bottom: 0; }
+
+    .game-link small {
+      display: block;
+      font-size: 11px;
+      font-weight: normal;
+      opacity: 0.92;
+      margin-top: 2px;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #1565c0;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="../">← もどる</a>
+
+  <div class="header">
+    <h1>🖱️ マウス練習</h1>
+    <p>スクラッチをはじめるまえに、まずはマウスのれんしゅうをしよう！<br>クリックとドラッグがじょうずになれば、スクラッチもかんたんになるよ！</p>
+  </div>
+
+  <div class="card" style="background:#e3f2fd;border:3px solid #1976d2;">
+    <div class="card-title">🎮 スクラッチでマウスれんしゅう！</div>
+    <div style="text-align:center;overflow:hidden;border-radius:10px;">
+      <iframe src="https://scratch.mit.edu/projects/1314695139/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen style="max-width:100%;border-radius:10px;"></iframe>
+    </div>
+  </div>
+
+  <div class="card" style="background:#fff3e0;border:3px solid #ff9800;">
+    <div class="card-title">🎮 やってみよう！</div>
+
+    <a class="game-link" href="https://hirara.net/gallery/ynot/swf/ecgm_Tako.html" target="_blank"
+       style="background:linear-gradient(135deg,#ef5350,#b71c1c);box-shadow:0 4px 10px rgba(183,28,28,0.35)">
+      🐙 たこやきゲーム
+      <small>タイミングよくマウスをうごかそう！</small>
+    </a>
+
+    <a class="game-link" href="https://piyocom.com/app_mole.html" target="_blank"
+       style="background:linear-gradient(135deg,#ff7043,#ff9800);box-shadow:0 4px 10px rgba(255,120,0,0.35)">
+      🐭 モグラたたきゲーム
+      <small>クリックのれんしゅうはここから！</small>
+    </a>
+
+    <a class="game-link" href="https://hirara.net/gallery/ynot/swf/ecgm_Kingyo.html" target="_blank"
+       style="background:linear-gradient(135deg,#29b6f6,#0288d1);box-shadow:0 4px 10px rgba(2,136,209,0.35)">
+      🐟 きんぎょすくいゲーム
+      <small>マウスをうごかすれんしゅう！</small>
+    </a>
+
+    <a class="game-link" href="https://hirara.net/gallery/ynot/swf/ecgm_Kakigori.html" target="_blank"
+       style="background:linear-gradient(135deg,#26c6da,#006064);box-shadow:0 4px 10px rgba(0,96,100,0.35)">
+      🍧 かきごおりゲーム
+      <small>ドラッグのれんしゅうはここ！</small>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="info-box">
+      <strong>💡 なにをれんしゅうするの？</strong>
+      🖱️ <strong style="display:inline">クリック</strong>… ボタンやゲームをおす<br>
+      🖱️ <strong style="display:inline">ドラッグ</strong>… ブロックをコードエリアにうごかす<br>
+      🖱️ <strong style="display:inline">ダブルクリック</strong>… ブロックをつかう
+    </div>
+  </div>
+
+</body>
+</html>

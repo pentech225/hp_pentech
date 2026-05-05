@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎹 ピアノれんしゅう | PenTech</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Maru Gothic Pro', sans-serif;
+      font-size: 14px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #f7f9fc 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px 16px 40px;
+    }
+
+    .header { text-align: center; margin-bottom: 20px; }
+    .header h1 { font-size: 24px; font-weight: bold; color: #2e7d32; margin-bottom: 6px; }
+    .header p  { font-size: 13px; color: #555; line-height: 1.7; }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .game-wrap {
+      text-align: center;
+    }
+    .game-wrap iframe {
+      width: 630px;
+      max-width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .key-grid {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .key-badge {
+      display: inline-block;
+      background: #f1f8e9;
+      border: 2px solid #a5d6a7;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #2e7d32;
+      text-align: center;
+      min-width: 58px;
+    }
+    .key-badge small {
+      display: block;
+      font-size: 10px;
+      font-weight: normal;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .info-box {
+      background: #e8f5e9;
+      border: 2px solid #a5d6a7;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #2e7d32;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="../">← もどる</a>
+
+  <div class="header">
+    <h1>🎹 ピアノれんしゅう</h1>
+    <p>
+      キーボードでピアノをひいてみよう！<br>
+      <strong>a s d f g h j k l</strong> キーをおすとおとがでるよ！
+    </p>
+  </div>
+
+  <div class="card" style="background:#e8f5e9;border:3px solid #4caf50;">
+    <div class="card-title">🎵 ピアノゲーム（ゲームエリアをクリックしてからキーをおそう）</div>
+    <div class="game-wrap">
+      <iframe
+        src="build/web/index.html"
+        allow="autoplay"
+        title="ピアノれんしゅう"
+      ></iframe>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⌨️ キーとおとのひょう</div>
+    <div class="key-grid">
+      <div class="key-badge">a<small>ド (C4)</small></div>
+      <div class="key-badge">s<small>レ (D4)</small></div>
+      <div class="key-badge">d<small>ミ (E4)</small></div>
+      <div class="key-badge">f<small>ファ (F4)</small></div>
+      <div class="key-badge">g<small>ソ (G4)</small></div>
+      <div class="key-badge">h<small>ラ (A4)</small></div>
+      <div class="key-badge">j<small>シ (B4)</small></div>
+      <div class="key-badge">k<small>ド (C5)</small></div>
+      <div class="key-badge">l<small>レ (D5)</small></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="info-box">
+      <strong>💡 あそびかた</strong>
+      ① ゲームエリアを<strong style="display:inline">クリック</strong>してフォーカスをあてよう<br>
+      ② <strong style="display:inline">a s d f g h j k l</strong> キーをおすとおとがなるよ<br>
+      ③ なんこかいっしょにおしてもOK！<br>
+      🌟 すきなきょくをひいてみよう！
+    </div>
+  </div>
+
+</body>
+</html>

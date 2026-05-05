@@ -172,10 +172,10 @@ body {
 }
 
 .nav-btn {
-  padding: 10px 18px;
-  font-size: 14px;
+  padding: 14px 24px;
+  font-size: 17px;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 2px solid #ccc;
   background: #f5f5f5;
   color: #555;
