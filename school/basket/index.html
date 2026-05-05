@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>武庫東バスケットボールクラブ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F57C00;
+      --orange-light: #FFB74D;
+      --navy: #1A237E;
+      --navy-light: #283593;
+      --bg: #FFF8F0;
+      --text: #333;
+      --white: #fff;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .logo {
+      color: var(--white);
+      font-weight: 900;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-ball {
+      font-size: 1.4rem;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+    nav a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--orange-light); }
+
+    /* ========== HERO ========== */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #3949AB 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 72px 20px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '🏀';
+      position: absolute;
+      font-size: 200px;
+      opacity: 0.05;
+      top: -30px;
+      right: -20px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      margin-bottom: 32px;
+    }
+    .hero-info {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .hero-chip {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .hero-chip span {
+      color: var(--orange-light);
+      margin-right: 4px;
+    }
+
+    /* ========== SECTION COMMON ========== */
+    section { padding: 60px 20px; }
+    .section-inner { max-width: 900px; margin: 0 auto; }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 3px;
+      background: linear-gradient(to right, var(--orange), transparent);
+      border-radius: 2px;
+    }
+
+    /* ========== INFO CARDS ========== */
+    #info { background: var(--white); }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .info-card {
+      background: var(--bg);
+      border-left: 4px solid var(--orange);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .info-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .info-card-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* ========== SCHEDULE ========== */
+    #schedule { background: var(--bg); }
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,35,126,0.1);
+    }
+    .schedule-table thead {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .schedule-table th {
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: left;
+    }
+    .schedule-table tbody tr {
+      border-bottom: 1px solid #EEE;
+      transition: background 0.15s;
+    }
+    .schedule-table tbody tr:hover { background: #FFF3E0; }
+    .schedule-table tbody tr:last-child { border-bottom: none; }
+    .schedule-table td {
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+    .time-cell {
+      font-weight: 700;
+      color: var(--navy);
+      white-space: nowrap;
+      width: 90px;
+    }
+    .menu-cell { color: var(--text); }
+    .row-prep { background: #E8EAF6; }
+    .row-end { background: #FBE9E7; }
+    .tag {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ========== ACTIVITIES ========== */
+    #activities { background: var(--white); }
+    .activity-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .activity-card {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: var(--white);
+      border-radius: 12px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .activity-icon { font-size: 2rem; margin-bottom: 10px; }
+    .activity-name { font-size: 1rem; font-weight: 700; }
+    .activity-desc { font-size: 0.8rem; opacity: 0.8; margin-top: 4px; }
+
+    /* ========== APPLY ========== */
+    #apply {
+      background: linear-gradient(135deg, var(--orange) 0%, #FF8F00 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 72px 20px;
+    }
+    #apply .section-title {
+      color: var(--white);
+      justify-content: center;
+    }
+    #apply .section-title::after { background: rgba(255,255,255,0.4); }
+    .apply-desc {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      opacity: 0.95;
+    }
+    .apply-details {
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: inline-block;
+      padding: 16px 32px;
+      margin: 16px 0 28px;
+      text-align: left;
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+    .apply-btn {
+      display: inline-block;
+      background: var(--white);
+      color: var(--orange);
+      font-size: 1.1rem;
+      font-weight: 900;
+      padding: 16px 48px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .apply-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: var(--orange-light);
+      text-decoration: none;
+    }
+    .footer-contact {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.6rem; }
+      nav { gap: 12px; }
+      nav a { font-size: 0.78rem; }
+      .schedule-table { font-size: 0.85rem; }
+      .schedule-table th, .schedule-table td { padding: 8px 10px; }
+    }
+    @media (max-width: 480px) {
+      .logo { font-size: 0.95rem; }
+      nav { display: none; }
+      .hero { padding: 48px 16px 40px; }
+      .hero h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-ball">🏀</span>
+      武庫東バスケットボールクラブ
+    </div>
+    <nav>
+      <a href="#info">基本情報</a>
+      <a href="#schedule">スケジュール</a>
+      <a href="#activities">メニュー</a>
+      <a href="#apply">申し込み</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">毎週日曜日 開催中</div>
+  <h1>武庫東バスケットボールクラブ</h1>
+  <p class="hero-sub">小学生から大人まで、一緒にバスケを楽しもう！</p>
+  <div class="hero-info">
+    <div class="hero-chip"><span>📅</span>毎週日曜日</div>
+    <div class="hero-chip"><span>🕑</span>14:50〜16:30</div>
+    <div class="hero-chip"><span>📍</span>武庫東小学校体育館</div>
+  </div>
+</section>
+
+<!-- BASIC INFO -->
+<section id="info">
+  <div class="section-inner">
+    <h2 class="section-title">🏫 基本情報</h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-label">開催日時</div>
+        <div class="info-card-value">毎週日曜日<br>14:50〜16:30</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">場所</div>
+        <div class="info-card-value">武庫東小学校<br>体育館</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">持ち物</div>
+        <div class="info-card-value">室内シューズ<br>水分・タオル</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">連絡先</div>
+        <div class="info-card-value">彦阪吉海<br><a href="tel:07023278083" style="color:var(--orange);text-decoration:none;">070-2327-8083</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="section-inner">
+    <h2 class="section-title">⏰ タイムスケジュール</h2>
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>時刻</th>
+          <th>練習メニュー</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-prep">
+          <td class="time-cell">14:50<br><small style="font-weight:400;color:#666;">10分</small></td>
+          <td class="menu-cell"><strong>準備</strong><br><small>モップ、ゴール高さ調整、ボール出し。<strong>「高学年が低学年に教える」</strong>習慣作り。</small></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:00<br><small style="font-weight:400;color:#666;">10分</small></td>
+          <td class="menu-cell"><strong>挨拶・柔軟</strong><br><small>5分で挨拶。後半5分は<strong>「大人vs子供の柔軟対決」</strong>。大人が苦戦する姿で場の空気を温める。</small></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:10<br><small style="font-weight:400;color:#666;">10分</small></td>
+          <td class="menu-cell"><strong>ドリブル鬼ごっこ</strong><br><small>低学年：両手OK。高学年：苦手な方の手限定、またはドリブルを高くつかない制限。</small></td>
+        </tr>
+        <tr class="row-prep">
+          <td class="time-cell">15:20<br><small style="font-weight:400;color:#666;">5分</small></td>
+          <td class="menu-cell"><strong>休憩</strong><span class="tag">水分補給</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:25<br><small style="font-weight:400;color:#666;">15分</small></td>
+          <td class="menu-cell"><strong>ドリブル・レイアップ</strong><br><small>前半は全員でその場ドリブル。後半はレイアップ。低学年はステップ重視。</small></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:40<br><small style="font-weight:400;color:#666;">10分</small></td>
+          <td class="menu-cell"><strong>パス練習（鳥かご）</strong><br><small>3対1。低学年には「大人がパスを出すふりをして隙を作る」などアシスト。</small></td>
+        </tr>
+        <tr class="row-prep">
+          <td class="time-cell">15:50<br><small style="font-weight:400;color:#666;">5分</small></td>
+          <td class="menu-cell"><strong>休憩</strong><span class="tag">対人準備</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:55<br><small style="font-weight:400;color:#666;">15分</small></td>
+          <td class="menu-cell"><strong>シュート・1on1</strong><br><small>ゴールを高さ別で分ける。リバウンドは大人が入り、テンポを上げる。</small></td>
+        </tr>
+        <tr>
+          <td class="time-cell">16:10<br><small style="font-weight:400;color:#666;">10分</small></td>
+          <td class="menu-cell"><strong>アドバンス技</strong><span class="tag">スキルアップ</span><br><small>レッグスルーやユーロステップ等。できなくても「かっこいい！」と思わせる時間。</small></td>
+        </tr>
+        <tr>
+          <td class="time-cell">16:20<br><small style="font-weight:400;color:#666;">5分</small></td>
+          <td class="menu-cell"><strong>挨拶・終了</strong><br><small>振り返り。「今日一番のナイスプレー」を具体的に褒める。</small></td>
+        </tr>
+        <tr class="row-end">
+          <td class="time-cell">16:25<br><small style="font-weight:400;color:#666;">5分</small></td>
+          <td class="menu-cell"><strong>片付け</strong><span class="tag">終了</span><br><small>ボールカウント、掃除。</small></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities">
+  <div class="section-inner">
+    <h2 class="section-title">🎯 特別メニュー</h2>
+    <div class="activity-list">
+      <div class="activity-card">
+        <div class="activity-icon">👨‍👧</div>
+        <div class="activity-name">小学生 vs 大人</div>
+        <div class="activity-desc">年齢を超えた白熱バトル！</div>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🏆</div>
+        <div class="activity-name">5on5</div>
+        <div class="activity-desc">本格的な試合形式で実戦練習</div>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🎯</div>
+        <div class="activity-name">スリーポイント対決</div>
+        <div class="activity-desc">30秒間で何本決められる？</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY -->
+<section id="apply">
+  <div class="section-inner">
+    <h2 class="section-title">📝 お申し込み</h2>
+    <p class="apply-desc">参加ご希望の方は、下記のフォームからお申し込みください。</p>
+    <div class="apply-details">
+      📅 日時：毎週日曜日 14:50〜16:30<br>
+      📍 場所：武庫東小学校体育館<br>
+      👟 持ち物：室内シューズ・水分・タオル<br>
+      📞 連絡先：彦阪吉海 070-2327-8083
+    </div>
+    <br>
+    <a href="https://forms.gle/NGsrkrdoguXQP3Li9" target="_blank" rel="noopener" class="apply-btn">
+      🏀 申し込みフォームはこちら
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-contact">武庫東バスケットボールクラブ</div>
+  <p>連絡先：彦阪吉海 <a href="tel:07023278083">070-2327-8083</a></p>
+  <p style="margin-top:16px;">&copy; 2026 武庫東バスケットボールクラブ</p>
+</footer>
+
+</body>
+</html>
