@@ -1,0 +1,289 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #F57C00;
+  --orange-light: #FFB74D;
+  --navy: #1A237E;
+  --navy-light: #283593;
+  --bg: #FFF8F0;
+  --text: #333;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* ========== HEADER ========== */
+header {
+  background: var(--navy);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.header-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.logo {
+  color: var(--white);
+  font-weight: 900;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.logo-ball { font-size: 1.4rem; }
+nav { display: flex; gap: 24px; }
+nav a {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--orange-light); }
+nav a.active { color: var(--orange-light); border-bottom: 2px solid var(--orange-light); }
+
+/* ========== SECTION COMMON ========== */
+section { padding: 60px 20px; }
+.section-inner { max-width: 900px; margin: 0 auto; }
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(to right, var(--orange), transparent);
+  border-radius: 2px;
+}
+
+/* ========== REPORT CARDS ========== */
+.reports-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.reports-count {
+  background: var(--navy);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.report-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.08);
+  overflow: hidden;
+}
+.report-card-header {
+  background: var(--navy);
+  color: var(--white);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.report-date {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+.report-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+.report-chip {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.report-chip.highlight {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+.report-card-body { padding: 20px; }
+.report-summary {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.report-menu-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.menu-tag {
+  background: #E8EAF6;
+  color: var(--navy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.report-note {
+  font-size: 0.88rem;
+  color: #555;
+  border-left: 3px solid var(--orange);
+  padding-left: 12px;
+  line-height: 1.7;
+}
+.report-highlight-box {
+  background: #FFF3E0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--orange);
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* ========== REPORT PAGE ========== */
+main { background: var(--bg); padding: 60px 20px; }
+
+.members-box {
+  background: #E8EAF6;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+.members-box strong {
+  color: var(--navy);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+.members-count {
+  display: inline-block;
+  background: var(--navy);
+  color: var(--white);
+  font-weight: 900;
+  font-size: 0.8rem;
+  padding: 2px 10px;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.video-wrap {
+  position: relative;
+  padding-top: 56.25%;
+  margin: 16px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Markdownレンダリング出力 */
+.md-content { margin-top: 16px; font-size: 0.92rem; color: #444; line-height: 1.9; }
+.md-content h2 {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--navy);
+  margin: 24px 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #E8EAF6;
+}
+.md-content h3 {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--orange);
+  margin: 16px 0 6px;
+}
+.md-content p { margin-bottom: 10px; }
+.md-content ul { padding-left: 1.4em; margin-bottom: 10px; }
+.md-content li { margin-bottom: 4px; }
+.md-content strong { color: var(--navy); }
+.md-content hr { border: none; border-top: 1px solid #EEE; margin: 20px 0; }
+.md-content blockquote {
+  background: #FFF3E0;
+  border-left: 3px solid var(--orange);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  color: var(--orange);
+  font-weight: 700;
+  margin: 12px 0;
+}
+
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.page-nav a {
+  color: var(--navy);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.page-nav a:hover { color: var(--orange); }
+
+/* ========== FOOTER ========== */
+footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 0.85rem;
+}
+footer a { color: var(--orange-light); text-decoration: none; }
+.footer-contact {
+  font-size: 1rem;
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  nav { gap: 12px; }
+  nav a { font-size: 0.78rem; }
+}
+@media (max-width: 480px) {
+  .logo { font-size: 0.95rem; }
+  nav { display: none; }
+}

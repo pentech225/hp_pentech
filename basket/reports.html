@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動報告一覧 | 武庫東バスケットボールクラブ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #reports { background: var(--bg); }
+    .report-index-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .report-index-item {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(26,35,126,0.07);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .report-index-item:hover {
+      box-shadow: 0 4px 16px rgba(26,35,126,0.14);
+      transform: translateY(-2px);
+    }
+    .report-index-num {
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 900;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .report-index-date {
+      font-weight: 900;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+    .report-index-title {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 2px;
+    }
+    .report-index-arrow {
+      margin-left: auto;
+      color: var(--orange);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-ball">🏀</span>
+      武庫東バスケットボールクラブ
+    </a>
+    <nav>
+      <a href="index.html#info">基本情報</a>
+      <a href="index.html#schedule">スケジュール</a>
+      <a href="index.html#activities">メニュー</a>
+      <a href="reports.html" class="active">活動報告</a>
+      <a href="index.html#apply">申し込み</a>
+    </nav>
+  </div>
+</header>
+
+<section id="reports">
+  <div class="section-inner">
+    <div class="reports-header">
+      <h2 class="section-title" style="margin-bottom:0;">📋 活動報告一覧</h2>
+      <span class="reports-count">全 2 回</span>
+    </div>
+
+    <div class="report-index-list">
+      <a href="reports/2026-05-10.html" class="report-index-item">
+        <div class="report-index-num">1</div>
+        <div>
+          <div class="report-index-date">2026年5月10日（日）</div>
+          <div class="report-index-title">第1回 活動（初回）</div>
+        </div>
+        <span class="report-index-arrow">›</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-contact">武庫東バスケットボールクラブ</div>
+  <p>連絡先：彦阪吉海 <a href="tel:07023278083">070-2327-8083</a></p>
+  <p style="margin-top:16px;">&copy; 2026 武庫東バスケットボールクラブ</p>
+</footer>
+
+</body>
+</html>

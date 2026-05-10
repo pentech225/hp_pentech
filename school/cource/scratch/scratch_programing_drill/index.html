@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スクラッチプログラミングドリル — チャプター1-1: もりのしゃげきくんれん</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== リセット ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    button { font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer; border: none; }
+
+    /* ===== デザイントークン ===== */
+    :root {
+      --c-pink:    #FF9EC4;
+      --c-blue:    #A8D8EA;
+      --c-mint:    #A8E6CF;
+      --c-bg:      #FFF5F8;
+      --c-white:   #FFFFFF;
+      --c-text:    #555555;
+      --c-heading: #E8557A;
+      --c-border:  #FFD6E7;
+      --c-gray:    #CCCCCC;
+      --font:      'M PLUS Rounded 1c', sans-serif;
+      --radius:    12px;
+      --shadow:    0 4px 16px rgba(232, 85, 122, 0.12);
+    }
+
+    /* ===== ページ全体レイアウト ===== */
+    body {
+      font-family: var(--font);
+      background: var(--c-bg);
+      color: var(--c-text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== ヘッダー（コンパクト固定） ===== */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 20px;
+      background: var(--c-white);
+      border-bottom: 3px solid var(--c-pink);
+      box-shadow: var(--shadow);
+    }
+
+    .header h1 {
+      font-size: 18px;
+      color: var(--c-heading);
+      font-weight: 800;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: var(--c-text);
+    }
+
+    /* ===== 左右分割コンテナ ===== */
+    .split-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ===== 左ペイン：動画 + 目次 ===== */
+    .pane-left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 16px;
+      gap: 12px;
+      transition: flex 0.45s ease;
+      border-right: 3px solid var(--c-border);
+    }
+
+    /* ===== 右ペイン：Scratch ===== */
+    .pane-right {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: flex 0.45s ease;
+    }
+
+    /* ホバーで 8:2 切り替え（CSS :has() — Chrome 105+, Firefox 121+） */
+    .split-container:has(.pane-left:hover) .pane-left  { flex: 4; }
+    .split-container:has(.pane-left:hover) .pane-right { flex: 1; }
+    .split-container:has(.pane-right:hover) .pane-right { flex: 4; }
+    .split-container:has(.pane-right:hover) .pane-left  { flex: 1; }
+
+    /* ===== 動画コンテナ ===== */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ===== ゲーム目次 ===== */
+    .games-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--c-heading);
+      padding: 4px 0;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .game-card {
+      background: var(--c-white);
+      border-radius: var(--radius);
+      padding: 12px 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      gap: 6px;
+    }
+
+    .game-card:hover:not(.disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(232, 85, 122, 0.22);
+    }
+
+    .game-card.active { border-color: var(--c-heading); }
+    .game-card.disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .game-badge {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: var(--c-white); font-weight: 800;
+    }
+
+    .game-card:nth-child(1) .game-badge { background: var(--c-pink); }
+    .game-card:nth-child(2) .game-badge { background: var(--c-blue); }
+    .game-card:nth-child(3) .game-badge { background: var(--c-mint); }
+
+    .game-title {
+      font-size: 13px;
+      color: var(--c-heading);
+      font-weight: 800;
+    }
+
+    .game-status {
+      font-size: 11px;
+      color: var(--c-gray);
+      font-style: italic;
+    }
+
+    .btn-remix {
+      background: var(--c-pink);
+      color: var(--c-white);
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.2s;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .btn-remix:hover:not(:disabled) { background: #ff7fa8; }
+    .btn-remix:disabled { background: var(--c-gray); cursor: not-allowed; }
+
+    /* ===== 右ペイン内容 ===== */
+    .scratch-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--c-gray);
+      font-size: 15px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .scratch-placeholder .icon {
+      font-size: 64px;
+      opacity: 0.4;
+    }
+
+    .scratch-active {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .scratch-right-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--c-white);
+      border-bottom: 2px solid var(--c-border);
+      flex-shrink: 0;
+    }
+
+    .scratch-right-header span {
+      font-weight: 800;
+      color: var(--c-heading);
+      font-size: 15px;
+    }
+
+    .btn-edit {
+      background: var(--c-pink);
+      color: var(--c-white);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+
+    .btn-edit:hover { background: #ff7fa8; }
+
+    .scratch-right-header .btn-close {
+      background: none;
+      color: var(--c-gray);
+      font-size: 20px;
+      padding: 0 4px;
+      margin-left: 8px;
+    }
+
+    .scratch-right-header .btn-close:hover { color: var(--c-text); }
+
+    #scratchIframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ===== フッター（最小化） ===== */
+    .footer {
+      flex-shrink: 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--c-gray);
+      padding: 6px 16px;
+      border-top: 1px solid var(--c-border);
+      background: var(--c-white);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== ヘッダー ===== -->
+  <div class="header">
+    <h1>🎮 スクラッチプログラミングドリル</h1>
+    <p>チャプター1-1: もりのしゃげきくんれん</p>
+  </div>
+
+  <!-- ===== 左右分割エリア ===== -->
+  <div class="split-container">
+
+    <!-- 左ペイン：動画 + ゲーム目次 -->
+    <div class="pane-left">
+
+      <!-- YouTube 動画 -->
+      <div class="video-container">
+        <iframe
+          id="videoIframe"
+          src="https://www.youtube.com/embed/C-xdeJ4G8-w"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- ゲーム目次 -->
+      <div class="games-label">🕹️ ゲームを選んでね</div>
+      <div class="games-grid">
+
+        <!-- ゲーム1 -->
+        <div class="game-card active" data-game="1" data-video="C-xdeJ4G8-w" data-project="1317265354">
+          <div class="game-badge">1</div>
+          <div class="game-title">ゲーム1</div>
+          <button class="btn-remix" onclick="selectGame(this)">🔀 リミックス</button>
+        </div>
+
+        <!-- ゲーム2 -->
+        <div class="game-card" data-game="2" data-video="j03ktJA3Ybo" data-project="183404473">
+          <div class="game-badge">2</div>
+          <div class="game-title">ゲーム2</div>
+          <button class="btn-remix" onclick="selectGame(this)">🔀 リミックス</button>
+        </div>
+
+        <!-- ゲーム3（準備中） -->
+        <div class="game-card disabled" data-game="3" data-video="" data-project="">
+          <div class="game-badge">3</div>
+          <div class="game-title">ゲーム3</div>
+          <div class="game-status">準備中...</div>
+          <button class="btn-remix" disabled>🔀 リミックス</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 右ペイン：Scratch -->
+    <div class="pane-right">
+
+      <!-- 未選択時のプレースホルダー -->
+      <div class="scratch-placeholder" id="scratchPlaceholder">
+        <div class="icon">🐱</div>
+        <p>左のゲームを選んで<br>「🔀 リミックス」を押してね！</p>
+      </div>
+
+      <!-- ゲーム選択後 -->
+      <div class="scratch-active" id="scratchActive" style="display: none;">
+        <div class="scratch-right-header">
+          <span id="scratchTitle">🎮 ゲーム1</span>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <button class="btn-edit" onclick="openEditor()">✏️ 編集モードで開く</button>
+            <button class="btn-close" onclick="closeScratch()" title="閉じる">✕</button>
+          </div>
+        </div>
+        <iframe id="scratchIframe"
+          src=""
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gamepad; gyroscope; microphone"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== フッター ===== -->
+  <div class="footer">
+    © <ruby>アソビズム<rt>Asobism</rt></ruby>「スクラッチプログラミングドリル」参考 | PenTech
+  </div>
+
+  <script>
+    let currentProjectId = '';
+
+    // ゲームカードをクリック / リミックスボタンを押す
+    function selectGame(button) {
+      const card = button.closest('.game-card');
+      currentProjectId = card.dataset.project;
+      const gameNum    = card.dataset.game;
+      const videoId    = card.dataset.video;
+
+      // アクティブカードを更新
+      document.querySelectorAll('.game-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      // 動画を切り替え
+      document.getElementById('videoIframe').src =
+        `https://www.youtube.com/embed/${videoId}`;
+
+      // 右ペインに Scratch embed を表示
+      document.getElementById('scratchTitle').textContent = `🎮 ゲーム${gameNum}`;
+      document.getElementById('scratchIframe').src =
+        `https://scratch.mit.edu/projects/${currentProjectId}/embed`;
+      document.getElementById('scratchPlaceholder').style.display = 'none';
+      document.getElementById('scratchActive').style.display     = 'flex';
+    }
+
+    // ゲームカード本体クリックでも選択（ボタン以外）
+    document.querySelectorAll('.game-card:not(.disabled)').forEach(card => {
+      card.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON') return;
+        const fakeBtn = this.querySelector('.btn-remix');
+        selectGame(fakeBtn);
+      });
+    });
+
+    // 「編集モードで開く」→ Scratch エディタを新規タブで開く
+    function openEditor() {
+      window.open(
+        `https://scratch.mit.edu/projects/${currentProjectId}/editor/`, '_blank'
+      );
+    }
+
+    // 右ペインを閉じる
+    function closeScratch() {
+      document.getElementById('scratchActive').style.display     = 'none';
+      document.getElementById('scratchPlaceholder').style.display = 'flex';
+      document.getElementById('scratchIframe').src = '';
+    }
+  </script>
+
+</body>
+</html>
