@@ -4,23 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者ログイン | iTeen 武庫之荘校</title>
-    
-    <!-- パスワード保護 -->
     <script src="../config.js"></script>
-    
     <style>
         :root {
             --primary: #4A90E2;
             --accent: #F5A623;
             --text: #333333;
-            --bg: #FAFAFA;
             --white: #FFFFFF;
         }
-        
-        * {
-            box-sizing: border-box;
-        }
-        
+
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
             margin: 0;
@@ -32,54 +26,53 @@
             justify-content: center;
             color: var(--text);
         }
-        
+
         .login-container {
             background: var(--white);
             border-radius: 20px;
             padding: 40px;
             max-width: 400px;
             width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             text-align: center;
         }
-        
+
         .login-logo {
             max-width: 150px;
             margin-bottom: 20px;
         }
-        
+
         h1 {
             color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 10px;
+            margin: 0 0 8px;
             font-size: 1.8rem;
         }
-        
+
         .login-subtitle {
             color: #666;
             font-size: 0.9rem;
             margin-bottom: 30px;
         }
-        
+
         .login-form {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-        
+
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             text-align: left;
         }
-        
+
         .form-group label {
             font-size: 0.9rem;
             color: #666;
             font-weight: bold;
         }
-        
+
         .form-group input {
             padding: 12px 15px;
             border: 2px solid #E0E0E0;
@@ -87,28 +80,29 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-        
+
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
         }
-        
+
         .form-group input.error {
             border-color: #F44336;
             background-color: #ffebee;
         }
-        
+
         .error-message {
             color: #F44336;
             font-size: 0.85rem;
-            display: none;
-            margin-top: -10px;
+            text-align: center;
+            min-height: 1.2em;
+            visibility: hidden;
         }
-        
+
         .error-message.show {
-            display: block;
+            visibility: visible;
         }
-        
+
         .login-button {
             padding: 14px 30px;
             background-color: var(--primary);
@@ -119,51 +113,34 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 10px;
+            margin-top: 5px;
         }
-        
+
         .login-button:hover {
             background-color: #357ABD;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
         }
-        
-        .login-button:active {
-            transform: translateY(0);
-        }
-        
-        .login-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
+
+        .login-button:active { transform: translateY(0); }
+
         .back-link {
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #E0E0E0;
         }
-        
+
         .back-link a {
             color: var(--primary);
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.2s;
         }
-        
-        .back-link a:hover {
-            color: #357ABD;
-            text-decoration: underline;
-        }
-        
+
+        .back-link a:hover { text-decoration: underline; }
+
         @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
+            .login-container { padding: 30px 20px; }
+            h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -171,78 +148,66 @@
     <div class="login-container">
         <img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="login-logo">
         <h1>🔒 管理者ログイン</h1>
-        <p class="login-subtitle">メール送信履歴を確認するには、管理者パスワードを入力してください</p>
-        
+        <p class="login-subtitle">管理者IDとパスワードを入力してください</p>
+
         <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label for="password">パスワード</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="管理者パスワードを入力"
-                    required
-                    autofocus
-                >
-                <div class="error-message" id="error-message">パスワードが正しくありません。</div>
+                <label for="admin-id">管理者ID</label>
+                <input type="text" id="admin-id" name="admin-id"
+                    placeholder="IDを入力" required autocomplete="username" autofocus>
             </div>
-            
-            <button type="submit" class="login-button" id="login-button">ログイン</button>
+            <div class="form-group">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" name="password"
+                    placeholder="パスワードを入力" required autocomplete="current-password">
+            </div>
+
+            <div class="error-message" id="error-message">IDまたはパスワードが正しくありません。</div>
+
+            <button type="submit" class="login-button">ログイン</button>
         </form>
-        
+
         <div class="back-link">
             <a href="../../index.html">← ホームに戻る</a>
         </div>
     </div>
-    
+
     <script>
-        // CONFIGが読み込まれているか確認
         if (typeof CONFIG === 'undefined') {
-            console.error('CONFIGが読み込まれていません。config.jsを先に読み込んでください。');
+            alert('設定ファイルが読み込めませんでした。');
         }
-        
-        // 管理者用パスワード
-        const ADMIN_PASSWORD = CONFIG.ADMIN_PASSWORD || CONFIG.PASSWORD || 'admin123';
-        
-        // ログインフォームの処理
+
+        // ログイン済みなら記事エディタへ
+        if (sessionStorage.getItem('iteen_mukonosou_admin_authenticated') === 'true') {
+            window.location.href = 'article-editor.html';
+        }
+
         function handleLogin(event) {
             event.preventDefault();
-            
-            const passwordInput = document.getElementById('password');
-            const errorMessage = document.getElementById('error-message');
-            const loginButton = document.getElementById('login-button');
-            const inputPassword = passwordInput.value.trim();
-            
-            // パスワードチェック
-            if (inputPassword === ADMIN_PASSWORD) {
-                // パスワードが正しい場合
-                // セッションストレージに認証状態を保存
+
+            const inputId  = document.getElementById('admin-id').value.trim();
+            const inputPw  = document.getElementById('password').value.trim();
+            const errorEl  = document.getElementById('error-message');
+
+            const correctId = CONFIG.ADMIN_ID       || '';
+            const correctPw = CONFIG.ADMIN_PASSWORD || '';
+
+            if (inputId === correctId && inputPw === correctPw) {
                 sessionStorage.setItem('iteen_mukonosou_admin_authenticated', 'true');
-                
-                // 管理者ページにリダイレクト
-                window.location.href = 'email-history.html';
+                window.location.href = 'article-editor.html';
             } else {
-                // パスワードが間違っている場合
-                errorMessage.classList.add('show');
-                passwordInput.classList.add('error');
-                passwordInput.value = '';
-                passwordInput.focus();
-                
-                // 2秒後にエラーメッセージを非表示
+                errorEl.classList.add('show');
+                document.getElementById('admin-id').classList.add('error');
+                document.getElementById('password').classList.add('error');
+                document.getElementById('password').value = '';
+
                 setTimeout(function() {
-                    errorMessage.classList.remove('show');
-                    passwordInput.classList.remove('error');
-                }, 2000);
+                    errorEl.classList.remove('show');
+                    document.getElementById('admin-id').classList.remove('error');
+                    document.getElementById('password').classList.remove('error');
+                }, 2500);
             }
         }
-        
-        // Enterキーで送信（既にformのonsubmitで処理されているが、念のため）
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('login-form').dispatchEvent(new Event('submit'));
-            }
-        });
     </script>
 </body>
 </html>
-

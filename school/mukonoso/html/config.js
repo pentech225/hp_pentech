@@ -32,7 +32,8 @@ const CONFIG = {
     // パスワード（PASSWORD_PROTECTION_ENABLEDがtrueの場合に使用）
     PASSWORD: '123',
     
-    // 管理者用パスワード（メール送信履歴ページなどで使用）
-    ADMIN_PASSWORD: 'admin123'
+    // 管理者アカウント（ログインページで使用）
+    ADMIN_ID: 'admin2026',
+    ADMIN_PASSWORD: '202605'
 };
 
