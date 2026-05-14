@@ -513,30 +513,71 @@
             breaks: true,
             gfm: true
         });
-        
-        // 日付フィールドに今日の日付を設定
-        document.getElementById('date').valueAsDate = new Date();
-        
+
+        // 編集モード: URL の ?edit=ID があれば既存記事を読み込む
+        let editingArticleId = null;
+        const editId = new URLSearchParams(window.location.search).get('edit');
+        if (editId) {
+            editingArticleId = editId;
+        }
+
+        // 日付フィールドに今日の日付を設定（新規作成時のみ）
+        if (!editingArticleId) {
+            document.getElementById('date').valueAsDate = new Date();
+        }
+
         // マークダウンエディタの内容が変更されたらプレビューを更新
         const markdownEditor = document.getElementById('markdown-content');
         markdownEditor.addEventListener('input', debounce(updatePreview, 300));
-        
+
         // 初回プレビュー更新
         updatePreview();
-        
-        // 投稿ボタンの処理
+
+        // 編集モードなら記事を読み込んでフォームに反映
+        if (editingArticleId) {
+            (async function loadArticleForEdit() {
+                try {
+                    showMessage('記事を読み込み中...', 'success');
+                    const url = CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL + '?action=getArticle&id=' + encodeURIComponent(editingArticleId);
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (!data.success || !data.article) throw new Error(data.error || '記事の取得に失敗しました');
+
+                    const a = data.article;
+                    document.getElementById('title').value = a.title || '';
+                    // YYYY.MM.DD → YYYY-MM-DD に変換してdateインプットにセット
+                    document.getElementById('date').value = (a.date || '').replace(/\./g, '-');
+                    document.getElementById('category').value = a.category || '';
+                    markdownEditor.value = a.markdown || '';
+                    updatePreview();
+
+                    // UIを編集モードに切り替え
+                    document.querySelector('.header h1').textContent = '✏️ 記事編集';
+                    document.getElementById('publish-btn').textContent = '📤 記事を更新';
+                    document.getElementById('save-btn').style.display = 'none';
+
+                    const msgEl = document.getElementById('message');
+                    msgEl.classList.remove('show');
+                } catch (err) {
+                    showMessage('記事の読み込みに失敗しました: ' + err.message, 'error');
+                }
+            })();
+        }
+
+        // 投稿（新規）または更新ボタンの処理
         async function publishArticle() {
             const title = document.getElementById('title').value.trim();
             const date = document.getElementById('date').value;
             const category = document.getElementById('category').value;
             const markdown = markdownEditor.value.trim();
-            
+
             if (!title || !date || !category || !markdown) {
                 showMessage('すべての項目を入力してください。', 'error');
                 return;
             }
-            
-            if (!confirm('記事を投稿しますか？')) {
+
+            const actionLabel = editingArticleId ? '更新' : '投稿';
+            if (!confirm(`記事を${actionLabel}しますか？`)) {
                 return;
             }
             
@@ -566,35 +607,37 @@
             // 投稿ボタンを無効化
             const publishBtn = document.getElementById('publish-btn');
             publishBtn.disabled = true;
-            publishBtn.textContent = '📤 投稿中...';
+            publishBtn.textContent = editingArticleId ? '📤 更新中...' : '📤 投稿中...';
 
             try {
-                // Google Apps Scriptに送信（text/plainはCORSシンプルリクエストのため preflight 不要）
+                // 更新 or 新規投稿
+                const requestBody = editingArticleId
+                    ? { type: 'update_article', id: editingArticleId, data: articleData }
+                    : { type: 'publish_article', data: articleData };
+
                 const response = await fetch(CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain',
-                    },
-                    body: JSON.stringify({
-                        type: 'publish_article',
-                        data: articleData
-                    })
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(requestBody)
                 });
 
                 const result = await response.json();
                 if (result.success) {
-                    showMessage('記事を投稿しました！ブログ一覧に反映されます。', 'success');
-                    setTimeout(() => { clearForm(); }, 3000);
+                    const successMsg = editingArticleId
+                        ? '記事を更新しました！'
+                        : '記事を投稿しました！ブログ一覧に反映されます。';
+                    showMessage(successMsg, 'success');
+                    if (!editingArticleId) setTimeout(() => { clearForm(); }, 3000);
                 } else {
-                    throw new Error(result.error || result.message || '投稿に失敗しました');
+                    throw new Error(result.error || result.message || `${actionLabel}に失敗しました`);
                 }
 
             } catch (error) {
-                console.error('投稿エラー:', error);
-                showMessage('記事の投稿に失敗しました: ' + error.message, 'error');
+                console.error('エラー:', error);
+                showMessage(`記事の${actionLabel}に失敗しました: ` + error.message, 'error');
             } finally {
                 publishBtn.disabled = false;
-                publishBtn.textContent = '📤 記事を投稿';
+                publishBtn.textContent = editingArticleId ? '📤 記事を更新' : '📤 記事を投稿';
             }
         }
         

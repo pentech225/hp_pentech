@@ -91,6 +91,8 @@ function doPost(e) {
       return handleArticlePublish(data.data);
     } else if (data.type === 'save_article') {
       return handleArticleSave(data.data);
+    } else if (data.type === 'update_article') {
+      return handleArticleUpdate(data.id, data.data);
     } else {
       throw new Error('不明なリクエストタイプ: ' + data.type);
     }
@@ -162,6 +164,35 @@ function handleArticleSave(articleData) {
 }
 
 // ============================================================
+// 記事更新
+// ============================================================
+
+function handleArticleUpdate(id, articleData) {
+  try {
+    if (!id) throw new Error('更新対象のIDが指定されていません');
+    if (!articleData.title || !articleData.date || !articleData.category || !articleData.html) {
+      throw new Error('記事データが不完全です（タイトル・日付・カテゴリ・本文が必要）');
+    }
+
+    updateArticleInSheets(id, articleData);
+    Logger.log('✅ 記事を更新: ' + id);
+
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: '記事を更新しました',
+      id: id
+    })));
+
+  } catch (error) {
+    Logger.log('❌ 記事更新エラー: ' + error.toString());
+    return setCorsHeaders(ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: error.toString()
+    })));
+  }
+}
+
+// ============================================================
 // Google Sheets 操作
 // ============================================================
 
@@ -182,12 +213,15 @@ function getOrCreateSpreadsheet() {
   return spreadsheet;
 }
 
+// カラム定義: A=id, B=timestamp, C=title, D=date, E=category, F=html, G=markdown, H=filename, I=excerpt
+var COLS = 9;
+
 function getBlogSheet(spreadsheet) {
   let sheet = spreadsheet.getSheetByName('BlogArticles');
   if (!sheet) {
     sheet = spreadsheet.insertSheet('BlogArticles');
-    sheet.appendRow(['id', 'timestamp', 'title', 'date', 'category', 'html', 'filename', 'excerpt']);
-    sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#E0E0E0');
+    sheet.appendRow(['id', 'timestamp', 'title', 'date', 'category', 'html', 'markdown', 'filename', 'excerpt']);
+    sheet.getRange(1, 1, 1, COLS).setFontWeight('bold').setBackground('#E0E0E0');
   }
   return sheet;
 }
@@ -206,13 +240,44 @@ function saveArticleToSheets(articleData) {
     articleData.title    || '',
     articleData.date     || '',
     articleData.category || '',
-    articleData.html     || '',
-    articleData.filename || '',
+    articleData.html      || '',
+    articleData.markdown  || '',
+    articleData.filename  || '',
     excerpt
   ]);
 
   Logger.log('✅ BlogArticlesシートに保存: ' + id);
   return id;
+}
+
+function updateArticleInSheets(id, articleData) {
+  const spreadsheet = getOrCreateSpreadsheet();
+  const sheet = getBlogSheet(spreadsheet);
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) throw new Error('記事が存在しません');
+
+  const ids = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+  const rowIndex = ids.findIndex(function(r) { return r[0] === id; });
+  if (rowIndex === -1) throw new Error('IDが一致する記事が見つかりません: ' + id);
+
+  const sheetRow = rowIndex + 2; // 0-indexed + ヘッダー行分
+  const timestamp = new Date().toISOString();
+  const excerpt = (articleData.html || '').replace(/<[^>]+>/g, '').substring(0, 200);
+
+  sheet.getRange(sheetRow, 1, 1, COLS).setValues([[
+    id,
+    timestamp,
+    articleData.title    || '',
+    articleData.date     || '',
+    articleData.category || '',
+    articleData.html      || '',
+    articleData.markdown  || '',
+    articleData.filename  || '',
+    excerpt
+  ]]);
+
+  Logger.log('✅ 記事を更新: ' + id);
 }
 
 function getArticlesFromSheets() {
@@ -228,8 +293,7 @@ function getArticlesFromSheets() {
     const lastRow = sheet.getLastRow();
     if (lastRow < 2) return [];
 
-    // lastRow - 1 = データ行数（ヘッダー行を除く）
-    const data = sheet.getRange(2, 1, lastRow - 1, 8).getValues();
+    const data = sheet.getRange(2, 1, lastRow - 1, COLS).getValues();
     const articles = data
       .map(function(row) {
         return {
@@ -239,13 +303,13 @@ function getArticlesFromSheets() {
           date:      row[3],
           category:  row[4],
           html:      row[5],
-          filename:  row[6],
-          excerpt:   row[7]
+          markdown:  row[6],
+          filename:  row[7],
+          excerpt:   row[8]
         };
       })
-      .filter(function(a) { return a.id && a.title; }); // 空行を除外
+      .filter(function(a) { return a.id && a.title; });
 
-    // 日付の新しい順
     articles.sort(function(a, b) {
       return new Date((b.date || '').replace(/\./g, '-')) -
              new Date((a.date || '').replace(/\./g, '-'));

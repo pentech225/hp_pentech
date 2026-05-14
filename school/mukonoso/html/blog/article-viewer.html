@@ -63,6 +63,7 @@
 
     <div class="article-navigation" id="article-nav" style="display: none;">
         <a href="index.html" class="nav-link">← ブログ一覧に戻る</a>
+        <a id="edit-btn" href="#" class="nav-link" style="display:none; background:#F5A623; color:white; border-color:#F5A623;">✏️ 記事を編集</a>
     </div>
 
     <div class="back-to-list">
@@ -105,7 +106,15 @@
                     document.getElementById('article-category').textContent = article.category;
                     document.getElementById('article-title').textContent = article.title;
                     document.getElementById('article-body').innerHTML = article.html || article.excerpt || '';
-                    
+
+                    // 管理者ログイン中は編集ボタンを表示
+                    const isAdmin = sessionStorage.getItem('iteen_mukonosou_admin_authenticated') === 'true';
+                    if (isAdmin) {
+                        const editBtn = document.getElementById('edit-btn');
+                        editBtn.href = '../admin/article-editor.html?edit=' + encodeURIComponent(id);
+                        editBtn.style.display = 'inline-block';
+                    }
+
                     loadingEl.style.display = 'none';
                     contentEl.style.display = 'block';
                     navEl.style.display = 'block';
