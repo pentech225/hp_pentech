@@ -139,8 +139,8 @@
             
             let apiArticles = [];
             try {
-                if (typeof CONFIG !== 'undefined' && CONFIG.GOOGLE_APPS_SCRIPT_URL) {
-                    const url = CONFIG.GOOGLE_APPS_SCRIPT_URL + '?action=getArticles';
+                if (typeof CONFIG !== 'undefined' && CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL) {
+                    const url = CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL + '?action=getArticles';
                     const response = await fetch(url);
                     const data = await response.json();
                     if (data.success && data.articles && data.articles.length > 0) {

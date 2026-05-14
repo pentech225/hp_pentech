@@ -91,10 +91,10 @@
             }
 
             try {
-                if (typeof CONFIG === 'undefined' || !CONFIG.GOOGLE_APPS_SCRIPT_URL) {
-                    throw new Error('設定がありません');
+                if (typeof CONFIG === 'undefined' || !CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL) {
+                    throw new Error('BLOG_GOOGLE_APPS_SCRIPT_URLが設定されていません');
                 }
-                const url = CONFIG.GOOGLE_APPS_SCRIPT_URL + '?action=getArticle&id=' + encodeURIComponent(id);
+                const url = CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL + '?action=getArticle&id=' + encodeURIComponent(id);
                 const response = await fetch(url);
                 const data = await response.json();
 

@@ -1733,12 +1733,19 @@ function saveArticleToSheets(articleData, fileId) {
   try {
     const properties = PropertiesService.getScriptProperties();
     let spreadsheetId = properties.getProperty('GOOGLE_SHEETS_SPREADSHEET_ID');
-    
+
+    let spreadsheet;
     if (!spreadsheetId) {
-      throw new Error('スプレッドシートが設定されていません。先に予約フォーム等を1回実行してください。');
+      // スプレッドシートが未設定の場合は自動作成
+      Logger.log('📝 スプレッドシートが未設定のため、新規作成します');
+      spreadsheet = SpreadsheetApp.create('iTeen 武庫之荘校 - データ管理');
+      spreadsheetId = spreadsheet.getId();
+      properties.setProperty('GOOGLE_SHEETS_SPREADSHEET_ID', spreadsheetId);
+      Logger.log('✅ 新規スプレッドシートを作成しました: ' + spreadsheetId);
+    } else {
+      spreadsheet = SpreadsheetApp.openById(spreadsheetId);
     }
-    
-    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+
     let sheet = spreadsheet.getSheetByName('BlogArticles');
     
     if (!sheet) {
@@ -1792,7 +1799,7 @@ function getArticlesFromSheets() {
       return [];
     }
     
-    const data = sheet.getRange(2, 1, lastRow, 8).getValues();
+    const data = sheet.getRange(2, 1, lastRow - 1, 8).getValues();
     const articles = data.map(function(row) {
       return {
         id: row[0],

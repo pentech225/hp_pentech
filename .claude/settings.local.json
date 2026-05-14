@@ -3,7 +3,11 @@
     "allow": [
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\PC\\\\.company\\\\cto\\\\hp_pentech\\\\school\\\\cource\" -Recurse -Directory | ForEach-Object { $_.FullName } | Sort-Object)",
       "Bash(python -c \"import pygame; import numpy; print\\('pygame:', pygame.__version__, '/ numpy:', numpy.__version__\\)\")",
-      "Bash(Get-ChildItem *)"
+      "Bash(Get-ChildItem *)",
+      "Bash(git push *)",
+      "PowerShell(git filter-branch *)",
+      "PowerShell(git stash *)",
+      "PowerShell(git push *)"
     ]
   }
 }

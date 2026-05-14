@@ -10,6 +10,9 @@ const CONFIG = {
     // Google Apps ScriptのWebアプリURL（体験会・お問い合わせフォーム用）
     GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyGWLE6Z574DGYk6BQqaksJ_UdSyJndAh7Fkf7AlzG_8vNku6BEKpTDCIRNz_2FwYqP/exec',
 
+    // ブログ記事管理専用GAS URL（blog-gas-code.js をデプロイ後に貼り付ける）
+    BLOG_GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw5hzA5xBL6CdIT-28zMS_WVnge-JgAVQYpc3KZ_t2hX8JILttZ4YlVsKOqOWT-1XqlRw/exec',
+
     // イベント申し込みフォーム専用GAS URL（↓デプロイ後に貼り付ける）
     EVENT_GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycby60qiEn0to3gqumebdJF4yS7XQL5dWhLSaaQZpuucKkCt1pE9MZ-RlmpDGwZ7nxMNl/exec',
     

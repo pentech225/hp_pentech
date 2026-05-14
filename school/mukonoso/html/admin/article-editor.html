@@ -567,32 +567,31 @@
             const publishBtn = document.getElementById('publish-btn');
             publishBtn.disabled = true;
             publishBtn.textContent = '📤 投稿中...';
-            
+
             try {
-                // Google Apps Scriptに送信
-                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                // Google Apps Scriptに送信（text/plainはCORSシンプルリクエストのため preflight 不要）
+                const response = await fetch(CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'text/plain',
                     },
                     body: JSON.stringify({
                         type: 'publish_article',
                         data: articleData
                     })
                 });
-                
-                // no-corsモードではレスポンスを読めないため、成功とみなす
-                showMessage('記事を投稿しました！', 'success');
-                
-                // 3秒後にフォームをクリア
-                setTimeout(() => {
-                    clearForm();
-                }, 3000);
-                
+
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('記事を投稿しました！ブログ一覧に反映されます。', 'success');
+                    setTimeout(() => { clearForm(); }, 3000);
+                } else {
+                    throw new Error(result.error || result.message || '投稿に失敗しました');
+                }
+
             } catch (error) {
                 console.error('投稿エラー:', error);
-                showMessage('記事の投稿に失敗しました。もう一度お試しください。', 'error');
+                showMessage('記事の投稿に失敗しました: ' + error.message, 'error');
             } finally {
                 publishBtn.disabled = false;
                 publishBtn.textContent = '📤 記事を投稿';
@@ -639,32 +638,31 @@
             const saveBtn = document.getElementById('save-btn');
             saveBtn.disabled = true;
             saveBtn.textContent = '💾 保存中...';
-            
+
             try {
-                // Google Apps Scriptに送信
-                const response = await fetch(CONFIG.GOOGLE_APPS_SCRIPT_URL, {
+                // Google Apps Scriptに送信（text/plainはCORSシンプルリクエストのため preflight 不要）
+                const response = await fetch(CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'text/plain',
                     },
                     body: JSON.stringify({
                         type: 'save_article',
                         data: articleData
                     })
                 });
-                
-                // no-corsモードではレスポンスを読めないため、成功とみなす
-                showMessage('記事を保存しました！', 'success');
-                
-                // 3秒後にフォームをクリア
-                setTimeout(() => {
-                    clearForm();
-                }, 3000);
-                
+
+                const result = await response.json();
+                if (result.success) {
+                    showMessage('記事を保存しました！', 'success');
+                    setTimeout(() => { clearForm(); }, 3000);
+                } else {
+                    throw new Error(result.error || result.message || '保存に失敗しました');
+                }
+
             } catch (error) {
                 console.error('保存エラー:', error);
-                showMessage('記事の保存に失敗しました。もう一度お試しください。', 'error');
+                showMessage('記事の保存に失敗しました: ' + error.message, 'error');
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.textContent = '💾 記事を保存';
