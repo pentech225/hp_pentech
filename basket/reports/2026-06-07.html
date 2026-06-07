@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動報告 2026-06-07 | むこたまバスケットボールクラブ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-ball">🏀</span>
+      むこたまバスケットボールクラブ
+    </a>
+    <nav>
+      <a href="../index.html#info">基本情報</a>
+      <a href="../index.html#schedule">スケジュール</a>
+      <a href="../index.html#activities">メニュー</a>
+      <a href="../reports.html" class="active">活動報告</a>
+      <a href="../index.html#apply">申し込み</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="section-inner">
+    <h2 class="section-title">📋 活動報告</h2>
+
+    <!-- ===== メタ情報（HTML） ===== -->
+    <div class="report-card">
+      <div class="report-card-header">
+        <span class="report-date">📅 2026年5月17日（日）</span>
+        <div class="report-meta">
+          <span class="report-chip">14:50〜16:30</span>
+          <span class="report-chip highlight">参加 子ども7名、大人3名</span>
+          <!-- 𠮷岡、成山、山口ひろや、みずは、あやと、うい、 諒、-->
+        </div>
+      </div>
+      <div class="report-card-body">
+        <p class="report-summary">第4回 活動</p>
+
+        <div class="report-menu-tags">
+          <span class="menu-tag">準備・挨拶・柔軟・ボール2つドリブル</span>
+          <span class="menu-tag">ドリブル</span>
+          <span class="menu-tag">レイアップ練習一人3本左右</span>
+          <span class="menu-tag">シュート練習、ボールを片手で支えられるようにフォームを調整</span>
+          <span class="menu-tag">1on1 勝ち残り。順番に戦っていく。シュートを外しても負け判定なので、うまい具合に回ってよかったです。 </span>
+          <span class="menu-tag">4on4 x1 </span>
+        </div>
+
+        <!-- ===== レポート本文（ここをMarkdownで編集） ===== -->
+        <div id="md-output" class="md-content"></div>
+        <script type="text/markdown" id="md-src">
+
+## 練習
+少し早めについたので、14:40ぐらいから体を動かしました。後半ばてたので、15:00から一斉に始めるでよいです。
+バスケ体力が切れて他の事をして遊んでいる子どもがいると、全体の雰囲気が閉まらなくなるので、適度に、遊んでくれたらと思います。
+強制的に練習をさせたいわけではないので、ここの匙加減、単調な反復でもモチベーションを持ってやってくれるようにするのがコーチの腕の見せ所だと思いました。
+
+## 環境・その他
+雨だったので涼しかったです。
+最後の片付け、みんな率先してモップやドア閉めを今日もしてくれて助かりました。
+ポカリ２Lｘ３本。給水タンク。少し余りました。
+シューズが拭ける雑巾を用意　→　ＯＫ
+
+---
+
+## 🎯 次回に向けた課題
+
+## 次回までの取り組み
+
+- フリースロー対決　一人ずつフリースローを打っていく。最後まで残っていた人が勝ち。
+→　みんな近くからでも結構入れるのが難しいから、すぐに脱落してゲームにならなかったです。
+
+- 適切な難易度の課題を、継続的に与え続けることが必要です。
+# 半年間の取り組み
+- 目標は部員**30名**！仲間をどんどん呼ぼう
+- スタンプカード導入検討（5回参加でプレゼント）
+- 他チームとの交流戦を企画したい
+- 目標を明確にする。「シュートが入るようになる」「ドリブルが上手くなる」など、達成感を味わえる目標を設定していきたいです。
+- コーチである私がプレイに入ると、全体が見渡せない。やはり、私以外にもプレーをしつつ導いてくれる大人が３人ぐらい必要。募集中
+- 尼崎で3on3のオープン戦が、資格などいらず参加しやすい。明確なゴールとしてあり。
+
+        </script>
+
+      </div>
+    </div>
+
+    <div class="page-nav">
+      <a href="../reports.html">← 一覧へ戻る</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-contact">むこたまバスケットボール</div>
+  <p>連絡先：彦阪吉海 <a href="tel:07023278083">070-2327-8083</a></p>
+  <p style="margin-top:16px;">&copy; 2026 むこたまバスケットボール</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const src = document.getElementById('md-src').textContent;
+  document.getElementById('md-output').innerHTML = marked.parse(src);
+</script>
+
+</body>
+</html>
