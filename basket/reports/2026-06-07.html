@@ -9,21 +9,7 @@
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <a href="../index.html" class="logo">
-      <span class="logo-ball">🏀</span>
-      むこたまバスケットボールクラブ
-    </a>
-    <nav>
-      <a href="../index.html#info">基本情報</a>
-      <a href="../index.html#schedule">スケジュール</a>
-      <a href="../index.html#activities">メニュー</a>
-      <a href="../reports.html" class="active">活動報告</a>
-      <a href="../index.html#apply">申し込み</a>
-    </nav>
-  </div>
-</header>
+<div id="site-header"></div>
 
 <main>
   <div class="section-inner">
@@ -96,17 +82,14 @@
   </div>
 </main>
 
-<footer>
-  <div class="footer-contact">むこたまバスケットボール</div>
-  <p>連絡先：彦阪吉海 <a href="tel:07023278083">070-2327-8083</a></p>
-  <p style="margin-top:16px;">&copy; 2026 むこたまバスケットボール</p>
-</footer>
+<div id="site-footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
   const src = document.getElementById('md-src').textContent;
   document.getElementById('md-output').innerHTML = marked.parse(src);
 </script>
-
+<script>window.ROOT='../';</script>
+<script src="../js/components.js"></script>
 </body>
 </html>
