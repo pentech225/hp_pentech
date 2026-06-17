@@ -385,6 +385,91 @@
             width: 30%;
         }
 
+        .article-list-panel {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .article-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .article-list-table th {
+            background: #f5f5f5;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .article-list-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .article-list-table tr:hover td {
+            background: #f9f9f9;
+        }
+
+        .article-list-table tr.editing-row td {
+            background: #fff8e1;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        .btn-edit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-edit:hover {
+            background: #357ABD;
+        }
+
+        .btn-edit.editing {
+            background: var(--accent);
+            cursor: default;
+        }
+
+        .article-list-status {
+            text-align: center;
+            color: #888;
+            padding: 30px;
+        }
+
+        .edit-mode-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
         .markdown-editor.drag-over {
             border-color: var(--primary);
             background: #f0f8ff;
@@ -528,6 +613,9 @@
                 <button type="submit" class="btn btn-primary" id="save-btn">
                     💾 記事を保存
                 </button>
+                <button type="button" class="btn btn-secondary" id="new-btn" onclick="switchToNewMode()" style="display: none;">
+                    ➕ 新規作成
+                </button>
                 <button type="button" class="btn btn-secondary" onclick="clearForm()">
                     🗑️ クリア
                 </button>
@@ -536,6 +624,16 @@
                 </button>
             </div>
         </form>
+
+        <div class="article-list-panel">
+            <div class="panel-header">
+                <h2>📋 投稿済み記事一覧</h2>
+                <button type="button" class="panel-toggle" onclick="refreshArticleList()">🔄 更新</button>
+            </div>
+            <div id="article-list-container">
+                <p class="article-list-status">読み込み中...</p>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -576,16 +674,12 @@
 
                     const a = data.article;
                     document.getElementById('title').value = a.title || '';
-                    // YYYY.MM.DD → YYYY-MM-DD に変換してdateインプットにセット
                     document.getElementById('date').value = (a.date || '').replace(/\./g, '-');
                     document.getElementById('category').value = a.category || '';
                     markdownEditor.value = a.markdown || '';
                     updatePreview();
 
-                    // UIを編集モードに切り替え
-                    document.querySelector('.header h1').textContent = '✏️ 記事編集';
-                    document.getElementById('publish-btn').textContent = '📤 記事を更新';
-                    document.getElementById('save-btn').style.display = 'none';
+                    switchToEditMode(editingArticleId);
 
                     const msgEl = document.getElementById('message');
                     msgEl.classList.remove('show');
@@ -658,6 +752,7 @@
                         ? '記事を更新しました！'
                         : '記事を投稿しました！ブログ一覧に反映されます。';
                     showMessage(successMsg, 'success');
+                    refreshArticleList();
                     if (!editingArticleId) setTimeout(() => { clearForm(); }, 3000);
                 } else {
                     throw new Error(result.error || result.message || `${actionLabel}に失敗しました`);
@@ -785,6 +880,139 @@
             };
         }
         
+        // ============================================================
+        // 投稿済み記事一覧
+        // ============================================================
+
+        async function loadArticleList() {
+            const container = document.getElementById('article-list-container');
+            try {
+                if (typeof CONFIG === 'undefined' || !CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL) {
+                    container.innerHTML = '<p class="article-list-status">APIの設定がありません（config.js を確認してください）</p>';
+                    return;
+                }
+                const url = CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL + '?action=getArticles';
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!data.success || !data.articles || data.articles.length === 0) {
+                    container.innerHTML = '<p class="article-list-status">投稿済み記事がありません</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="article-list-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">日付</th>
+                                <th style="width: 120px;">カテゴリ</th>
+                                <th>タイトル</th>
+                                <th style="width: 80px;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.articles.map(a => `
+                                <tr id="row-${a.id}" class="${a.id === editingArticleId ? 'editing-row' : ''}">
+                                    <td style="white-space: nowrap;">${a.date || ''}</td>
+                                    <td><span class="category-tag">${a.category || ''}</span></td>
+                                    <td>${a.title || ''}</td>
+                                    <td>
+                                        <button
+                                            class="btn-edit${a.id === editingArticleId ? ' editing' : ''}"
+                                            onclick="loadArticleForEditing('${a.id}', this)"
+                                            ${a.id === editingArticleId ? 'disabled' : ''}
+                                        >${a.id === editingArticleId ? '編集中' : '✏️ 編集'}</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (err) {
+                container.innerHTML = '<p class="article-list-status">記事の読み込みに失敗しました</p>';
+                console.error(err);
+            }
+        }
+
+        function refreshArticleList() {
+            const container = document.getElementById('article-list-container');
+            container.innerHTML = '<p class="article-list-status">読み込み中...</p>';
+            loadArticleList();
+        }
+
+        async function loadArticleForEditing(id, btnEl) {
+            try {
+                showMessage('記事を読み込み中...', 'success');
+                const url = CONFIG.BLOG_GOOGLE_APPS_SCRIPT_URL + '?action=getArticle&id=' + encodeURIComponent(id);
+                const response = await fetch(url);
+                const data = await response.json();
+                if (!data.success || !data.article) throw new Error(data.error || '記事の取得に失敗しました');
+
+                const a = data.article;
+                editingArticleId = a.id;
+
+                document.getElementById('title').value = a.title || '';
+                document.getElementById('date').value = (a.date || '').replace(/\./g, '-');
+                document.getElementById('category').value = a.category || '';
+                markdownEditor.value = a.markdown || '';
+                updatePreview();
+
+                switchToEditMode(a.id);
+
+                // 一覧のハイライトを更新
+                document.querySelectorAll('.article-list-table tr').forEach(tr => tr.classList.remove('editing-row'));
+                document.querySelectorAll('.btn-edit').forEach(b => {
+                    b.classList.remove('editing');
+                    b.disabled = false;
+                    b.textContent = '✏️ 編集';
+                });
+                const row = document.getElementById('row-' + a.id);
+                if (row) {
+                    row.classList.add('editing-row');
+                    const btn = row.querySelector('.btn-edit');
+                    if (btn) { btn.classList.add('editing'); btn.disabled = true; btn.textContent = '編集中'; }
+                }
+
+                const msgEl = document.getElementById('message');
+                msgEl.classList.remove('show');
+                showMessage(`「${a.title}」を編集モードで開きました`, 'success');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                showMessage('記事の読み込みに失敗しました: ' + err.message, 'error');
+            }
+        }
+
+        function switchToEditMode(id) {
+            editingArticleId = id;
+            document.querySelector('.header h1').innerHTML = '✏️ 記事編集 <span class="edit-mode-badge">編集中</span>';
+            document.getElementById('publish-btn').textContent = '📤 記事を更新';
+            document.getElementById('save-btn').style.display = 'none';
+            document.getElementById('new-btn').style.display = '';
+        }
+
+        function switchToNewMode() {
+            if (!confirm('新規作成モードに切り替えますか？編集中の内容は失われます。')) return;
+            editingArticleId = null;
+            document.getElementById('article-form').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            markdownEditor.value = '';
+            updatePreview();
+            document.querySelector('.header h1').textContent = '📝 記事投稿エディタ';
+            document.getElementById('publish-btn').textContent = '📤 記事を投稿';
+            document.getElementById('save-btn').style.display = '';
+            document.getElementById('new-btn').style.display = 'none';
+            // 一覧の選択を解除
+            document.querySelectorAll('.article-list-table tr').forEach(tr => tr.classList.remove('editing-row'));
+            document.querySelectorAll('.btn-edit').forEach(b => {
+                b.classList.remove('editing');
+                b.disabled = false;
+                b.textContent = '✏️ 編集';
+            });
+        }
+
+        // 起動時に記事一覧を読み込む
+        loadArticleList();
+
         // クリップボードからの画像貼り付け
         markdownEditor.addEventListener('paste', function(e) {
             const items = e.clipboardData && e.clipboardData.items;
