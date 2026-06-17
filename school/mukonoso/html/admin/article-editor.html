@@ -384,6 +384,36 @@
             font-weight: bold;
             width: 30%;
         }
+
+        .markdown-editor.drag-over {
+            border-color: var(--primary);
+            background: #f0f8ff;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .paste-hint {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        .image-inserting {
+            position: relative;
+        }
+
+        .image-inserting::after {
+            content: '画像を処理中...';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--primary);
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -431,12 +461,13 @@
                         <h2>📝 マークダウンエディタ</h2>
                         <button type="button" class="panel-toggle" onclick="toggleFullWidth('editor')">全画面</button>
                     </div>
-                    <textarea 
-                        id="markdown-content" 
-                        class="markdown-editor" 
+                    <textarea
+                        id="markdown-content"
+                        class="markdown-editor"
                         placeholder="# 見出し1&#10;&#10;記事の本文をマークダウン形式で入力してください。&#10;&#10;## 見出し2&#10;&#10;- リスト項目1&#10;- リスト項目2&#10;&#10;**太字**や*斜体*も使えます。"
                         required
                     ></textarea>
+                    <p class="paste-hint">📋 Ctrl+V で画像を貼り付け・画像ファイルのドラッグ＆ドロップも可能</p>
                 </div>
                 
                 <div class="editor-panel">
@@ -754,6 +785,65 @@
             };
         }
         
+        // クリップボードからの画像貼り付け
+        markdownEditor.addEventListener('paste', function(e) {
+            const items = e.clipboardData && e.clipboardData.items;
+            if (!items) return;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    e.preventDefault();
+                    insertImageFromFile(items[i].getAsFile());
+                    return;
+                }
+            }
+        });
+
+        // ドラッグ＆ドロップ対応
+        markdownEditor.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
+        markdownEditor.addEventListener('dragleave', function() {
+            this.classList.remove('drag-over');
+        });
+        markdownEditor.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].type.indexOf('image') !== -1) {
+                    insertImageFromFile(files[i]);
+                    return;
+                }
+            }
+        });
+
+        function insertImageFromFile(file) {
+            const editorPanel = markdownEditor.closest('.editor-panel');
+            editorPanel.classList.add('image-inserting');
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const dataUrl = event.target.result;
+                const before = markdownEditor.value.substring(0, markdownEditor.selectionStart);
+                const after = markdownEditor.value.substring(markdownEditor.selectionEnd);
+                const prefix = before.length > 0 && !before.endsWith('\n') ? '\n' : '';
+                const suffix = after.length > 0 && !after.startsWith('\n') ? '\n' : '';
+                const insertion = prefix + `![画像](${dataUrl})` + suffix;
+                markdownEditor.value = before + insertion + after;
+                const newPos = before.length + insertion.length;
+                markdownEditor.selectionStart = markdownEditor.selectionEnd = newPos;
+                markdownEditor.focus();
+                updatePreview();
+                editorPanel.classList.remove('image-inserting');
+                showMessage('画像を挿入しました！', 'success');
+            };
+            reader.onerror = function() {
+                editorPanel.classList.remove('image-inserting');
+                showMessage('画像の読み込みに失敗しました。', 'error');
+            };
+            reader.readAsDataURL(file);
+        }
+
         // 全画面切り替え
         let fullWidthPanel = null;
         function toggleFullWidth(panel) {
