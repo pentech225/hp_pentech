@@ -21,7 +21,6 @@
 
   const footer = `<footer>
   <div class="footer-contact">むこたまバスケット</div>
-  <p>連絡先：彦阪吉海 <a href="tel:07023278083">070-2327-8083</a></p>
   <p><a href="mailto:mukotama7@gmail.com">mukotama7@gmail.com</a></p>
   <p style="margin-top:16px;">&copy; 2026 むこたまバスケット</p>
 </footer>`;
