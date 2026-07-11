@@ -1,4 +1,4 @@
-<html lang="en-us"><script src="https://pygame-web.github.io/cdn/0.9.3/pythons.js" type=module id="site" data-python="python3.12" data-LINES=42 data-COLUMNS=132 data-os="vtx,snd,gui" async defer>#<!--
+﻿<html lang="en-us"><script src="https://pygame-web.github.io/cdn/0.9.3/pythons.js" type=module id="site" data-python="python3.12" data-LINES=42 data-COLUMNS=132 data-os="vtx,snd,gui" async defer>#<!--
 
 print("""
 Loading browser_game from browser_game.apk
@@ -52,6 +52,12 @@ async def custom_site():
     # preloader will change to work dir and prepend it to sys.path
     platform.run_main(PyConfig, loaderhome= appdir / "assets", loadermain=None)
 
+    # archive download/extract is done, but wasm still has to compile : keep the
+    # panel visible and say so, otherwise the screen goes blank for a few seconds
+    # and looks like a load failure.
+    # NB: use getElementById, not platform.window.status -- window.status is a
+    # native browser property (the old statusbar text) and shadows the #status div.
+    platform.document.getElementById("status").innerText = "Preparing..."
 
     # wait preloading complete : that includes images and wasm compilation of bundled modules
     while embed.counter()<0:
@@ -70,8 +76,8 @@ async def custom_site():
         __import__(__name__).__file__ = main
 
         # now make a prompt
-        msg  = "Ready to start ! Please click/touch page"
-        platform.window.infobox.innerText = msg
+        msg  = "TOUCH"
+        platform.document.getElementById("status").innerText = msg
         print("\n"*4, f"    * Waiting for media user engagement. {msg} *" , "\n"*4)
 
         while not platform.window.MM.UME:
@@ -86,13 +92,15 @@ async def custom_site():
 
 
     def ui_callback(pkg):
-        platform.window.infobox.innerText = f"installing {pkg}"
+        platform.document.getElementById("status").innerText = f"Installing {pkg}..."
 
+    platform.document.getElementById("status").innerText = "Starting..."
     await shell.source(main, callback=ui_callback)
 
     # if you don't reach that step
     # your main.py has an infinite sync loop somewhere !
 
+    platform.window.transfer.hidden = true
     platform.window.infobox.style.display = "none"
     platform.window.config.gui_divider = 1
     platform.window.window_resize()
@@ -166,14 +174,12 @@ function show_infobox() {
 
     // Measure box
     const w = infobox.offsetWidth;
-    const h = infobox.offsetHeight;
 
-    // Center in viewport
+    // Center horizontally only; vertical position is fixed via CSS (#infobox top)
+    // so this box never overlaps the progress bar shown above it.
     const left = (window.innerWidth - w) / 2;
-    const top = (window.innerHeight - h) / 2;
 
     infobox.style.left = left + "px";
-    infobox.style.top = top + "px";
 }
 
 </script>
@@ -192,7 +198,7 @@ function show_infobox() {
     <style>
         #transfer {
             position: fixed;
-            top: 50%;
+            top: 38%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
@@ -239,13 +245,23 @@ function show_infobox() {
             color: rgb(80, 80, 80);
         }
 
+        @keyframes still-working-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        #status.still-working {
+            animation: still-working-pulse 1s ease-in-out infinite;
+        }
+
         #infobox {
-            position: fixed; /* center relative to viewport */
+            position: fixed; /* horizontally centered via JS, top fixed here so it never overlaps the progress bar above */
+            top: 62%;
             background: green;
             color: blue;
             font-weight: bold;
             padding: 12px 24px;
- /*           display: none; */
+            display: none;
             z-index: 999999;
         }
         div.emscripten { text-align: center; }
@@ -331,7 +347,7 @@ function show_infobox() {
         <div class="emscripten">
             <progress value="0" max="100" id="progress"></progress>
         </div>
-        <div id="progress-percent">0%</div>
+
     </div>
 
 
@@ -423,8 +439,6 @@ frameborder="1"
         transfer.hidden = debug_hidden
         info.hidden = debug_hidden
         box.hidden =  debug_hidden
-
-        show_infobox()
     }
 
     function custom_prerun(){
@@ -471,12 +485,17 @@ frameborder="1"
     (function () {
         const bar = document.getElementById("progress");
         const label = document.getElementById("progress-percent");
+        const statusEl = document.getElementById("status");
         if (!bar || !label) return;
         setInterval(() => {
             const max = bar.max || 100;
             const val = bar.value || 0;
             const pct = Math.min(100, Math.round((val / max) * 100));
             label.textContent = pct + "%";
+            // once the archive download itself hits 100%, wasm compile / game
+            // start is still happening : pulse the status text so it doesn't
+            // look frozen or broken while we wait for that to finish.
+            if (statusEl) statusEl.classList.toggle("still-working", pct >= 100);
         }, 100);
     })();
 
