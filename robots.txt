@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /school/mukonoso/html/admin/
+Disallow: /limited_access_H8nK2mR5pB9vX1wQ7zL4tY6sD0fG3jA9uE2vN5xC8bM1kP4qW7z/
+
+Sitemap: https://www.pentech.info/sitemap.xml
