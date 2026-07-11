@@ -25,7 +25,7 @@ async def custom_site():
     import embed
     platform.document.body.style.background = "#7f7f7f"
 
-    platform.window.transfer.hidden = true
+    platform.window.transfer.hidden = false
     platform.window.canvas.style.visibility = "visible"
 
 
@@ -190,18 +190,53 @@ function show_infobox() {
     <link rel="icon" type="image/png" href="favicon.png" sizes="16x16">
 
     <style>
+        #transfer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+        }
+
         #status {
-            display: inline-block;
-            vertical-align: top;
-            margin-top: 20px;
-            margin-left: 30px;
+            display: block;
+            margin-bottom: 12px;
             font-weight: bold;
-            color: rgb(120, 120, 120);
+            font-size: 18px;
+            color: rgb(80, 80, 80);
         }
 
         #progress {
-            height: 20px;
-            width: 300px;
+            height: 24px;
+            width: 320px;
+            border-radius: 12px;
+            border: 2px solid #555;
+            overflow: hidden;
+        }
+
+        #progress::-webkit-progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 12px;
+        }
+
+        #progress::-webkit-progress-value {
+            background-color: #4caf50;
+            border-radius: 12px;
+            transition: width 0.15s ease;
+        }
+
+        #progress::-moz-progress-bar {
+            background-color: #4caf50;
+            border-radius: 12px;
+            transition: width 0.15s ease;
+        }
+
+        #progress-percent {
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            color: rgb(80, 80, 80);
         }
 
         #infobox {
@@ -296,6 +331,7 @@ function show_infobox() {
         <div class="emscripten">
             <progress value="0" max="100" id="progress"></progress>
         </div>
+        <div id="progress-percent">0%</div>
     </div>
 
 
@@ -431,6 +467,18 @@ frameborder="1"
     function frame_online(url) {
         window.frames["iframe"].location = url;
     }
+
+    (function () {
+        const bar = document.getElementById("progress");
+        const label = document.getElementById("progress-percent");
+        if (!bar || !label) return;
+        setInterval(() => {
+            const max = bar.max || 100;
+            const val = bar.value || 0;
+            const pct = Math.min(100, Math.round((val / max) * 100));
+            label.textContent = pct + "%";
+        }, 100);
+    })();
 
     </script>
 
