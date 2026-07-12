@@ -8,7 +8,13 @@
       "PowerShell(git filter-branch *)",
       "PowerShell(git stash *)",
       "PowerShell(git push *)",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(file img/*.png build/web/favicon.png)",
+      "Bash(identify img/*.png build/web/favicon.png)",
+      "Bash(powershell -c \"Get-Item img\\\\*.png, build\\\\web\\\\favicon.png | Select-Object Name,Length\")",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git branch *)"
     ]
   }
 }

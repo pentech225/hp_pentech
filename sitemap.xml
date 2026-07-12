@@ -4,79 +4,80 @@
   <!-- iTeen 武庫之荘校（プログラミング教室） -->
   <url>
     <loc>https://www.pentech.info/school/mukonoso/index.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/game-event.html</loc>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/values.html</loc>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/reserve.html</loc>
-    <lastmod>2026-02-22</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/contact.html</loc>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.pentech.info/school/mukonoso/html/greeting.html</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.pentech.info/school/mukonoso/html/blog/index.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/blog/why-programming-now.html</loc>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/html/blog/26_0209_01.html</loc>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
-  <url>
-    <loc>https://www.pentech.info/school/mukonoso/html/blog/2026/0217.html</loc>
-    <lastmod>2026-02-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <!-- NOTE: html/blog/2026/0217.html は下書きプレースホルダーのため noindex 設定とし、sitemapから除外 -->
   <url>
     <loc>https://www.pentech.info/school/mukonoso/student/work/index.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/student/work/dark-mode.html</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/event/26_0315.html</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/mukonoso/event/26_0503.html</loc>
-    <lastmod>2026-04-26</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -90,25 +91,31 @@
   </url>
   <url>
     <loc>https://www.pentech.info/school/cource/typing/index.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/cource/typing/piano/index.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.pentech.info/school/cource/typing/piano/build/web/index.html</loc>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/cource/scratch/index.html</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/cource/mouse/index.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -116,55 +123,55 @@
   <!-- NPO法人 阪神つばめ学習会 -->
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/index.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/about.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/classroom.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/schedule.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/volunteer.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/donate.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/apply.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/contact.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/school/tsubame/muko/blog.html</loc>
-    <lastmod>2026-05-05</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -172,13 +179,13 @@
   <!-- 武庫東バスケットボールクラブ -->
   <url>
     <loc>https://www.pentech.info/basket/index.html</loc>
-    <lastmod>2026-06-14</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.pentech.info/basket/reports.html</loc>
-    <lastmod>2026-06-28</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
