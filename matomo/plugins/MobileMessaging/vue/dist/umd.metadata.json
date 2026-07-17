@@ -1,7 +1,0 @@
-{
-  "dependsOn": [
-    "ScheduledReports",
-    "CoreHome",
-    "CorePluginsAdmin"
-  ]
-}
