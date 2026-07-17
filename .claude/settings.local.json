@@ -17,7 +17,8 @@
       "Bash(git branch *)",
       "Bash(git commit -m ' *)",
       "Bash(git fetch *)",
-      "Bash(git rev-list *)"
+      "Bash(git rev-list *)",
+      "Bash(Get-Content)"
     ]
   }
 }

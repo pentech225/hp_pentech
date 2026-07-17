@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏫 教室ポータル | PenTech</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- パスワード保護 -->
+  <script src="config.js"></script>
+  <script src="password-check.js"></script>
+
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --primary-dark: #357ABD;
+      --accent: #F5A623;
+      --text: #333333;
+      --bg: #FAFAFA;
+      --white: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+      text-align: center;
+      padding: 48px 20px 36px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .hero p {
+      margin: 0;
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    section.group {
+      margin-top: 36px;
+    }
+
+    .group-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .cards.two-col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card {
+      display: block;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .card-title.external::after {
+      content: " ↗";
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: #666;
+    }
+
+    .card.scratch {
+      border: 2px solid var(--accent);
+      background: linear-gradient(135deg, #fff8ec, var(--white));
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .empty-note {
+      background: var(--white);
+      border: 1px dashed #ccc;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      color: #888;
+      font-size: 0.92rem;
+    }
+
+    .pdf-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 20px;
+      color: #999;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>🏫 教室ポータル</h1>
+    <p>スクラッチ・タイピング練習・教科書PDFに、ここからアクセスできます。</p>
+  </div>
+
+  <div class="container">
+
+    <section class="group">
+      <div class="group-title">🎨 スクラッチ</div>
+      <div class="cards">
+        <a class="card scratch" href="https://scratch.mit.edu/" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">Scratch（本家）をひらく</div>
+          <div class="card-desc">scratch.mit.edu にアクセスして、じぶんの作品をつくろう！</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="group-title">⌨️ タイピング練習</div>
+      <div class="cards two-col">
+        <a class="card" href="https://n-typing.com/" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">🐣 ナレッジタイピング</div>
+          <div class="card-desc">初心者向け。ローマ字からていねいに学べる。</div>
+        </a>
+        <a class="card" href="https://manabi-gakushu.benesse.ne.jp/gakushu/typing/nihongonyuryoku.html" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">📝 ベネッセ にほんご入力練習</div>
+          <div class="card-desc">ひらがな・カタカナ・かんじもOK。</div>
+        </a>
+        <a class="card" href="https://keyx0.net/pop/" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">🎮 POPタイピング</div>
+          <div class="card-desc">ポップなゲームで楽しく練習。</div>
+        </a>
+        <a class="card" href="https://keyx0.net/map/" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">🗺️ 県名当てタイピング</div>
+          <div class="card-desc">キーの場所を覚えながら練習。</div>
+        </a>
+        <a class="card" href="https://sushida.net/play.html" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">🍣 寿司打</div>
+          <div class="card-desc">定番のタイピングゲーム。スピードに挑戦！</div>
+        </a>
+        <a class="card" href="https://www.edclub.com/sportal/program-16/8928.play" target="_blank" rel="noopener noreferrer">
+          <div class="card-title external">🌐 TypingClub（EdClub）</div>
+          <div class="card-desc">英語のタイピングにも挑戦しよう。</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="group-title">📚 教科書PDF</div>
+      <div id="pdf-container"></div>
+    </section>
+
+  </div>
+
+  <footer>&copy; 2026 PenTech</footer>
+
+  <script>
+    // 教科書PDFを追加するときは、ここに { title, file } を足すだけでOK。
+    // file は school/portal/pdf/ フォルダに置いたPDFのファイル名を指定する。
+    const TEXTBOOKS = [
+      // 例: { title: 'スクラッチ入門テキスト', file: 'scratch-basics.pdf' },
+    ];
+
+    const pdfContainer = document.getElementById('pdf-container');
+
+    if (TEXTBOOKS.length === 0) {
+      pdfContainer.innerHTML = '<div class="empty-note">📄 教科書PDFは準備中です。追加され次第、ここに表示されます。</div>';
+    } else {
+      const list = document.createElement('div');
+      list.className = 'cards pdf-list';
+      TEXTBOOKS.forEach(function(book) {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = 'pdf/' + book.file;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.innerHTML = '<div class="card-title external">📄 ' + book.title + '</div>';
+        list.appendChild(a);
+      });
+      pdfContainer.appendChild(list);
+    }
+  </script>
+
+</body>
+</html>

@@ -34,6 +34,15 @@ const CONFIG = {
     
     // 管理者アカウント（ログインページで使用）
     ADMIN_ID: 'admin2026',
-    ADMIN_PASSWORD: '202605'
+    ADMIN_PASSWORD: '202605',
+
+    // Matomoアクセス解析設定
+    // MATOMO_URL: Matomoをインストールしたサーバーのベースアドレス（末尾に / を含める）
+    //   例: 'https://analytics.pentech.info/'
+    // 空文字のままにしておくと解析コードは読み込まれません（Matomo未設置の状態）。
+    MATOMO_URL: '',
+
+    // MatomoでこのサイトのサイトIDとして発行された番号（管理画面「サイト」で確認）
+    MATOMO_SITE_ID: '1'
 };
 
