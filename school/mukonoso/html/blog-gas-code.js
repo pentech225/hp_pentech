@@ -213,14 +213,14 @@ function getOrCreateSpreadsheet() {
   return spreadsheet;
 }
 
-// カラム定義: A=id, B=timestamp, C=title, D=date, E=category, F=html, G=markdown, H=filename, I=excerpt
-var COLS = 9;
+// カラム定義: A=id, B=timestamp, C=title, D=date, E=category, F=html, G=markdown, H=filename, I=excerpt, J=thumbnail
+var COLS = 10;
 
 function getBlogSheet(spreadsheet) {
   let sheet = spreadsheet.getSheetByName('BlogArticles');
   if (!sheet) {
     sheet = spreadsheet.insertSheet('BlogArticles');
-    sheet.appendRow(['id', 'timestamp', 'title', 'date', 'category', 'html', 'markdown', 'filename', 'excerpt']);
+    sheet.appendRow(['id', 'timestamp', 'title', 'date', 'category', 'html', 'markdown', 'filename', 'excerpt', 'thumbnail']);
     sheet.getRange(1, 1, 1, COLS).setFontWeight('bold').setBackground('#E0E0E0');
   }
   return sheet;
@@ -243,7 +243,8 @@ function saveArticleToSheets(articleData) {
     articleData.html      || '',
     articleData.markdown  || '',
     articleData.filename  || '',
-    excerpt
+    excerpt,
+    articleData.thumbnail || ''
   ]);
 
   Logger.log('✅ BlogArticlesシートに保存: ' + id);
@@ -274,7 +275,8 @@ function updateArticleInSheets(id, articleData) {
     articleData.html      || '',
     articleData.markdown  || '',
     articleData.filename  || '',
-    excerpt
+    excerpt,
+    articleData.thumbnail || ''
   ]]);
 
   Logger.log('✅ 記事を更新: ' + id);
@@ -305,7 +307,8 @@ function getArticlesFromSheets() {
           html:      row[5],
           markdown:  row[6],
           filename:  row[7],
-          excerpt:   row[8]
+          excerpt:   row[8],
+          thumbnail: row[9]
         };
       })
       .filter(function(a) { return a.id && a.title; });

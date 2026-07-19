@@ -21,7 +21,13 @@
       "Bash(Get-Content)",
       "Bash(python -m pygbag --help)",
       "Bash(python *)",
-      "Bash(PYTHONUTF8=1 python *)"
+      "Bash(PYTHONUTF8=1 python *)",
+      "WebFetch(domain:script.google.com)",
+      "WebFetch(domain:script.googleusercontent.com)",
+      "Bash(curl -sL \"https://script.google.com/macros/s/AKfycbw5hzA5xBL6CdIT-28zMS_WVnge-JgAVQYpc3KZ_t2hX8JILttZ4YlVsKOqOWT-1XqlRw/exec?action=getArticle&id=art_1784465651467\")",
+      "Bash(node --check \"C:\\\\Users\\\\PC\\\\.company\\\\02_Products_Development\\\\hp_pentech\\\\ga4-tracking.js\")",
+      "Bash(curl -s http://localhost:8791/school/tsubame/muko/index.html)",
+      "Bash(pkill -f \"http.server 8791\")"
     ]
   }
 }

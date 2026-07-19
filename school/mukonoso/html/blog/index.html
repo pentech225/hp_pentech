@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ブログ | iTeen 武庫之荘校</title>
@@ -161,7 +164,8 @@
                             content: a.excerpt || '',
                             href: 'article-viewer.html?id=' + encodeURIComponent(a.id),
                             isApi: true,
-                            id: a.id
+                            id: a.id,
+                            thumbnail: a.thumbnail || ''
                         }));
                     }
                 }
@@ -185,6 +189,7 @@
                 const contentStyle = article.contentStyle || '';
                 return `
                 <article class="blog-item"${itemStyle ? ' style="' + itemStyle + '"' : ''}>
+                    ${article.thumbnail ? `<img src="${article.thumbnail}" alt="${article.title}" class="blog-item-thumbnail">` : ''}
                     <div class="blog-item-header">
                         <span class="blog-date">${article.date}</span>
                         <span class="blog-category"${categoryStyle ? ' style="' + categoryStyle + '"' : ''}>${article.category}</span>

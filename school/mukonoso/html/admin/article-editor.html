@@ -539,7 +539,20 @@
                     </select>
                 </div>
             </div>
-            
+
+            <div class="form-group">
+                <label>サムネイル画像</label>
+                <div id="thumbnail-preview-wrap" style="display:none; margin-bottom:10px;">
+                    <img id="thumbnail-preview" src="" alt="サムネイルプレビュー" style="max-width:240px; max-height:160px; object-fit:cover; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.15); display:block;">
+                </div>
+                <input type="file" id="thumbnail-input" accept="image/*" style="display:none;">
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('thumbnail-input').click()">🖼️ サムネイル画像を選択</button>
+                    <button type="button" class="btn btn-secondary" id="thumbnail-remove-btn" onclick="removeThumbnail()" style="display:none;">🗑️ サムネイルを削除</button>
+                </div>
+                <p class="help-text">ブログ一覧・記事ページの上部に表示される画像です（任意）。</p>
+            </div>
+
             <div class="editor-container">
                 <div class="editor-panel">
                     <div class="panel-header">
@@ -643,6 +656,43 @@
             gfm: true
         });
 
+        // サムネイル画像（Data URLとして保持）
+        let thumbnailDataUrl = '';
+
+        document.getElementById('thumbnail-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                // スプレッドシートの1セルは50,000文字までのため、大きすぎる画像は保存できない
+                if (ev.target.result.length > 45000) {
+                    showMessage('画像が大きすぎます（保存上限あり）。40KB程度以下に圧縮・リサイズしてから選び直してください。', 'error');
+                    e.target.value = '';
+                    return;
+                }
+                thumbnailDataUrl = ev.target.result;
+                showThumbnailPreview(thumbnailDataUrl);
+            };
+            reader.onerror = function() {
+                showMessage('サムネイル画像の読み込みに失敗しました。', 'error');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function showThumbnailPreview(src) {
+            if (!src) { removeThumbnail(); return; }
+            document.getElementById('thumbnail-preview').src = src;
+            document.getElementById('thumbnail-preview-wrap').style.display = 'block';
+            document.getElementById('thumbnail-remove-btn').style.display = 'inline-block';
+        }
+
+        function removeThumbnail() {
+            thumbnailDataUrl = '';
+            document.getElementById('thumbnail-input').value = '';
+            document.getElementById('thumbnail-preview-wrap').style.display = 'none';
+            document.getElementById('thumbnail-remove-btn').style.display = 'none';
+        }
+
         // 編集モード: URL の ?edit=ID があれば既存記事を読み込む
         let editingArticleId = null;
         const editId = new URLSearchParams(window.location.search).get('edit');
@@ -678,6 +728,8 @@
                     document.getElementById('category').value = a.category || '';
                     markdownEditor.value = a.markdown || '';
                     updatePreview();
+                    thumbnailDataUrl = a.thumbnail || '';
+                    showThumbnailPreview(thumbnailDataUrl);
 
                     switchToEditMode(editingArticleId);
 
@@ -726,6 +778,7 @@
                 markdown: markdown,
                 html: htmlContent,
                 filename: filename,
+                thumbnail: thumbnailDataUrl,
                 published: true // 投稿フラグ
             };
             
@@ -800,9 +853,10 @@
                 category: category,
                 markdown: markdown,
                 html: htmlContent,
-                filename: filename
+                filename: filename,
+                thumbnail: thumbnailDataUrl
             };
-            
+
             // 保存ボタンを無効化
             const saveBtn = document.getElementById('save-btn');
             saveBtn.disabled = true;
@@ -852,6 +906,7 @@
                 document.getElementById('date').valueAsDate = new Date();
                 markdownEditor.value = '';
                 updatePreview();
+                removeThumbnail();
                 showMessage('フォームをクリアしました。', 'success');
             }
         }
@@ -956,6 +1011,8 @@
                 document.getElementById('category').value = a.category || '';
                 markdownEditor.value = a.markdown || '';
                 updatePreview();
+                thumbnailDataUrl = a.thumbnail || '';
+                showThumbnailPreview(thumbnailDataUrl);
 
                 switchToEditMode(a.id);
 
@@ -997,6 +1054,7 @@
             document.getElementById('date').valueAsDate = new Date();
             markdownEditor.value = '';
             updatePreview();
+            removeThumbnail();
             document.querySelector('.header h1').textContent = '📝 記事投稿エディタ';
             document.getElementById('publish-btn').textContent = '📤 記事を投稿';
             document.getElementById('save-btn').style.display = '';
