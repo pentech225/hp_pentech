@@ -81,26 +81,65 @@
         });
     }
 
+    // YouTube APIの読み込みが遅い/ブロックされている場合に「読み込み中」で止まっていないか判定するまでの待ち時間
+    var API_LOAD_TIMEOUT_MS = 8000;
+
     function playVideo(videoId) {
         var wrap = document.getElementById('thumbwrap-' + videoId);
-        wrap.innerHTML = '<div class="yt-player" id="player-' + videoId + '"></div>';
+        wrap.innerHTML = '<div class="yt-player" id="player-' + videoId + '"></div>' +
+            '<div class="player-loading" id="loading-' + videoId + '">読み込み中...</div>';
 
         if (ytApiReady) {
             createPlayer(videoId);
         } else {
             pendingPlays.push(videoId);
+            setTimeout(function () {
+                if (!players[videoId]) {
+                    showPlaybackError(videoId, '動画の読み込みに時間がかかっています。広告ブロッカーなどの影響かもしれません。');
+                }
+            }, API_LOAD_TIMEOUT_MS);
         }
+    }
+
+    // YouTube側のエラーコード一覧: https://developers.google.com/youtube/iframe_api_reference#onError
+    var YT_ERROR_MESSAGES = {
+        2: 'この動画は再生できません（動画IDが正しくないようです）。',
+        5: 'この動画はこのブラウザでは再生できませんでした。',
+        100: 'この動画が見つかりませんでした（削除または非公開になっている可能性があります）。',
+        101: 'この動画は他のサイトへの埋め込み再生が許可されていません。',
+        150: 'この動画は他のサイトへの埋め込み再生が許可されていません。'
+    };
+
+    function showPlaybackError(videoId, message) {
+        var wrap = document.getElementById('thumbwrap-' + videoId);
+        if (!wrap) return;
+        wrap.innerHTML =
+            '<div class="player-error">' +
+                '<p>⚠️ ' + message + '</p>' +
+                '<a href="https://www.youtube.com/watch?v=' + videoId + '" target="_blank" rel="noopener noreferrer">▶ YouTubeで直接見る</a>' +
+            '</div>';
     }
 
     function createPlayer(videoId) {
         players[videoId] = new YT.Player('player-' + videoId, {
+            width: '100%',
+            height: '100%',
             videoId: videoId,
-            playerVars: { rel: 0 },
+            playerVars: {
+                rel: 0,
+                origin: window.location.origin
+            },
             events: {
                 onReady: function (event) {
+                    var loadingEl = document.getElementById('loading-' + videoId);
+                    if (loadingEl) loadingEl.remove();
                     durations[videoId] = event.target.getDuration() || durations[videoId] || 0;
                 },
-                onStateChange: function (event) { onPlayerStateChange(videoId, event); }
+                onStateChange: function (event) { onPlayerStateChange(videoId, event); },
+                onError: function (event) {
+                    var message = YT_ERROR_MESSAGES[event.data] || 'この動画の再生中にエラーが発生しました。';
+                    showPlaybackError(videoId, message);
+                }
             }
         });
     }
