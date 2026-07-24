@@ -50,6 +50,10 @@ function doGet(e) {
         progress: getAllProgress()
       });
 
+    } else if (action === 'getQuizAnswers') {
+      const studentId = e.parameter.studentId;
+      return jsonOutput({ success: true, answers: getQuizAnswers(studentId) });
+
     } else {
       return jsonOutput({
         success: true,
@@ -57,7 +61,8 @@ function doGet(e) {
         actions: {
           getProgress: '?action=getProgress&studentId=xxx で生徒の進捗を取得',
           getAssignments: '?action=getAssignments&studentId=xxx で宿題一覧を取得（studentId省略で全件）',
-          getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）'
+          getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）',
+          getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）'
         }
       });
     }
@@ -90,6 +95,8 @@ function doPost(e) {
       return handleSaveAssignment(data.data);
     } else if (data.type === 'deleteAssignment') {
       return handleDeleteAssignment(data.data);
+    } else if (data.type === 'saveQuizAnswer') {
+      return handleSaveQuizAnswer(data.data);
     } else {
       throw new Error('不明なリクエストタイプ: ' + data.type);
     }
@@ -293,6 +300,62 @@ function getAssignments(studentId) {
 }
 
 // ============================================================
+// 確認問題（4択クイズ）の解答記録
+// ============================================================
+
+function handleSaveQuizAnswer(payload) {
+  const studentId = (payload && payload.studentId || '').trim();
+  const quizId = (payload && payload.quizId || '').trim();
+  const chosenKey = (payload && payload.chosenKey || '').trim();
+  const correct = !!(payload && payload.correct);
+
+  if (!studentId || !quizId || !chosenKey) {
+    return jsonOutput({ success: false, error: 'studentId, quizId, chosenKeyが必要です' });
+  }
+
+  const spreadsheet = getOrCreateSpreadsheet();
+  const sheet = getQuizAnswersSheet(spreadsheet);
+  const now = new Date().toISOString();
+
+  // 解答するたびに1行追加する（履歴として残す。同じ問題を何度解いても上書きしない）
+  sheet.appendRow([studentId, quizId, chosenKey, correct, now]);
+
+  return jsonOutput({
+    success: true,
+    answer: { studentId: studentId, quizId: quizId, chosenKey: chosenKey, correct: correct, answeredAt: now }
+  });
+}
+
+function getQuizAnswers(studentId) {
+  const spreadsheet = getOrCreateSpreadsheet();
+  const sheet = getQuizAnswersSheet(spreadsheet);
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+
+  const data = sheet.getRange(2, 1, lastRow - 1, QUIZ_ANSWERS_COLS).getValues();
+  let answers = data
+    .map(function (row) {
+      return {
+        studentId: row[0],
+        quizId: row[1],
+        chosenKey: row[2],
+        correct: row[3] === true || row[3] === 'TRUE',
+        answeredAt: row[4]
+      };
+    })
+    .filter(function (a) { return a.studentId; });
+
+  if (studentId) {
+    answers = answers.filter(function (a) {
+      return String(a.studentId).toLowerCase() === String(studentId).toLowerCase();
+    });
+  }
+
+  return answers;
+}
+
+// ============================================================
 // 進捗の取得（生徒用・先生用）
 // ============================================================
 
@@ -429,6 +492,19 @@ function getAssignmentsSheet(spreadsheet) {
     sheet = spreadsheet.insertSheet('Assignments');
     sheet.appendRow(['assignmentId', 'videoId', 'cutoffSeconds', 'targetStudentId', 'note', 'assignedAt', 'dueDate']);
     sheet.getRange(1, 1, 1, ASSIGNMENTS_COLS).setFontWeight('bold').setBackground('#E0E0E0');
+  }
+  return sheet;
+}
+
+// カラム定義: A=studentId, B=quizId, C=chosenKey, D=correct, E=answeredAt
+var QUIZ_ANSWERS_COLS = 5;
+
+function getQuizAnswersSheet(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName('QuizAnswers');
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet('QuizAnswers');
+    sheet.appendRow(['studentId', 'quizId', 'chosenKey', 'correct', 'answeredAt']);
+    sheet.getRange(1, 1, 1, QUIZ_ANSWERS_COLS).setFontWeight('bold').setBackground('#E0E0E0');
   }
   return sheet;
 }

@@ -10,6 +10,7 @@
   <script src="teacher-password-check.js"></script>
   <script src="../../portal-common.js"></script>
   <script src="../videos.js"></script>
+  <script src="../quizzes.js"></script>
 
   <style>
     :root {
@@ -191,11 +192,29 @@
       </div>
     </div>
 
+    <div class="panel">
+      <h2>確認問題の解答記録</h2>
+      <p style="font-size:0.85rem; color:#666; margin-top:-8px;">いつ・だれが・どの問題に・正解/不正解だったかの記録です（同じ問題を解き直すたびに1行追加されます）。</p>
+      <div class="table-scroll">
+        <table id="quiz-table">
+          <thead>
+            <tr><th>日時</th><th>生徒</th><th>問題</th><th>選んだ答え</th><th>正誤</th></tr>
+          </thead>
+          <tbody id="quiz-tbody"><tr><td colspan="5">読み込み中...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <script>
     var videoById = {};
     VIDEOS.slice().sort(function (a, b) { return a.order - b.order; }).forEach(function (v) { videoById[v.videoId] = v; });
+
+    var quizById = {};
+    (typeof QUIZZES !== 'undefined' ? QUIZZES : []).forEach(function (q) { quizById[q.id] = q; });
+
+    var studentDisplayNames = {};
 
     function parseMmSs(text) {
       text = (text || '').trim();
@@ -268,8 +287,7 @@
           tbody.innerHTML = '<tr><td colspan="5">まだ視聴記録がありません。</td></tr>';
           return;
         }
-        var displayNames = {};
-        result.students.forEach(function (s) { displayNames[s.studentId] = s.displayName; });
+        result.students.forEach(function (s) { studentDisplayNames[s.studentId] = s.displayName; });
 
         var rows = result.progress.slice().sort(function (a, b) {
           return String(a.studentId).localeCompare(String(b.studentId));
@@ -279,7 +297,7 @@
           var video = videoById[p.videoId];
           var title = video ? video.title : p.videoId;
           var percent = p.durationSeconds > 0 ? Math.min(100, Math.round((p.maxWatchedSeconds / p.durationSeconds) * 100)) : 0;
-          var name = displayNames[p.studentId] || p.studentId;
+          var name = studentDisplayNames[p.studentId] || p.studentId;
           return (
             '<tr>' +
               '<td>' + name + '</td>' +
@@ -287,6 +305,40 @@
               '<td>' + percent + '%</td>' +
               '<td>' + (p.watchCount || 0) + '</td>' +
               '<td>' + (p.lastWatchedAt || '-') + '</td>' +
+            '</tr>'
+          );
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5">読み込みに失敗しました。</td></tr>';
+      }
+    }
+
+    async function loadQuizAnswers() {
+      var tbody = document.getElementById('quiz-tbody');
+      try {
+        var result = await portalGetJson('getQuizAnswers', {});
+        if (!result.success || result.answers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">まだ解答記録がありません。</td></tr>';
+          return;
+        }
+
+        var rows = result.answers.slice().sort(function (a, b) {
+          return new Date(b.answeredAt) - new Date(a.answeredAt);
+        });
+
+        tbody.innerHTML = rows.map(function (a) {
+          var quiz = quizById[a.quizId];
+          var questionText = quiz ? quiz.question : a.quizId;
+          var chosenChoice = quiz ? (quiz.choices.filter(function (c) { return c.key === a.chosenKey; })[0]) : null;
+          var chosenText = a.chosenKey + (chosenChoice ? '　' + chosenChoice.text : '');
+          var name = studentDisplayNames[a.studentId] || a.studentId;
+          return (
+            '<tr>' +
+              '<td>' + (a.answeredAt || '-') + '</td>' +
+              '<td>' + name + '</td>' +
+              '<td>' + questionText + '</td>' +
+              '<td>' + chosenText + '</td>' +
+              '<td>' + (a.correct ? '⭕ 正解' : '❌ 不正解') + '</td>' +
             '</tr>'
           );
         }).join('');
@@ -332,7 +384,7 @@
 
     populateVideoSelect();
     loadAssignments();
-    loadProgress();
+    loadProgress().then(loadQuizAnswers);
   </script>
 </body>
 </html>

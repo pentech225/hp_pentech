@@ -13,6 +13,7 @@
 
   <!-- 動画データ -->
   <script src="videos.js"></script>
+  <script src="quizzes.js"></script>
 
   <!-- YouTube IFrame Player API -->
   <script src="https://www.youtube.com/iframe_api"></script>
@@ -201,6 +202,80 @@
       border-radius: 20px;
     }
 
+    .quiz-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #eefaf0, var(--white));
+      border: 2px solid #4caf50;
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .quiz-label {
+      display: inline-block;
+      background: #4caf50;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .quiz-question {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .quiz-choices {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .quiz-choices { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .quiz-choice-btn {
+      text-align: left;
+      padding: 10px 14px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .quiz-choice-btn:hover:not(:disabled) {
+      border-color: #4caf50;
+      background: #f3fff4;
+    }
+
+    .quiz-choice-btn:disabled { cursor: default; }
+
+    .quiz-choice-btn.correct {
+      border-color: #2e7d32;
+      background: #c8e6c9;
+      font-weight: bold;
+    }
+
+    .quiz-choice-btn.incorrect {
+      border-color: #F44336;
+      background: #ffcdd2;
+    }
+
+    .quiz-result {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .quiz-result.correct { color: #2e7d32; }
+    .quiz-result.incorrect { color: #F44336; }
+
     .video-info { padding: 12px 14px 14px; }
 
     .video-title {
@@ -244,7 +319,7 @@
 
   <div class="hero">
     <h1>📘 ITパスポート試験対策コース</h1>
-    <p>動画を見て学ぼう！どこまで見たかは自動で記録されるよ。</p>
+    <p>動画を見て学ぼう！</p>
     <a class="back-link" href="../index.html">← ポータルにもどる</a>
   </div>
 

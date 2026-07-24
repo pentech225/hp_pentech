@@ -22,6 +22,7 @@
     var maxSeen = {};          // videoId -> 到達した最大秒数
     var durations = {};        // videoId -> 動画の長さ（秒）
     var watchCounts = {};      // videoId -> 視聴回数
+    var answeredQuizzes = {};  // quizId -> true（このページ読み込み中に解答済みか）
     var ytApiReady = false;
     var pendingPlays = [];
 
@@ -54,30 +55,128 @@
         if (el) el.innerHTML = badgeHtml(videoId);
     }
 
+    function videoCardHtml(video) {
+        return (
+            '<div class="video-card" data-video-id="' + video.videoId + '">' +
+                '<div class="video-thumb-wrap" id="thumbwrap-' + video.videoId + '">' +
+                    '<img class="video-thumb" src="https://img.youtube.com/vi/' + video.videoId + '/mqdefault.jpg" alt="">' +
+                    '<button class="play-btn" data-video-id="' + video.videoId + '">▶ 再生</button>' +
+                    '<div class="hw-tag" id="hwtag-' + video.videoId + '" style="display:none;">🏠 宿題</div>' +
+                '</div>' +
+                '<div class="video-info">' +
+                    '<div class="video-title">' + video.title + '</div>' +
+                    '<div class="video-progress" id="progress-' + video.videoId + '">読み込み中...</div>' +
+                '</div>' +
+            '</div>'
+        );
+    }
+
+    function quizCardHtml(quiz) {
+        var choicesHtml = quiz.choices.map(function (choice) {
+            return (
+                '<button class="quiz-choice-btn" data-quiz-id="' + quiz.id + '" data-key="' + choice.key + '">' +
+                    choice.key + '　' + choice.text +
+                '</button>'
+            );
+        }).join('');
+
+        return (
+            '<div class="quiz-card" id="quiz-' + quiz.id + '">' +
+                '<div class="quiz-label">📝 確認問題</div>' +
+                '<div class="quiz-question">' + quiz.question + '</div>' +
+                '<div class="quiz-choices">' + choicesHtml + '</div>' +
+                '<div class="quiz-result" id="quiz-result-' + quiz.id + '"></div>' +
+            '</div>'
+        );
+    }
+
+    function quizzesHtmlAfterOrder(order, quizzes) {
+        return quizzes
+            .filter(function (q) { return q.afterOrder === order; })
+            .map(quizCardHtml)
+            .join('');
+    }
+
+    function applyQuizAnswerState(quizId, chosenKey, isCorrect) {
+        var quiz = QUIZZES.filter(function (q) { return q.id === quizId; })[0];
+        var card = document.getElementById('quiz-' + quizId);
+        if (!quiz || !card) return;
+
+        var resultEl = document.getElementById('quiz-result-' + quizId);
+        var buttons = card.querySelectorAll('.quiz-choice-btn');
+
+        buttons.forEach(function (b) {
+            b.disabled = true;
+            if (b.getAttribute('data-key') === quiz.answerKey) {
+                b.classList.add('correct');
+            } else if (b.getAttribute('data-key') === chosenKey) {
+                b.classList.add('incorrect');
+            }
+        });
+
+        resultEl.textContent = isCorrect
+            ? '⭕ 正解！'
+            : '❌ 不正解。正解は「' + quiz.answerKey + '　' + (quiz.choices.filter(function (c) { return c.key === quiz.answerKey; })[0] || {}).text + '」でした。';
+        resultEl.className = 'quiz-result ' + (isCorrect ? 'correct' : 'incorrect');
+
+        answeredQuizzes[quizId] = true;
+    }
+
+    async function handleQuizAnswer(button) {
+        var quizId = button.getAttribute('data-quiz-id');
+        var chosenKey = button.getAttribute('data-key');
+        var quiz = QUIZZES.filter(function (q) { return q.id === quizId; })[0];
+        if (!quiz || answeredQuizzes[quizId]) return;
+
+        var isCorrect = chosenKey === quiz.answerKey;
+        applyQuizAnswerState(quizId, chosenKey, isCorrect);
+
+        if (!student) return;
+        try {
+            await portalPostJson('saveQuizAnswer', {
+                studentId: student.studentId,
+                quizId: quizId,
+                chosenKey: chosenKey,
+                correct: isCorrect
+            });
+        } catch (err) {
+            // 通信エラーが起きても解答自体はその場で表示済みなので無視する
+        }
+    }
+
+    async function loadQuizAnswers() {
+        try {
+            var result = await portalGetJson('getQuizAnswers', { studentId: student.studentId });
+            if (!result.success) return;
+            // 解答は appendRow で追記される（履歴）ので、同じ問題は最後（最新）の記録を採用する
+            result.answers.forEach(function (a) {
+                applyQuizAnswerState(a.quizId, a.chosenKey, a.correct);
+            });
+        } catch (err) {
+            // 解答記録の取得に失敗しても、未解答として問題を解くことは継続できる
+        }
+    }
+
     function renderVideoGrid() {
         var grid = document.getElementById('video-grid');
         var sorted = VIDEOS.slice().sort(function (a, b) { return a.order - b.order; });
+        var quizzes = (typeof QUIZZES !== 'undefined') ? QUIZZES : [];
 
-        grid.innerHTML = sorted.map(function (video) {
-            return (
-                '<div class="video-card" data-video-id="' + video.videoId + '">' +
-                    '<div class="video-thumb-wrap" id="thumbwrap-' + video.videoId + '">' +
-                        '<img class="video-thumb" src="https://img.youtube.com/vi/' + video.videoId + '/mqdefault.jpg" alt="">' +
-                        '<button class="play-btn" data-video-id="' + video.videoId + '">▶ 再生</button>' +
-                        '<div class="hw-tag" id="hwtag-' + video.videoId + '" style="display:none;">🏠 宿題</div>' +
-                    '</div>' +
-                    '<div class="video-info">' +
-                        '<div class="video-title">' + video.title + '</div>' +
-                        '<div class="video-progress" id="progress-' + video.videoId + '">読み込み中...</div>' +
-                    '</div>' +
-                '</div>'
-            );
-        }).join('');
+        var html = quizzesHtmlAfterOrder(0, quizzes);
+        sorted.forEach(function (video) {
+            html += videoCardHtml(video);
+            html += quizzesHtmlAfterOrder(video.order, quizzes);
+        });
+        grid.innerHTML = html;
 
         grid.querySelectorAll('.play-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 playVideo(btn.getAttribute('data-video-id'));
             });
+        });
+
+        grid.querySelectorAll('.quiz-choice-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { handleQuizAnswer(btn); });
         });
     }
 
@@ -291,6 +390,8 @@
         } catch (err) {
             // 宿題の取得に失敗しても致命的ではない
         }
+
+        await loadQuizAnswers();
     }
 
     function init() {
