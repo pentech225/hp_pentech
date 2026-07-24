@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宿題管理 | ITパスポート試験対策コース</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <script src="../../config.js"></script>
+  <script src="teacher-password-check.js"></script>
+  <script src="../../portal-common.js"></script>
+  <script src="../videos.js"></script>
+
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --primary-dark: #357ABD;
+      --accent: #F5A623;
+      --text: #333333;
+      --bg: #FAFAFA;
+      --white: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+      text-align: center;
+      padding: 32px 20px 24px;
+    }
+
+    .hero h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--primary); }
+    .hero p { margin: 0; color: #666; font-size: 0.9rem; }
+    .hero a { color: var(--primary); font-size: 0.85rem; }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .panel {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-row label { font-size: 0.85rem; color: #666; font-weight: bold; }
+
+    .form-row input, .form-row select {
+      padding: 10px 12px;
+      border: 2px solid #E0E0E0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-inline { display: flex; gap: 16px; flex-wrap: wrap; }
+    .form-inline .form-row { flex: 1; min-width: 160px; }
+
+    button.primary {
+      padding: 12px 24px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.primary:hover { background-color: var(--primary-dark); }
+
+    #assign-status { font-size: 0.85rem; margin-top: 10px; }
+    #assign-status.success { color: #2e7d32; }
+    #assign-status.error { color: #F44336; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th { background: #f5f5f5; }
+
+    .delete-btn {
+      background: none;
+      border: 1px solid #F44336;
+      color: #F44336;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .table-scroll { overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>🏠 宿題管理（先生用）</h1>
+    <p>動画に「ここまで見てきてね」を割り当てて、生徒の進捗を確認できます。</p>
+    <a href="../index.html">← コース画面にもどる</a>
+  </div>
+
+  <div class="container">
+
+    <div class="panel">
+      <h2>宿題を割り当てる</h2>
+      <form id="assign-form">
+        <div class="form-inline">
+          <div class="form-row">
+            <label for="video-select">動画</label>
+            <select id="video-select" required></select>
+          </div>
+          <div class="form-row">
+            <label for="cutoff-input">ここまで見てきてね（mm:ss）</label>
+            <input type="text" id="cutoff-input" placeholder="例: 5:30" required>
+          </div>
+        </div>
+        <div class="form-inline">
+          <div class="form-row">
+            <label for="target-input">対象（ALL または 生徒ID）</label>
+            <input type="text" id="target-input" value="ALL">
+          </div>
+          <div class="form-row">
+            <label for="due-input">期限（任意）</label>
+            <input type="date" id="due-input">
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="note-input">メモ（任意）</label>
+          <input type="text" id="note-input" placeholder="例: 来週の授業までに見てきてね">
+        </div>
+        <button type="submit" class="primary">宿題を追加</button>
+        <div id="assign-status"></div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>今までの宿題</h2>
+      <div class="table-scroll">
+        <table id="assignments-table">
+          <thead>
+            <tr><th>動画</th><th>ここまで</th><th>対象</th><th>期限</th><th>メモ</th><th></th></tr>
+          </thead>
+          <tbody id="assignments-tbody"><tr><td colspan="6">読み込み中...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>生徒の進捗一覧</h2>
+      <div class="table-scroll">
+        <table id="progress-table">
+          <thead>
+            <tr><th>生徒</th><th>動画</th><th>視聴%</th><th>回数</th><th>最終視聴</th></tr>
+          </thead>
+          <tbody id="progress-tbody"><tr><td colspan="5">読み込み中...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    var videoById = {};
+    VIDEOS.slice().sort(function (a, b) { return a.order - b.order; }).forEach(function (v) { videoById[v.videoId] = v; });
+
+    function parseMmSs(text) {
+      text = (text || '').trim();
+      if (/^\d+$/.test(text)) return Number(text);
+      var m = text.match(/^(\d+):(\d{1,2})$/);
+      if (!m) return null;
+      return Number(m[1]) * 60 + Number(m[2]);
+    }
+
+    function formatMmSs(seconds) {
+      seconds = Math.floor(seconds || 0);
+      var m = Math.floor(seconds / 60);
+      var s = seconds % 60;
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function populateVideoSelect() {
+      var select = document.getElementById('video-select');
+      select.innerHTML = Object.keys(videoById).map(function (id) {
+        return '<option value="' + id + '">' + videoById[id].title + '</option>';
+      }).join('');
+    }
+
+    function showStatus(message, isError) {
+      var el = document.getElementById('assign-status');
+      el.textContent = message;
+      el.className = isError ? 'error' : 'success';
+    }
+
+    async function loadAssignments() {
+      var tbody = document.getElementById('assignments-tbody');
+      try {
+        var result = await portalGetJson('getAssignments', {});
+        if (!result.success || result.assignments.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6">まだ宿題はありません。</td></tr>';
+          return;
+        }
+        tbody.innerHTML = result.assignments.map(function (a) {
+          var video = videoById[a.videoId];
+          var title = video ? video.title : a.videoId;
+          return (
+            '<tr>' +
+              '<td>' + title + '</td>' +
+              '<td>' + formatMmSs(a.cutoffSeconds) + '</td>' +
+              '<td>' + a.targetStudentId + '</td>' +
+              '<td>' + (a.dueDate || '-') + '</td>' +
+              '<td>' + (a.note || '-') + '</td>' +
+              '<td><button class="delete-btn" data-id="' + a.assignmentId + '">削除</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+
+        tbody.querySelectorAll('.delete-btn').forEach(function (btn) {
+          btn.addEventListener('click', async function () {
+            btn.disabled = true;
+            await portalPostJson('deleteAssignment', { assignmentId: btn.getAttribute('data-id') });
+            loadAssignments();
+          });
+        });
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6">読み込みに失敗しました。</td></tr>';
+      }
+    }
+
+    async function loadProgress() {
+      var tbody = document.getElementById('progress-tbody');
+      try {
+        var result = await portalGetJson('getAllStudentProgress', {});
+        if (!result.success || result.progress.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5">まだ視聴記録がありません。</td></tr>';
+          return;
+        }
+        var displayNames = {};
+        result.students.forEach(function (s) { displayNames[s.studentId] = s.displayName; });
+
+        var rows = result.progress.slice().sort(function (a, b) {
+          return String(a.studentId).localeCompare(String(b.studentId));
+        });
+
+        tbody.innerHTML = rows.map(function (p) {
+          var video = videoById[p.videoId];
+          var title = video ? video.title : p.videoId;
+          var percent = p.durationSeconds > 0 ? Math.min(100, Math.round((p.maxWatchedSeconds / p.durationSeconds) * 100)) : 0;
+          var name = displayNames[p.studentId] || p.studentId;
+          return (
+            '<tr>' +
+              '<td>' + name + '</td>' +
+              '<td>' + title + '</td>' +
+              '<td>' + percent + '%</td>' +
+              '<td>' + (p.watchCount || 0) + '</td>' +
+              '<td>' + (p.lastWatchedAt || '-') + '</td>' +
+            '</tr>'
+          );
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5">読み込みに失敗しました。</td></tr>';
+      }
+    }
+
+    document.getElementById('assign-form').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      var videoId = document.getElementById('video-select').value;
+      var cutoffSeconds = parseMmSs(document.getElementById('cutoff-input').value);
+      var targetStudentId = document.getElementById('target-input').value.trim() || 'ALL';
+      var dueDate = document.getElementById('due-input').value;
+      var note = document.getElementById('note-input').value.trim();
+
+      if (cutoffSeconds === null) {
+        showStatus('「ここまで見てきてね」は mm:ss の形式で入力してください（例: 5:30）', true);
+        return;
+      }
+
+      showStatus('送信中...', false);
+      try {
+        var result = await portalPostJson('saveAssignment', {
+          videoId: videoId,
+          cutoffSeconds: cutoffSeconds,
+          targetStudentId: targetStudentId,
+          note: note,
+          dueDate: dueDate
+        });
+        if (result.success) {
+          showStatus('宿題を追加しました。', false);
+          document.getElementById('assign-form').reset();
+          document.getElementById('target-input').value = 'ALL';
+          loadAssignments();
+        } else {
+          showStatus(result.error || '追加に失敗しました。', true);
+        }
+      } catch (err) {
+        showStatus('通信エラーが発生しました。', true);
+      }
+    });
+
+    populateVideoSelect();
+    loadAssignments();
+    loadProgress();
+  </script>
+</body>
+</html>

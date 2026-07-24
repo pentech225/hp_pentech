@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>先生用ログイン | ITパスポート試験対策コース</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script src="../../config.js"></script>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin: 0 0 8px;
+            font-size: 1.6rem;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group input.error {
+            border-color: #F44336;
+            background-color: #ffebee;
+        }
+
+        .error-message {
+            color: #F44336;
+            font-size: 0.85rem;
+            text-align: center;
+            min-height: 1.2em;
+            visibility: hidden;
+        }
+
+        .error-message.show { visibility: visible; }
+
+        .login-button {
+            padding: 14px 30px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+        }
+
+        .login-button:active { transform: translateY(0); }
+
+        .back-link {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .back-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .login-container { padding: 30px 20px; }
+            h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔒 先生用ログイン</h1>
+        <p class="login-subtitle">ITパスポートコースの宿題管理画面に入るには、先生用パスワードを入力してください</p>
+
+        <form class="login-form" id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="password">先生用パスワード</label>
+                <input type="password" id="password" name="password"
+                    placeholder="パスワードを入力" required autocomplete="current-password" autofocus>
+            </div>
+
+            <div class="error-message" id="error-message">パスワードが正しくありません。</div>
+
+            <button type="submit" class="login-button">ログイン</button>
+        </form>
+
+        <div class="back-link">
+            <a href="../index.html">← コース画面にもどる</a>
+        </div>
+    </div>
+
+    <script>
+        if (typeof CONFIG === 'undefined') {
+            alert('設定ファイルが読み込めませんでした。');
+        }
+
+        if (sessionStorage.getItem('pentech_itpassport_teacher_authenticated') === 'true') {
+            window.location.href = 'assign.html';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const inputPw = document.getElementById('password').value.trim();
+            const errorEl = document.getElementById('error-message');
+            const correctPw = CONFIG.TEACHER_PASSWORD || '';
+
+            if (inputPw === correctPw) {
+                sessionStorage.setItem('pentech_itpassport_teacher_authenticated', 'true');
+                window.location.href = 'assign.html';
+            } else {
+                errorEl.classList.add('show');
+                document.getElementById('password').classList.add('error');
+                document.getElementById('password').value = '';
+
+                setTimeout(function () {
+                    errorEl.classList.remove('show');
+                    document.getElementById('password').classList.remove('error');
+                }, 2500);
+            }
+        }
+    </script>
+</body>
+</html>
