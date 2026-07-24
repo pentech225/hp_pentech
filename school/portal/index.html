@@ -6,9 +6,10 @@
   <title>🏫 教室ポータル | PenTech</title>
   <meta name="robots" content="noindex, nofollow">
 
-  <!-- パスワード保護 -->
+  <!-- 個人アカウント -->
   <script src="config.js"></script>
-  <script src="password-check.js"></script>
+  <script src="portal-common.js"></script>
+  <script src="auth-check.js"></script>
 
   <style>
     :root {
@@ -118,6 +119,37 @@
       background: linear-gradient(135deg, #fff8ec, var(--white));
     }
 
+    .card.itpassport {
+      border: 2px solid var(--primary);
+      background: linear-gradient(135deg, #eaf3ff, var(--white));
+    }
+
+    .account-bar {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 10px 20px 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .account-bar button {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .account-bar button:hover {
+      background: #f0f0f0;
+    }
+
     .badge {
       display: inline-block;
       background: var(--accent);
@@ -154,12 +186,24 @@
 </head>
 <body>
 
+  <div class="account-bar" id="account-bar"></div>
+
   <div class="hero">
     <h1>🏫 教室ポータル</h1>
     <p>スクラッチ・タイピング練習・教科書PDFに、ここからアクセスできます。</p>
   </div>
 
   <div class="container">
+
+    <section class="group">
+      <div class="group-title">💻 ITパスポート試験対策</div>
+      <div class="cards">
+        <a class="card itpassport" href="itpassport/index.html">
+          <div class="card-title">📘 ITパスポート試験対策コース</div>
+          <div class="card-desc">動画で学んで、進捗もチェックできるよ。先生からの宿題もここに出るよ！</div>
+        </a>
+      </div>
+    </section>
 
     <section class="group">
       <div class="group-title">🎨 スクラッチ</div>
@@ -211,6 +255,18 @@
   <footer>&copy; 2026 PenTech</footer>
 
   <script>
+    (function () {
+      const student = getLoggedInStudent();
+      const bar = document.getElementById('account-bar');
+      if (student) {
+        bar.innerHTML = 'ログイン中: ' + student.displayName + ' さん　';
+        const btn = document.createElement('button');
+        btn.textContent = 'ログアウト';
+        btn.onclick = logoutStudent;
+        bar.appendChild(btn);
+      }
+    })();
+
     // 教科書PDFを追加するときは、ここに { title, file } を足すだけでOK。
     // file は school/portal/pdf/ フォルダに置いたPDFのファイル名を指定する。
     const TEXTBOOKS = [

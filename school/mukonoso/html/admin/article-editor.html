@@ -550,7 +550,10 @@
                     <button type="button" class="btn btn-secondary" onclick="document.getElementById('thumbnail-input').click()">🖼️ サムネイル画像を選択</button>
                     <button type="button" class="btn btn-secondary" id="thumbnail-remove-btn" onclick="removeThumbnail()" style="display:none;">🗑️ サムネイルを削除</button>
                 </div>
-                <p class="help-text">ブログ一覧・記事ページの上部に表示される画像です（任意）。</p>
+                <div style="margin-top:10px;">
+                    <input type="text" id="thumbnail-url-input" placeholder="/school/mukonoso/images/ファイル名.png のように入力（images/フォルダに置いた画像を使う場合）" style="width:100%; box-sizing:border-box;">
+                </div>
+                <p class="help-text">ブログ一覧・記事ページの上部に表示される画像です（任意）。ファイル選択での画像は容量制限（約40KB）があるため、大きい画像は事前に <code>school/mukonoso/images/</code> フォルダに置いて、上のパス欄に <code>/school/mukonoso/images/ファイル名.png</code> の形式で入力してください。</p>
             </div>
 
             <div class="editor-container">
@@ -666,10 +669,11 @@
             reader.onload = function(ev) {
                 // スプレッドシートの1セルは50,000文字までのため、大きすぎる画像は保存できない
                 if (ev.target.result.length > 45000) {
-                    showMessage('画像が大きすぎます（保存上限あり）。40KB程度以下に圧縮・リサイズしてから選び直してください。', 'error');
+                    showMessage('画像が大きすぎます（保存上限あり）。40KB程度以下に圧縮・リサイズするか、images/フォルダに画像を置いてパス欄にファイル名を入力してください。', 'error');
                     e.target.value = '';
                     return;
                 }
+                document.getElementById('thumbnail-url-input').value = '';
                 thumbnailDataUrl = ev.target.result;
                 showThumbnailPreview(thumbnailDataUrl);
             };
@@ -677,6 +681,13 @@
                 showMessage('サムネイル画像の読み込みに失敗しました。', 'error');
             };
             reader.readAsDataURL(file);
+        });
+
+        document.getElementById('thumbnail-url-input').addEventListener('input', function(e) {
+            const url = e.target.value.trim();
+            document.getElementById('thumbnail-input').value = '';
+            thumbnailDataUrl = url;
+            showThumbnailPreview(url);
         });
 
         function showThumbnailPreview(src) {
@@ -689,6 +700,7 @@
         function removeThumbnail() {
             thumbnailDataUrl = '';
             document.getElementById('thumbnail-input').value = '';
+            document.getElementById('thumbnail-url-input').value = '';
             document.getElementById('thumbnail-preview-wrap').style.display = 'none';
             document.getElementById('thumbnail-remove-btn').style.display = 'none';
         }
@@ -729,6 +741,7 @@
                     markdownEditor.value = a.markdown || '';
                     updatePreview();
                     thumbnailDataUrl = a.thumbnail || '';
+                    document.getElementById('thumbnail-url-input').value = thumbnailDataUrl.startsWith('data:') ? '' : thumbnailDataUrl;
                     showThumbnailPreview(thumbnailDataUrl);
 
                     switchToEditMode(editingArticleId);
@@ -1012,6 +1025,7 @@
                 markdownEditor.value = a.markdown || '';
                 updatePreview();
                 thumbnailDataUrl = a.thumbnail || '';
+                document.getElementById('thumbnail-url-input').value = thumbnailDataUrl.startsWith('data:') ? '' : thumbnailDataUrl;
                 showThumbnailPreview(thumbnailDataUrl);
 
                 switchToEditMode(a.id);

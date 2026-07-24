@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📘 ITパスポート試験対策コース | PenTech</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- 個人アカウント -->
+  <script src="../config.js"></script>
+  <script src="../portal-common.js"></script>
+  <script src="../auth-check.js"></script>
+
+  <!-- 動画データ -->
+  <script src="videos.js"></script>
+
+  <!-- YouTube IFrame Player API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --primary-dark: #357ABD;
+      --accent: #F5A623;
+      --text: #333333;
+      --bg: #FAFAFA;
+      --white: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+      text-align: center;
+      padding: 36px 20px 28px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 1.7rem;
+      color: var(--primary);
+    }
+
+    .hero p {
+      margin: 0;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .hero .back-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .hero .back-link:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .homework-banner {
+      background: linear-gradient(135deg, #fff8ec, var(--white));
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-top: 24px;
+    }
+
+    .homework-banner .hw-title {
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .homework-banner .hw-item {
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .video-card {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .video-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .yt-player {
+      width: 100%;
+      height: 100%;
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(74, 144, 226, 0.92);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .play-btn:hover { background: var(--primary-dark); }
+
+    .hw-tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .video-info { padding: 12px 14px 14px; }
+
+    .video-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .video-progress {
+      font-size: 0.82rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar-track {
+      flex: 1;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 20px;
+      color: #999;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>📘 ITパスポート試験対策コース</h1>
+    <p>動画を見て学ぼう！どこまで見たかは自動で記録されるよ。</p>
+    <a class="back-link" href="../index.html">← ポータルにもどる</a>
+  </div>
+
+  <div class="container">
+    <div id="homework-container"></div>
+    <div class="video-grid" id="video-grid"></div>
+  </div>
+
+  <footer>&copy; 2026 PenTech　<a href="admin/login.html" style="color:#999;">先生用</a></footer>
+
+  <script src="itpassport.js"></script>
+</body>
+</html>

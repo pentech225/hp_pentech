@@ -109,6 +109,67 @@ header {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
+.header-cta-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.header-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.header-cta-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.header-cta-request {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.header-cta-request:hover {
+    background-color: #3d7fc9;
+}
+
+.header-cta-apply {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+.header-cta-apply:hover {
+    background-color: #e0961d;
+}
+
+.header-cta-contact {
+    background-color: #fff;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.header-cta-contact:hover {
+    background-color: #f0f8ff;
+}
+
+@media (max-width: 480px) {
+    .header-cta-btn {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+    }
+}
+
 .header-nav {
     display: flex;
     align-items: center;
