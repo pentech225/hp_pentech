@@ -16,21 +16,9 @@
     var POLL_INTERVAL_MS = 5000;
 
     var student = null;
-    var players = {};          // videoId -> YT.Player
-    var pollTimers = {};       // videoId -> setInterval id (client側の最大到達秒数の更新)
-    var safetyTimers = {};     // videoId -> setInterval id (定期保存)
     var maxSeen = {};          // videoId -> 到達した最大秒数
     var durations = {};        // videoId -> 動画の長さ（秒）
     var watchCounts = {};      // videoId -> 視聴回数
-    var answeredQuizzes = {};  // quizId -> true（このページ読み込み中に解答済みか）
-    var ytApiReady = false;
-    var pendingPlays = [];
-
-    window.onYouTubeIframeAPIReady = function () {
-        ytApiReady = true;
-        pendingPlays.forEach(function (videoId) { createPlayer(videoId); });
-        pendingPlays = [];
-    };
 
     function formatTime(seconds) {
         seconds = Math.floor(seconds || 0);
@@ -58,34 +46,15 @@
     function videoCardHtml(video) {
         return (
             '<div class="video-card" data-video-id="' + video.videoId + '">' +
-                '<div class="video-thumb-wrap" id="thumbwrap-' + video.videoId + '">' +
+                '<a class="video-thumb-wrap" id="thumbwrap-' + video.videoId + '" href="play.html?order=' + video.order + '">' +
                     '<img class="video-thumb" src="https://img.youtube.com/vi/' + video.videoId + '/mqdefault.jpg" alt="">' +
-                    '<button class="play-btn" data-video-id="' + video.videoId + '">▶ 再生</button>' +
+                    '<span class="play-btn">▶ 再生</span>' +
                     '<div class="hw-tag" id="hwtag-' + video.videoId + '" style="display:none;">🏠 宿題</div>' +
-                '</div>' +
+                '</a>' +
                 '<div class="video-info">' +
                     '<div class="video-title">' + video.title + '</div>' +
                     '<div class="video-progress" id="progress-' + video.videoId + '">読み込み中...</div>' +
                 '</div>' +
-            '</div>'
-        );
-    }
-
-    function quizCardHtml(quiz) {
-        var choicesHtml = quiz.choices.map(function (choice) {
-            return (
-                '<button class="quiz-choice-btn" data-quiz-id="' + quiz.id + '" data-key="' + choice.key + '">' +
-                    choice.key + '　' + choice.text +
-                '</button>'
-            );
-        }).join('');
-
-        return (
-            '<div class="quiz-card" id="quiz-' + quiz.id + '">' +
-                '<div class="quiz-label">📝 確認問題</div>' +
-                '<div class="quiz-question">' + quiz.question + '</div>' +
-                '<div class="quiz-choices">' + choicesHtml + '</div>' +
-                '<div class="quiz-result" id="quiz-result-' + quiz.id + '"></div>' +
             '</div>'
         );
     }
@@ -95,66 +64,6 @@
             .filter(function (q) { return q.afterOrder === order; })
             .map(quizCardHtml)
             .join('');
-    }
-
-    function applyQuizAnswerState(quizId, chosenKey, isCorrect) {
-        var quiz = QUIZZES.filter(function (q) { return q.id === quizId; })[0];
-        var card = document.getElementById('quiz-' + quizId);
-        if (!quiz || !card) return;
-
-        var resultEl = document.getElementById('quiz-result-' + quizId);
-        var buttons = card.querySelectorAll('.quiz-choice-btn');
-
-        buttons.forEach(function (b) {
-            b.disabled = true;
-            if (b.getAttribute('data-key') === quiz.answerKey) {
-                b.classList.add('correct');
-            } else if (b.getAttribute('data-key') === chosenKey) {
-                b.classList.add('incorrect');
-            }
-        });
-
-        resultEl.textContent = isCorrect
-            ? '⭕ 正解！'
-            : '❌ 不正解。正解は「' + quiz.answerKey + '　' + (quiz.choices.filter(function (c) { return c.key === quiz.answerKey; })[0] || {}).text + '」でした。';
-        resultEl.className = 'quiz-result ' + (isCorrect ? 'correct' : 'incorrect');
-
-        answeredQuizzes[quizId] = true;
-    }
-
-    async function handleQuizAnswer(button) {
-        var quizId = button.getAttribute('data-quiz-id');
-        var chosenKey = button.getAttribute('data-key');
-        var quiz = QUIZZES.filter(function (q) { return q.id === quizId; })[0];
-        if (!quiz || answeredQuizzes[quizId]) return;
-
-        var isCorrect = chosenKey === quiz.answerKey;
-        applyQuizAnswerState(quizId, chosenKey, isCorrect);
-
-        if (!student) return;
-        try {
-            await portalPostJson('saveQuizAnswer', {
-                studentId: student.studentId,
-                quizId: quizId,
-                chosenKey: chosenKey,
-                correct: isCorrect
-            });
-        } catch (err) {
-            // 通信エラーが起きても解答自体はその場で表示済みなので無視する
-        }
-    }
-
-    async function loadQuizAnswers() {
-        try {
-            var result = await portalGetJson('getQuizAnswers', { studentId: student.studentId });
-            if (!result.success) return;
-            // 解答は appendRow で追記される（履歴）ので、同じ問題は最後（最新）の記録を採用する
-            result.answers.forEach(function (a) {
-                applyQuizAnswerState(a.quizId, a.chosenKey, a.correct);
-            });
-        } catch (err) {
-            // 解答記録の取得に失敗しても、未解答として問題を解くことは継続できる
-        }
     }
 
     function renderVideoGrid() {
@@ -169,164 +78,9 @@
         });
         grid.innerHTML = html;
 
-        grid.querySelectorAll('.play-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                playVideo(btn.getAttribute('data-video-id'));
-            });
-        });
-
         grid.querySelectorAll('.quiz-choice-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () { handleQuizAnswer(btn); });
+            btn.addEventListener('click', function () { handleQuizAnswer(btn, student); });
         });
-    }
-
-    // YouTube APIの読み込みが遅い/ブロックされている場合に「読み込み中」で止まっていないか判定するまでの待ち時間
-    var API_LOAD_TIMEOUT_MS = 8000;
-
-    function playVideo(videoId) {
-        var wrap = document.getElementById('thumbwrap-' + videoId);
-        wrap.innerHTML = '<div class="yt-player" id="player-' + videoId + '"></div>' +
-            '<div class="player-loading" id="loading-' + videoId + '">読み込み中...</div>';
-
-        if (ytApiReady) {
-            createPlayer(videoId);
-        } else {
-            pendingPlays.push(videoId);
-            setTimeout(function () {
-                if (!players[videoId]) {
-                    showPlaybackError(videoId, '動画の読み込みに時間がかかっています。広告ブロッカーなどの影響かもしれません。');
-                }
-            }, API_LOAD_TIMEOUT_MS);
-        }
-    }
-
-    // YouTube側のエラーコード一覧: https://developers.google.com/youtube/iframe_api_reference#onError
-    var YT_ERROR_MESSAGES = {
-        2: 'この動画は再生できません（動画IDが正しくないようです）。',
-        5: 'この動画はこのブラウザでは再生できませんでした。',
-        100: 'この動画が見つかりませんでした（削除または非公開になっている可能性があります）。',
-        101: 'この動画は他のサイトへの埋め込み再生が許可されていません。',
-        150: 'この動画は他のサイトへの埋め込み再生が許可されていません。'
-    };
-
-    function showPlaybackError(videoId, message) {
-        var wrap = document.getElementById('thumbwrap-' + videoId);
-        if (!wrap) return;
-        wrap.innerHTML =
-            '<div class="player-error">' +
-                '<p>⚠️ ' + message + '</p>' +
-                '<a href="https://www.youtube.com/watch?v=' + videoId + '" target="_blank" rel="noopener noreferrer">▶ YouTubeで直接見る</a>' +
-            '</div>';
-    }
-
-    function createPlayer(videoId) {
-        players[videoId] = new YT.Player('player-' + videoId, {
-            width: '100%',
-            height: '100%',
-            videoId: videoId,
-            playerVars: {
-                rel: 0,
-                origin: window.location.origin
-            },
-            events: {
-                onReady: function (event) {
-                    var loadingEl = document.getElementById('loading-' + videoId);
-                    if (loadingEl) loadingEl.remove();
-                    durations[videoId] = event.target.getDuration() || durations[videoId] || 0;
-                },
-                onStateChange: function (event) { onPlayerStateChange(videoId, event); },
-                onError: function (event) {
-                    var message = YT_ERROR_MESSAGES[event.data] || 'この動画の再生中にエラーが発生しました。';
-                    showPlaybackError(videoId, message);
-                }
-            }
-        });
-    }
-
-    function onPlayerStateChange(videoId, event) {
-        if (event.data === YT.PlayerState.PLAYING) {
-            startTracking(videoId);
-        } else if (event.data === YT.PlayerState.PAUSED) {
-            stopTracking(videoId);
-            saveProgress(videoId);
-        } else if (event.data === YT.PlayerState.ENDED) {
-            stopTracking(videoId);
-            var player = players[videoId];
-            maxSeen[videoId] = Math.max(maxSeen[videoId] || 0, player.getDuration() || 0);
-            saveProgress(videoId);
-        }
-    }
-
-    function startTracking(videoId) {
-        stopTracking(videoId);
-
-        pollTimers[videoId] = setInterval(function () {
-            var player = players[videoId];
-            if (!player || typeof player.getCurrentTime !== 'function') return;
-            var current = player.getCurrentTime() || 0;
-            maxSeen[videoId] = Math.max(maxSeen[videoId] || 0, current);
-            durations[videoId] = player.getDuration() || durations[videoId] || 0;
-            renderProgressBadge(videoId);
-        }, POLL_INTERVAL_MS);
-
-        safetyTimers[videoId] = setInterval(function () {
-            saveProgress(videoId);
-        }, SAFETY_SAVE_INTERVAL_MS);
-    }
-
-    function stopTracking(videoId) {
-        if (pollTimers[videoId]) { clearInterval(pollTimers[videoId]); delete pollTimers[videoId]; }
-        if (safetyTimers[videoId]) { clearInterval(safetyTimers[videoId]); delete safetyTimers[videoId]; }
-    }
-
-    async function saveProgress(videoId) {
-        if (!student) return;
-        var current = maxSeen[videoId] || 0;
-        var duration = durations[videoId] || 0;
-        if (current <= 0) return;
-
-        try {
-            var result = await portalPostJson('saveProgress', {
-                studentId: student.studentId,
-                videoId: videoId,
-                currentTimeSeconds: current,
-                durationSeconds: duration
-            });
-            if (result.success && result.progress) {
-                maxSeen[videoId] = result.progress.maxWatchedSeconds;
-                durations[videoId] = result.progress.durationSeconds;
-                watchCounts[videoId] = result.progress.watchCount;
-                renderProgressBadge(videoId);
-            }
-        } catch (err) {
-            // 通信エラーは無視（次の保存タイミングで再試行される）
-        }
-    }
-
-    function saveProgressBeacon(videoId) {
-        if (!student) return;
-        var current = maxSeen[videoId] || 0;
-        var duration = durations[videoId] || 0;
-        if (current <= 0) return;
-
-        try {
-            fetch(CONFIG.PORTAL_GOOGLE_APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                keepalive: true,
-                body: JSON.stringify({
-                    type: 'saveProgress',
-                    data: {
-                        studentId: student.studentId,
-                        videoId: videoId,
-                        currentTimeSeconds: current,
-                        durationSeconds: duration
-                    }
-                })
-            });
-        } catch (err) {
-            // ページ離脱時のベストエフォート送信のため、失敗しても何もしない
-        }
     }
 
     function renderHomeworkBanner(assignments) {
@@ -391,7 +145,7 @@
             // 宿題の取得に失敗しても致命的ではない
         }
 
-        await loadQuizAnswers();
+        await loadQuizAnswers(student);
     }
 
     function init() {
@@ -404,13 +158,6 @@
 
         renderVideoGrid();
         loadProgressAndAssignments();
-
-        window.addEventListener('beforeunload', function () {
-            Object.keys(players).forEach(function (videoId) {
-                stopTracking(videoId);
-                saveProgressBeacon(videoId);
-            });
-        });
     }
 
     if (document.readyState === 'loading') {

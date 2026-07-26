@@ -32,7 +32,8 @@
       "Bash(echo \"local hookspath: $?\")",
       "Bash(echo \"global hookspath: $?\")",
       "Bash(gh api *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(cd *)"
     ]
   }
 }
