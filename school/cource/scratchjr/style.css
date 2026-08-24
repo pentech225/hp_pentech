@@ -1,0 +1,261 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #101014;
+  font-family: 'M+PLUS Rounded 1c', sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
+#video-area {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* YouTube iframe fills the stage; player itself has no native controls (playerVars) */
+#player,
+#player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  pointer-events: none; /* iframeは常に非対話、操作はoverlayで受ける */
+}
+
+/* -----------------------------------------------------------
+   タップオーバーレイ
+   state-idle   : スタート前 = 中央スタート領域のみ表示
+   state-playing: 再生中     = 全ゾーン非表示・無効
+   state-paused : 一時停止中 = 左右ゾーン表示・有効
+------------------------------------------------------------ */
+#tap-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#start-zone {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#start-shape {
+  width: min(22vh, 22vw, 180px);
+  height: min(22vh, 22vw, 180px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe066, #ffb703 60%, #fb8500 100%);
+  box-shadow: 0 0 0 10px rgba(255, 183, 3, 0.25), 0 10px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* 再生三角形をCSSのみで表現（文字ラベルなし） */
+#start-shape::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  width: 0;
+  height: 0;
+  border-top: 15% solid transparent;
+  border-bottom: 15% solid transparent;
+  border-left: 22% solid #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+#tap-overlay.state-idle #start-zone {
+  display: flex;
+  pointer-events: auto;
+}
+
+#nav-zone {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+#tap-overlay.state-paused #nav-zone {
+  display: flex;
+  pointer-events: auto;
+}
+
+.zone {
+  flex: 1 1 50%;
+  height: 100%;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+}
+
+#zone-back {
+  justify-content: flex-start;
+  padding-left: 4vw;
+}
+
+#zone-next {
+  justify-content: flex-end;
+  padding-right: 4vw;
+}
+
+/* 戻る = 控えめな配色・やや小さめ */
+.arrow-left {
+  width: min(9vh, 9vw, 70px);
+  height: min(9vh, 9vw, 70px);
+  border-left: 10px solid rgba(255, 255, 255, 0.55);
+  border-bottom: 10px solid rgba(255, 255, 255, 0.55);
+  transform: rotate(45deg);
+  border-radius: 6px;
+}
+
+/* 進む = 明るい色・大きめ */
+.arrow-right {
+  width: min(13vh, 13vw, 100px);
+  height: min(13vh, 13vw, 100px);
+  border-right: 14px solid #ffd60a;
+  border-top: 14px solid #ffd60a;
+  transform: rotate(45deg);
+  border-radius: 8px;
+  filter: drop-shadow(0 0 12px rgba(255, 214, 10, 0.6));
+}
+
+/* タップ可能になった瞬間の視覚合図 */
+@keyframes fade-in-blink {
+  0% { opacity: 0; transform: rotate(45deg) scale(0.7); }
+  40% { opacity: 1; transform: rotate(45deg) scale(1.1); }
+  60% { opacity: 0.4; }
+  80% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+
+#tap-overlay.state-paused .arrow-left,
+#tap-overlay.state-paused .arrow-right {
+  animation: fade-in-blink 0.9s ease-out;
+}
+
+.zone.disabled {
+  opacity: 0.15;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* -----------------------------------------------------------
+   先生用アイコン（子ども向け導線より明らかに小さく・目立たない）
+------------------------------------------------------------ */
+#teacher-gear {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 50;
+}
+
+#teacher-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#teacher-panel.hidden {
+  display: none;
+}
+
+#teacher-panel-inner {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 280px;
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'M+PLUS Rounded 1c', sans-serif;
+}
+
+#teacher-panel-inner button {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #e9ecef;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#teacher-panel-inner button:hover {
+  background: #dee2e6;
+}
+
+#panel-section-list {
+  margin-bottom: 10px;
+}
+
+.panel-section-btn {
+  background: #f1f3f5 !important;
+  text-align: left;
+}
+
+#panel-close {
+  background: #495057 !important;
+  color: #fff;
+}
+
+/* -----------------------------------------------------------
+   ランドスケープ（横向きタブレット）を主対象としたレスポンシブ
+------------------------------------------------------------ */
+@media (orientation: portrait) {
+  .arrow-right {
+    width: min(11vh, 20vw, 90px);
+    height: min(11vh, 20vw, 90px);
+  }
+  .arrow-left {
+    width: min(8vh, 14vw, 60px);
+    height: min(8vh, 14vw, 60px);
+  }
+}

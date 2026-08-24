@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ScratchJrレッスン | PenTech</title>
+  <meta name="description" content="PenTechのScratchJr（スクラッチジュニア）動画レッスン。文字が読めない年齢のお子さまでも、画面をタップするだけで自分のペースで操作を学べます。">
+  <link rel="canonical" href="https://www.pentech.info/school/cource/scratchjr/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PenTech（ペンテック）">
+  <meta property="og:title" content="ScratchJrレッスン | PenTech">
+  <meta property="og:description" content="タップするだけで進む、幼児向けScratchJr動画レッスン。">
+  <meta property="og:url" content="https://www.pentech.info/school/cource/scratchjr/index.html">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="stage">
+    <div id="video-area">
+      <div id="player"></div>
+      <div id="tap-overlay" class="state-idle">
+        <div id="start-zone" aria-hidden="true">
+          <div id="start-shape"></div>
+        </div>
+        <div id="nav-zone" aria-hidden="true">
+          <button id="zone-back" class="zone" type="button" aria-label="back">
+            <span class="arrow arrow-left"></span>
+          </button>
+          <button id="zone-next" class="zone" type="button" aria-label="next">
+            <span class="arrow arrow-right"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="teacher-gear" type="button" aria-label="teacher menu">⚙️</button>
+
+  <div id="teacher-panel" class="hidden">
+    <div id="teacher-panel-inner">
+      <button id="panel-reset" type="button">はじめから（リセット）</button>
+      <div id="panel-section-list"></div>
+      <button id="panel-close" type="button">閉じる</button>
+    </div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="script.js"></script>
+</body>
+</html>
