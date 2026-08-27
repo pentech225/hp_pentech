@@ -1,6 +1,9 @@
 /**
  * タイピングランド 生徒切り替えパネル
  *
+ * 【代替手段】通常運用では open_typingland.bat + load.bat/save.bat（agent.js経由、
+ * コンソール操作不要）を使う。これはload.bat/save.batが使えない環境向けの手動フォールバック。
+ *
  * 使い方: タイピングランドのページ (https://typingland.higopage.com/play/) を開いた状態で、
  * このコードをブラウザのDevToolsコンソール（F12 → Console）に貼り付けてEnterを押す。
  * 画面右にプルダウン（生徒選択）と「読み込む」「保存する」ボタンが出る。
