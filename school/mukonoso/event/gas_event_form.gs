@@ -1,5 +1,5 @@
 /**
- * 武庫っ子ゲームプログラミング大会 - 申し込みフォーム GAS
+ * 武庫之荘校 イベント申し込みフォーム GAS（複数イベント共用）
  *
  * 【セットアップ手順】
  * 1. Google スプレッドシートを新規作成
@@ -12,6 +12,14 @@
  * 【申込一覧シートの列構成】
  * 申込日時 | 時間帯 | お子さんのお名前 | 学年 | 電話番号 | メールアドレス | ご質問
  * ※ 子ども1人につき1行。2人申し込みなら2行追加。
+ *
+ * 【新しいイベントを追加するとき】
+ * 各イベントページ（26_0315.html等）は全て同じCONFIG.EVENT_GOOGLE_APPS_SCRIPT_URL・
+ * 同じスプレッドシートを共用する。枠管理シートの「時間帯」はキーとして使われるため、
+ * 他イベントと同じ文字列を使うと枠数が混ざってしまう。新しいイベントごとに
+ * addSlots0922() のような専用関数を追加し、時間帯キーにイベント日を含めて重複を避けること。
+ * 確認メールの文面はdata.school_type / data.dateから動的に組み立てるため、
+ * このファイル自体は編集不要（イベントページ側のemailDataだけ更新すればよい）。
  */
 
 const SPREADSHEET_ID = '1RJAoO36Cdvrcm8MmO2rG4tMj_5b1hSTIVXTGhBfWXRs';
@@ -47,6 +55,29 @@ function initSheets() {
   }
 
   Logger.log('シート初期化完了');
+}
+
+// ---- 9/22「あまがさきキッズプログラミングDAY」の時間帯枠を追加（1回だけ手動実行） ----
+// 3/15・5/3イベントと枠管理シート上でキーが衝突しないよう「（9/22）」付きのキーを使う
+function addSlots0922() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const slotSheet = ss.getSheetByName(SHEET_SLOTS);
+  const slots = [
+    ['1部：10:00〜10:30（9/22）', 8, 0],
+    ['2部：11:00〜11:30（9/22）', 8, 0],
+    ['3部：13:00〜13:30（9/22）', 8, 0],
+    ['4部：14:00〜14:30（9/22）', 8, 0],
+    ['5部：15:00〜15:30（9/22）', 8, 0],
+  ];
+
+  const existing = slotSheet.getDataRange().getValues().map(row => row[0]);
+  slots.forEach(slot => {
+    if (!existing.includes(slot[0])) {
+      slotSheet.appendRow(slot);
+    }
+  });
+
+  Logger.log('9/22枠を追加しました');
 }
 
 // ---- GET: 枠管理データを返す ----
@@ -148,7 +179,7 @@ function buildChildrenFromLegacy(data) {
 // ---- 運営メール ----
 function sendNotificationEmail(data, childrenDetail, participantCount) {
   const to = 'iteen.mukonosou@gmail.com';
-  const subject = '【申し込み】ゲームプログラミング大会';
+  const subject = `【申し込み】${data.school_type || 'イベント'}`;
   const body = `新しい申し込みがありました。
 
 時間帯：${data.time_slot}
@@ -167,10 +198,11 @@ iTeen 武庫之荘校 自動送信`;
 
 // ---- 申込者への確認メール ----
 function sendConfirmationEmail(data, childrenDetail) {
-  const subject = '【iTeen 武庫之荘校】ゲームプログラミング大会 参加申し込みのご確認';
+  const eventName = data.school_type || 'イベント';
+  const subject = `【iTeen 武庫之荘校】${eventName} 参加申し込みのご確認`;
   const body = `${data.child_name} 様
 
-この度は「武庫っ子あつまれ！ゲームプログラミング大会」へのお申し込みありがとうございます。
+この度は「${eventName}」へのお申し込みありがとうございます。
 
 【申し込み内容】
 時間帯：${data.time_slot}
@@ -178,15 +210,15 @@ function sendConfirmationEmail(data, childrenDetail) {
 電話番号：${data.phone}
 ${data.message ? `ご質問：${data.message}\n` : ''}
 【イベント情報】
-開催日時：2026年5月3日(日) ${data.time_slot}
+開催日時：${data.date || ''} ${data.time_slot}
 会場：尼崎市立武庫西生涯学習プラザ 2F 小会議室
 住所：〒661-0041 兵庫県尼崎市武庫の里１丁目１３−２９
 
 当日お会いできるのを楽しみにしております！
-お問い合わせ：070-2327-8083（担当：彦阪 吉海）
+お問い合わせ：06-6438-8277／iteen.mukonosou@gmail.com
 
 ---
-iTeen 子どものためのICT教育普及促進委員会`;
+iTeen 子どものためのICT教育普及推進委員会`;
 
   MailApp.sendEmail({ to: data.email, subject, body });
 }
