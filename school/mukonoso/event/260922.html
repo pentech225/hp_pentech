@@ -740,11 +740,11 @@
         // ---- 枠数管理（フォールバック値：GAS取得失敗時に使用。registeredは常に0） ----
         // ※他イベント（3/15・5/3）と枠管理シート上でキーが衝突しないよう「（9/22）」を付与
         const TIME_SLOTS = [
-            { id: '1部：10:00〜10:30', capacity: 8, registered: 0 },
-            { id: '2部：11:00〜11:30', capacity: 8, registered: 0 },
-            { id: '3部：13:00〜13:30', capacity: 8, registered: 0 },
-            { id: '4部：14:00〜14:30', capacity: 8, registered: 0 },
-            { id: '5部：15:00〜15:30', capacity: 8, registered: 0 },
+            { id: '1部：10:00〜10:30（9/22）', capacity: 8, registered: 0 },
+            { id: '2部：11:00〜11:30（9/22）', capacity: 8, registered: 0 },
+            { id: '3部：13:00〜13:30（9/22）', capacity: 8, registered: 0 },
+            { id: '4部：14:00〜14:30（9/22）', capacity: 8, registered: 0 },
+            { id: '5部：15:00〜15:30（9/22）', capacity: 8, registered: 0 },
         ];
 
         function getRemainingLabel(remaining) {
