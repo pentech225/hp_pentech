@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>タイピングランド 生徒切り替えツール（スタッフ用）</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Maru Gothic Pro', sans-serif;
+      font-size: 15px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #f7f9fc 100%);
+      color: #333;
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .step-title {
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+
+    .step-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #444;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #2e7d32;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn.secondary {
+      background: #1565c0;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #2e7d32;
+      font-weight: bold;
+      min-height: 1.2em;
+    }
+
+    kbd {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 20px;
+      line-height: 1.7;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>タイピングランド 生徒切り替えツール</h1>
+      <p>スタッフ用の内部ツールです。手順どおりに①→②→③の順で進めてください。</p>
+    </div>
+
+    <div class="card">
+      <div class="step-title">① タイピングランドを開く</div>
+      <div class="step-body">
+        下のボタンで新しいタブが開きます。生徒が座っているPCで開いてください。
+      </div>
+      <a class="btn" href="https://typingland.higopage.com/play/" target="_blank" rel="noopener">タイピングランドを開く</a>
+    </div>
+
+    <div class="card">
+      <div class="step-title">② 切り替えツールのコードをコピーする</div>
+      <div class="step-body">
+        下のボタンでコードがコピーされます（①のタブに切り替えなくてもOK、このページのままで大丈夫です）。
+      </div>
+      <button class="btn secondary" id="copyBtn">コードをコピーする</button>
+      <div class="status" id="copyStatus"></div>
+    </div>
+
+    <div class="card">
+      <div class="step-title">③ ①のタブに戻り、コードを貼り付けて実行する</div>
+      <div class="step-body">
+        ①で開いたタイピングランドのタブに戻り、<br>
+        <kbd>F12</kbd> キー（またはキーボードのメニューから「検証」）を押してデベロッパーツールを開く<br>
+        → 上部の「Console」タブをクリック<br>
+        → 画面をクリックしてカーソルを合わせ、<kbd>Ctrl</kbd> + <kbd>V</kbd> で貼り付け<br>
+        → <kbd>Enter</kbd> キーを押す<br><br>
+        <strong>「貼り付けを許可しますか」という警告が出た場合</strong>は、そのまま <kbd>allow pasting</kbd> と入力して <kbd>Enter</kbd>。もう一度 <kbd>Ctrl</kbd> + <kbd>V</kbd> で貼り付けて <kbd>Enter</kbd> を押してください（Chromeの標準機能で、初回だけ出ます）。<br><br>
+        画面右にプルダウンと「読み込む」「保存する」ボタンのパネルが出れば成功です。
+      </div>
+    </div>
+
+    <div class="note">
+      うまく表示されない場合は、①のページを開き直してからもう一度②③を試してください。<br>
+      それでも解決しない場合は管理者に連絡してください。
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var copyBtn = document.getElementById('copyBtn');
+      var statusEl = document.getElementById('copyStatus');
+      var codePromise = fetch('./panel.js').then(function (res) {
+        if (!res.ok) throw new Error('コード取得に失敗しました');
+        return res.text();
+      });
+
+      copyBtn.addEventListener('click', function () {
+        codePromise
+          .then(function (code) {
+            return navigator.clipboard.writeText(code);
+          })
+          .then(function () {
+            statusEl.textContent = 'コピーしました。①のタブに戻って貼り付けてください。';
+          })
+          .catch(function (e) {
+            statusEl.textContent = 'コピーに失敗しました: ' + e.message;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

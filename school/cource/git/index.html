@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自分の作品を世界に公開しよう — VSCode × Git × GitHub 実践マニュアル</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121b2e;
+      --panel2: #0d1626;
+      --border: #22314d;
+      --text: #e8edf5;
+      --muted: #9fb0c9;
+      --blue: #3b82f6;
+      --blue-deep: #1e3a8a;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --code-bg: #0a0f1a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.9;
+      font-size: 1rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0b1220 0%, #101c33 50%, #16233f 100%);
+      border-bottom: 4px solid var(--blue);
+      padding: 56px 40px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "{ }";
+      font-size: 200px;
+      position: absolute; top: -40px; left: -20px;
+      opacity: 0.04; color: var(--cyan);
+      font-family: 'Consolas', monospace;
+    }
+    header::after {
+      content: "< / >";
+      font-size: 180px;
+      position: absolute; bottom: -60px; right: -30px;
+      opacity: 0.04; color: var(--blue);
+      font-family: 'Consolas', monospace;
+    }
+    .subtitle {
+      color: var(--cyan);
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 2rem; font-weight: 900; line-height: 1.3; margin-bottom: 14px; }
+    h1 span { color: var(--blue); }
+    .tagline { font-size: 1rem; color: var(--muted); max-width: 620px; margin: 0 auto; }
+
+    nav {
+      background: #0a0f1c;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav a {
+      color: #7c8aa5;
+      text-decoration: none;
+      padding: 14px 20px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all .2s;
+    }
+    nav a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 40px 24px 100px; }
+
+    h2 {
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--blue);
+      border-left: 5px solid var(--cyan);
+      padding-left: 14px;
+      margin: 64px 0 24px;
+    }
+    h3 { font-size: 1.05rem; font-weight: 700; margin: 28px 0 10px; color: #fff; }
+    h4 { font-size: 0.95rem; font-weight: 700; margin: 20px 0 8px; color: #cbd5e1; }
+    p { margin-bottom: 12px; }
+
+    /* 全体フロー図 */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      margin: 24px 0;
+    }
+    .flow .node {
+      background: var(--panel);
+      border: 2px solid var(--blue);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-align: center;
+      min-width: 110px;
+    }
+    .flow .arrow { color: var(--cyan); font-size: 1.3rem; font-weight: 900; }
+
+    /* セッションヘッダー */
+    .session-header {
+      background: linear-gradient(90deg, var(--blue), var(--blue-deep));
+      border-radius: 12px 12px 0 0;
+      padding: 24px 32px;
+      margin-top: 48px;
+    }
+    .session-header.s2 { background: linear-gradient(90deg, #0ea5a5, #0f766e); }
+    .session-header.s3 { background: linear-gradient(90deg, #7c3aed, #4c1d95); }
+    .session-header.s4 { background: linear-gradient(90deg, var(--green), #15803d); }
+    .session-num { font-size: 0.8rem; letter-spacing: 3px; opacity: 0.75; margin-bottom: 4px; }
+    .session-title { font-size: 1.4rem; font-weight: 900; }
+    .session-sub { font-size: 0.88rem; opacity: 0.85; margin-top: 4px; }
+    .session-body {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 32px;
+    }
+
+    /* MISSION */
+    .mission-box {
+      background: linear-gradient(90deg, #0d1f3a, #10233f);
+      border: 2px solid var(--blue);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 24px 0;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #cfe1ff;
+    }
+    .mission-box .label {
+      color: var(--cyan);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* 手順ステップ */
+    .steps { counter-reset: step-counter; }
+    .step {
+      counter-increment: step-counter;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin: 16px 0;
+      position: relative;
+    }
+    .step::before {
+      content: "STEP " counter(step-counter);
+      display: block;
+      color: var(--cyan);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* 打つ／操作ブロック */
+    .type-this {
+      background: #081422;
+      border: 1px solid #1e3a5f;
+      border-top: 3px solid var(--cyan);
+      border-radius: 0 0 10px 10px;
+      padding: 0;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+    .type-this .type-label {
+      background: #113a5c;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .type-this pre { border: none; border-radius: 0; margin: 0; background: transparent; }
+
+    /* 実行確認 */
+    .run-check {
+      background: #08210f;
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin: 16px 0;
+    }
+    .run-check .label {
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* エラー解説 */
+    .error-box {
+      background: #210a0a;
+      border: 1px solid var(--red);
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin: 16px 0;
+    }
+    .error-box .label {
+      color: var(--red);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* ポイント */
+    .tip {
+      background: var(--panel);
+      border-left: 4px solid var(--amber);
+      padding: 14px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.95rem;
+    }
+
+    /* OS切り替えタブ */
+    .os-switch {
+      display: flex;
+      gap: 10px;
+      margin: 16px 0 20px;
+      flex-wrap: wrap;
+    }
+    .os-btn {
+      background: var(--panel);
+      border: 2px solid var(--border);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .os-btn:hover { border-color: var(--cyan); color: var(--text); }
+    .os-btn.active {
+      background: var(--blue-deep);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    /* コードブロック */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid #223049;
+      border-radius: 8px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .cm { color: #7f8ea8; }
+    .kw { color: #ff9d7b; }
+    .st { color: #a5d6ff; }
+    .fn { color: #d2a8ff; }
+    .va { color: #e6edf3; }
+
+    /* テーブル */
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th {
+      background: var(--blue-deep);
+      color: var(--cyan);
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    tr:nth-child(even) td { background: #16223b; }
+    tr:nth-child(odd) td { background: var(--panel); }
+
+    /* 権限フローの比較ボックス */
+    .compare-box {
+      background: #0d1626;
+      border: 2px solid var(--cyan);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+    .compare-box .label {
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .compare-grid > div { background: var(--code-bg); border-radius: 8px; padding: 14px; }
+    .compare-grid .cg-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .compare-grid .cg-label.bad { color: var(--red); }
+    .compare-grid .cg-label.good { color: var(--green); }
+
+    /* 自習・確認カード */
+    .hw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .hw-card {
+      background: var(--blue-deep);
+      border: 1px solid var(--blue);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .hw-card .icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .hw-card p { font-size: 0.9rem; color: #dbe6ff; margin: 0; }
+
+    /* 最終メッセージ */
+    .final-box {
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+      border-radius: 12px;
+      padding: 36px;
+      margin: 56px 0;
+      text-align: center;
+    }
+    .final-box p { font-size: 1.1rem; font-weight: 700; }
+    .final-box .big { font-size: 1.4rem; display: block; margin-top: 10px; }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      color: #445069;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 600px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 1.5rem; }
+      .flow { flex-direction: column; }
+      .flow .arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle">VSCode × Git × GitHub Manual</p>
+  <h1>自分の作品を<span>世界に公開しよう</span></h1>
+  <p class="tagline">プロが毎日使っている道具を、そのまま使っていただきます。難しいのではなく、順番を知っているかどうかだけです。</p>
+</header>
+
+<nav>
+  <a href="#intro">はじめに</a>
+  <a href="#s1">STEP1：VSCode</a>
+  <a href="#s2">STEP2：Git</a>
+  <a href="#s3">STEP3：GitHub</a>
+  <a href="#s4">STEP4：公開する</a>
+  <a href="#trouble">困ったとき</a>
+  <a href="#hw">自分で確かめること</a>
+</nav>
+
+<main>
+
+  <!-- ━━ はじめに ━━ -->
+  <section id="intro">
+    <h2>はじめに</h2>
+
+    <p>これから使っていただくのは、プロのエンジニアが毎日使っているのと<strong>まったく同じ道具</strong>です。<br>
+    子ども用に簡単にした偽物ではありません。本物を、本物のまま使っていただきます。</p>
+
+    <div class="flow">
+      <div class="node">VSCode<br><span style="font-weight:400;font-size:0.8rem;color:var(--muted)">書く</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Git<br><span style="font-weight:400;font-size:0.8rem;color:var(--muted)">セーブする</span></div>
+      <div class="arrow">→</div>
+      <div class="node">GitHub<br><span style="font-weight:400;font-size:0.8rem;color:var(--muted)">預ける</span></div>
+      <div class="arrow">→</div>
+      <div class="node">公開<br><span style="font-weight:400;font-size:0.8rem;color:var(--muted)">世界に届く</span></div>
+    </div>
+
+    <p>このマニュアルでは、この4つを順番に体験していただきます。最後には、ご自身が作ったものが<strong>実際にインターネット上のURLとして誰でも見られる状態</strong>になります。</p>
+
+    <div class="tip">
+      <strong>誰の権限も借りません</strong><br>
+      この仕組みは、ご自身のGitHubアカウントとリポジトリだけで完結します。先生のホームページのパスワードやサーバーの権限を借りる必要は一切ありません。自分の場所は自分で持つ、というのが一番大事な考え方です。
+    </div>
+
+  </section>
+
+
+  <!-- ━━ STEP1 VSCode ━━ -->
+  <section id="s1">
+    <div class="session-header s1">
+      <div class="session-num">STEP 01</div>
+      <div class="session-title">VSCodeを使えるようにする</div>
+      <div class="session-sub">インストール・基本操作・ターミナル</div>
+    </div>
+    <div class="session-body">
+
+      <div class="mission-box">
+        <span class="label">MISSION</span>
+        ご自身のMacBookにVSCodeを入れて、フォルダを1つ開き、ファイルを作って保存してみましょう。
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          公式サイトからVisual Studio Code（Mac版）をダウンロードし、インストールします。
+          <div class="type-this">
+            <div class="type-label">アクセス先</div>
+            <pre><code>code.visualstudio.com</code></pre>
+          </div>
+          <div class="tip">
+            ダウンロードした .zip を開き、出てきた「Visual Studio Code」を<strong>アプリケーションフォルダ</strong>に移動してください。
+          </div>
+        </div>
+
+        <div class="step">
+          作品を入れるフォルダを1つ作成します（デスクトップなど、どこでも構いません）。名前は自由につけていただけますが、英数字にしておくと後で困りません。
+          <div class="type-this">
+            <div class="type-label">例</div>
+            <pre><code>my-project</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          VSCodeを開き、そのフォルダを開きます。「フォルダーを開く」から、先ほど作成したフォルダを選んでください。
+          <div class="run-check">
+            <div class="label">確認</div>
+            左側にフォルダ名が表示され、その中にファイルを作れる状態になっていれば大丈夫です。
+          </div>
+        </div>
+
+        <div class="step">
+          ターミナルを開きます。VSCodeには「ターミナル」が内蔵されています。
+          <div class="type-this">
+            <div class="type-label">メニューから</div>
+            <pre><code>ターミナル → 新しいターミナル</code></pre>
+          </div>
+          <div class="tip">
+            画面下に黒い入力欄が表示されます。これがターミナルです。これ以降、ほとんどの操作はここに文字を入力して行います。マウス操作よりも、こちらの方がずっと速く進められます。
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ━━ STEP2 Git ━━ -->
+  <section id="s2">
+    <div class="session-header s2">
+      <div class="session-num">STEP 02</div>
+      <div class="session-title">Gitで履歴を残す</div>
+      <div class="session-sub">init / add / commit — 「セーブポイント」を作る</div>
+    </div>
+    <div class="session-body">
+
+      <div class="mission-box">
+        <span class="label">MISSION</span>
+        作成したファイルを「セーブ」し、その記録が残ることを確認しましょう。
+      </div>
+
+      <h3>Gitとは何か</h3>
+      <p>Gitは、ゲームの「セーブポイント」のようなものです。作業の区切りごとに記録を残すことができます。<br>
+      失敗しても、前のセーブポイントに戻ることができるため、思い切って挑戦していただけます。</p>
+
+      <h3>Gitをインストールする</h3>
+      <p>VSCodeにはターミナルが内蔵されていますが、「Git」というソフト自体は別途インストールが必要な場合があります。お使いのパソコンに合わせて、下のボタンで手順を切り替えてご覧ください。</p>
+
+      <div class="os-switch">
+        <button type="button" class="os-btn active" data-os-panel="mac" onclick="switchOS('mac', this)">🍎 Macの場合</button>
+        <button type="button" class="os-btn" data-os-panel="win" onclick="switchOS('win', this)">🪟 Windowsの場合</button>
+      </div>
+
+      <div class="os-panel" data-os-panel="mac">
+        <div class="steps">
+
+          <div class="step">
+            すでにGitが入っているか確認します。
+            <div class="type-this">
+              <div class="type-label">ターミナルに打つ</div>
+              <pre><code><span class="fn">git</span> --version</code></pre>
+            </div>
+            <div class="run-check">
+              <div class="label">確認</div>
+              <code>git version 2.x.x</code> のように表示されれば、すでに使える状態です。下の「カレントディレクトリについて」まで読み飛ばして構いません。
+            </div>
+          </div>
+
+          <div class="step">
+            表示されない場合は、インストールを促すダイアログが自動で出ますので、それに従ってください（数分かかります）。
+            <div class="tip">
+              それでもうまくいかない場合は、<a href="https://brew.sh" style="color:var(--cyan)">Homebrew</a>というツールを使う方法もあります。
+              <div class="type-this">
+                <div class="type-label">Homebrewでのインストール（任意）</div>
+                <pre><code><span class="cm"># Homebrewが未インストールの場合、先にこちらを実行</span>
+/bin/bash -c <span class="st">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span>
+
+<span class="fn">brew</span> install git</code></pre>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="os-panel" data-os-panel="win" style="display:none">
+        <div class="steps">
+
+          <div class="step">
+            <a href="https://git-scm.com/download/win" style="color:var(--cyan)">git-scm.com/download/win</a> から、Windows用のインストーラーをダウンロードします。
+          </div>
+
+          <div class="step">
+            インストーラーを実行し、基本的にはすべて「Next」を押してそのまま進めていただいて構いません。
+            <div class="tip">
+              「Adjusting your PATH environment」という画面だけ、推奨（デフォルト）の項目が選ばれていることをご確認ください。
+            </div>
+          </div>
+
+          <div class="step">
+            インストールが終わると、スタートメニューに「<strong>Git Bash</strong>」が追加されます。以降、これがWindowsでの黒い入力欄（ターミナル）になります。VSCodeの内蔵ターミナルの種類を「Git Bash」に選んでいただくと、これ以降の手順がそのままお使いいただけます。
+            <div class="run-check">
+              <div class="label">確認</div>
+              Git Bashを開いて以下を実行し、バージョンが表示されれば成功です。
+              <pre><code><span class="fn">git</span> --version</code></pre>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <h4>カレントディレクトリ（今いる作業フォルダ）について</h4>
+      <p>ターミナルの操作は、常に「今どのフォルダにいるか」に対して行われます。これを<strong>カレントディレクトリ</strong>と呼びます。VSCodeでフォルダを開いた状態でターミナルを起動すると、自動的にそのフォルダがカレントディレクトリになります。</p>
+
+      <table>
+        <tr><th>操作</th><th>コマンド</th><th>備考</th></tr>
+        <tr><td>今の場所を確認する</td><td><code>pwd</code></td><td>Mac／Windows（Git Bash）共通</td></tr>
+        <tr><td>中身を一覧表示する</td><td><code>ls</code></td><td>共通</td></tr>
+        <tr><td>フォルダへ移動する</td><td><code>cd フォルダ名</code></td><td>共通</td></tr>
+        <tr><td>一つ上の階層に戻る</td><td><code>cd ..</code></td><td>共通</td></tr>
+        <tr><td>ホームディレクトリに戻る</td><td><code>cd ~</code></td><td>共通</td></tr>
+      </table>
+
+      <div class="compare-box">
+        <div class="label">パスの書き方の違い</div>
+        <div class="compare-grid">
+          <div>
+            <div class="cg-label good">🍎 Mac</div>
+            <code>/Users/自分の名前/Desktop/my-project</code>
+          </div>
+          <div>
+            <div class="cg-label good">🪟 Windows（Git Bash）</div>
+            <code>/c/Users/自分の名前/Desktop/my-project</code><br>
+            <span style="font-size:0.85rem;color:var(--muted)">「C:\」が「/c/」になる点だけご注意ください</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>基本はcdを使わなくても大丈夫です</strong><br>
+        VSCodeで「フォルダーを開く」を使い、その状態でターミナルを開けば、すでに正しいカレントディレクトリになっています。<code>cd</code>が必要になるのは、ターミナルだけを単体で開いた場合や、別のフォルダに移動したい場合です。
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          このフォルダをGitで管理し始めます（最初の1回だけで構いません）。
+          <div class="type-this">
+            <div class="type-label">ターミナルに打つ</div>
+            <pre><code><span class="fn">git</span> init</code></pre>
+          </div>
+          <div class="run-check">
+            <div class="label">確認</div>
+            <code>Initialized empty Git repository</code> のような表示が出れば成功です。
+          </div>
+        </div>
+
+        <div class="step">
+          何かファイルを1つ作成します（例: <code>index.html</code> や <code>index.py</code>）。中身は何でも構いません。
+          <div class="type-this">
+            <div class="type-label">例: index.html</div>
+            <pre><code>&lt;h1&gt;はじめての作品&lt;/h1&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          変更をGitに「これをセーブしたい」と伝えます（add）。
+          <div class="type-this">
+            <div class="type-label">ターミナルに打つ</div>
+            <pre><code><span class="fn">git</span> add .</code></pre>
+          </div>
+          <div class="tip">
+            「<code>.</code>」は「今のフォルダの中の全部」という意味です。
+          </div>
+        </div>
+
+        <div class="step">
+          セーブを確定します（commit）。メッセージには「何をしたか」を短く記入してください。
+          <div class="type-this">
+            <div class="type-label">ターミナルに打つ</div>
+            <pre><code><span class="fn">git</span> commit -m <span class="st">"最初の作品を作った"</span></code></pre>
+          </div>
+          <div class="run-check">
+            <div class="label">確認</div>
+            以下を実行し、これまでのセーブ履歴が並んで見えれば成功です。
+            <pre><code><span class="fn">git</span> log</code></pre>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="error-box">
+        <div class="label">よくあるつまずき</div>
+        <strong>「not a git repository」と表示される場合</strong> → そのフォルダで <code>git init</code> をまだ実行していません。<br>
+        <strong>commitできない場合（名前を尋ねられる場合）</strong> → 初回のみ、以下を1回実行しておいてください（ご自身の呼び名とメールアドレスで構いません）。
+        <div class="type-this">
+          <div class="type-label">初回だけ</div>
+          <pre><code><span class="fn">git</span> config --global user.name  <span class="st">"自分の名前"</span>
+<span class="fn">git</span> config --global user.email <span class="st">"自分のメールアドレス"</span></code></pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ━━ STEP3 GitHub ━━ -->
+  <section id="s3">
+    <div class="session-header s3">
+      <div class="session-num">STEP 03</div>
+      <div class="session-title">GitHubに預ける</div>
+      <div class="session-sub">アカウント作成・リポジトリ・push</div>
+    </div>
+    <div class="session-body">
+
+      <div class="mission-box">
+        <span class="label">MISSION</span>
+        ご自身のGitHubアカウントとリポジトリを作成し、手元のセーブをGitHub上に送りましょう。
+      </div>
+
+      <h3>GitHubとは</h3>
+      <p>GitHubは、ご自身のパソコンの中にあるGitの記録を、インターネット上に置いておける場所です。<br>
+      世界中のプロのエンジニアも、ここに自分のコードを置いて仕事をしています。</p>
+
+      <div class="steps">
+
+        <div class="step">
+          <a href="https://github.com" style="color:var(--cyan)">github.com</a> でアカウントを作成します。ユーザー名は今後ずっと使うことになりますので、変わった名前にしないようご注意ください（このユーザー名は、後で公開URLの一部になります）。
+        </div>
+
+        <div class="step">
+          右上の「+」から「New repository」を選び、新しいリポジトリを作成します。名前は自由につけていただけますが、次のSTEP4で公開する場合は名前にご注意ください（後述します）。
+        </div>
+
+        <div class="step">
+          手元のフォルダとGitHub上のリポジトリをつなげます（remote）。「Quick setup」の画面に表示されるコマンドをコピーしてお使いいただいても構いません。
+          <div class="type-this">
+            <div class="type-label">ターミナルに打つ（URLは自分のリポジトリのもの）</div>
+            <pre><code><span class="fn">git</span> remote add origin https://github.com/自分のユーザー名/リポジトリ名.git
+<span class="fn">git</span> branch -M main
+<span class="fn">git</span> push -u origin main</code></pre>
+          </div>
+          <div class="run-check">
+            <div class="label">確認</div>
+            GitHubのリポジトリのページを開き直し、手元で作成したファイルが表示されていれば成功です。
+          </div>
+        </div>
+
+      </div>
+
+      <div class="error-box">
+        <div class="label">よくあるつまずき</div>
+        <strong>push時にログインを求められる場合</strong> → パスワードではなく、GitHubの「Personal Access Token」か、初回に表示されるブラウザ認証をお使いください（先生と一緒に1回設定していただければ大丈夫です）。<br>
+        <strong>「failed to push」（rejected）と表示される場合</strong> → GitHub側に手元にない変更がある状態です。先生と一緒に <code>git pull</code> の意味を確認してからやり直してください。
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ━━ STEP4 公開 ━━ -->
+  <section id="s4">
+    <div class="session-header s4">
+      <div class="session-num">STEP 04</div>
+      <div class="session-title">作品を世界に公開する</div>
+      <div class="session-sub">GitHub Pages — pushしたら公開される</div>
+    </div>
+    <div class="session-body">
+
+      <div class="mission-box">
+        <span class="label">MISSION</span>
+        ご自身の作品に、誰でもアクセスできるURLをつけましょう。本日のゴールは、そのURLをスマートフォンから開き、ご自身の作品が表示されることです。
+      </div>
+
+      <h3>権限の話（大事）</h3>
+      <div class="compare-box">
+        <div class="label">やらないこと ⇔ やること</div>
+        <div class="compare-grid">
+          <div>
+            <div class="cg-label bad">やらない</div>
+            先生のホームページのサーバーに、生徒のパスコードやデプロイ権限をお渡しすること
+          </div>
+          <div>
+            <div class="cg-label good">やる</div>
+            ご自身のGitHubリポジトリだけで完結して公開すること。先生のホームページには、ご自身のURLへの<strong>リンクを貼っていただくだけ</strong>です
+          </div>
+        </div>
+      </div>
+      <p>ですので、安心してご利用いただけます。ご自身の場所をどのように使っても、先生のホームページには一切影響がありません。</p>
+
+      <div class="steps">
+
+        <div class="step">
+          GitHubのリポジトリページで「Settings」タブを開きます。
+        </div>
+
+        <div class="step">
+          左メニューの「Pages」を開きます。「Build and deployment」の「Branch」で <code>main</code> を選択し、保存してください。
+        </div>
+
+        <div class="step">
+          少し待つと、公開URLが表示されます。形式は以下のようになります。
+          <div class="type-this">
+            <div class="type-label">公開URLの形</div>
+            <pre><code>https://自分のユーザー名.github.io/リポジトリ名/</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          何かファイルを修正し、もう一度セーブして送信します。
+          <div class="type-this">
+            <div class="type-label">ターミナルに打つ</div>
+            <pre><code><span class="fn">git</span> add .
+<span class="fn">git</span> commit -m <span class="st">"公開ページを更新した"</span>
+<span class="fn">git</span> push</code></pre>
+          </div>
+          <div class="run-check">
+            <div class="label">確認</div>
+            1分ほど待ってから公開URLを開き直すと、修正した内容が反映されています。これが「セーブ＝公開」の体験です。
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tip">
+        <strong>先生のホームページとつなげたい場合</strong><br>
+        ご自身の公開URLが完成しましたら、先生にお伝えください。先生のホームページ側に「生徒の作品一覧」ページを作成し、そこから各自のURLへリンクを貼る形にいたします。この方法であれば、権限のやりとりは一切発生しません。
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ━━ トラブルシューティング ━━ -->
+  <section id="trouble">
+    <h2>困ったとき</h2>
+
+    <table>
+      <tr><th>症状</th><th>原因・対処</th></tr>
+      <tr><td><code>command not found: git</code></td><td>Gitがインストールされていません。ターミナルで <code>git --version</code> を実行すると、Macが自動でインストールを促す場合があります。</td></tr>
+      <tr><td>commitできない</td><td><code>git config --global user.name / user.email</code> を設定済みかご確認ください。</td></tr>
+      <tr><td>pushで止まる</td><td>ネットワークまたは認証の問題です。エラーメッセージの最後の行を先生にお見せください。</td></tr>
+      <tr><td>Pagesが404になる</td><td>設定直後は反映まで数分かかる場合があります。Branchの選択が <code>main</code> になっているかご確認ください。</td></tr>
+      <tr><td>公開ページが更新されない</td><td><code>git push</code> を実行し忘れていないかご確認ください。commitしただけでは公開先には反映されません。</td></tr>
+    </table>
+
+    <div class="tip">
+      <strong>エラーは失敗ではありません</strong><br>
+      エラーメッセージは「ここがおかしいですよ」と教えてくれているだけです。すべて読む必要はありません。一番下の行だけ読めば、たいていヒントが書かれています。
+    </div>
+  </section>
+
+
+  <!-- ━━ 自分で確かめること ━━ -->
+  <section id="hw">
+    <h2>自分で確かめること</h2>
+    <p>ここまで完了しましたら、次は以下をご自身の手で試してみてください。</p>
+    <div class="hw-grid">
+      <div class="hw-card">
+        <div class="icon">📱</div>
+        <p>ご自身の公開URLをスマートフォンで開き、ご家族に見せる</p>
+      </div>
+      <div class="hw-card">
+        <div class="icon">✏️</div>
+        <p>ファイルを1か所修正し、もう一度 add → commit → push してみる</p>
+      </div>
+      <div class="hw-card">
+        <div class="icon">🕒</div>
+        <p><code>git log</code> で、ご自身がこれまで何回セーブしたか数えてみる</p>
+      </div>
+      <div class="hw-card">
+        <div class="icon">🔗</div>
+        <p>ご自身の公開URLを先生に送り、作品一覧ページに掲載してもらう</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="final-box">
+    <p>
+      一番大事なこと
+      <span class="big">自分の場所は、自分で持つことができます</span>
+    </p>
+    <p style="margin-top:14px; font-weight:400; font-size:0.95rem; opacity:0.9;">
+      誰かの許可を待つ必要はありません。本日作ったものが、本日中に世界へ届きます。
+    </p>
+  </div>
+
+</main>
+
+<script>
+  function switchOS(os, btn) {
+    document.querySelectorAll('.os-panel').forEach(function (panel) {
+      panel.style.display = (panel.dataset.osPanel === os) ? '' : 'none';
+    });
+    btn.parentElement.querySelectorAll('.os-btn').forEach(function (b) {
+      b.classList.toggle('active', b === btn);
+    });
+  }
+</script>
+
+<footer>
+  <p>VSCode × Git × GitHub 実践マニュアル &nbsp;|&nbsp; 中学生向けプログラミング授業</p>
+</footer>
+
+</body>
+</html>
