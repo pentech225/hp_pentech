@@ -13,9 +13,10 @@
  *     たびに毎回サーバーへ再送して再検証させる（PRDのセキュリティ要件）。
  *   - 講師パスワードは sessionStorage には保存しない（タブを閉じずに放置された共有PCでの露出を避けるため）。
  *     講師モード中のみメモリ上（本スクリプトのモジュール変数）に保持し、ページ再読み込みで消える。
- *   - CONFIG.SKILL_TRAIL_STAFF_PASSWORD_HINT はサーバー未応答時にも即座に「違うかも」とフィードバックするための
- *     クライアント側の簡易フォールバック値。書き込みの可否は必ずGAS側Script Propertiesとの照合で決まる
- *     （このヒント値との一致だけでは絶対に承認・差し戻しを実行しない）。
+ *   - CONFIG.SKILL_TRAIL_STAFF_PASSWORD_HINT は config.js 上のプレースホルダとしてのみ保持しており、
+ *     本スクリプトのロジックでは意図的に参照していない（未使用）。書き込みの可否は必ずGAS側
+ *     Script Propertiesとの照合のみで決まる設計とし、クライアント側の値で判定する経路を一切作らない
+ *     ことで「クライアント側だけで承認が通ってしまう」抜け道の混入を防いでいる。
  */
 (function () {
   "use strict";
@@ -186,6 +187,26 @@
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(body)
     }).then(function (r) { return r.json(); });
+  }
+
+  // ============================================================
+  // 進捗の再同期（サーバーの正の状態に合わせる）
+  // request_review 送信後、成功/論理失敗/通信断のいずれの経路でも呼び出し、
+  // 楽観的UI更新（pending表示）が実際のサーバー状態と食い違ったまま残らないようにする。
+  // ============================================================
+  function resyncScratchProgress() {
+    if (!app.student) return Promise.resolve();
+    return gasPost("login", { student_id: app.student.studentId, pin: app.student.pin }).then(function (r2) {
+      if (r2 && r2.success) {
+        app.progress = {};
+        (r2.progress || []).forEach(function (p) { app.progress[p.node_id] = p.status; });
+      }
+      renderStudentApp();
+    }).catch(function () {
+      // 再同期自体も失敗した場合は次回ログイン/再読み込みで復旧する（楽観的UI更新は表示に残るが、
+      // これ以上リトライはせずユーザーに通信状態を伝えるに留める）
+      toast("通信状態が不安定です。もう一度お試しください");
+    });
   }
 
   // ============================================================
@@ -695,19 +716,17 @@
             if (res && res.success) {
               app.progress = {};
               (res.progress || []).forEach(function (p) { app.progress[p.node_id] = p.status; });
-            } else {
-              // サーバー側で拒否された場合は再ログインして正の状態に同期
-              toast("申請に失敗しました。状態を再取得します");
-            }
-            gasPost("login", { student_id: app.student.studentId, pin: app.student.pin }).then(function (r2) {
-              if (r2 && r2.success) {
-                app.progress = {};
-                (r2.progress || []).forEach(function (p) { app.progress[p.node_id] = p.status; });
-              }
               renderStudentApp();
-            });
+            } else {
+              // サーバー側で拒否された場合（INVALID_STATE等）は再ログインして正の状態に同期
+              toast("申請に失敗しました。状態を再取得します");
+              resyncScratchProgress();
+            }
           }).catch(function () {
-            toast("通信エラーが発生しました");
+            // fetch自体が失敗（通信断・タイムアウト等）した場合も、楽観的更新した pending 表示を
+            // サーバーの正の状態（実際にはまだ current の可能性が高い）に再同期する
+            toast("通信エラーが発生しました。状態を再取得します");
+            resyncScratchProgress();
           });
         return;
       }
