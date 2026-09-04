@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧑‍🎨 VRoid Studioでオリジナルキャラをつくろう | PenTech</title>
+  <meta name="description" content="PenTechのVRoid Studio学習教材。全10回でパーツ選び・衣装デザイン・背景演出・声の変調まで学び、自分だけのオリジナルキャラクターをつくって動かします。">
+  <link rel="canonical" href="https://www.pentech.info/school/cource/vroid/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PenTech（ペンテック）">
+  <meta property="og:title" content="VRoid Studioでオリジナルキャラをつくろう | PenTech">
+  <meta property="og:description" content="全10回でパーツ選び・衣装デザイン・背景演出・声の変調まで学び、自分だけのオリジナルキャラクターをつくって動かす教材。">
+  <meta property="og:url" content="https://www.pentech.info/school/cource/vroid/index.html">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic Pro', sans-serif;
+      font-size: 14px;
+      background: linear-gradient(135deg, #fce4ec 0%, #f7f9fc 40%, #e3f2fd 100%);
+      color: #333;
+      line-height: 1.8;
+      min-height: 100vh;
+      padding: 20px 16px 48px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #d81b60;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ad1457;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h2.section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ad1457;
+      border-left: 6px solid #f06292;
+      padding-left: 12px;
+      margin: 40px 0 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    /* カリキュラム（全10回） */
+    .lessons { counter-reset: lesson-counter; }
+    .lesson {
+      counter-increment: lesson-counter;
+      background: white;
+      border-radius: 14px;
+      padding: 16px 18px 16px 0;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      overflow: hidden;
+    }
+    .lesson::before {
+      content: counter(lesson-counter);
+      flex: none;
+      width: 54px;
+      align-self: stretch;
+      background: linear-gradient(160deg, #f06292, #ad1457);
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lesson-body { padding: 2px 4px 2px 0; }
+    .lesson-title { font-weight: bold; font-size: 14px; margin-bottom: 4px; color: #ad1457; }
+    .lesson-desc { font-size: 12.5px; color: #555; }
+    .lesson-time { font-size: 11px; color: #999; margin-top: 4px; }
+
+    /* ガイドライン */
+    .rule-card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-left: 6px solid #64b5f6;
+    }
+    .rule-card.warn { border-left-color: #ffb74d; }
+    .rule-card.danger { border-left-color: #e57373; }
+    .rule-card .rule-title { font-weight: bold; font-size: 13px; margin-bottom: 6px; }
+    .rule-card ul { padding-left: 18px; font-size: 12.5px; color: #444; }
+    .rule-card li { margin-bottom: 4px; }
+
+    .note-box {
+      background: #fff8e1;
+      border: 2px dashed #ffb300;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #5d4037;
+      margin-top: 16px;
+    }
+
+    /* リンクカード */
+    .link-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 520px) {
+      .link-grid.two-col { grid-template-columns: 1fr 1fr; }
+    }
+    .link-card {
+      display: block;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border: 1px solid #f0f0f0;
+      transition: transform 0.15s;
+    }
+    .link-card:hover { transform: translateY(-2px); }
+    .link-card .lc-title { font-weight: bold; font-size: 13px; color: #ad1457; }
+    .link-card .lc-title::after { content: " ↗"; }
+    .link-card .lc-desc { font-size: 11.5px; color: #666; margin-top: 3px; }
+
+    /* 比較（配信ソフト） */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .compare-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .compare-card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border: 2px solid #e0e0e0;
+    }
+    .compare-card.a { border-color: #4fc3f7; }
+    .compare-card.b { border-color: #ba68c8; }
+    .compare-card .cc-title { font-weight: 800; font-size: 14px; margin-bottom: 8px; }
+    .compare-card.a .cc-title { color: #0288d1; }
+    .compare-card.b .cc-title { color: #8e24aa; }
+    .compare-card ul { padding-left: 18px; font-size: 12px; color: #444; }
+    .compare-card li { margin-bottom: 5px; }
+
+    /* 発表会 */
+    .final-box {
+      background: linear-gradient(135deg, #f06292, #ad1457);
+      color: white;
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin: 36px 0 24px;
+      text-align: center;
+    }
+    .final-box .big { font-size: 17px; font-weight: 800; display: block; margin-bottom: 8px; }
+    .final-box p { font-size: 12.5px; opacity: 0.95; }
+
+    footer {
+      text-align: center;
+      padding: 24px 0 8px;
+      color: #999;
+      font-size: 11px;
+    }
+
+    .src-note {
+      font-size: 10.5px;
+      color: #999;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="../">← もどる</a>
+
+  <div class="header">
+    <h1>🧑‍🎨 VRoid Studioで<br>オリジナルキャラをつくろう</h1>
+    <p>パーツを選んでオリジナルキャラをつくり、衣装をデザインして、背景の中で動かしてみよう。<br>
+    全10回のコースで、自分だけのキャラクターを完成させて、最後にみんなの前で発表します。</p>
+  </div>
+
+  <main>
+
+    <h2 class="section-title">🎬 まずは解説動画を見てみよう</h2>
+    <div class="card">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/II76N4bzdq8" title="VRoid Studio 解説動画" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <h2 class="section-title">📅 全10回のコース（各30分）</h2>
+    <div class="lessons">
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第1回　オリエンテーション</div>
+          <div class="lesson-desc">VRoid Studioを開いて、画面の見方と基本の操作を確認しよう。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第2回　顔のパーツを選ぼう</div>
+          <div class="lesson-desc">目・眉・口などのパーツを選んで顔をつくる。鼻は横から見ながら操作するのがコツ。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第3回　髪型・体型を決めよう</div>
+          <div class="lesson-desc">髪型と体型を選んで、キャラクターの土台を完成させる。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第4回　衣装をデザインしよう①</div>
+          <div class="lesson-desc">トップス・ボトムスなど、着せたい服を選んでコーディネートする。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第5回　衣装をデザインしよう②</div>
+          <div class="lesson-desc">小物やカラーリングにこだわって、自分らしいキャラに仕上げる。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第6回　背景を選んでキャラを動かそう</div>
+          <div class="lesson-desc">写真のコーナーでポーズやアニメーションを試してみる。背景を選ぶときの著作権の注意も学ぶ。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第7回　声を変調してみよう</div>
+          <div class="lesson-desc">自分のキャラに合わせて、声色を変えて遊んでみる。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第8回　書き出して動かしてみよう</div>
+          <div class="lesson-desc">VRMファイルとしてエクスポートし、実際に自分のキャラを動かしてみる。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第9回　公開のルールを学ぼう</div>
+          <div class="lesson-desc">作品を公開・配布するときのライセンスや商用利用のルールを学ぶ。</div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson-body">
+          <div class="lesson-title">第10回　発表会</div>
+          <div class="lesson-desc">見せてもいいよという人だけ発表しよう。みんなで一番を決めよう。</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">📜 ガイドライン（利用規約の要点）</h2>
+
+    <div class="rule-card">
+      <div class="rule-title">✅ 商用利用とライセンス（原則自由）</div>
+      <ul>
+        <li>個人・法人問わず商用利用が可能。配信活動、グッズ制作・販売、Blender等での改変・利用、フィギュア化などによる収益化も認められている。</li>
+        <li>ライセンス条件に特別な表記がない素体・衣装・アクセサリ・テクスチャ等のプリセットアイテムは、改変して作ったデータの販売を含め商用利用できる。</li>
+        <li>素材の著作権自体はピクシブ社にあるが、利用者には広い範囲での二次利用・販売ライセンスが認められている。</li>
+      </ul>
+    </div>
+
+    <div class="rule-card warn">
+      <div class="rule-title">⚠️ 注意すべき制限事項・禁止事項</div>
+      <ul>
+        <li>BOOTH等で入手した外部素材（第三者の権利物）を組み込む場合は、VRoid Studioの規約ではなく素材製作者側が設定した条件が優先される。</li>
+        <li>VRoid Studioの出力物を使って、アバター制作機能・出力機能を持つアプリ（キャラメイクツール等）をつくることは禁止（個人的利用を除く）。</li>
+        <li>ピクシブ社と特別な提携・支援関係があるかのような誤解を与える表記、公式発行物と誤認される表現は禁止。</li>
+        <li>「特別のライセンス条件」が明記されたアイテムやサンプルモデルがある場合は、個別の指示に従う。</li>
+      </ul>
+    </div>
+
+    <div class="rule-card danger">
+      <div class="rule-title">🚫 公開・配布時のルール（VRoid Hub等）</div>
+      <ul>
+        <li>下着の露出や性的連想（R-15）、性行為・局部の露出や強い暴力表現（R-18）を含むモデルは、プラットフォームの定める年齢制限設定が必須。</li>
+        <li>性器の露出、反社会的な表現、他者への中傷、過度な政治・カルト的宗教活動への利用、権利侵害物などは削除・アカウント停止等の対象になる。</li>
+      </ul>
+    </div>
+
+    <div class="note-box">
+      ※規約改定や個別素材の条件が更新される場合がありますので、最新の詳細は公式サイトの「VRoid Studio個別利用規約」および「VRoid Studioガイドライン」をご確認ください。
+    </div>
+
+    <h2 class="section-title">🖼️ 背景素材（著作権フリー・商用利用可）</h2>
+    <p style="font-size:12.5px;color:#555;margin-bottom:12px;">第6回で背景を選ぶときは、著作権のルールを守って、下のようなフリー素材サイトから選ぼう。</p>
+    <div class="link-grid two-col">
+      <a class="link-card" href="https://sozaino.site/" target="_blank" rel="noopener noreferrer">
+        <div class="lc-title">OKUMONO</div>
+        <div class="lc-desc">著作権フリー・商用利用可能なイラスト素材サイト。</div>
+      </a>
+      <a class="link-card" href="https://min-chi.material.jp/" target="_blank" rel="noopener noreferrer">
+        <div class="lc-title">みりんちえ</div>
+        <div class="lc-desc">学校などのイラストが多数そろっている素材サイト。</div>
+      </a>
+    </div>
+
+    <h2 class="section-title">🌐 VRMファイルの使い道</h2>
+    <p style="font-size:12.5px;color:#555;margin-bottom:12px;">第8回で書き出したVRMファイルは、いろいろなアプリやプラットフォームで使うことができる。</p>
+    <div class="card">
+      <div class="card-title">🎥 VTuber・配信ソフト</div>
+      <div style="font-size:12.5px;color:#555;">VSeeFace / Warudo / 3Dセサミ など。カメラで自分の顔を映し、モデルをリアルタイムで動かしてYouTubeやTwitch等で配信・動画撮影ができる。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌏 メタバース</div>
+      <div style="font-size:12.5px;color:#555;">cluster / VRChat など。自分の分身（アバター）としてバーチャル空間に入り、他のユーザーと交流やイベント参加ができる。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🖌️ 画像・動画制作</div>
+      <div style="font-size:12.5px;color:#555;">VRoid Hub / MMD / Blender / Unity など。ポーズや表情をつけてサムネイル画像をつくったり、ゲーム開発や3Dアニメーションの素材として組み込んだりできる。</div>
+    </div>
+
+    <h2 class="section-title">🎮 配信ソフトの選び方</h2>
+    <div class="compare-grid">
+      <div class="compare-card a">
+        <div class="cc-title">🪑 VSeeFace が向いている人</div>
+        <ul>
+          <li>デスクに座って配信するスタイルの人（雑談、ゲーム実況、作業配信など）</li>
+          <li>目やまばたき、口の動き（あいうえお）、表情の切り替えを滑らかに見せたい人</li>
+          <li>動作を軽くし、PCへの負担を抑えてゲーム配信などを快適に行いたい人</li>
+        </ul>
+      </div>
+      <div class="compare-card b">
+        <div class="cc-title">🕺 3DPoseTracker が向いている人</div>
+        <ul>
+          <li>Webカメラ1台で全身（立ち姿や手足の動き）を動かしたい人</li>
+          <li>立ち姿での動画制作や、簡単なダンス・全身ポーズの撮影をしたい人</li>
+          <li>※全身を認識する分、手足が意図しない方向に曲がるなどのブレが発生しやすいため、配信よりは録画・編集向け</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="final-box">
+      <span class="big">🏆 授業の最後に、発表します</span>
+      <p>見せてもいいよって子は、先生に教えてください。<br>みんなの作品を見せ合って、一番を決めましょう。</p>
+    </div>
+
+  </main>
+
+  <footer>&copy; 2026 PenTech</footer>
+
+</body>
+</html>
