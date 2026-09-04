@@ -176,6 +176,63 @@
       gap: 10px;
     }
 
+    section.group.featured {
+      background: linear-gradient(135deg, #eaf3ff, var(--white));
+      border: 2px solid var(--primary);
+      border-radius: 18px;
+      padding: 20px 20px 24px;
+    }
+
+    section.group.featured .group-title {
+      font-size: 1.4rem;
+    }
+
+    .dl-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .dl-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .dl-item-name {
+      font-weight: bold;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .dl-item-meta {
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .dl-item-btn {
+      flex: none;
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 20px;
+      padding: 8px 18px;
+      white-space: nowrap;
+    }
+
+    .dl-item-btn:hover {
+      background: var(--primary-dark);
+    }
+
     footer {
       text-align: center;
       padding: 24px 20px;
@@ -194,6 +251,32 @@
   </div>
 
   <div class="container">
+
+    <section class="group featured">
+      <div class="group-title">⬇️ ダウンロード</div>
+      <div id="download-content" class="cards">
+        <div class="empty-note" id="download-status">読み込み中...</div>
+      </div>
+    </section>
+
+    <section class="group featured">
+      <div class="group-title">⬆️ 作品を提出する</div>
+      <div class="cards">
+        <div class="card" style="cursor: default;">
+          <div class="card-title">⬆️ 作品ファイルをアップロード</div>
+          <div class="card-desc">画像・PDF・zipなどのファイルを先生に提出できます（1ファイル10MBまで）。</div>
+          <form id="upload-form" style="margin-top: 14px;">
+            <input type="file" id="upload-file-input" required
+              style="display: block; width: 100%; margin-bottom: 10px; box-sizing: border-box;">
+            <input type="text" id="upload-title-input" placeholder="作品タイトル（任意）"
+              style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 0.95rem;">
+            <button type="submit" id="upload-submit-btn"
+              style="padding: 10px 22px; background: var(--primary); color: var(--white); border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">提出する</button>
+            <span id="upload-status" style="margin-left: 10px; font-size: 0.85rem; color: #666;"></span>
+          </form>
+        </div>
+      </div>
+    </section>
 
     <section class="group">
       <div class="group-title">🧑‍🎨 VRoid</div>
@@ -260,25 +343,6 @@
       <div id="pdf-container"></div>
     </section>
 
-    <section class="group">
-      <div class="group-title">⬆️ 作品を提出する</div>
-      <div class="cards">
-        <div class="card" style="cursor: default;">
-          <div class="card-title">⬆️ 作品ファイルをアップロード</div>
-          <div class="card-desc">画像・PDF・zipなどのファイルを先生に提出できます（1ファイル10MBまで）。</div>
-          <form id="upload-form" style="margin-top: 14px;">
-            <input type="file" id="upload-file-input" required
-              style="display: block; width: 100%; margin-bottom: 10px; box-sizing: border-box;">
-            <input type="text" id="upload-title-input" placeholder="作品タイトル（任意）"
-              style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 0.95rem;">
-            <button type="submit" id="upload-submit-btn"
-              style="padding: 10px 22px; background: var(--primary); color: var(--white); border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">提出する</button>
-            <span id="upload-status" style="margin-left: 10px; font-size: 0.85rem; color: #666;"></span>
-          </form>
-        </div>
-      </div>
-    </section>
-
   </div>
 
   <footer>&copy; 2026 PenTech</footer>
@@ -294,6 +358,55 @@
         btn.onclick = logoutStudent;
         bar.appendChild(btn);
       }
+    })();
+
+    // ダウンロード一覧（GoogleDriveのフォルダ内容をGAS経由で取得）
+    (function () {
+      const statusEl = document.getElementById('download-status');
+      const container = document.getElementById('download-content');
+
+      function formatFileSize(bytes) {
+        bytes = Number(bytes) || 0;
+        if (bytes >= 1024 * 1024 * 1024) return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+        if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(0) + ' MB';
+        if (bytes >= 1024) return (bytes / 1024).toFixed(0) + ' KB';
+        return bytes + ' B';
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+      }
+
+      portalGetJson('listDownloads', { target: 'vroid' }).then(function (result) {
+        if (!result.success) {
+          statusEl.textContent = '⚠️ ' + (result.error || '一覧を取得できませんでした');
+          return;
+        }
+        const files = result.files || [];
+        if (files.length === 0) {
+          statusEl.textContent = '📦 現在ダウンロードできるファイルはありません。';
+          return;
+        }
+        const list = document.createElement('div');
+        list.className = 'dl-list';
+        files.forEach(function (file) {
+          const item = document.createElement('div');
+          item.className = 'dl-item';
+          item.innerHTML =
+            '<div>' +
+              '<div class="dl-item-name">' + escapeHtml(file.name) + '</div>' +
+              '<div class="dl-item-meta">' + formatFileSize(file.size) + '</div>' +
+            '</div>' +
+            '<a class="dl-item-btn" href="https://drive.google.com/uc?export=download&id=' + encodeURIComponent(file.id) + '" target="_blank" rel="noopener noreferrer">⬇️ ダウンロード</a>';
+          list.appendChild(item);
+        });
+        container.innerHTML = '';
+        container.appendChild(list);
+      }).catch(function () {
+        statusEl.textContent = '⚠️ 通信エラーが発生しました';
+      });
     })();
 
     // 教科書PDFを追加するときは、ここに { title, file } を足すだけでOK。
