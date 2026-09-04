@@ -59,6 +59,10 @@ function doGet(e) {
       const displayName = e.parameter.displayName || '';
       return jsonOutput(listMyDownloads(studentId, displayName));
 
+    } else if (action === 'listSharedDownloads') {
+      const target = e.parameter.target || '';
+      return jsonOutput(listSharedDownloads(target));
+
     } else {
       return jsonOutput({
         success: true,
@@ -69,6 +73,7 @@ function doGet(e) {
           getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）',
           getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）',
           listDownloads: '?action=listDownloads&studentId=xxx&displayName=xxx で自分のフォルダの中身一覧を取得',
+          listSharedDownloads: '?action=listSharedDownloads&target=xxx で全員共通のダウンロード用フォルダの中身一覧を取得',
           uploadWork: 'POST type=uploadWork で生徒の作品ファイルをGoogleDriveに保存（POST専用）'
         }
       });
@@ -368,6 +373,22 @@ function getQuizAnswers(studentId) {
 // ダウンロード一覧の取得（ログイン中の生徒自身のフォルダの中身）
 // ============================================================
 
+function listFolderFiles(folder) {
+  const files = [];
+  const it = folder.getFiles();
+  while (it.hasNext()) {
+    const f = it.next();
+    files.push({
+      id: f.getId(),
+      name: f.getName(),
+      size: f.getSize(),
+      mimeType: f.getMimeType(),
+      updatedAt: f.getLastUpdated().toISOString()
+    });
+  }
+  return files;
+}
+
 // 「教室ポータル 生徒提出物」内の、自分のID（表示名）フォルダの中身を返す。
 // 提出物のアップロード先と同じフォルダなので、先生がここに個別のファイルを置けば
 // その生徒だけがダウンロードできる、という使い方もできる。
@@ -380,22 +401,39 @@ function listMyDownloads(studentId, displayName) {
     const rootFolder = getOrCreateSubmissionsRootFolder();
     const studentFolder = getOrCreateStudentFolder(rootFolder, studentId, displayName || studentId);
 
-    const files = [];
-    const it = studentFolder.getFiles();
-    while (it.hasNext()) {
-      const f = it.next();
-      files.push({
-        id: f.getId(),
-        name: f.getName(),
-        size: f.getSize(),
-        mimeType: f.getMimeType(),
-        updatedAt: f.getLastUpdated().toISOString()
-      });
-    }
+    const files = listFolderFiles(studentFolder);
     files.sort(function (a, b) { return b.updatedAt.localeCompare(a.updatedAt); });
     return { success: true, files: files };
   } catch (error) {
     Logger.log('❌ listMyDownloadsエラー: ' + error.toString());
+    return { success: false, error: '一覧の取得に失敗しました: ' + error.toString() };
+  }
+}
+
+// ============================================================
+// ダウンロード一覧の取得（全員共通のダウンロード用フォルダの中身）
+// ============================================================
+
+// ページ側から指定できる target と、対応するGoogleDriveフォルダIDの対応表。
+// 任意のフォルダIDを外部から直接指定させないよう、ここに登録したものだけ許可する。
+// VRoid Studioインストーラーなど、全員に同じファイルを配りたいときはここに追加する。
+var SHARED_DOWNLOAD_FOLDERS = {
+  vroid: '1JyRzVO37Vgxa_UJfRk1Wjv_WshX-XaVt'
+};
+
+function listSharedDownloads(target) {
+  const folderId = SHARED_DOWNLOAD_FOLDERS[target];
+  if (!folderId) {
+    return { success: false, error: '不明なダウンロード先です' };
+  }
+
+  try {
+    const folder = DriveApp.getFolderById(folderId);
+    const files = listFolderFiles(folder);
+    files.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    return { success: true, files: files };
+  } catch (error) {
+    Logger.log('❌ listSharedDownloadsエラー: ' + error.toString());
     return { success: false, error: '一覧の取得に失敗しました: ' + error.toString() };
   }
 }
