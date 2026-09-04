@@ -54,6 +54,10 @@ function doGet(e) {
       const studentId = e.parameter.studentId;
       return jsonOutput({ success: true, answers: getQuizAnswers(studentId) });
 
+    } else if (action === 'listDownloads') {
+      const target = e.parameter.target || '';
+      return jsonOutput(listDownloads(target));
+
     } else {
       return jsonOutput({
         success: true,
@@ -63,6 +67,7 @@ function doGet(e) {
           getAssignments: '?action=getAssignments&studentId=xxx で宿題一覧を取得（studentId省略で全件）',
           getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）',
           getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）',
+          listDownloads: '?action=listDownloads&target=xxx でダウンロード用フォルダの中身一覧を取得',
           uploadWork: 'POST type=uploadWork で生徒の作品ファイルをGoogleDriveに保存（POST専用）'
         }
       });
@@ -356,6 +361,44 @@ function getQuizAnswers(studentId) {
   }
 
   return answers;
+}
+
+// ============================================================
+// ダウンロード用フォルダの一覧取得
+// ============================================================
+
+// ページ側から指定できる target と、対応するGoogleDriveフォルダIDの対応表。
+// 任意のフォルダIDを外部から直接指定させないよう、ここに登録したものだけ許可する。
+var DOWNLOAD_TARGET_FOLDERS = {
+  vroid: '1JyRzVO37Vgxa_UJfRk1Wjv_WshX-XaVt'
+};
+
+function listDownloads(target) {
+  const folderId = DOWNLOAD_TARGET_FOLDERS[target];
+  if (!folderId) {
+    return { success: false, error: '不明なダウンロード先です' };
+  }
+
+  try {
+    const folder = DriveApp.getFolderById(folderId);
+    const files = [];
+    const it = folder.getFiles();
+    while (it.hasNext()) {
+      const f = it.next();
+      files.push({
+        id: f.getId(),
+        name: f.getName(),
+        size: f.getSize(),
+        mimeType: f.getMimeType(),
+        updatedAt: f.getLastUpdated().toISOString()
+      });
+    }
+    files.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    return { success: true, files: files };
+  } catch (error) {
+    Logger.log('❌ listDownloadsエラー: ' + error.toString());
+    return { success: false, error: '一覧の取得に失敗しました: ' + error.toString() };
+  }
 }
 
 // ============================================================

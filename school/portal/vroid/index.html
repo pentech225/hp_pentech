@@ -265,6 +265,40 @@
       opacity: 0.9;
       margin-top: 10px;
     }
+    .download-title {
+      color: white;
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    .dl-list {
+      display: grid;
+      gap: 10px;
+      text-align: left;
+    }
+    .dl-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .dl-item-name { color: white; font-weight: bold; font-size: 13px; }
+    .dl-item-meta { color: white; font-size: 11px; opacity: 0.85; margin-top: 2px; }
+    .dl-item-btn {
+      flex: none;
+      display: inline-block;
+      background: white;
+      color: #ad1457;
+      font-weight: 800;
+      font-size: 12.5px;
+      text-decoration: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -277,20 +311,66 @@
     全10回のコースで、自分だけのキャラクターを完成させて、最後にみんなの前で発表します。</p>
   </div>
 
-  <div class="download-box" id="download-box"></div>
+  <div class="download-box">
+    <div class="download-title">⬇️ ダウンロード</div>
+    <div id="download-content"></div>
+  </div>
   <script>
     (function () {
-      const box = document.getElementById('download-box');
+      const content = document.getElementById('download-content');
       const student = typeof getLoggedInStudent === 'function' ? getLoggedInStudent() : null;
-      if (student) {
-        box.innerHTML =
-          '<a class="download-btn" href="https://drive.google.com/uc?export=download&id=1PQDpMUrlDfFtrH5cja5PsNaAGDDQrC_D" target="_blank" rel="noopener noreferrer">⬇️ VRoid Studioをダウンロード（Windows版）</a>' +
-          '<div class="download-note">ファイルサイズ：約460MB／バージョン v2.14.0<br>ダウンロード後、案内にしたがってインストールしてください。</div>';
-      } else {
-        box.innerHTML =
+
+      if (!student) {
+        content.innerHTML =
           '<div class="download-note" style="margin-top:0;">🔒 ダウンロードするには教室ポータルへのログインが必要です</div>' +
           '<a class="download-btn" href="../">ログインする</a>';
+        return;
       }
+
+      content.innerHTML = '<div class="download-note" style="margin-top:0;">読み込み中...</div>';
+
+      function formatFileSize(bytes) {
+        bytes = Number(bytes) || 0;
+        if (bytes >= 1024 * 1024 * 1024) return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+        if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(0) + ' MB';
+        if (bytes >= 1024) return (bytes / 1024).toFixed(0) + ' KB';
+        return bytes + ' B';
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+      }
+
+      portalGetJson('listDownloads', { target: 'vroid' }).then(function (result) {
+        if (!result.success) {
+          content.innerHTML = '<div class="download-note" style="margin-top:0;">⚠️ ' + escapeHtml(result.error || '一覧を取得できませんでした') + '</div>';
+          return;
+        }
+        const files = result.files || [];
+        if (files.length === 0) {
+          content.innerHTML = '<div class="download-note" style="margin-top:0;">現在ダウンロードできるファイルはありません。</div>';
+          return;
+        }
+        const list = document.createElement('div');
+        list.className = 'dl-list';
+        files.forEach(function (file) {
+          const item = document.createElement('div');
+          item.className = 'dl-item';
+          item.innerHTML =
+            '<div>' +
+              '<div class="dl-item-name">' + escapeHtml(file.name) + '</div>' +
+              '<div class="dl-item-meta">' + formatFileSize(file.size) + '</div>' +
+            '</div>' +
+            '<a class="dl-item-btn" href="https://drive.google.com/uc?export=download&id=' + encodeURIComponent(file.id) + '" target="_blank" rel="noopener noreferrer">⬇️ ダウンロード</a>';
+          list.appendChild(item);
+        });
+        content.innerHTML = '';
+        content.appendChild(list);
+      }).catch(function () {
+        content.innerHTML = '<div class="download-note" style="margin-top:0;">⚠️ 通信エラーが発生しました</div>';
+      });
     })();
   </script>
 
