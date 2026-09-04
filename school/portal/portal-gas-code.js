@@ -62,7 +62,8 @@ function doGet(e) {
           getProgress: '?action=getProgress&studentId=xxx で生徒の進捗を取得',
           getAssignments: '?action=getAssignments&studentId=xxx で宿題一覧を取得（studentId省略で全件）',
           getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）',
-          getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）'
+          getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）',
+          uploadWork: 'POST type=uploadWork で生徒の作品ファイルをGoogleDriveに保存（POST専用）'
         }
       });
     }
@@ -97,6 +98,8 @@ function doPost(e) {
       return handleDeleteAssignment(data.data);
     } else if (data.type === 'saveQuizAnswer') {
       return handleSaveQuizAnswer(data.data);
+    } else if (data.type === 'uploadWork') {
+      return handleUploadWork(data.data);
     } else {
       throw new Error('不明なリクエストタイプ: ' + data.type);
     }
@@ -353,6 +356,88 @@ function getQuizAnswers(studentId) {
   }
 
   return answers;
+}
+
+// ============================================================
+// 作品ファイルの提出（GoogleDriveへアップロード）
+// ============================================================
+
+// GAS単一リクエストの上限を考慮したサイズ制限（base64換算で約15MB＝元ファイル約10MB）
+var MAX_UPLOAD_BASE64_LENGTH = 15 * 1024 * 1024;
+
+function handleUploadWork(payload) {
+  const studentId = (payload && payload.studentId || '').trim();
+  const displayName = (payload && payload.displayName || '').trim() || studentId;
+  const fileName = (payload && payload.fileName || '').trim();
+  const mimeType = (payload && payload.mimeType || 'application/octet-stream').trim();
+  const base64 = payload && payload.base64;
+  const title = (payload && payload.title || '').trim();
+
+  if (!studentId || !fileName || !base64) {
+    return jsonOutput({ success: false, error: 'studentId, fileName, ファイルデータが必要です' });
+  }
+  if (String(base64).length > MAX_UPLOAD_BASE64_LENGTH) {
+    return jsonOutput({ success: false, error: 'ファイルサイズが大きすぎます（10MBまで）' });
+  }
+
+  try {
+    const bytes = Utilities.base64Decode(base64);
+    const blob = Utilities.newBlob(bytes, mimeType, fileName);
+
+    const rootFolder = getOrCreateSubmissionsRootFolder();
+    const studentFolder = getOrCreateStudentFolder(rootFolder, studentId, displayName);
+    const file = studentFolder.createFile(blob);
+
+    const spreadsheet = getOrCreateSpreadsheet();
+    const sheet = getSubmissionsSheet(spreadsheet);
+    const now = new Date().toISOString();
+    sheet.appendRow([studentId, displayName, title, fileName, file.getUrl(), now]);
+
+    Logger.log('✅ 作品ファイルを保存: ' + studentId + ' / ' + fileName);
+
+    return jsonOutput({ success: true, url: file.getUrl(), fileName: fileName });
+  } catch (error) {
+    Logger.log('❌ アップロードエラー: ' + error.toString());
+    return jsonOutput({ success: false, error: 'アップロードに失敗しました: ' + error.toString() });
+  }
+}
+
+function getOrCreateSubmissionsRootFolder() {
+  const properties = PropertiesService.getScriptProperties();
+  const folderId = properties.getProperty('SUBMISSIONS_FOLDER_ID');
+
+  if (folderId) {
+    try {
+      return DriveApp.getFolderById(folderId);
+    } catch (e) {
+      // 手動で削除された場合などは作り直す
+    }
+  }
+
+  const folder = DriveApp.createFolder('教室ポータル 生徒提出物');
+  properties.setProperty('SUBMISSIONS_FOLDER_ID', folder.getId());
+  Logger.log('✅ 提出物用フォルダを新規作成: ' + folder.getId());
+  return folder;
+}
+
+function getOrCreateStudentFolder(rootFolder, studentId, displayName) {
+  const folderName = studentId + '（' + displayName + '）';
+  const existing = rootFolder.getFoldersByName(folderName);
+  if (existing.hasNext()) return existing.next();
+  return rootFolder.createFolder(folderName);
+}
+
+// カラム定義: A=studentId, B=displayName, C=title, D=fileName, E=url, F=uploadedAt
+var SUBMISSIONS_COLS = 6;
+
+function getSubmissionsSheet(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName('Submissions');
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet('Submissions');
+    sheet.appendRow(['studentId', 'displayName', 'title', 'fileName', 'url', 'uploadedAt']);
+    sheet.getRange(1, 1, 1, SUBMISSIONS_COLS).setFontWeight('bold').setBackground('#E0E0E0');
+  }
+  return sheet;
 }
 
 // ============================================================

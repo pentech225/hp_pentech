@@ -49,3 +49,34 @@ async function portalPostJson(type, data) {
     });
     return response.json();
 }
+
+function readFileAsBase64(file) {
+    return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const result = reader.result || '';
+            resolve(result.substring(result.indexOf(',') + 1));
+        };
+        reader.onerror = function () {
+            reject(new Error('ファイルの読み込みに失敗しました'));
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// 作品ファイルをGoogleDrive（教室ポータル用GAS経由）にアップロードする
+async function portalUploadWork(file, title) {
+    const student = getLoggedInStudent();
+    if (!student) {
+        return { success: false, error: 'ログインしていません' };
+    }
+    const base64 = await readFileAsBase64(file);
+    return portalPostJson('uploadWork', {
+        studentId: student.studentId,
+        displayName: student.displayName,
+        fileName: file.name,
+        mimeType: file.type || 'application/octet-stream',
+        base64: base64,
+        title: title || ''
+    });
+}

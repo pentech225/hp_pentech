@@ -250,6 +250,25 @@
       <div id="pdf-container"></div>
     </section>
 
+    <section class="group">
+      <div class="group-title">📤 作品を提出する</div>
+      <div class="cards">
+        <div class="card" style="cursor: default;">
+          <div class="card-title">📁 作品ファイルをアップロード</div>
+          <div class="card-desc">画像・PDF・zipなどのファイルを先生に提出できます（1ファイル10MBまで）。</div>
+          <form id="upload-form" style="margin-top: 14px;">
+            <input type="file" id="upload-file-input" required
+              style="display: block; width: 100%; margin-bottom: 10px; box-sizing: border-box;">
+            <input type="text" id="upload-title-input" placeholder="作品タイトル（任意）"
+              style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 0.95rem;">
+            <button type="submit" id="upload-submit-btn"
+              style="padding: 10px 22px; background: var(--primary); color: var(--white); border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">提出する</button>
+            <span id="upload-status" style="margin-left: 10px; font-size: 0.85rem; color: #666;"></span>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <footer>&copy; 2026 PenTech</footer>
@@ -291,6 +310,52 @@
       });
       pdfContainer.appendChild(list);
     }
+
+    // 作品ファイル提出
+    (function () {
+      const form = document.getElementById('upload-form');
+      const fileInput = document.getElementById('upload-file-input');
+      const titleInput = document.getElementById('upload-title-input');
+      const submitBtn = document.getElementById('upload-submit-btn');
+      const statusEl = document.getElementById('upload-status');
+      const MAX_SIZE = 10 * 1024 * 1024;
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if (!file) {
+          statusEl.textContent = 'ファイルを選んでください';
+          statusEl.style.color = '#F44336';
+          return;
+        }
+        if (file.size > MAX_SIZE) {
+          statusEl.textContent = 'ファイルサイズが大きすぎます（10MBまで）';
+          statusEl.style.color = '#F44336';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        statusEl.style.color = '#666';
+        statusEl.textContent = 'アップロード中...';
+
+        try {
+          const result = await portalUploadWork(file, titleInput.value.trim());
+          if (result.success) {
+            statusEl.style.color = '#2e7d32';
+            statusEl.textContent = '提出しました！';
+            form.reset();
+          } else {
+            statusEl.style.color = '#F44336';
+            statusEl.textContent = result.error || '提出できませんでした';
+          }
+        } catch (err) {
+          statusEl.style.color = '#F44336';
+          statusEl.textContent = '通信エラーが発生しました';
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    })();
   </script>
 
 </body>
