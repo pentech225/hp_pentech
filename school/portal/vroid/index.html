@@ -4,6 +4,10 @@
     <!-- Google tag (gtag.js) -->
     <script src="/ga4-tracking.js"></script>
 
+    <!-- 個人アカウント（ダウンロードボタンのログイン判定に使用） -->
+    <script src="../config.js"></script>
+    <script src="../portal-common.js"></script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🧑‍🎨 VRoid Studioでオリジナルキャラをつくろう | PenTech</title>
@@ -273,10 +277,22 @@
     全10回のコースで、自分だけのキャラクターを完成させて、最後にみんなの前で発表します。</p>
   </div>
 
-  <div class="download-box">
-    <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1PQDpMUrlDfFtrH5cja5PsNaAGDDQrC_D" target="_blank" rel="noopener noreferrer">⬇️ VRoid Studioをダウンロード（Windows版）</a>
-    <div class="download-note">ファイルサイズ：約460MB／バージョン v2.14.0<br>ダウンロード後、案内にしたがってインストールしてください。</div>
-  </div>
+  <div class="download-box" id="download-box"></div>
+  <script>
+    (function () {
+      const box = document.getElementById('download-box');
+      const student = typeof getLoggedInStudent === 'function' ? getLoggedInStudent() : null;
+      if (student) {
+        box.innerHTML =
+          '<a class="download-btn" href="https://drive.google.com/uc?export=download&id=1PQDpMUrlDfFtrH5cja5PsNaAGDDQrC_D" target="_blank" rel="noopener noreferrer">⬇️ VRoid Studioをダウンロード（Windows版）</a>' +
+          '<div class="download-note">ファイルサイズ：約460MB／バージョン v2.14.0<br>ダウンロード後、案内にしたがってインストールしてください。</div>';
+      } else {
+        box.innerHTML =
+          '<div class="download-note" style="margin-top:0;">🔒 ダウンロードするには教室ポータルへのログインが必要です</div>' +
+          '<a class="download-btn" href="../">ログインする</a>';
+      }
+    })();
+  </script>
 
   <main>
 

@@ -381,25 +381,44 @@ function handleUploadWork(payload) {
   }
 
   try {
-    const bytes = Utilities.base64Decode(base64);
-    const blob = Utilities.newBlob(bytes, mimeType, fileName);
-
     const rootFolder = getOrCreateSubmissionsRootFolder();
     const studentFolder = getOrCreateStudentFolder(rootFolder, studentId, displayName);
+    const uniqueFileName = getUniqueFileName(studentFolder, fileName);
+
+    const bytes = Utilities.base64Decode(base64);
+    const blob = Utilities.newBlob(bytes, mimeType, uniqueFileName);
     const file = studentFolder.createFile(blob);
 
     const spreadsheet = getOrCreateSpreadsheet();
     const sheet = getSubmissionsSheet(spreadsheet);
     const now = new Date().toISOString();
-    sheet.appendRow([studentId, displayName, title, fileName, file.getUrl(), now]);
+    sheet.appendRow([studentId, displayName, title, uniqueFileName, file.getUrl(), now]);
 
-    Logger.log('✅ 作品ファイルを保存: ' + studentId + ' / ' + fileName);
+    Logger.log('✅ 作品ファイルを保存: ' + studentId + ' / ' + uniqueFileName);
 
-    return jsonOutput({ success: true, url: file.getUrl(), fileName: fileName });
+    return jsonOutput({ success: true, url: file.getUrl(), fileName: uniqueFileName });
   } catch (error) {
     Logger.log('❌ アップロードエラー: ' + error.toString());
     return jsonOutput({ success: false, error: 'アップロードに失敗しました: ' + error.toString() });
   }
+}
+
+// 同じフォルダ内に同名ファイルがある場合、上書きせず "_v1", "_v2"... を付けて重複を避ける
+function getUniqueFileName(folder, fileName) {
+  if (!folder.getFilesByName(fileName).hasNext()) return fileName;
+
+  const dotIndex = fileName.lastIndexOf('.');
+  const base = dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
+  const ext = dotIndex > 0 ? fileName.substring(dotIndex) : '';
+
+  let candidate;
+  let n = 1;
+  do {
+    candidate = base + '_v' + n + ext;
+    n++;
+  } while (folder.getFilesByName(candidate).hasNext());
+
+  return candidate;
 }
 
 function getOrCreateSubmissionsRootFolder() {
