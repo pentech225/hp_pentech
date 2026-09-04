@@ -15,7 +15,17 @@ const CONFIG = {
 
     // イベント申し込みフォーム専用GAS URL（↓デプロイ後に貼り付ける）
     EVENT_GOOGLE_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycby60qiEn0to3gqumebdJF4yS7XQL5dWhLSaaQZpuucKkCt1pE9MZ-RlmpDGwZ7nxMNl/exec',
-    
+
+    // スキル街道（生徒進捗管理）専用GAS URL（skill-trail-gas-code.js をデプロイ後に貼り付ける）
+    // 未デプロイの間はプレースホルダのままでよい（skill-trail.htmlは生徒一覧取得に失敗しエラー表示になるだけ）
+    SKILL_TRAIL_GOOGLE_APPS_SCRIPT_URL: 'YOUR_SKILL_TRAIL_GOOGLE_APPS_SCRIPT_URL',
+
+    // 講師モードパスワードのクライアント側フォールバック値（表示ヒント用途のみ）
+    // 注意: 実際の承認・差し戻し等の書き込み許可は必ずGAS側 Script Properties の
+    // SKILL_TRAIL_STAFF_PASSWORD との照合で決まる。この値だけを書き換えても書き込みは通らない。
+    // デプロイ手順書 SKILL_TRAIL_DEPLOY.md の指示に従い、Script Properties 側の値と揃えておくこと。
+    SKILL_TRAIL_STAFF_PASSWORD_HINT: 'skilltrail-staff',
+
     // 連絡先情報
     PHONE: '06-6438-8277',
     EMAIL: 'iteen.mukonosou@gmail.com',

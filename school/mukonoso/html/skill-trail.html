@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スキル街道 | iTeen 武庫之荘校</title>
+    <meta name="description" content="iTeen武庫之荘校の生徒向けスキルマップ「スキル街道」。スクラッチのブロックプログラミングを4段階（Entry/Bronze/Silver/Gold）で楽しく可視化します。">
+    <link rel="canonical" href="https://www.pentech.info/school/mukonoso/html/skill-trail.html">
+    <meta name="robots" content="noindex, follow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+
+    <script src="config.js"></script>
+    <script src="matomo-tracking.js"></script>
+    <link rel="stylesheet" href="../css/skill-trail.css">
+</head>
+<body>
+    <div class="wrap wide">
+        <a class="back-link" href="../index.html">&larr; iTeen武庫之荘校 トップへ</a>
+
+        <header class="top">
+            <div>
+                <span class="eyebrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+                    iTeen 武庫之荘校
+                </span>
+                <h1 class="title">スキル<em>街道</em></h1>
+                <p class="lede">
+                    ひとつスキルを身につけるたび、街道の先のバッジが解放されていきます。
+                    まずは「スクラッチ街道」で基礎を身につけよう。
+                </p>
+            </div>
+            <div class="header-actions" id="header-actions"></div>
+        </header>
+
+        <div id="app-root"><p class="empty-note">よみこみ中…</p></div>
+
+        <footer class="foot">スキル街道 — iTeen 武庫之荘校</footer>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="skill-trail.js"></script>
+</body>
+</html>
