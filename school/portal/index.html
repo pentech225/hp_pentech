@@ -254,6 +254,7 @@
 
     <section class="group featured">
       <div class="group-title">⬇️ ダウンロード</div>
+      <p style="margin: 0 0 12px; font-size: 0.85rem; color: #666;">あなた専用のフォルダに先生が置いたファイルをここからダウンロードできます。</p>
       <div id="download-content" class="cards">
         <div class="empty-note" id="download-status">読み込み中...</div>
       </div>
@@ -360,10 +361,16 @@
       }
     })();
 
-    // ダウンロード一覧（GoogleDriveのフォルダ内容をGAS経由で取得）
+    // ダウンロード一覧（ログイン中の自分のフォルダの中身をGAS経由で取得）
     (function () {
       const statusEl = document.getElementById('download-status');
       const container = document.getElementById('download-content');
+      const student = getLoggedInStudent();
+
+      if (!student) {
+        statusEl.textContent = '🔒 ログインすると表示されます';
+        return;
+      }
 
       function formatFileSize(bytes) {
         bytes = Number(bytes) || 0;
@@ -379,14 +386,14 @@
         return div.innerHTML;
       }
 
-      portalGetJson('listDownloads', { target: 'vroid' }).then(function (result) {
+      portalGetJson('listDownloads', { studentId: student.studentId, displayName: student.displayName }).then(function (result) {
         if (!result.success) {
           statusEl.textContent = '⚠️ ' + (result.error || '一覧を取得できませんでした');
           return;
         }
         const files = result.files || [];
         if (files.length === 0) {
-          statusEl.textContent = '📦 現在ダウンロードできるファイルはありません。';
+          statusEl.textContent = '📦 まだファイルが置かれていません。';
           return;
         }
         const list = document.createElement('div');
