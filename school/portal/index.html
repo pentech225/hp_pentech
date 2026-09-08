@@ -10,6 +10,7 @@
   <script src="config.js"></script>
   <script src="portal-common.js"></script>
   <script src="auth-check.js"></script>
+  <script src="typingland-bookmarklet.js"></script>
 
   <style>
     :root {
@@ -124,6 +125,24 @@
       background: linear-gradient(135deg, #eaf3ff, var(--white));
     }
 
+    .card-desc.warn {
+      color: #C0392B;
+      margin-top: 8px;
+    }
+
+    .bookmarklet-link {
+      display: inline-block;
+      margin: 10px 0 6px;
+      padding: 8px 14px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.92rem;
+      cursor: grab;
+    }
+
     .account-bar {
       max-width: 700px;
       margin: 0 auto;
@@ -205,6 +224,28 @@
       </div>
     </section>
 
+    <section class="group" id="typingland-section" style="display:none;">
+      <div class="group-title">⌨️ タイピングランド（じぶんのデータで続きから）</div>
+      <div class="cards">
+        <div class="card" id="typingland-card">
+          <div class="card-title">⌨️ タイピングランド（じぶんのデータで続きから）</div>
+          <div class="card-desc">
+            下の青いボタンを「ブックマークバー」にドラッグして登録してください。<br>
+            以後、タイピングランドのページを開いた状態でこのブックマークを押すと、じぶんの続きからロード・セーブができます。
+          </div>
+          <div>
+            <a id="typingland-bookmarklet-link" class="bookmarklet-link" href="#" draggable="true">⌨️ タイピングランド（じぶんのデータで続きから）</a>
+          </div>
+          <div class="card-desc warn" id="typingland-share-warning">
+            ⚠️ このリンクにはあなたのパスワードが埋め込まれています。他の人と共有しないでください（他の人があなたの進捗を書き換えられてしまいます）。
+          </div>
+          <div class="card-desc warn" id="typingland-no-password-note" style="display:none;">
+            パスワード情報が見つかりませんでした。お手数ですが一度ログアウトしてログインし直してください。
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="group">
       <div class="group-title">🎨 スクラッチ</div>
       <div class="cards">
@@ -265,6 +306,35 @@
         btn.onclick = logoutStudent;
         bar.appendChild(btn);
       }
+    })();
+
+    // タイピングランド 家庭用ブックマークレット（studentId+passwordを埋め込んだjavascript:リンクを生成）
+    (function () {
+      const student = getLoggedInStudent();
+      if (!student) return;
+
+      const section = document.getElementById('typingland-section');
+      section.style.display = '';
+
+      const link = document.getElementById('typingland-bookmarklet-link');
+      const shareWarning = document.getElementById('typingland-share-warning');
+      const noPasswordNote = document.getElementById('typingland-no-password-note');
+
+      if (!student.password) {
+        // 本機能の追加前からログイン状態が続いているセッション等、パスワードを保持していない場合
+        link.style.display = 'none';
+        shareWarning.style.display = 'none';
+        noPasswordNote.style.display = '';
+        return;
+      }
+
+      link.href = buildTypingBookmarkletHref(student.studentId, student.password, CONFIG.PORTAL_GOOGLE_APPS_SCRIPT_URL);
+      // クリックでその場実行されても実害はない（このページには/idbfsが無いため失敗するだけ）が、
+      // 誤操作を防ぐため案内を出してブロックする。ドラッグ登録のみを促す。
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('このリンクは押すのではなく、ブラウザの「ブックマークバー」へドラッグして登録してください。');
+      });
     })();
 
     // 教科書PDFを追加するときは、ここに { title, file } を足すだけでOK。

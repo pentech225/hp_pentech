@@ -130,8 +130,9 @@
             registerBtn.style.opacity = disabled ? '0.6' : '1';
         }
 
-        function onSuccess(student) {
-            setLoggedInStudent(student.studentId, student.displayName);
+        function onSuccess(student, password) {
+            // password: タイピングランド家庭用ブックマークレット生成のためsessionStorageに保持する（PRD確定事項）
+            setLoggedInStudent(student.studentId, student.displayName, password);
             const protectionStyle = document.getElementById('auth-protection-style');
             if (protectionStyle) protectionStyle.remove();
             modal.remove();
@@ -149,7 +150,7 @@
             try {
                 const result = await portalPostJson('login', { studentId: studentId, password: password });
                 if (result.success) {
-                    onSuccess(result.student);
+                    onSuccess(result.student, password);
                 } else {
                     showError(result.error || 'ログインできませんでした');
                 }
@@ -175,7 +176,7 @@
             try {
                 const result = await portalPostJson('register', { studentId: studentId, password: password });
                 if (result.success) {
-                    onSuccess(result.student);
+                    onSuccess(result.student, password);
                 } else {
                     showError(result.error || '登録できませんでした');
                 }

@@ -10,6 +10,10 @@
  *
  * デプロイ後にURLを config.js の PORTAL_GOOGLE_APPS_SCRIPT_URL に設定してください。
  * スプレッドシートは初回アクセス時に自動作成されるので、手動で作る必要はありません。
+ *
+ * 2026-09-07追記: タイピングランド(家庭用ブックマークレット連携)のセーブデータ(TypingSavesシート)を追加。
+ * loadTyping(GET)は認証不要（閲覧のみ）、saveTyping(POST)はStudentsシートのpasswordと一致した場合のみ書き込みを許可する。
+ * 詳細: cto/pj/タイピングランドportal統合/20260907_タイピングランドportal統合_PRD.md
  */
 
 // ============================================================
@@ -54,6 +58,11 @@ function doGet(e) {
       const studentId = e.parameter.studentId;
       return jsonOutput({ success: true, answers: getQuizAnswers(studentId) });
 
+    } else if (action === 'loadTyping') {
+      const studentId = e.parameter.studentId;
+      if (!studentId) return jsonOutput({ success: false, error: 'studentIdパラメータが必要です' });
+      return jsonOutput({ success: true, data: getTypingSaveForStudent(studentId) });
+
     } else {
       return jsonOutput({
         success: true,
@@ -62,7 +71,8 @@ function doGet(e) {
           getProgress: '?action=getProgress&studentId=xxx で生徒の進捗を取得',
           getAssignments: '?action=getAssignments&studentId=xxx で宿題一覧を取得（studentId省略で全件）',
           getAllStudentProgress: '?action=getAllStudentProgress で全生徒の進捗をまとめて取得（先生用）',
-          getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）'
+          getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）',
+          loadTyping: '?action=loadTyping&studentId=xxx でタイピングランドのセーブデータを取得（認証不要・閲覧のみ）'
         }
       });
     }
@@ -97,6 +107,8 @@ function doPost(e) {
       return handleDeleteAssignment(data.data);
     } else if (data.type === 'saveQuizAnswer') {
       return handleSaveQuizAnswer(data.data);
+    } else if (data.type === 'saveTyping') {
+      return handleSaveTyping(data.data);
     } else {
       throw new Error('不明なリクエストタイプ: ' + data.type);
     }
@@ -353,6 +365,108 @@ function getQuizAnswers(studentId) {
   }
 
   return answers;
+}
+
+// ============================================================
+// タイピングランド セーブデータ（家庭用ブックマークレット連携）
+//
+// Unity WebGL(タイピングランド)のIndexedDB(/idbfs)エクスポート形式
+// { app:'typingland', version:1, exportedAt, entries:[...] } を
+// 中身を解釈せずJSON文字列としてそのまま保存・返却する。
+// セルの文字数上限(5万)対策として、pj/tools/typingland_switch/gas/Code.gs の
+// save/load と同じチャンク分割方式を踏襲する。
+// ============================================================
+
+var TYPING_CHUNK_SIZE = 45000;
+
+function handleSaveTyping(payload) {
+  const studentId = (payload && payload.studentId || '').trim();
+  const password = (payload && payload.password || '').trim();
+  const saveData = payload && payload.data;
+
+  if (!studentId || !password) {
+    return jsonOutput({ success: false, error: 'studentIdとpasswordが必要です' });
+  }
+  if (!saveData) {
+    return jsonOutput({ success: false, error: 'セーブデータ(data)が必要です' });
+  }
+
+  const spreadsheet = getOrCreateSpreadsheet();
+  const studentsSheet = getStudentsSheet(spreadsheet);
+  const rowIndex = findStudentRow(studentsSheet, studentId);
+  if (rowIndex === -1) {
+    return jsonOutput({ success: false, error: 'IDまたはパスワードが正しくありません' });
+  }
+
+  const row = studentsSheet.getRange(rowIndex, 1, 1, STUDENTS_COLS).getValues()[0];
+  const storedPassword = row[1];
+  if (String(storedPassword) !== password) {
+    return jsonOutput({ success: false, error: 'IDまたはパスワードが正しくありません' });
+  }
+
+  saveTypingDataForStudent(studentId, saveData);
+  Logger.log('✅ タイピングランド セーブ: ' + studentId);
+  return jsonOutput({ success: true });
+}
+
+function getTypingSaveForStudent(studentId) {
+  const spreadsheet = getOrCreateSpreadsheet();
+  const sheet = getTypingSavesSheet(spreadsheet);
+
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][0]).toLowerCase() !== String(studentId).toLowerCase()) continue;
+    const chunks = values[i].slice(2).filter(function (c) {
+      return c !== '' && c !== null && c !== undefined;
+    });
+    if (chunks.length === 0) return null;
+    return JSON.parse(chunks.join(''));
+  }
+  return null;
+}
+
+function saveTypingDataForStudent(studentId, saveData) {
+  const spreadsheet = getOrCreateSpreadsheet();
+  const sheet = getTypingSavesSheet(spreadsheet);
+
+  const json = JSON.stringify(saveData);
+  const chunks = [];
+  for (let i = 0; i < json.length; i += TYPING_CHUNK_SIZE) {
+    chunks.push(json.substring(i, i + TYPING_CHUNK_SIZE));
+  }
+
+  const values = sheet.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][0]).toLowerCase() === String(studentId).toLowerCase()) {
+      rowIndex = i + 1; // 1-indexed row number
+      break;
+    }
+  }
+  if (rowIndex === -1) {
+    rowIndex = sheet.getLastRow() + 1;
+    sheet.getRange(rowIndex, 1).setValue(studentId);
+  }
+
+  sheet.getRange(rowIndex, 2).setValue(saveData.exportedAt || new Date().toISOString());
+
+  const lastCol = sheet.getLastColumn();
+  if (lastCol >= 3) {
+    sheet.getRange(rowIndex, 3, 1, lastCol - 2).clearContent();
+  }
+  if (chunks.length > 0) {
+    sheet.getRange(rowIndex, 3, 1, chunks.length).setValues([chunks]);
+  }
+}
+
+function getTypingSavesSheet(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName('TypingSaves');
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet('TypingSaves');
+    sheet.appendRow(['studentId', 'exportedAt', 'dataChunk1']);
+    sheet.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#E0E0E0');
+  }
+  return sheet;
 }
 
 // ============================================================
