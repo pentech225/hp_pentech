@@ -5,10 +5,10 @@
  * https://www.youtube.com/@ITsukima
  * https://www.youtube.com/playlist?list=PLhThj1C8DuL1rPuW4n1dnMRbKbbg2bkHv
  *
- * 注意: このリストはYouTubeのRSSフィード（最大15件まで）から取得したもので、
- * プレイリストの並び順と完全に一致しない可能性があります。
- * 公開前に実際のプレイリストと見比べて、順番やタイトル・動画の過不足を
- * 確認・修正してください（動画を追加する場合はここに { videoId, title, order } を足すだけでOK）。
+ * order 1〜15（テクノロジ系）は上記プレイリストの先頭15件（旧・RSSフィード由来）。
+ * order 16〜41（マネジメント系・ストラテジ系）は2026-09-12に同プレイリストの再生ページを
+ * ブラウザで直接確認し、videoId・タイトルを実際のページから取得して追加したもの。
+ * 動画を追加する場合はここに { videoId, title, order } を足すだけでOK。
  */
 
 const VIDEOS = [
@@ -26,5 +26,35 @@ const VIDEOS = [
   { videoId: '-bF3t5oaRTk', title: '⑫ネットワーク通信とは【IPアドレス/サーバー/通信プロトコル】', order: 12 },
   { videoId: 'uBcTnwSGqDs', title: '⑬ドメインルール・IPアドレス枯渇化対策／ITパスポート・基本情報技術者・高校情報', order: 13 },
   { videoId: 'DV-zl0OnWto', title: '⑭ファイルディレクトリのパス指定問題・CUIとGUI', order: 14 },
-  { videoId: 'nfTL64JxU-w', title: '⑮キャッシュ、クッキーの違いを解説！セッションとは？', order: 15 }
+  { videoId: 'nfTL64JxU-w', title: '⑮キャッシュ、クッキーの違いを解説！セッションとは？', order: 15 },
+
+  // マネジメント系
+  { videoId: '5T2lX99Old8', title: 'ITパスポート試験📝マネジメント系分野は何を「管理」する知識？', order: 16 },
+  { videoId: 'AcXg58OA2wM', title: 'ITパスポート／マネジメント系⓪~システム開発プロセス全体像~', order: 17 },
+  { videoId: 'GhgKMwpb8sE', title: 'ITパスポート／マネジメント系①~企画・プロジェクトマネジメント~', order: 18 },
+  { videoId: 'vTOU1IOwPEc', title: 'ITパスポート／マネジメント系②~要件定義プロセス~', order: 19 },
+  { videoId: 'I3R6Rucd6To', title: 'ITパスポート／マネジメント系③~システム開発プロセス~', order: 20 },
+  { videoId: '5OwfiSXg6lY', title: '全部分かればスゴイ6選🎉システム開発技術の種類と特徴／ITパスポート・基本情報技術者・高校情報', order: 21 },
+  { videoId: 'mP_J6N0Ac9w', title: 'ITパスポート／マネジメント系④~保守・運用プロセス~', order: 22 },
+  { videoId: 'EPMv6wkJ32Q', title: 'RFIとRFPの違い？企業と技術の秘密を守るNDA🤫「調達」業務とは🧭／ITパスポート・基本情報技術者・高校情報', order: 23 },
+  { videoId: '21kB9kesd_s', title: 'IPA試験頻出！リスクマネジメント、リスクアセスメント、リスク対応策を知ろう🐿️🤨／ITパスポート・基本情報技術者・高校情報', order: 24 },
+  { videoId: '8Yz0L5ZSBFU', title: 'ITパスポート🔍システム監査人って、何する仕事？⚙️', order: 25 },
+
+  // ストラテジ系
+  { videoId: 'JnWp6TODlbM', title: 'ITパスポート試験📝ITの試験なのに、なぜ経営知識を問われるの？ストラテジ系分野', order: 26 },
+  { videoId: 'zzb5Fe4JSSs', title: 'ストラテジ系・絶対おさえたいビジネス基礎用語／ITパスポート・基本情報技術者', order: 27 },
+  { videoId: 'VAsDXCqvwsY', title: 'PPM/BSC/VCM/SCM…資本を拡大する企業分析／ITパスポート・基本情報技術者・高校情報', order: 28 },
+  { videoId: 'nqFKAsF1n84', title: '🏢 ストラテジ系・他社協業の用語集／ITパスポート・基本情報技術者・高校情報', order: 29 },
+  { videoId: 'PjZfP011cjM', title: '組織の成立ち👨‍👩‍👧‍👦職能別組織と事業部制組織／ITパスポート・基本情報技術者・高校情報', order: 30 },
+  { videoId: 'ae49wasqJ8k', title: 'CSRとは？利益以外の会社の役割／ITパスポート・基本情報技術者・高校情報', order: 31 },
+  { videoId: 'v3zTLgg6JyY', title: 'ビジネスの道しるべ！目標達成の指標／ITパスポート・基本情報技術者・高校情報', order: 32 },
+  { videoId: 'ZJ9FmouyrIM', title: 'マーケティングとは？①／ITパスポート,基本情報技術者だけでないビジネスで使える知識◎', order: 33 },
+  { videoId: 'GJ4jH2y1slA', title: 'マーケティングのフレームワーク基礎／ITパスポート・基本情報技術者・高校情報', order: 34 },
+  { videoId: '7j88wfQoz1k', title: '知的財産権（著作権・産業財産権＞特許権・実用新案権・意匠権・商標権）／ITパスポート・基本情報技術者・高校情報', order: 35 },
+  { videoId: '_KQnlZRNs_c', title: '個人情報を保護する法律／ITパスポート・基本情報技術者・高校情報', order: 36 },
+  { videoId: 'kUp110N7YOg', title: '雇用契約・働く人に関わる法律🕵️‍♂️／ITパスポート・基本情報技術者・高校情報', order: 37 },
+  { videoId: 'AStXoYqPAQA', title: '損益分岐点”売上高”を求めよう！／ITパスポート・基本情報技術者試験', order: 38 },
+  { videoId: 'VJDuiWl6-C4', title: '損益計算書(P/L)から読み解く「利益率」求め方／ITパスポート・基本情報技術者・高校情報', order: 39 },
+  { videoId: 'yZ-y2tqNg48', title: '貸借対照表(B/S)から読み解く「自己資本比率」求め方／ITパスポート・基本情報技術者・高校情報', order: 40 },
+  { videoId: 'kB3IrAeqOgs', title: 'キャッシュフロー計算書(C/F)／ITパスポート・基本情報技術者', order: 41 }
 ];
