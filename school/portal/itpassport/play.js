@@ -16,8 +16,8 @@
     var POLL_INTERVAL_MS = 5000;
     // YouTube APIの読み込みが遅い/ブロックされている場合のタイムアウト
     var API_LOAD_TIMEOUT_MS = 8000;
-    // 演習回答後、次の動画へ自動遷移するまでの待ち時間（結果表示を見せるため）
-    var ADVANCE_DELAY_MS = 1200;
+    // 演習回答後、次の動画へ自動遷移するまでの待ち時間（解説を読む時間を確保するため）
+    var ADVANCE_DELAY_MS = 6000;
 
     // YouTube側のエラーコード一覧: https://developers.google.com/youtube/iframe_api_reference#onError
     var YT_ERROR_MESSAGES = {

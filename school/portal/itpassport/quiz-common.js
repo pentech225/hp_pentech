@@ -47,9 +47,18 @@ function applyQuizAnswerState(quizId, chosenKey, isCorrect) {
         }
     });
 
-    resultEl.textContent = isCorrect
+    var resultText = isCorrect
         ? '⭕ 正解！'
         : '❌ 不正解。正解は「' + quiz.answerKey + '　' + (quiz.choices.filter(function (c) { return c.key === quiz.answerKey; })[0] || {}).text + '」でした。';
+
+    if (quiz.explanation) {
+        resultText += '\n💡 ' + quiz.explanation;
+    }
+    if (quiz.source) {
+        resultText += '\n（出典: ' + quiz.source + '）';
+    }
+
+    resultEl.textContent = resultText;
     resultEl.className = 'quiz-result ' + (isCorrect ? 'correct' : 'incorrect');
 
     answeredQuizzes[quizId] = true;
