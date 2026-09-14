@@ -18,10 +18,10 @@
 ============================================================= */
 
 const SECTIONS = [
-  { title: "セクション1（ダミー）", youtubeId: "M7lc1UVf-VE", start: 0, end: 15 },
-  { title: "セクション2（ダミー）", youtubeId: "M7lc1UVf-VE", start: 15, end: 35 },
-  { title: "セクション3（ダミー）", youtubeId: "M7lc1UVf-VE", start: 35, end: 55 },
-  { title: "セクション4（ダミー）", youtubeId: "M7lc1UVf-VE", start: 55, end: 75 },
+  { title: "セクション1（ダミー）", youtubeId: "Zz0kKYyFKnM", start: 0, end: 15 },
+  { title: "セクション2（ダミー）", youtubeId: "Zz0kKYyFKnM", start: 15, end: 35 },
+  { title: "セクション3（ダミー）", youtubeId: "Zz0kKYyFKnM", start: 35, end: 55 },
+  { title: "セクション4（ダミー）", youtubeId: "Zz0kKYyFKnM", start: 55, end: 75 },
 ];
 
 // プレースホルダー。本番メニューURL確定後に差し替える。
