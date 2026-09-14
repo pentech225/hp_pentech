@@ -31,6 +31,7 @@ let player = null;
 let playerReady = false;
 let currentIndex = 0;
 let pendingAutoplayIndex = null; // API準備待ちの間に再生要求が来た場合のインデックス
+let stopWatcher = null; // 現在のセクションの終了秒に達したか監視するタイマー
 
 const appEl = document.getElementById("app");
 const startZone = document.getElementById("start-zone");
@@ -59,22 +60,45 @@ function updateSectionIndicator(index) {
   sectionIndicator.textContent = "セクション " + (index + 1) + " / " + SECTIONS.length;
 }
 
-function playSection(index, { fromStart = true } = {}) {
+function stopWatching() {
+  if (stopWatcher !== null) {
+    clearInterval(stopWatcher);
+    stopWatcher = null;
+  }
+}
+
+// section.end秒に達したら自分でpauseVideo()する。
+// YouTube側のendSeconds任せだと「止まった時にENDEDが来るかPAUSEDが来るか」が
+// 状況によって変わり不安定なため、こちらで秒数を監視して確実に止める。
+function watchForSectionEnd(section) {
+  stopWatching();
+  stopWatcher = setInterval(() => {
+    if (player.getCurrentTime() >= section.end) {
+      stopWatching();
+      player.pauseVideo();
+      setState("paused");
+      updateNavZoneAvailability();
+    }
+  }, 200);
+}
+
+function playSection(index) {
   if (!playerReady) {
     pendingAutoplayIndex = index;
     return;
   }
   const section = SECTIONS[index];
   if (!section) return;
+  stopWatching();
   currentIndex = index;
   setState("playing");
   updateNavZoneAvailability();
   updateSectionIndicator(index);
   player.loadVideoById({
     videoId: section.youtubeId,
-    startSeconds: fromStart ? section.start : section.start,
-    endSeconds: section.end,
+    startSeconds: section.start,
   });
+  watchForSectionEnd(section);
 }
 
 function goNext() {
@@ -85,24 +109,26 @@ function goNext() {
       window.location.href = MENU_URL;
     } else {
       // MENU_URL未確定の間はメニューへ飛べないため、安全に最終セクションを再生し直す
-      playSection(currentIndex, { fromStart: true });
+      playSection(currentIndex);
     }
     return;
   }
-  playSection(nextIndex, { fromStart: true });
+  playSection(nextIndex);
 }
 
 function goBack() {
   if (currentIndex === 0) {
     // 先頭セクションでの「戻る」はエラーにせず、現在のセクションを再生し直すだけにする
-    playSection(0, { fromStart: true });
+    playSection(0);
     return;
   }
-  playSection(currentIndex - 1, { fromStart: true });
+  playSection(currentIndex - 1);
 }
 
 function onPlayerStateChange(event) {
+  // 動画そのものが最後まで再生された場合の保険（通常はwatchForSectionEndが先に止める）
   if (event.data === YT.PlayerState.ENDED) {
+    stopWatching();
     setState("paused");
     updateNavZoneAvailability();
   }
@@ -180,6 +206,7 @@ panelClose.addEventListener("click", () => {
 
 panelReset.addEventListener("click", () => {
   teacherPanel.classList.add("hidden");
+  stopWatching();
   setState("idle");
   currentIndex = 0;
   sectionIndicator.textContent = "";
