@@ -32,11 +32,11 @@ let playerReady = false;
 let currentIndex = 0;
 let pendingAutoplayIndex = null; // API準備待ちの間に再生要求が来た場合のインデックス
 
-const overlay = document.getElementById("tap-overlay");
+const appEl = document.getElementById("app");
 const startZone = document.getElementById("start-zone");
-const navZone = document.getElementById("nav-zone");
 const zoneBack = document.getElementById("zone-back");
 const zoneNext = document.getElementById("zone-next");
+const sectionIndicator = document.getElementById("section-indicator");
 
 const teacherGear = document.getElementById("teacher-gear");
 const teacherPanel = document.getElementById("teacher-panel");
@@ -45,14 +45,18 @@ const panelClose = document.getElementById("panel-close");
 const panelSectionList = document.getElementById("panel-section-list");
 
 function setState(state) {
-  overlay.classList.remove("state-idle", "state-playing", "state-paused");
-  overlay.classList.add("state-" + state);
+  appEl.classList.remove("state-idle", "state-playing", "state-paused");
+  appEl.classList.add("state-" + state);
 }
 
 function updateNavZoneAvailability() {
   // 先頭セクションでの「戻る」は安全な挙動（現在のセクションを再生し直す）にするため、
   // 常に有効のままにしておく（エラーにはならない）。誤操作防止の視覚的な弱化のみ行う。
   zoneBack.classList.toggle("disabled", currentIndex === 0);
+}
+
+function updateSectionIndicator(index) {
+  sectionIndicator.textContent = "セクション " + (index + 1) + " / " + SECTIONS.length;
 }
 
 function playSection(index, { fromStart = true } = {}) {
@@ -65,6 +69,7 @@ function playSection(index, { fromStart = true } = {}) {
   currentIndex = index;
   setState("playing");
   updateNavZoneAvailability();
+  updateSectionIndicator(index);
   player.loadVideoById({
     videoId: section.youtubeId,
     startSeconds: fromStart ? section.start : section.start,
@@ -140,12 +145,12 @@ startZone.addEventListener("click", () => {
 });
 
 zoneNext.addEventListener("click", () => {
-  if (!overlay.classList.contains("state-paused")) return;
+  if (!appEl.classList.contains("state-paused")) return;
   goNext();
 });
 
 zoneBack.addEventListener("click", () => {
-  if (!overlay.classList.contains("state-paused")) return;
+  if (!appEl.classList.contains("state-paused")) return;
   goBack();
 });
 
@@ -177,6 +182,7 @@ panelReset.addEventListener("click", () => {
   teacherPanel.classList.add("hidden");
   setState("idle");
   currentIndex = 0;
+  sectionIndicator.textContent = "";
 });
 
 renderSectionList();
