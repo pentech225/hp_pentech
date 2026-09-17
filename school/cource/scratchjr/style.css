@@ -1,0 +1,307 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: #f4f2f8;
+  font-family: 'M+PLUS Rounded 1c', sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px 40px;
+}
+
+/* -----------------------------------------------------------
+   上部セクション表示
+------------------------------------------------------------ */
+#section-indicator {
+  font-size: clamp(16px, 2.4vw, 22px);
+  font-weight: 700;
+  color: #4a3f6b;
+  background: #ffffff;
+  padding: 8px 24px;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(74, 63, 107, 0.12);
+  min-height: 1.4em;
+}
+
+/* -----------------------------------------------------------
+   ステージ（左矢印 - 動画埋め込み - 右矢印）
+------------------------------------------------------------ */
+#stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 32px);
+  width: 100%;
+  max-width: 1100px;
+  flex-wrap: wrap;
+}
+
+#video-frame {
+  position: relative;
+  flex: 1 1 480px;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+#video-area {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* YouTube iframe fills the frame; player itself has no native controls (playerVars) */
+#player,
+#player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  pointer-events: none; /* iframeは常に非対話、操作はoverlayで受ける */
+}
+
+/* -----------------------------------------------------------
+   動画内のオーバーレイ：最初の再生開始タップのみ
+   （進む/戻るは動画の外に出したので、ここには含めない）
+------------------------------------------------------------ */
+#tap-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#start-zone {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#start-shape {
+  width: min(22vh, 22vw, 120px);
+  height: min(22vh, 22vw, 120px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe066, #ffb703 60%, #fb8500 100%);
+  box-shadow: 0 0 0 10px rgba(255, 183, 3, 0.25), 0 10px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* 再生三角形をCSSのみで表現（文字ラベルなし） */
+#start-shape::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  width: 0;
+  height: 0;
+  border-top: 15% solid transparent;
+  border-bottom: 15% solid transparent;
+  border-left: 22% solid #ffffff;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+#app.state-idle #start-zone {
+  display: flex;
+  pointer-events: auto;
+}
+
+/* -----------------------------------------------------------
+   進む/戻るボタン（動画の外・左右に独立配置）
+------------------------------------------------------------ */
+.zone {
+  flex: 0 0 auto;
+  width: min(14vw, 84px);
+  height: min(14vw, 84px);
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* 再生中/待機中は非表示、一時停止中のみ操作可能 */
+#app.state-paused .zone {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 戻る = 控えめな配色・やや小さめ */
+.arrow-left {
+  width: 32%;
+  height: 32%;
+  border-left: 8px solid #6c757d;
+  border-bottom: 8px solid #6c757d;
+  transform: rotate(45deg) translateX(10%);
+  border-radius: 4px;
+}
+
+/* 進む = 明るい色・大きめ */
+#zone-next {
+  width: min(18vw, 104px);
+  height: min(18vw, 104px);
+}
+
+.arrow-right {
+  width: 34%;
+  height: 34%;
+  border-right: 10px solid #fb8500;
+  border-top: 10px solid #fb8500;
+  transform: rotate(45deg) translateX(-10%);
+  border-radius: 6px;
+}
+
+/* タップ可能になった瞬間の視覚合図 */
+@keyframes fade-in-blink {
+  0% { opacity: 0; transform: scale(0.7); }
+  40% { opacity: 1; transform: scale(1.1); }
+  60% { opacity: 0.4; }
+  80% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+#app.state-paused .zone {
+  animation: fade-in-blink 0.9s ease-out;
+}
+
+.zone.disabled {
+  opacity: 0.15 !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* -----------------------------------------------------------
+   先生用アイコン（子ども向け導線より明らかに小さく・目立たない）
+------------------------------------------------------------ */
+#teacher-gear {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 50;
+}
+
+#teacher-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#teacher-panel.hidden {
+  display: none;
+}
+
+#teacher-panel-inner {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 280px;
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'M+PLUS Rounded 1c', sans-serif;
+}
+
+#teacher-panel-inner button {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #e9ecef;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#teacher-panel-inner button:hover {
+  background: #dee2e6;
+}
+
+#panel-section-list {
+  margin-bottom: 10px;
+}
+
+.panel-section-btn {
+  background: #f1f3f5 !important;
+  text-align: left;
+}
+
+#panel-close {
+  background: #495057 !important;
+  color: #fff;
+}
+
+/* -----------------------------------------------------------
+   狭い画面（スマホ縦持ち等）では矢印を動画の下に回す
+------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "video video"
+      "back  next";
+    row-gap: 16px;
+  }
+  #video-frame {
+    grid-area: video;
+    max-width: 100%;
+  }
+  #zone-back {
+    grid-area: back;
+    justify-self: center;
+  }
+  #zone-next {
+    grid-area: next;
+    justify-self: center;
+  }
+}

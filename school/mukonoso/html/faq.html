@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保護者様Q&A（よくあるご質問） | iTeen 武庫之荘校</title>
+    <meta name="description" content="iTeen武庫之荘校の保護者様からよくいただくご質問をまとめました。料金・振替・成長の見える化・入会の流れ・続けやすさについてご案内します。">
+    <link rel="canonical" href="https://www.pentech.info/school/mukonoso/html/faq.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="iTeen武庫之荘校">
+    <meta property="og:title" content="保護者様Q&A（よくあるご質問） | iTeen武庫之荘校">
+    <meta property="og:description" content="iTeen武庫之荘校の保護者様からよくいただくご質問をまとめました。">
+    <meta property="og:url" content="https://www.pentech.info/school/mukonoso/html/faq.html">
+    <meta property="og:image" content="https://www.pentech.info/school/mukonoso/images/school_image.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- パスワード保護 -->
+    <script src="config.js"></script>
+    <script src="password-check.js"></script>
+    <script src="matomo-tracking.js"></script>
+
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+            --muted: #666666;
+            --line: #EAEAEA;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .container {
+            padding: 0 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ヘッダー */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header-logo { max-height: 50px; width: auto; }
+        .header-brand > a:first-child {
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .header-brand > a:first-child:hover { opacity: 0.8; }
+        .header-school-name {
+            font-size: 1.2rem;
+            color: var(--text);
+            font-weight: normal;
+            white-space: nowrap;
+        }
+        .header-phone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .header-phone:hover { text-decoration: underline; }
+        .header-line-button {
+            background-color: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-line-button:hover {
+            background-color: #05B04A;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .header-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .header-nav a:hover { color: var(--primary); background-color: #f0f8ff; }
+
+        /* メインセクション */
+        .faq-page-section {
+            padding: 50px 0;
+            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+        }
+        .faq-page-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .faq-page-subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .faq-updated {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-bottom: 30px;
+        }
+        .faq-disclaimer {
+            background: #FFF8E1;
+            border-left: 4px solid var(--accent);
+            border-radius: 6px;
+            padding: 14px 18px;
+            font-size: 0.88rem;
+            color: var(--text);
+            margin-bottom: 36px;
+        }
+
+        .faq-group { margin-bottom: 40px; }
+        .faq-group-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        details.faq-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 4px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        details.faq-card summary {
+            cursor: pointer;
+            list-style: none;
+            padding-block: 16px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+        details.faq-card summary::-webkit-details-marker { display: none; }
+        details.faq-card summary .q-mark { color: var(--accent); margin-right: 6px; }
+        details.faq-card summary .chev {
+            color: var(--muted);
+            transition: transform 0.18s ease;
+            flex: none;
+        }
+        details.faq-card[open] summary .chev { transform: rotate(180deg); }
+        .faq-card .answer {
+            padding-block: 0 16px;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .faq-card .answer p { margin: 0; }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #444;
+            color: white;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        footer a { color: white; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .header-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header-brand { width: 100%; justify-content: space-between; }
+            .header-line-button { width: 100%; justify-content: center; font-size: 0.85rem; padding: 8px 16px; }
+            .header-nav { gap: 10px; }
+            .header-nav a { font-size: 0.85rem; padding: 5px 8px; }
+            .faq-page-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
+                <div class="header-school-name">武庫之荘校</div>
+                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
+            </div>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
+                💬 LINEで質問
+            </a>
+        </div>
+        <nav class="header-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="values.html">大切にしていること</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="faq.html">よくあるご質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="contact.html">お問い合わせ</a>
+            <a href="reserve.html">無料体験予約</a>
+        </nav>
+    </header>
+
+    <section class="faq-page-section">
+        <div class="container">
+            <h1 class="faq-page-title">保護者様Q&A</h1>
+            <p class="faq-page-subtitle">保護者の皆様からよくいただくご質問にお答えします</p>
+            <p class="faq-updated">最終更新：2026年9月16日</p>
+            <div class="faq-disclaimer">
+                本ページの内容は改定される場合があります。最終的な内容は教室まで直接ご確認ください。
+            </div>
+
+            <div class="faq-group">
+                <h2 class="faq-group-title">料金について</h2>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>月謝以外にかかる費用はありますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>月謝とは別に、教材費など月あたり2,090円が目安としてかかります。入会金など初期費用については、教室に直接お尋ねください。</p></div>
+                </details>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>講師と生徒の人数比は？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>個別指導形式で、講師1名につき最大3名までです。指導内容もオーダーメイドなので、回数の少ないプランでもお子さまの理解度に合わせて進められます。</p></div>
+                </details>
+            </div>
+
+            <div class="faq-group">
+                <h2 class="faq-group-title">振替・欠席について</h2>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>都合が悪い日は振替できますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>振替可能です。台風・体調不良などで予定が変わる場合は、教室から保護者へLINEで個別にご連絡し、振替の日時を調整します。</p></div>
+                </details>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>急な休講や時間変更はどう連絡が来ますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>通常のスケジュールと異なる対応（振替・休講・時間変更・臨時追加）が発生した場合は、必ず保護者へ個別にLINEでご連絡いたします。</p></div>
+                </details>
+            </div>
+
+            <div class="faq-group">
+                <h2 class="faq-group-title">成長の見える化</h2>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>子どもの理解度や成長はどう分かりますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>授業ごとにcomiruシステムを通じて指導報告書をお届けしています。加えて、10種類の検定への対応・成果発表会・全国iTeen EXPOへの参加など、客観的な形で成果を確認できる仕組みがあります。</p></div>
+                </details>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>1年後・3年後にどこまで到達しますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>学年ごとの長期的な学習ロードマップは、現在教室側で整備を進めている段階です。確定次第このページを更新します。現時点で気になる場合は、お通いの学年での到達目安を教室に直接お尋ねください。</p></div>
+                </details>
+            </div>
+
+            <div class="faq-group">
+                <h2 class="faq-group-title">入会の流れ</h2>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>体験から入会までの流れは？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>一般的には「体験授業 → ご説明 → お申込み」という流れになります。教室側でも手続きをより簡素にできないか検討を進めていますので、最新の流れ・必要書類は教室まで直接お問い合わせください。</p></div>
+                </details>
+            </div>
+
+            <div class="faq-group">
+                <h2 class="faq-group-title">続けやすさ</h2>
+                <details class="faq-card">
+                    <summary><span><span class="q-mark">Q.</span>中学生・高校生になっても続けられますか？</span><span class="chev">▾</span></summary>
+                    <div class="answer"><p>対象学年は5歳〜高校生です。メインの年齢層は小学3・4年生ですが、iTeen全体では長期（5年以上）にわたって通われる生徒が多く、その間の大きなクレームもない実績があります。</p></div>
+                </details>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="../index.html" class="btn-lg btn-accent" style="display: inline-block; padding: 15px 40px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 1.1rem; transition: all 0.2s;">
+                    戻る
+                </a>
+                <a href="reserve.html" class="btn-lg btn-accent" style="display: inline-block; padding: 15px 40px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 1.1rem; transition: all 0.2s;">
+                    無料体験で実感する →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+</body>
+</html>
