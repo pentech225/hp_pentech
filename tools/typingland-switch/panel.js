@@ -17,6 +17,9 @@
  *      → (直前に別の生徒が読み込まれていれば)今のセーブデータをその生徒の名前で保存してから、
  *        選んだ生徒のセーブデータを読み込んでゲームに反映し、ページを自動リロードする
  *   2. 交代せず同じ生徒が続けて遊ぶ日は、「保存する」ボタンでその場で保存できる（リロードなし）
+ *
+ * 自動保存: 生徒が読み込まれている間、1分ごとにバックグラウンドで自動保存する
+ * （画面操作・プレーには影響しない。手動の読み込み/保存中は衝突を避けてスキップする）。
  */
 (async function () {
   // デプロイ後に発行される Apps Script Web App のURLに置き換える（gas/Code.gs参照）
@@ -271,6 +274,28 @@
     panel.appendChild(saveBtn);
 
     document.body.appendChild(panel);
+
+    // ---- 自動保存（1分ごと、バックグラウンド。プレー画面には影響しない） ----
+    // スクリプトを再度貼り付けた場合に前回分のタイマーが二重に走らないよう、
+    // 既存のタイマーがあれば止めてから新しく張り直す。
+    if (window.__tlAutoSaveTimer) {
+      clearInterval(window.__tlAutoSaveTimer);
+    }
+    window.__tlAutoSaveTimer = setInterval(async () => {
+      if (!currentStudent) return;
+      // 手動の読み込み/保存が進行中の場合は衝突を避けてスキップ（次の周期で再試行）
+      if (loadBtn.disabled || saveBtn.disabled) return;
+      try {
+        const data = await exportSave();
+        await apiSave(currentStudent, data);
+        lastUpdatedByName[currentStudent] = data.exportedAt;
+        if (select.value === currentStudent) {
+          lastUpdatedLabel.textContent = formatLastUpdated(data.exportedAt) + '（自動保存）';
+        }
+      } catch (e) {
+        console.warn('[tl-switch] 自動保存に失敗しました:', e);
+      }
+    }, 60 * 1000);
   }
 
   await main();
