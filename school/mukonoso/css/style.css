@@ -145,31 +145,23 @@ a { text-decoration: none; color: var(--primary); }
         cursor: grabbing;
     }
 }
-/* カルーセル画像の統一フォーマット - 画面幅に応じて表示数を調整 */
+/* カルーセル画像 - ヒーロー表示のため常に1枚を画面幅いっぱいに表示 */
 .top-image-carousel .carousel-image-wrapper {
     position: relative;
-    aspect-ratio: 3 / 2.67; /* 3:4の3分の2 (高さを約67%に削減) */
+    height: 56vh;
+    min-height: 320px;
+    max-height: 620px;
     flex-shrink: 0;
     overflow: hidden;
-    border-radius: 8px;
-    /* 小さい画面（モバイル）: 1つ表示 */
+    border-radius: 0;
     width: calc(100% - 10px);
     min-width: calc(100% - 10px);
 }
 
-/* タブレットサイズ: 2つ表示 */
-@media (min-width: 768px) {
+@media (max-width: 480px) {
     .top-image-carousel .carousel-image-wrapper {
-        width: calc((100% - 10px) / 2);
-        min-width: calc((100% - 10px) / 2);
-    }
-}
-
-/* デスクトップサイズ: 3つ表示 */
-@media (min-width: 1024px) {
-    .top-image-carousel .carousel-image-wrapper {
-        width: calc((100% - 20px) / 3);
-        min-width: calc((100% - 20px) / 3);
+        height: 70vh;
+        min-height: 380px;
     }
 }
 
@@ -190,7 +182,7 @@ a { text-decoration: none; color: var(--primary); }
     display: block;
     object-fit: cover;
     object-position: center;
-    border-radius: 8px;
+    border-radius: 0;
     transition: opacity 0.3s ease;
     position: relative;
     z-index: 1;
@@ -211,7 +203,7 @@ a { text-decoration: none; color: var(--primary); }
     pointer-events: none;
     z-index: 2;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 /* ホバー時の動作 */
@@ -246,14 +238,63 @@ a { text-decoration: none; color: var(--primary); }
     background: var(--white);
 }
 
+/* ヒーローのキャッチコピー重ね表示（左寄せ） */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0) 70%);
+}
+.hero-overlay-inner {
+    padding: 30px 24px 60px;
+    max-width: 640px;
+}
+.hero-headline {
+    color: var(--white);
+    font-size: clamp(1.3rem, 4vw, 2.2rem);
+    font-weight: bold;
+    line-height: 1.4;
+    margin: 0 0 12px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.hero-subcopy {
+    color: var(--white);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    line-height: 1.7;
+    margin: 0 0 20px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.hero-cta {
+    display: inline-block;
+    pointer-events: auto;
+    background: var(--accent);
+    color: var(--white);
+    padding: 12px 28px;
+    border-radius: 2px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+@media (max-width: 480px) {
+    .hero-overlay-inner {
+        padding: 20px 16px 50px;
+    }
+}
+
 /* --- ヒーローセクション --- */
 .hero {
-    background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+    background: var(--white);
     text-align: center;
     padding: 40px 0;
 }
 .hero-img { width: 90%; max-width: 400px; margin: 0 auto 20px; }
-.hero-img img { width: 100%; height: auto; border-radius: 8px; }
+.hero-img img { width: 100%; height: auto; border-radius: 4px; }
 .hero-video {
     width: 80%;
     max-width: 400px;
@@ -261,7 +302,7 @@ a { text-decoration: none; color: var(--primary); }
     /* 動画の切り抜きサイズを指定（必要に応じて調整） */
     height: 700px; /* 表示したい高さを指定 */
     overflow: hidden; /* はみ出た部分を切り抜く */
-    border-radius: 8px;
+    border-radius: 4px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .hero-video video {
@@ -293,7 +334,7 @@ a { text-decoration: none; color: var(--primary); }
     padding: 5px 10px;
     background-color: #f0f8ff; 
     display: inline-block;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 /* --- 信頼性セクション --- */
@@ -309,10 +350,9 @@ a { text-decoration: none; color: var(--primary); }
     margin-bottom: 20px;
 }
 .trust-card {
-    background: #fff8e1;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    background: var(--white);
+    padding: 15px 0;
+    border-radius: 0;
 }
 
 /* --- ニュースセクション --- */
@@ -333,14 +373,14 @@ a { text-decoration: none; color: var(--primary); }
 }
 .news-item {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 4px;
     padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .news-item:hover {
     transform: translateX(5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 .news-header {
     display: flex;
@@ -353,7 +393,7 @@ a { text-decoration: none; color: var(--primary); }
     background: var(--accent);
     color: var(--white);
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.85rem;
     font-weight: bold;
     white-space: nowrap;
@@ -362,7 +402,7 @@ a { text-decoration: none; color: var(--primary); }
     background: #f0f8ff;
     color: var(--primary);
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.85rem;
     font-weight: bold;
     white-space: nowrap;
@@ -402,30 +442,120 @@ a { text-decoration: none; color: var(--primary); }
 .usp { padding: 40px 0; }
 .usp-title { text-align: center; font-size: 1.5rem; color: var(--primary); margin-bottom: 30px; }
 .usp-card {
-    background: var(--white); border-radius: 15px; padding: 20px; margin-bottom: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08); border: 1px solid #eee;
+    background: var(--white); border-radius: 0; padding: 20px 0; margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
 }
 .usp-card h3 {
     font-size: 1.1rem; color: var(--primary); margin-bottom: 10px;
 }
 /* ... (他のセクションのCSSは省略) ... */
 
-/* --- カリキュラムセクション --- */
-.curriculum { padding: 40px 0; background-color: var(--white); text-align: center; }
-.curriculum-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-.curriculum-item { padding: 10px 5px; border-radius: 8px; background-color: #f7f7f7; font-size: 0.8rem; font-weight: bold; }
+/* --- 学べることグリッド（対象学年・タイプ＋カリキュラムを統合） --- */
+.learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    max-width: 900px;
+    margin: 0 auto;
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+}
+.learn-item {
+    padding: 20px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+.learn-icon {
+    font-size: 1.3rem;
+    margin-right: 6px;
+}
+.learn-item h3 {
+    display: inline;
+    font-size: 1rem;
+    color: var(--primary);
+    margin: 0;
+}
+.learn-item p {
+    margin: 8px 0 0;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* --- ブログ最新記事プレビュー --- */
+.blog-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.blog-preview-item {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+.blog-preview-item img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 0;
+    margin-bottom: 12px;
+}
+.blog-preview-meta {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+.blog-preview-item h3 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin: 0 0 8px;
+    line-height: 1.5;
+}
+.blog-preview-item p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 8px;
+}
+.blog-preview-item a {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+/* --- 教室・設備紹介 --- */
+.facility-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.facility-item img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 0;
+    display: block;
+}
+.facility-item p {
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+}
 
 /* --- 生徒作品紹介セクション --- */
 .student-works-section {
     padding: 40px 0;
-    background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);
+    background: var(--white);
     text-align: center;
 }
 .student-works-content {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 4px;
     padding: 30px 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     margin-top: 20px;
 }
 .student-works-btn {
@@ -433,25 +563,25 @@ a { text-decoration: none; color: var(--primary); }
     padding: 15px 40px;
     background: var(--accent);
     color: var(--white);
-    border-radius: 30px;
+    border-radius: 4px;
     font-weight: bold;
     font-size: 1.1rem;
     margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .student-works-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 /* --- 料金誘導セクション --- */
-.pricing-cta { padding: 40px 0; text-align: center; background: #fff3e0; }
+.pricing-cta { padding: 40px 0; text-align: center; background: var(--white); }
 .pricing-cta h2 { font-size: 1.4rem; color: var(--accent); margin-bottom: 15px; }
 .cta-btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
 .btn-lg {
-    padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: block;
+    padding: 15px 30px; border-radius: 4px; text-decoration: none; font-weight: bold;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: block;
 }
 .btn-accent { background: var(--accent); color: var(--white); }
 .btn-primary { background: var(--primary); color: var(--white); }
@@ -459,7 +589,7 @@ a { text-decoration: none; color: var(--primary); }
 /* --- 料金セクション --- */
 .fee-section {
     padding: 50px 0;
-    background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);
+    background: var(--white);
 }
 .fee-title {
     text-align: center;
@@ -475,9 +605,9 @@ a { text-decoration: none; color: var(--primary); }
 }
 .fee-content {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 4px;
     padding: 40px 30px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     text-align: center;
     margin-bottom: 30px;
 }
@@ -493,9 +623,11 @@ a { text-decoration: none; color: var(--primary); }
     margin-bottom: 20px;
 }
 .fee-highlight {
-    background: #fff8e1;
-    padding: 20px;
-    border-radius: 10px;
+    background: var(--white);
+    padding: 15px 0;
+    border-radius: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     margin: 20px 0;
 }
 .fee-highlight p {
@@ -510,9 +642,10 @@ a { text-decoration: none; color: var(--primary); }
     margin-top: 30px;
 }
 .fee-benefit-item {
-    background: #f0f8ff;
+    background: var(--white);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0;
+    border-top: 1px solid #eee;
     text-align: center;
 }
 .fee-benefit-item .icon {
@@ -532,8 +665,8 @@ a { text-decoration: none; color: var(--primary); }
 
 /* --- FAQセクション --- */
 .faq { padding: 40px 0; }
-.faq-question { background: #f0f8ff; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 5px 5px 0 0; }
-.faq-answer { padding: 15px; background: var(--white); font-size: 0.95rem; border-radius: 0 0 5px 5px; border: 1px solid #eee; }
+.faq-question { background: var(--white); padding: 15px 0; font-weight: bold; cursor: pointer; border-top: 1px solid #eee; border-radius: 0; }
+.faq-answer { padding: 0 0 15px; background: var(--white); font-size: 0.95rem; border-radius: 0; }
 
 /* --- 講師紹介セクション --- */
 .teachers-section { padding: 40px 0; background: var(--white); }
@@ -578,10 +711,8 @@ a { text-decoration: none; color: var(--primary); }
 }
 .teacher-item {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 0;
     padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border: 1px solid #eee;
     text-align: center;
     flex-shrink: 0;
     min-width: 280px;
@@ -590,7 +721,7 @@ a { text-decoration: none; color: var(--primary); }
 .teacher-item img {
     width: 300px;
     height: 300px;
-    border-radius: 8px;
+    border-radius: 4px;
     object-fit: cover;
     margin-bottom: 15px;
     border: 0px solid var(--accent);
@@ -609,7 +740,7 @@ a { text-decoration: none; color: var(--primary); }
 /* --- 教室の雰囲気セクション --- */
 .atmosphere-section {
     padding: 50px 0;
-    background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);
+    background: var(--white);
 }
 .atmosphere-title {
     text-align: center;
@@ -644,9 +775,9 @@ a { text-decoration: none; color: var(--primary); }
 }
 .atmosphere-card {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     min-width: 300px;
     max-width: 400px;
     flex-shrink: 0;
@@ -683,10 +814,10 @@ a { text-decoration: none; color: var(--primary); }
     gap: 25px;
 }
 .testimonial-item {
-    background: #f0f8ff;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    background: var(--white);
+    border-radius: 0;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
 }
 .testimonial-header {
     display: flex;
@@ -729,7 +860,7 @@ a { text-decoration: none; color: var(--primary); }
 /* --- 料金・コースセクション --- */
 .pricing-section {
     padding: 50px 0;
-    background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+    background: var(--white);
 }
 .pricing-title {
     text-align: center;
@@ -745,10 +876,9 @@ a { text-decoration: none; color: var(--primary); }
 }
 .pricing-card {
     background: var(--white);
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: 0;
+    padding: 25px 0;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 .pricing-card h3 {
     color: var(--primary);
@@ -776,9 +906,10 @@ a { text-decoration: none; color: var(--primary); }
     color: var(--text);
 }
 .course-recommendation {
-    background: #fff8e1;
-    padding: 15px;
-    border-radius: 8px;
+    background: var(--white);
+    padding: 15px 0;
+    border-radius: 0;
+    border-top: 1px solid #eee;
     margin-top: 20px;
 }
 .course-recommendation h4 {
@@ -810,12 +941,11 @@ a { text-decoration: none; color: var(--primary); }
     margin-top: 30px;
 }
 .skill-card {
-    background: linear-gradient(135deg, #f0f8ff 0%, var(--white) 100%);
-    border-radius: 15px;
-    padding: 25px;
+    background: var(--white);
+    border-radius: 0;
+    padding: 25px 0 0;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border-top: 4px solid var(--accent);
+    border-top: 1px solid #eee;
 }
 .skill-card .icon {
     font-size: 3rem;
@@ -835,7 +965,7 @@ a { text-decoration: none; color: var(--primary); }
 /* --- お問い合わせセクション --- */
 .contact-section {
     padding: 50px 0;
-    background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+    background: var(--white);
 }
 .contact-title {
     text-align: center;
@@ -851,15 +981,14 @@ a { text-decoration: none; color: var(--primary); }
 }
 .contact-card {
     background: var(--white);
-    border-radius: 15px;
+    border-radius: 0;
     padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border: 1px solid #eee;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
 }
 .contact-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    border-color: var(--primary);
 }
 .contact-icon {
     font-size: 3rem;
@@ -986,9 +1115,9 @@ a { text-decoration: none; color: var(--primary); }
 }
 .access-info {
     background: var(--white);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 0;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
 }
 .access-info h3 {
     font-size: 1.1rem;
@@ -1002,15 +1131,14 @@ a { text-decoration: none; color: var(--primary); }
 }
 .map-container {
     background: var(--white);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 0;
+    padding: 20px 0;
 }
 .map-container iframe {
     width: 100%;
     height: 300px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 /* --- ヘッダー --- */
@@ -1099,7 +1227,7 @@ header {
     color: white;
     text-decoration: none;
     padding: 10px 20px;
-    border-radius: 25px;
+    border-radius: 4px;
     font-size: 0.9rem;
     font-weight: bold;
     white-space: nowrap;
@@ -1125,7 +1253,7 @@ header {
     gap: 4px;
     text-decoration: none;
     padding: 10px 18px;
-    border-radius: 25px;
+    border-radius: 4px;
     font-size: 0.85rem;
     font-weight: bold;
     white-space: nowrap;
@@ -1192,7 +1320,7 @@ header {
     font-size: 0.95rem;
     font-weight: 500;
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 4px;
     transition: all 0.2s;
     white-space: nowrap;
 }
@@ -1293,15 +1421,15 @@ header {
     color: var(--white);
     text-decoration: none;
     font-weight: bold;
-    border-radius: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     text-align: center;
     font-size: 1rem;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 .fixed-cta-btn:hover {
     transform: translateX(-50%) translateY(-2px);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 .fixed-cta-btn:active {
     transform: translateX(-50%) translateY(0);
@@ -1310,7 +1438,7 @@ header {
 /* --- 予約フォームセクション --- */
 .reservation-section {
     padding: 50px 0;
-    background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+    background: var(--white);
 }
 .reservation-title {
     text-align: center;
@@ -1326,24 +1454,24 @@ header {
 }
 .reservation-form {
     background: var(--white);
-    border-radius: 15px;
-    padding: 30px 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 0;
+    padding: 30px 0;
     margin-top: 20px;
 }
 .form-instruction {
-    background-color: #f0f8ff;
-    padding: 15px;
-    border-radius: 8px;
+    background-color: var(--white);
+    padding: 12px 0;
+    border-radius: 0;
+    border-bottom: 1px solid #eee;
     margin-bottom: 20px;
     font-size: 0.95rem;
     color: var(--text);
-    text-align: center;
+    text-align: left;
 }
 .calendar-container {
     background-color: var(--white);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-bottom: 20px;
 }
 .calendar-header {
@@ -1368,7 +1496,7 @@ header {
     color: white;
     border: none;
     padding: 8px 15px;
-    border-radius: 5px;
+    border-radius: 4px;
     font-size: 0.85rem;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -1405,7 +1533,7 @@ header {
     align-items: center;
     justify-content: center;
     border: 2px solid #E0E0E0;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
@@ -1454,7 +1582,7 @@ header {
 .date-section {
     background-color: var(--white);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-bottom: 15px;
     display: none;
 }
@@ -1486,7 +1614,7 @@ header {
 .time-slot {
     background-color: var(--white);
     border: 2px solid #E0E0E0;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 10px;
     text-align: center;
     cursor: pointer;
@@ -1528,7 +1656,7 @@ header {
 .submit-section {
     background-color: var(--white);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-top: 20px;
     text-align: center;
 }
@@ -1536,7 +1664,7 @@ header {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #F0F7FF;
-    border-radius: 6px;
+    border-radius: 4px;
     font-size: 0.9rem;
     color: var(--primary);
     display: none;
@@ -1549,7 +1677,7 @@ header {
     color: white;
     border: none;
     padding: 15px 40px;
-    border-radius: 25px;
+    border-radius: 4px;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
@@ -1571,13 +1699,13 @@ header {
 /* --- プロフィールセクション --- */
 .profile-section {
     background-color: var(--white);
-    padding: 20px;
+    padding: 20px 0 0;
     margin-top: 30px;
     display: flex;
     align-items: center;
     gap: 15px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 0;
+    border-top: 1px solid #eee;
 }
 .profile-image {
     width: 60px;
