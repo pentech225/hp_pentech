@@ -74,7 +74,8 @@ function doGet(e) {
           getQuizAnswers: '?action=getQuizAnswers&studentId=xxx で確認問題の解答記録を取得（studentId省略で全件）',
           listDownloads: '?action=listDownloads&studentId=xxx&displayName=xxx で自分のフォルダの中身一覧を取得',
           listSharedDownloads: '?action=listSharedDownloads&target=xxx で全員共通のダウンロード用フォルダの中身一覧を取得',
-          uploadWork: 'POST type=uploadWork で生徒の作品ファイルをGoogleDriveに保存（POST専用）'
+          uploadWorkStart: 'POST type=uploadWorkStart で作品ファイル（100MBまで）のアップロードを開始（POST専用）',
+          uploadWorkChunk: 'POST type=uploadWorkChunk で作品ファイルを分割送信してGoogleDriveに保存（POST専用）'
         }
       });
     }
@@ -95,7 +96,8 @@ function doPost(e) {
     }
 
     const data = JSON.parse(e.postData.contents);
-    Logger.log('受信: ' + JSON.stringify(data));
+    // チャンク（base64）をそのままログに出すと巨大になるので種別だけ記録する
+    Logger.log('受信: ' + (data.type === 'uploadWorkChunk' ? data.type : JSON.stringify(data)));
 
     if (data.type === 'register') {
       return handleRegister(data.data);
@@ -109,8 +111,10 @@ function doPost(e) {
       return handleDeleteAssignment(data.data);
     } else if (data.type === 'saveQuizAnswer') {
       return handleSaveQuizAnswer(data.data);
-    } else if (data.type === 'uploadWork') {
-      return handleUploadWork(data.data);
+    } else if (data.type === 'uploadWorkStart') {
+      return handleUploadWorkStart(data.data);
+    } else if (data.type === 'uploadWorkChunk') {
+      return handleUploadWorkChunk(data.data);
     } else {
       throw new Error('不明なリクエストタイプ: ' + data.type);
     }
@@ -442,22 +446,29 @@ function listSharedDownloads(target) {
 // 作品ファイルの提出（GoogleDriveへアップロード）
 // ============================================================
 
-// GAS単一リクエストの上限を考慮したサイズ制限（base64換算で約15MB＝元ファイル約10MB）
-var MAX_UPLOAD_BASE64_LENGTH = 15 * 1024 * 1024;
+// 1ファイルあたりの上限（100MB）。
+// GASの1リクエスト上限（約50MB）を超えるため、ブラウザ側でファイルを分割し、
+// Drive API の resumable upload に1チャンクずつ中継して保存する。
+//   1) uploadWorkStart : アップロードセッションを作成し uploadId を返す
+//   2) uploadWorkChunk : チャンク（base64）を順番に送る。最後のチャンクでファイル完成
+var MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+// チャンクの最大サイズ（Drive APIの仕様で256KBの倍数である必要がある）
+var UPLOAD_CHUNK_BYTES = 8 * 1024 * 1024;
+var UPLOAD_SESSION_CACHE_SECONDS = 6 * 60 * 60;
 
-function handleUploadWork(payload) {
+function handleUploadWorkStart(payload) {
   const studentId = (payload && payload.studentId || '').trim();
   const displayName = (payload && payload.displayName || '').trim() || studentId;
   const fileName = (payload && payload.fileName || '').trim();
   const mimeType = (payload && payload.mimeType || 'application/octet-stream').trim();
-  const base64 = payload && payload.base64;
   const title = (payload && payload.title || '').trim();
+  const totalSize = Number(payload && payload.totalSize);
 
-  if (!studentId || !fileName || !base64) {
-    return jsonOutput({ success: false, error: 'studentId, fileName, ファイルデータが必要です' });
+  if (!studentId || !fileName || !totalSize) {
+    return jsonOutput({ success: false, error: 'studentId, fileName, ファイルサイズが必要です' });
   }
-  if (String(base64).length > MAX_UPLOAD_BASE64_LENGTH) {
-    return jsonOutput({ success: false, error: 'ファイルサイズが大きすぎます（10MBまで）' });
+  if (totalSize > MAX_UPLOAD_BYTES) {
+    return jsonOutput({ success: false, error: 'ファイルサイズが大きすぎます（100MBまで）' });
   }
 
   try {
@@ -465,18 +476,91 @@ function handleUploadWork(payload) {
     const studentFolder = getOrCreateStudentFolder(rootFolder, studentId, displayName);
     const uniqueFileName = getUniqueFileName(studentFolder, fileName);
 
+    const response = UrlFetchApp.fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id', {
+      method: 'post',
+      contentType: 'application/json; charset=UTF-8',
+      headers: {
+        Authorization: 'Bearer ' + ScriptApp.getOAuthToken(),
+        'X-Upload-Content-Type': mimeType,
+        'X-Upload-Content-Length': String(totalSize)
+      },
+      payload: JSON.stringify({ name: uniqueFileName, mimeType: mimeType, parents: [studentFolder.getId()] }),
+      muteHttpExceptions: true
+    });
+    const headers = response.getHeaders();
+    const sessionUrl = headers['Location'] || headers['location'];
+    if (response.getResponseCode() !== 200 || !sessionUrl) {
+      throw new Error('セッション作成失敗 (' + response.getResponseCode() + '): ' + response.getContentText());
+    }
+
+    // セッションURL自体が書き込み権限を持つため、ブラウザには渡さずサーバー側に保持する
+    const uploadId = Utilities.getUuid();
+    CacheService.getScriptCache().put('upload_' + uploadId, JSON.stringify({
+      sessionUrl: sessionUrl,
+      studentId: studentId,
+      displayName: displayName,
+      title: title,
+      fileName: uniqueFileName,
+      totalSize: totalSize
+    }), UPLOAD_SESSION_CACHE_SECONDS);
+
+    return jsonOutput({ success: true, uploadId: uploadId, chunkSize: UPLOAD_CHUNK_BYTES });
+  } catch (error) {
+    Logger.log('❌ アップロード開始エラー: ' + error.toString());
+    return jsonOutput({ success: false, error: 'アップロードに失敗しました: ' + error.toString() });
+  }
+}
+
+function handleUploadWorkChunk(payload) {
+  const uploadId = payload && payload.uploadId;
+  const offset = Number(payload && payload.offset);
+  const base64 = payload && payload.base64;
+
+  const cache = CacheService.getScriptCache();
+  const cached = uploadId && cache.get('upload_' + uploadId);
+  if (!cached) {
+    return jsonOutput({ success: false, error: 'アップロードの有効期限が切れました。もう一度やり直してください' });
+  }
+  if (!base64 || isNaN(offset)) {
+    return jsonOutput({ success: false, error: 'チャンクデータが正しくありません' });
+  }
+  const session = JSON.parse(cached);
+
+  try {
     const bytes = Utilities.base64Decode(base64);
-    const blob = Utilities.newBlob(bytes, mimeType, uniqueFileName);
-    const file = studentFolder.createFile(blob);
+    if (bytes.length > UPLOAD_CHUNK_BYTES) {
+      return jsonOutput({ success: false, error: 'チャンクサイズが大きすぎます' });
+    }
+    const end = offset + bytes.length - 1;
+
+    const response = UrlFetchApp.fetch(session.sessionUrl, {
+      method: 'put',
+      contentType: 'application/octet-stream',
+      headers: { 'Content-Range': 'bytes ' + offset + '-' + end + '/' + session.totalSize },
+      payload: bytes,
+      muteHttpExceptions: true
+    });
+    const code = response.getResponseCode();
+
+    // 308 = 途中のチャンクを受け付けた（まだ続きがある）
+    if (code === 308) {
+      return jsonOutput({ success: true, done: false });
+    }
+    if (code !== 200 && code !== 201) {
+      throw new Error('チャンク送信失敗 (' + code + '): ' + response.getContentText());
+    }
+
+    const file = DriveApp.getFileById(JSON.parse(response.getContentText()).id);
+    cache.remove('upload_' + uploadId);
 
     const spreadsheet = getOrCreateSpreadsheet();
     const sheet = getSubmissionsSheet(spreadsheet);
     const now = new Date().toISOString();
-    sheet.appendRow([studentId, displayName, title, uniqueFileName, file.getUrl(), now]);
+    sheet.appendRow([session.studentId, session.displayName, session.title, session.fileName, file.getUrl(), now]);
 
-    Logger.log('✅ 作品ファイルを保存: ' + studentId + ' / ' + uniqueFileName);
+    Logger.log('✅ 作品ファイルを保存: ' + session.studentId + ' / ' + session.fileName);
 
-    return jsonOutput({ success: true, url: file.getUrl(), fileName: uniqueFileName });
+    return jsonOutput({ success: true, done: true, url: file.getUrl(), fileName: session.fileName });
   } catch (error) {
     Logger.log('❌ アップロードエラー: ' + error.toString());
     return jsonOutput({ success: false, error: 'アップロードに失敗しました: ' + error.toString() });
