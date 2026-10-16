@@ -64,19 +64,39 @@ function readFileAsBase64(file) {
     });
 }
 
-// 作品ファイルをGoogleDrive（教室ポータル用GAS経由）にアップロードする
-async function portalUploadWork(file, title) {
+const PORTAL_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+
+// 作品ファイルをGoogleDrive（教室ポータル用GAS経由）にアップロードする。
+// GASの1リクエスト上限を超えないよう、ファイルを分割して順番に送る。
+// onProgress(送信済みバイト数, 全体バイト数) で進捗を受け取れる。
+async function portalUploadWork(file, title, onProgress) {
     const student = getLoggedInStudent();
     if (!student) {
         return { success: false, error: 'ログインしていません' };
     }
-    const base64 = await readFileAsBase64(file);
-    return portalPostJson('uploadWork', {
+    const start = await portalPostJson('uploadWorkStart', {
         studentId: student.studentId,
         displayName: student.displayName,
         fileName: file.name,
         mimeType: file.type || 'application/octet-stream',
-        base64: base64,
+        totalSize: file.size,
         title: title || ''
     });
+    if (!start.success) return start;
+
+    let offset = 0;
+    while (offset < file.size) {
+        const chunk = file.slice(offset, offset + start.chunkSize);
+        const base64 = await readFileAsBase64(chunk);
+        const result = await portalPostJson('uploadWorkChunk', {
+            uploadId: start.uploadId,
+            offset: offset,
+            base64: base64
+        });
+        if (!result.success) return result;
+        offset += chunk.size;
+        if (onProgress) onProgress(offset, file.size);
+        if (result.done) return result;
+    }
+    return { success: false, error: 'アップロードが完了しませんでした' };
 }
