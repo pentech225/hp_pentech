@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スクラッチ動画大全集 | PenTech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== リセット ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { max-width: 100%; display: block; }
+    button { font-family: 'M PLUS Rounded 1c', sans-serif; cursor: pointer; border: none; }
+
+    /* ===== デザイントークン（スクラッチドリルと共通） ===== */
+    :root {
+      --c-pink:    #FF9EC4;
+      --c-blue:    #A8D8EA;
+      --c-mint:    #A8E6CF;
+      --c-yellow:  #FFE08A;
+      --c-bg:      #FFF5F8;
+      --c-white:   #FFFFFF;
+      --c-text:    #555555;
+      --c-heading: #E8557A;
+      --c-border:  #FFD6E7;
+      --font:      'M PLUS Rounded 1c', sans-serif;
+      --radius:    12px;
+      --shadow:    0 4px 16px rgba(232, 85, 122, 0.12);
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--c-bg);
+      color: var(--c-text);
+      min-height: 100vh;
+    }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 20px;
+      background: var(--c-white);
+      border-bottom: 3px solid var(--c-pink);
+      box-shadow: var(--shadow);
+    }
+    .header h1 { font-size: 20px; font-weight: 800; color: var(--c-heading); }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 20px 16px 48px; }
+
+    /* ===== プレイヤー ===== */
+    .player {
+      background: var(--c-white);
+      border: 2px solid var(--c-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .now-playing { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .now-playing h2 { font-size: 18px; font-weight: 800; color: var(--c-heading); }
+    .now-playing p { width: 100%; font-size: 14px; line-height: 1.6; }
+
+    /* ===== レベルバッジ ===== */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #444;
+      white-space: nowrap;
+    }
+    .badge.beginner     { background: var(--c-mint); }
+    .badge.intermediate { background: var(--c-yellow); }
+    .badge.advanced     { background: var(--c-pink); }
+
+    /* ===== レベル切り替えタブ ===== */
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 8px; }
+    .tab {
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: var(--c-white);
+      border: 2px solid var(--c-border);
+      color: var(--c-text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .tab.active { background: var(--c-heading); border-color: var(--c-heading); color: var(--c-white); }
+
+    /* ===== 動画一覧（レベル別セクション） ===== */
+    .level-section { margin-top: 20px; }
+    .level-section h3 {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 17px; font-weight: 800; color: var(--c-heading);
+      margin-bottom: 12px;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .video-card {
+      text-align: left;
+      background: var(--c-white);
+      border: 2px solid var(--c-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      color: var(--c-text);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .video-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .video-card.active { border-color: var(--c-heading); }
+    .video-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .video-card .card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+    .video-card .card-title { font-size: 14px; font-weight: 700; line-height: 1.4; }
+    .empty { font-size: 14px; color: #999; padding: 8px 0; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>🎬 スクラッチ動画大全集</h1>
+  </header>
+
+  <main class="container">
+    <!-- プレイヤー -->
+    <section class="player">
+      <div class="video-container">
+        <iframe
+          id="videoIframe"
+          title="動画プレイヤー"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="now-playing">
+        <span id="nowBadge" class="badge"></span>
+        <h2 id="nowTitle"></h2>
+        <p id="nowDesc"></p>
+      </div>
+    </section>
+
+    <!-- レベル切り替え -->
+    <nav class="tabs" id="tabs"></nav>
+
+    <!-- 動画一覧 -->
+    <div id="videoList"></div>
+  </main>
+
+  <script>
+    // ===== 動画リスト =====
+    // 動画を追加するときはここに1行足すだけでOK（上から順に並びます）
+    //   id:    YouTubeの動画ID（https://youtu.be/XXXX の XXXX 部分）
+    //   level: 'beginner'（初級） / 'intermediate'（中級） / 'advanced'（上級）
+    const VIDEOS = [
+      { id: 'p-M_HQnVehM', title: 'みんなしゅうごう', level: 'beginner', desc: '' },
+    ];
+
+    const LEVELS = [
+      { key: 'beginner',     label: '初級', icon: '🌱' },
+      { key: 'intermediate', label: '中級', icon: '🌿' },
+      { key: 'advanced',     label: '上級', icon: '🌳' },
+    ];
+    const levelOf = key => LEVELS.find(l => l.key === key);
+
+    let currentFilter = 'all';
+    let currentId = VIDEOS.length ? VIDEOS[0].id : null;
+
+    function play(id, autoplay) {
+      const v = VIDEOS.find(x => x.id === id);
+      if (!v) return;
+      currentId = id;
+      document.getElementById('videoIframe').src =
+        `https://www.youtube.com/embed/${v.id}${autoplay ? '?autoplay=1' : ''}`;
+      const lv = levelOf(v.level);
+      const badge = document.getElementById('nowBadge');
+      badge.className = `badge ${v.level}`;
+      badge.textContent = lv.label;
+      document.getElementById('nowTitle').textContent = v.title;
+      document.getElementById('nowDesc').textContent = v.desc || '';
+      renderList();
+    }
+
+    function renderTabs() {
+      const tabs = [{ key: 'all', label: 'すべて', icon: '📚' }, ...LEVELS];
+      document.getElementById('tabs').innerHTML = tabs.map(t =>
+        `<button class="tab ${currentFilter === t.key ? 'active' : ''}" data-key="${t.key}">${t.icon} ${t.label}</button>`
+      ).join('');
+    }
+
+    function renderList() {
+      const levels = currentFilter === 'all' ? LEVELS : LEVELS.filter(l => l.key === currentFilter);
+      document.getElementById('videoList').innerHTML = levels.map(lv => {
+        const items = VIDEOS.filter(v => v.level === lv.key);
+        // 「すべて」表示では動画のないレベルは出さない
+        if (!items.length && currentFilter === 'all') return '';
+        const cards = items.length
+          ? `<div class="video-grid">${items.map(v => `
+              <button class="video-card ${v.id === currentId ? 'active' : ''}" data-id="${v.id}">
+                <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy">
+                <div class="card-body">
+                  <span class="badge ${v.level}" style="align-self:flex-start">${lv.label}</span>
+                  <span class="card-title">${v.title}</span>
+                </div>
+              </button>`).join('')}</div>`
+          : `<p class="empty">じゅんびちゅう…</p>`;
+        return `<section class="level-section"><h3>${lv.icon} ${lv.label}</h3>${cards}</section>`;
+      }).join('');
+    }
+
+    document.getElementById('tabs').addEventListener('click', e => {
+      const btn = e.target.closest('.tab');
+      if (!btn) return;
+      currentFilter = btn.dataset.key;
+      renderTabs();
+      renderList();
+    });
+
+    document.getElementById('videoList').addEventListener('click', e => {
+      const card = e.target.closest('.video-card');
+      if (!card) return;
+      play(card.dataset.id, true);
+      document.querySelector('.player').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    renderTabs();
+    if (currentId) play(currentId, false); else renderList();
+  </script>
+</body>
+</html>
