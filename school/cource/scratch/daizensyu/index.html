@@ -129,6 +129,35 @@
     .video-card .card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
     .video-card .card-title { font-size: 14px; font-weight: 700; line-height: 1.4; }
     .empty { font-size: 14px; color: #999; padding: 8px 0; }
+
+    /* ===== 課題エリア（リミックスボタン・完成形） ===== */
+    .task { margin-top: 16px; padding-top: 16px; border-top: 2px dashed var(--c-border); }
+    .task[hidden], .btn-remix[hidden], .answer[hidden] { display: none; }
+    .btn-remix {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: var(--c-heading);
+      color: var(--c-white);
+      font-size: 16px; font-weight: 800;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      transition: transform .15s;
+    }
+    .btn-remix:hover { transform: translateY(-2px); }
+    .answer { margin-top: 16px; }
+    .answer h3 { font-size: 16px; font-weight: 800; color: var(--c-heading); margin-bottom: 8px; }
+    .scratch-container {
+      position: relative;
+      width: 100%;
+      max-width: 485px;
+      aspect-ratio: 485 / 402;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--c-white);
+      border: 2px solid var(--c-border);
+    }
+    .scratch-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   </style>
 </head>
 <body>
@@ -154,6 +183,17 @@
         <h2 id="nowTitle"></h2>
         <p id="nowDesc"></p>
       </div>
+
+      <!-- 課題（動画ごとに設定があるときだけ表示） -->
+      <div class="task" id="task" hidden>
+        <a class="btn-remix" id="remixLink" target="_blank" rel="noopener" hidden>🔁 もんだいをリミックスする</a>
+        <div class="answer" id="answer" hidden>
+          <h3>✨ 完成形の作品</h3>
+          <div class="scratch-container">
+            <iframe id="answerIframe" title="完成形の作品" allowtransparency="true" scrolling="no" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- レベル切り替え -->
@@ -168,8 +208,11 @@
     // 動画を追加するときはここに1行足すだけでOK（上から順に並びます）
     //   id:    YouTubeの動画ID（https://youtu.be/XXXX の XXXX 部分）
     //   level: 'beginner'（初級） / 'intermediate'（中級） / 'advanced'（上級）
+    //   remixId:  （任意）リミックスさせる「もんだい」のScratchプロジェクトID
+    //   answerId: （任意）埋め込む「完成形」のScratchプロジェクトID
     const VIDEOS = [
-      { id: 'p-M_HQnVehM', title: 'みんなしゅうごう', level: 'beginner', desc: '' },
+      { id: 'p-M_HQnVehM', title: 'みんなしゅうごう', level: 'beginner', desc: '',
+        remixId: '1392955842', answerId: '1392956396' },
     ];
 
     const LEVELS = [
@@ -194,7 +237,18 @@
       badge.textContent = lv.label;
       document.getElementById('nowTitle').textContent = v.title;
       document.getElementById('nowDesc').textContent = v.desc || '';
+      renderTask(v);
       renderList();
+    }
+
+    function renderTask(v) {
+      const remix = document.getElementById('remixLink');
+      remix.hidden = !v.remixId;
+      if (v.remixId) remix.href = `https://scratch.mit.edu/projects/${v.remixId}`;
+      document.getElementById('answer').hidden = !v.answerId;
+      document.getElementById('answerIframe').src =
+        v.answerId ? `https://scratch.mit.edu/projects/${v.answerId}/embed` : 'about:blank';
+      document.getElementById('task').hidden = !v.remixId && !v.answerId;
     }
 
     function renderTabs() {
