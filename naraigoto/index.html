@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script src="/ga4-tracking.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尼崎の習い事ガイド｜子どもの条件から選べる・取材で比べる</title>
+    <meta name="description" content="兵庫県尼崎市の子どもの習い事を一覧・地図・比較表で探せるガイド。学年・住んでいる地域・伸ばしたい力を入れると、通える教室を合う順に並べます。教室への取材記録も順次掲載。">
+    <link rel="canonical" href="https://www.pentech.info/naraigoto/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="尼崎の習い事ガイド">
+    <meta property="og:description" content="学年・地域・伸ばしたい力から、尼崎で通える習い事を探す。取材記録つき。">
+    <meta property="og:url" content="https://www.pentech.info/naraigoto/">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+    <div class="wrap">
+        <p class="site-name">尼崎の習い事ガイド</p>
+        <nav><a href="#find">探す</a><a href="#compare">比べる</a><a href="#about">このガイドについて</a></nav>
+    </div>
+</header>
+
+<main>
+<section class="hero wrap">
+    <h1>尼崎で、その子が一番伸びる習い事を。</h1>
+    <p class="lead">学年と住んでいる地域、伸ばしたい力を入れると、通える教室を合う順に並べます。口コミサイトの評判に加えて、教室へ足を運んだ取材記録を順に載せていきます。</p>
+    <p class="stats" id="stats"></p>
+</section>
+
+<section id="find" class="wrap">
+    <h2>条件を入れる</h2>
+    <form id="cond" class="cond">
+        <label>学年
+            <select name="age">
+                <option value="3">年少</option><option value="4">年中</option><option value="5">年長</option>
+                <option value="6">小学1年</option><option value="7" selected>小学2年</option><option value="8">小学3年</option>
+                <option value="9">小学4年</option><option value="10">小学5年</option><option value="11">小学6年</option>
+                <option value="12">中学1年</option><option value="13">中学2年</option><option value="14">中学3年</option>
+            </select>
+        </label>
+        <label>住んでいる地域
+            <select name="area" id="areaSel"></select>
+        </label>
+        <label>通える距離
+            <select name="dist">
+                <option value="1.5">1.5km以内（徒歩・自転車）</option>
+                <option value="3" selected>3km以内</option>
+                <option value="99">市内どこでも</option>
+            </select>
+        </label>
+        <fieldset>
+            <legend>伸ばしたい力（いくつでも）</legend>
+            <div class="checks" id="goals"></div>
+        </fieldset>
+        <fieldset>
+            <legend>ジャンル（しぼる場合）</legend>
+            <div class="checks" id="cats"></div>
+        </fieldset>
+        <p class="hint">地図をクリックすると、その場所を自宅の位置として距離を計算します。</p>
+    </form>
+
+    <div class="view-switch" role="tablist">
+        <button type="button" data-view="list" class="on">リスト</button>
+        <button type="button" data-view="map">地図</button>
+    </div>
+    <p class="count" id="count"></p>
+    <div id="map" class="map" hidden></div>
+    <ol id="results" class="results"></ol>
+</section>
+
+<section id="compare" class="wrap">
+    <h2>比べる</h2>
+    <p class="hint" id="cmpHint">リストで「比べる」にチェックを入れた教室（最大3つ）を、ここで横に並べます。</p>
+    <div class="table-scroll"><table id="cmp" class="cmp"></table></div>
+</section>
+
+<section id="about" class="wrap about">
+    <h2>このガイドについて</h2>
+    <h3>運営者</h3>
+    <p>尼崎市武庫之荘でプログラミング教室（iTeen武庫之荘校）を運営する彦阪が作っています。自分の教室も一覧に載せていますが、並び順は下の計算式だけで決め、自分の教室を上に出す調整はしていません。</p>
+    <h3>並び順の決め方</h3>
+    <p>学年が対象年齢に入っていない教室は出しません。そのうえで、次の点数の合計が高い順に並べます。</p>
+    <ul>
+        <li>近さ：最大40点（自宅から0kmで40点、選んだ距離の上限で0点）</li>
+        <li>伸ばしたい力との一致：最大40点（選んだ力のうち、そのジャンルで育てやすい力の割合）</li>
+        <li>取材済み：10点（このガイドが実際に教室を見たもの）</li>
+        <li>口コミ評価：最大10点（コエテコの評価。教室ごとではなくブランド全体の値のため、比重を小さくしています。評価3.5で0点、5.0で10点。口コミが30件未満のものは点にしません）</li>
+    </ul>
+    <h3>情報の出どころ</h3>
+    <p>各教室の名前・住所・対象年齢は、教室カードに書いた出典（コエテコ、FITMAPなど）から2026年10月28日に集めました。月謝や曜日は教室ごとに違い、まだ確認できていないため「未確認」としています。最新の情報は各教室にお問い合わせください。座標は国土地理院の住所検索で付けています。</p>
+    <p>掲載内容の誤り・掲載の取り下げのご連絡は、<a href="/school/mukonoso/html/contact.html">お問い合わせフォーム</a>からお願いします。</p>
+</section>
+</main>
+
+<footer class="wrap foot">
+    <p>尼崎の習い事ガイド｜運営 PenTech（iTeen武庫之荘校）｜情報は2026年10月28日時点</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

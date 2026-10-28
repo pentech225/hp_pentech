@@ -1,0 +1,96 @@
+/* 尼崎の習い事ガイド。school/mukonoso/CLAUDE.md のデザイン指針に合わせ、角丸・色付きの箱・左の縦棒・グラデーションは使わない */
+:root {
+    --ink: #1d1d1b;
+    --sub: #6b6b66;
+    --line: #dcdcd6;
+    --accent: #0b5d4b;
+    --bg: #ffffff;
+}
+* { box-sizing: border-box; border-radius: 0; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+    line-height: 1.8;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+.results li > div, .cond > * { min-width: 0; }
+a { color: var(--accent); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+.top { border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-top: 14px; padding-bottom: 14px; }
+.site-name { margin: 0; font-weight: 700; letter-spacing: .04em; }
+.top nav a { margin-left: 20px; color: var(--ink); text-decoration: none; font-size: 14px; }
+.top nav a:first-child { margin-left: 0; }
+
+.hero { padding-top: 56px; padding-bottom: 32px; }
+h1 { font-size: clamp(26px, 4.4vw, 40px); line-height: 1.4; margin: 0 0 16px; }
+.lead { max-width: 640px; color: var(--sub); margin: 0; }
+.stats { margin-top: 24px; font-size: 14px; }
+.stats b { font-size: 22px; margin-right: 2px; }
+
+section { padding-bottom: 64px; }
+h2 { font-size: 22px; margin: 0 0 20px; }
+h3 { font-size: 16px; margin: 28px 0 6px; }
+
+.cond { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; }
+.cond label { display: flex; flex-direction: column; font-size: 13px; color: var(--sub); }
+.cond select {
+    margin-top: 4px; padding: 8px; font-size: 16px; color: var(--ink);
+    border: 1px solid var(--line); background: #fff;
+}
+.cond fieldset { grid-column: 1 / -1; border: 0; padding: 0; margin: 0; }
+.cond legend { font-size: 13px; color: var(--sub); margin-bottom: 6px; }
+.checks { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.checks label { flex-direction: row; align-items: center; gap: 6px; font-size: 15px; color: var(--ink); }
+.checks .soon { color: var(--sub); }
+.hint { font-size: 13px; color: var(--sub); grid-column: 1 / -1; margin: 0; }
+
+.view-switch { margin: 32px 0 8px; display: flex; }
+.view-switch button {
+    padding: 8px 22px; font-size: 15px; background: #fff; color: var(--ink);
+    border: 1px solid var(--ink); cursor: pointer;
+}
+.view-switch button + button { border-left: 0; }
+.view-switch button.on { background: var(--ink); color: #fff; }
+.count { font-size: 14px; color: var(--sub); }
+
+.map { height: 520px; margin-bottom: 24px; }
+
+.results { list-style: none; padding: 0; margin: 0; }
+.results li { padding: 22px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 56px 1fr auto; gap: 4px 18px; }
+.rank { font-size: 28px; font-weight: 700; color: var(--sub); line-height: 1.2; }
+.r-cat { font-size: 13px; font-weight: 700; color: var(--accent); }
+.r-name { font-size: 18px; font-weight: 700; margin: 0; line-height: 1.5; }
+.r-meta { font-size: 14px; color: var(--sub); margin: 2px 0 0; }
+.r-why { font-size: 14px; margin: 8px 0 0; }
+.r-links { font-size: 13px; margin-top: 6px; }
+.r-links a { margin-right: 14px; }
+.r-score { text-align: right; font-size: 13px; color: var(--sub); }
+.r-score b { display: block; font-size: 24px; color: var(--ink); }
+.r-score label { display: block; margin-top: 8px; cursor: pointer; }
+.own { font-size: 12px; color: var(--sub); }
+
+.table-scroll { overflow-x: auto; }
+.cmp { border-collapse: collapse; min-width: 100%; font-size: 14px; }
+.cmp th, .cmp td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
+.cmp th { color: var(--sub); font-weight: 400; white-space: nowrap; width: 9em; }
+.cmp thead th { color: var(--ink); font-weight: 700; }
+.unk { color: var(--sub); }
+
+.about { max-width: 760px; }
+.about ul { padding-left: 1.2em; }
+.foot { font-size: 12px; color: var(--sub); padding-bottom: 40px; }
+
+@media (max-width: 720px) {
+    .cond { grid-template-columns: 1fr; }
+    .results li { grid-template-columns: 36px 1fr; }
+    .r-score { grid-column: 2; text-align: left; }
+    .r-score b { display: inline; margin-right: 6px; }
+    .map { height: 420px; }
+    .top nav a { margin-left: 14px; }
+}

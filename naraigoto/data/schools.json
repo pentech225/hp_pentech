@@ -1,0 +1,1389 @@
+[
+ {
+  "id": "p001",
+  "name": "スクールIE 武庫之荘北校",
+  "brand": "HALLO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫元町1-22-14",
+  "area": "武庫之荘",
+  "agesText": "年長〜中3",
+  "ageMin": 5,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 327,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.38327,
+  "lat": 34.757858,
+  "geoMatch": "兵庫県尼崎市武庫元町一丁目２２番１４号"
+ },
+ {
+  "id": "p002",
+  "name": "HALLO スクールIE 武庫之荘南口校",
+  "brand": "HALLO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南武庫之荘3丁目30-12 新東洋ビルパイネリーF1 2階",
+  "area": "武庫之荘",
+  "agesText": "年長〜中3",
+  "ageMin": 5,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 327,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.393143,
+  "lat": 34.745701,
+  "geoMatch": "兵庫県尼崎市南武庫之荘三丁目３０番１２号"
+ },
+ {
+  "id": "p003",
+  "name": "個別指導Axis JR塚口駅前校",
+  "brand": "Axis",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市東塚口町1丁目9-10 2F",
+  "area": "塚口",
+  "agesText": "小学生〜中学生",
+  "ageMin": 6,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.21,
+   "reviews": 496,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.42485,
+  "lat": 34.751617,
+  "geoMatch": "兵庫県尼崎市東塚口町一丁目９番１０号"
+ },
+ {
+  "id": "p004",
+  "name": "デジタネ つかしん校",
+  "brand": "デジタネ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市塚口本町4-8-1 つかしんにしまち1階",
+  "area": "塚口",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.46,
+   "reviews": 577,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.417938,
+  "lat": 34.761581,
+  "geoMatch": "兵庫県尼崎市塚口本町四丁目８番"
+ },
+ {
+  "id": "p005",
+  "name": "デジタネ ペガサス園田校",
+  "brand": "デジタネ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市御園1-23-13-204",
+  "area": "園田",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.46,
+   "reviews": 577,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43161,
+  "lat": 34.758106,
+  "geoMatch": "兵庫県尼崎市御園一丁目２３番１３号"
+ },
+ {
+  "id": "p006",
+  "name": "デジタネ 松陰塾 塚口校",
+  "brand": "デジタネ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市上坂部3丁目11-1 1階",
+  "area": "塚口",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.46,
+   "reviews": 577,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.432526,
+  "lat": 34.750076,
+  "geoMatch": "兵庫県尼崎市上坂部三丁目１１番"
+ },
+ {
+  "id": "p007",
+  "name": "エドモンド 塚口校",
+  "brand": "エドモンド",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町1-2-8 ネオダイキョー塚口404",
+  "area": "塚口",
+  "agesText": "小学生〜高校生",
+  "ageMin": 6,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.68,
+   "reviews": 206,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.413803,
+  "lat": 34.752724,
+  "geoMatch": "兵庫県尼崎市南塚口町一丁目２番８号"
+ },
+ {
+  "id": "p008",
+  "name": "プロクラ au Style 塚口校",
+  "brand": "プロクラ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町2-15-10 MYTビル1F",
+  "area": "塚口",
+  "agesText": "小1〜中3",
+  "ageMin": 6,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 768,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.417252,
+  "lat": 34.751434,
+  "geoMatch": "兵庫県尼崎市南塚口町二丁目１５番１０号"
+ },
+ {
+  "id": "p009",
+  "name": "プロクラ 明光義塾 武庫之荘教室",
+  "brand": "プロクラ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫之荘東2-14-21 2F",
+  "area": "武庫之荘",
+  "agesText": "小1〜中3",
+  "ageMin": 6,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 768,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.398758,
+  "lat": 34.753559,
+  "geoMatch": "兵庫県尼崎市武庫之荘東二丁目１４番２１号"
+ },
+ {
+  "id": "p010",
+  "name": "プロクラ au Style あまがさきキューズモール校",
+  "brand": "プロクラ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市潮江1-3-1 あまがさきキューズモール3F",
+  "area": "JR尼崎",
+  "agesText": "小1〜中3",
+  "ageMin": 6,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 768,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.431763,
+  "lat": 34.733112,
+  "geoMatch": "兵庫県尼崎市潮江一丁目３番１号"
+ },
+ {
+  "id": "p011",
+  "name": "プロクラ au Style 尼崎下坂部校",
+  "brand": "プロクラ",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市下坂部3-5-20",
+  "area": "塚口",
+  "agesText": "小1〜中3",
+  "ageMin": 6,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.3,
+   "reviews": 768,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.438782,
+  "lat": 34.743443,
+  "geoMatch": "兵庫県尼崎市下坂部三丁目５番２０号"
+ },
+ {
+  "id": "p012",
+  "name": "QUREO 個別指導WAM 名神校",
+  "brand": "QUREO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市名神町2-2-23 2F",
+  "area": "JR尼崎",
+  "agesText": "小学生〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 1518,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.417404,
+  "lat": 34.739567,
+  "geoMatch": "兵庫県尼崎市名神町二丁目２番２３号"
+ },
+ {
+  "id": "p013",
+  "name": "QUREO 個別指導WAM 園田校",
+  "brand": "QUREO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南清水37-30",
+  "area": "園田",
+  "agesText": "小学生〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 1518,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.430145,
+  "lat": 34.760567,
+  "geoMatch": "兵庫県尼崎市南清水３７番３０号"
+ },
+ {
+  "id": "p014",
+  "name": "QUREO 高橋塾",
+  "brand": "QUREO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町1丁目30-11 M&Pビルディング101",
+  "area": "塚口",
+  "agesText": "小学生〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 1518,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.414673,
+  "lat": 34.748226,
+  "geoMatch": "兵庫県尼崎市南塚口町一丁目３０番１１号"
+ },
+ {
+  "id": "p015",
+  "name": "QUREO 個別指導シグマ武庫之荘校",
+  "brand": "QUREO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫之荘1-15-1",
+  "area": "武庫之荘",
+  "agesText": "小学生〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 1518,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.393997,
+  "lat": 34.753536,
+  "geoMatch": "兵庫県尼崎市武庫之荘一丁目１５番１号"
+ },
+ {
+  "id": "p016",
+  "name": "QUREO 木村塾塚口本部校",
+  "brand": "QUREO",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町1丁目8-3 木村ビル",
+  "area": "塚口",
+  "agesText": "小学生〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 1518,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.412781,
+  "lat": 34.75182,
+  "geoMatch": "兵庫県尼崎市南塚口町一丁目８番３号"
+ },
+ {
+  "id": "p017",
+  "name": "コードアドベンチャー 塚口校",
+  "brand": "コードアドベンチャー",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町1丁目3-6",
+  "area": "塚口",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.52,
+   "reviews": 291,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.412537,
+  "lat": 34.752686,
+  "geoMatch": "兵庫県尼崎市南塚口町一丁目３番６号"
+ },
+ {
+  "id": "p018",
+  "name": "ヒューマンアカデミージュニアロボット教室 JR立花駅前",
+  "brand": "ヒューマンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市立花町1-4-17 丸信ビル3階",
+  "area": "立花",
+  "agesText": "年中〜高校生",
+  "ageMin": 4,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 1698,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.398804,
+  "lat": 34.738316,
+  "geoMatch": "兵庫県尼崎市立花町一丁目４番１７号"
+ },
+ {
+  "id": "p019",
+  "name": "ヒューマンアカデミージュニアロボット教室 JR尼崎教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市潮江1丁目20-21 フレッシュコア2階",
+  "area": "JR尼崎",
+  "agesText": "年中〜高校生",
+  "ageMin": 4,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 1698,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.434998,
+  "lat": 34.734852,
+  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号"
+ },
+ {
+  "id": "p020",
+  "name": "ヒューマンアカデミージュニアロボット教室 武庫之荘教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市武庫之荘西2-41-18 武庫之荘カルチャースタジオ",
+  "area": "武庫之荘",
+  "agesText": "年中〜高校生",
+  "ageMin": 4,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 1698,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.387146,
+  "lat": 34.752735,
+  "geoMatch": "兵庫県尼崎市武庫之荘西二丁目４１番１８号"
+ },
+ {
+  "id": "p021",
+  "name": "ヒューマンアカデミージュニアロボット教室 出屋敷教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市道意町7丁目1-3 尼崎リサーチ・インキュベーションセンター",
+  "area": "出屋敷・南部",
+  "agesText": "年中〜高校生",
+  "ageMin": 4,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 1698,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.398254,
+  "lat": 34.712391,
+  "geoMatch": "兵庫県尼崎市道意町七丁目１番地"
+ },
+ {
+  "id": "p022",
+  "name": "ヒューマンアカデミージュニアロボット教室 梅花東幼稚園教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市長洲本通1丁目7-35",
+  "area": "JR尼崎",
+  "agesText": "年中〜高校生",
+  "ageMin": 4,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 1698,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.431778,
+  "lat": 34.729343,
+  "geoMatch": "兵庫県尼崎市長洲本通一丁目７番３５号"
+ },
+ {
+  "id": "p023",
+  "name": "ヒューマンアカデミージュニアこどもプログラミング教室 JR尼崎教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市潮江1丁目20-21 フレッシュコア2階",
+  "area": "JR尼崎",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 182,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.434998,
+  "lat": 34.734852,
+  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号"
+ },
+ {
+  "id": "p024",
+  "name": "ヒューマンアカデミージュニアこどもプログラミング教室 出屋敷教室",
+  "brand": "ヒューマンアカデミー",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市道意町7丁目1-3 尼崎リサーチ・インキュベーションセンター",
+  "area": "出屋敷・南部",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.23,
+   "reviews": 182,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.398254,
+  "lat": 34.712391,
+  "geoMatch": "兵庫県尼崎市道意町七丁目１番地"
+ },
+ {
+  "id": "p025",
+  "name": "市民パソコン塾 尼崎校",
+  "brand": "市民パソコン塾",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市大西町3-17-21 清和企業ビル3F",
+  "area": "塚口",
+  "agesText": "小3〜中3",
+  "ageMin": 8,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 4.15,
+   "reviews": 332,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.410278,
+  "lat": 34.74411,
+  "geoMatch": "兵庫県尼崎市大西町三丁目１７番２１号"
+ },
+ {
+  "id": "p026",
+  "name": "アーテック自考力キッズ D-Management",
+  "brand": "アーテック自考力キッズ",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市塚口町3-38-5 DAISOU GROUPビル2F",
+  "area": "塚口",
+  "agesText": "年長〜小3",
+  "ageMin": 5,
+  "ageMax": 8,
+  "coeteco": {
+   "rating": 4.32,
+   "reviews": 300,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.411163,
+  "lat": 34.755451,
+  "geoMatch": "兵庫県尼崎市塚口町三丁目３８番"
+ },
+ {
+  "id": "p027",
+  "name": "アーテック自考力キッズ ちびっこ自考力キッズ",
+  "brand": "アーテック自考力キッズ",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市潮江2丁目1番54号",
+  "area": "JR尼崎",
+  "agesText": "年長〜小3",
+  "ageMin": 5,
+  "ageMax": 8,
+  "coeteco": {
+   "rating": 4.32,
+   "reviews": 300,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.429138,
+  "lat": 34.736458,
+  "geoMatch": "兵庫県尼崎市潮江二丁目１番５４号"
+ },
+ {
+  "id": "p028",
+  "name": "エジソンアカデミー D-Management",
+  "brand": "エジソンアカデミー",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市塚口町3-38-5 DAISOU GROUPビル2F",
+  "area": "塚口",
+  "agesText": "小3〜",
+  "ageMin": 8,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.31,
+   "reviews": 278,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.411163,
+  "lat": 34.755451,
+  "geoMatch": "兵庫県尼崎市塚口町三丁目３８番"
+ },
+ {
+  "id": "p029",
+  "name": "ペガサス 園田教室",
+  "brand": "ペガサス",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市御園1-23-13 204",
+  "area": "園田",
+  "agesText": "小1〜高校生・社会人",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43161,
+  "lat": 34.758106,
+  "geoMatch": "兵庫県尼崎市御園一丁目２３番１３号"
+ },
+ {
+  "id": "p030",
+  "name": "ロボ団 JR尼崎駅校",
+  "brand": "ロボ団",
+  "category": "ロボット",
+  "address": "兵庫県尼崎市潮江1-1-50 エディオン店内4階",
+  "area": "JR尼崎",
+  "agesText": "新年長〜",
+  "ageMin": 5,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.53,
+   "reviews": 447,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43399,
+  "lat": 34.731262,
+  "geoMatch": "兵庫県尼崎市潮江一丁目１番"
+ },
+ {
+  "id": "p031",
+  "name": "iTeen 武庫之荘校",
+  "brand": "iTeen",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫之荘5-6-1",
+  "area": "武庫之荘",
+  "agesText": "5歳〜高校生",
+  "ageMin": 5,
+  "ageMax": 17,
+  "coeteco": {
+   "rating": 4.6,
+   "reviews": 179,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": true,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.388855,
+  "lat": 34.757996,
+  "geoMatch": "兵庫県尼崎市武庫之荘五丁目６番１号"
+ },
+ {
+  "id": "p032",
+  "name": "e-kagakuアカデミー 尼崎教室",
+  "brand": "e-kagaku",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市昭和通3-96 尼崎商工会議所",
+  "area": "阪神尼崎",
+  "agesText": "未就学児〜大人",
+  "ageMin": 4,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.418304,
+  "lat": 34.720505,
+  "geoMatch": "兵庫県尼崎市昭和通三丁目９６番地"
+ },
+ {
+  "id": "p033",
+  "name": "もののしくみ研究室 学習塾ペガサス 園田教室",
+  "brand": "もののしくみ研究室",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市御園1-23-13-204",
+  "area": "園田",
+  "agesText": "小3〜",
+  "ageMin": 8,
+  "ageMax": 18,
+  "coeteco": {
+   "rating": 4.56,
+   "reviews": 9,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43161,
+  "lat": 34.758106,
+  "geoMatch": "兵庫県尼崎市御園一丁目２３番１３号"
+ },
+ {
+  "id": "p034",
+  "name": "Tech for elementary すくすくスクール",
+  "brand": "Tech for elementary",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫元町2丁目16-15 元町壱番館2階",
+  "area": "武庫之荘",
+  "agesText": "小2〜中3",
+  "ageMin": 7,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 5.0,
+   "reviews": 3,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.381653,
+  "lat": 34.757866,
+  "geoMatch": "兵庫県尼崎市武庫元町二丁目１６番１５号"
+ },
+ {
+  "id": "p035",
+  "name": "Tech for elementary 三和キッズプログラミング",
+  "brand": "Tech for elementary",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市建家町82番 1F（地域共創Lab.）",
+  "area": "阪神尼崎",
+  "agesText": "小2〜中3",
+  "ageMin": 7,
+  "ageMax": 14,
+  "coeteco": {
+   "rating": 5.0,
+   "reviews": 3,
+   "scope": "ブランド全体",
+   "checked": "2026-10-28"
+  },
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.409073,
+  "lat": 34.71999,
+  "geoMatch": "兵庫県尼崎市建家町８２番地"
+ },
+ {
+  "id": "p036",
+  "name": "Hop STEAM Jump まなびばプログラミングキッズ",
+  "brand": "Hop STEAM Jump",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南武庫之荘3-2-18",
+  "area": "武庫之荘",
+  "agesText": "年中〜小2",
+  "ageMin": 4,
+  "ageMax": 7,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.393463,
+  "lat": 34.748024,
+  "geoMatch": "兵庫県尼崎市南武庫之荘三丁目２番１８号"
+ },
+ {
+  "id": "p037",
+  "name": "Hop STEAM Jump ペガサス園田教室",
+  "brand": "Hop STEAM Jump",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市御園1-23-13-204",
+  "area": "園田",
+  "agesText": "年中〜小2",
+  "ageMin": 4,
+  "ageMax": 7,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43161,
+  "lat": 34.758106,
+  "geoMatch": "兵庫県尼崎市御園一丁目２３番１３号"
+ },
+ {
+  "id": "p038",
+  "name": "あまがさきプログラミング教室 立花プログラミング教室",
+  "brand": "あまがさきプログラミング教室",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市東七松町1-6-1 七松城東福祉会館",
+  "area": "立花",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.40799,
+  "lat": 34.734867,
+  "geoMatch": "兵庫県尼崎市東七松町一丁目６番"
+ },
+ {
+  "id": "p039",
+  "name": "あまがさきプログラミング教室 塚口教室",
+  "brand": "あまがさきプログラミング教室",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市南塚口町2-31-26 塚口南地域学習館",
+  "area": "塚口",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.417511,
+  "lat": 34.749474,
+  "geoMatch": "兵庫県尼崎市南塚口町二丁目３１番２６号"
+ },
+ {
+  "id": "p040",
+  "name": "あまがさきプログラミング教室 武庫教室",
+  "brand": "あまがさきプログラミング教室",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市武庫之荘西2-41-18 武庫之荘カルチャースタジオ",
+  "area": "武庫之荘",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.387146,
+  "lat": 34.752735,
+  "geoMatch": "兵庫県尼崎市武庫之荘西二丁目４１番１８号"
+ },
+ {
+  "id": "p041",
+  "name": "あまがさきプログラミング教室 立花パソコン教室",
+  "brand": "あまがさきプログラミング教室",
+  "category": "プログラミング",
+  "address": "兵庫県尼崎市栗山町2-24-3 たちばなNPOプラザ",
+  "area": "立花",
+  "agesText": "小1〜",
+  "ageMin": 6,
+  "ageMax": 18,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "コエテコ 尼崎市の教室一覧",
+    "url": "https://coeteco.jp/prefecture/hyogo/city/amagasaki-shi",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.404404,
+  "lat": 34.745644,
+  "geoMatch": "兵庫県尼崎市栗山町二丁目２４番３号"
+ },
+ {
+  "id": "s001",
+  "name": "ティップネススイミング武庫之荘店",
+  "brand": "ティップネス",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市南武庫之荘1-4-1",
+  "area": "武庫之荘",
+  "agesText": "幼児・小学生（短期教室）",
+  "ageMin": 3,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.395874,
+  "lat": 34.750904,
+  "geoMatch": "兵庫県尼崎市南武庫之荘一丁目４番１号"
+ },
+ {
+  "id": "s002",
+  "name": "スポーツクラブアクトスWill アマドゥ",
+  "brand": "アクトス",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市道意町7-1-1 アマドゥ内",
+  "area": "出屋敷・南部",
+  "agesText": "ジュニアコースあり",
+  "ageMin": 3,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.398254,
+  "lat": 34.712391,
+  "geoMatch": "兵庫県尼崎市道意町七丁目１番地"
+ },
+ {
+  "id": "s003",
+  "name": "塚口スイミングスクール",
+  "brand": "塚口スイミングスクール",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市南塚口町1-8-23",
+  "area": "塚口",
+  "agesText": "ベビー〜",
+  "ageMin": 0,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.413193,
+  "lat": 34.751541,
+  "geoMatch": "兵庫県尼崎市南塚口町一丁目８番２３号"
+ },
+ {
+  "id": "s004",
+  "name": "尼崎スイミングスクール",
+  "brand": "尼崎スイミングスクール",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市西長洲町2丁目34-38",
+  "area": "JR尼崎",
+  "agesText": "子ども向けあり",
+  "ageMin": 3,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.420334,
+  "lat": 34.723297,
+  "geoMatch": "兵庫県尼崎市西長洲町二丁目３４番３８号"
+ },
+ {
+  "id": "s005",
+  "name": "マックスポーツ武庫川",
+  "brand": "マックスポーツ",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市大島1丁目24-1",
+  "area": "出屋敷・南部",
+  "agesText": "ジュニアコースあり",
+  "ageMin": 3,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.384735,
+  "lat": 34.73053,
+  "geoMatch": "兵庫県尼崎市大島一丁目２４番１号"
+ },
+ {
+  "id": "s006",
+  "name": "武庫之荘スイミングスクール",
+  "brand": "武庫之荘スイミングスクール",
+  "category": "スイミング",
+  "address": "兵庫県尼崎市武庫之荘本町2-3-15",
+  "area": "武庫之荘",
+  "agesText": "幼児・小学生",
+  "ageMin": 3,
+  "ageMax": 12,
+  "coeteco": null,
+  "sources": [
+   {
+    "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
+    "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   }
+  ],
+  "own": false,
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.394547,
+  "lat": 34.760231,
+  "geoMatch": "兵庫県尼崎市武庫之荘本町二丁目３番１５号"
+ }
+]
