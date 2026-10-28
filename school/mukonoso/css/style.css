@@ -68,7 +68,7 @@ a { text-decoration: none; color: var(--primary); }
     z-index: 100;
     width: 48px;
     height: 48px;
-    border-radius: 50%;
+    border-radius: 0;
     background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
@@ -229,7 +229,7 @@ a { text-decoration: none; color: var(--primary); }
 .carousel-indicator {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-radius: 0;
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     transition: background 0.3s;
@@ -276,7 +276,7 @@ a { text-decoration: none; color: var(--primary); }
     background: var(--accent);
     color: var(--white);
     padding: 12px 28px;
-    border-radius: 2px;
+    border-radius: 0;
     font-weight: bold;
     text-decoration: none;
     font-size: 0.95rem;
@@ -294,7 +294,7 @@ a { text-decoration: none; color: var(--primary); }
     padding: 40px 0;
 }
 .hero-img { width: 90%; max-width: 400px; margin: 0 auto 20px; }
-.hero-img img { width: 100%; height: auto; border-radius: 4px; }
+.hero-img img { width: 100%; height: auto; border-radius: 0; }
 .hero-video {
     width: 80%;
     max-width: 400px;
@@ -302,7 +302,7 @@ a { text-decoration: none; color: var(--primary); }
     /* 動画の切り抜きサイズを指定（必要に応じて調整） */
     height: 700px; /* 表示したい高さを指定 */
     overflow: hidden; /* はみ出た部分を切り抜く */
-    border-radius: 4px;
+    border-radius: 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .hero-video video {
@@ -334,7 +334,7 @@ a { text-decoration: none; color: var(--primary); }
     padding: 5px 10px;
     background-color: #f0f8ff; 
     display: inline-block;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 /* --- 信頼性セクション --- */
@@ -369,40 +369,28 @@ a { text-decoration: none; color: var(--primary); }
 .news-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 36px;
 }
 .news-item {
-    background: var(--white);
-    border-radius: 4px;
-    padding: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 0;
 }
-.news-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+.news-item:hover .news-title-item {
+    color: var(--primary);
 }
 .news-header {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 6px;
     flex-wrap: wrap;
 }
 .news-date {
-    background: var(--accent);
-    color: var(--white);
-    padding: 5px 12px;
-    border-radius: 4px;
+    color: #777;
     font-size: 0.85rem;
-    font-weight: bold;
     white-space: nowrap;
 }
 .news-category {
-    background: #f0f8ff;
     color: var(--primary);
-    padding: 5px 12px;
-    border-radius: 4px;
     font-size: 0.85rem;
     font-weight: bold;
     white-space: nowrap;
@@ -553,7 +541,7 @@ a { text-decoration: none; color: var(--primary); }
 }
 .student-works-content {
     background: var(--white);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 30px 20px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     margin-top: 20px;
@@ -563,7 +551,7 @@ a { text-decoration: none; color: var(--primary); }
     padding: 15px 40px;
     background: var(--accent);
     color: var(--white);
-    border-radius: 4px;
+    border-radius: 0;
     font-weight: bold;
     font-size: 1.1rem;
     margin-top: 20px;
@@ -580,7 +568,7 @@ a { text-decoration: none; color: var(--primary); }
 .pricing-cta h2 { font-size: 1.4rem; color: var(--accent); margin-bottom: 15px; }
 .cta-btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
 .btn-lg {
-    padding: 15px 30px; border-radius: 4px; text-decoration: none; font-weight: bold;
+    padding: 15px 30px; border-radius: 0; text-decoration: none; font-weight: bold;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: block;
 }
 .btn-accent { background: var(--accent); color: var(--white); }
@@ -605,7 +593,7 @@ a { text-decoration: none; color: var(--primary); }
 }
 .fee-content {
     background: var(--white);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 40px 30px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     text-align: center;
@@ -692,11 +680,11 @@ a { text-decoration: none; color: var(--primary); }
 }
 .teacher-list-wrapper::-webkit-scrollbar-track {
     background: #f0f0f0;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .teacher-list-wrapper::-webkit-scrollbar-thumb {
     background: var(--primary);
-    border-radius: 4px;
+    border-radius: 0;
 }
 .teacher-list-wrapper::-webkit-scrollbar-thumb:hover {
     background: #357ABD;
@@ -721,7 +709,7 @@ a { text-decoration: none; color: var(--primary); }
 .teacher-item img {
     width: 300px;
     height: 300px;
-    border-radius: 4px;
+    border-radius: 0;
     object-fit: cover;
     margin-bottom: 15px;
     border: 0px solid var(--accent);
@@ -764,18 +752,18 @@ a { text-decoration: none; color: var(--primary); }
 }
 .atmosphere-grid::-webkit-scrollbar-track {
     background: #f0f0f0;
-    border-radius: 4px;
+    border-radius: 0;
 }
 .atmosphere-grid::-webkit-scrollbar-thumb {
     background: var(--primary);
-    border-radius: 4px;
+    border-radius: 0;
 }
 .atmosphere-grid::-webkit-scrollbar-thumb:hover {
     background: #357ABD;
 }
 .atmosphere-card {
     background: var(--white);
-    border-radius: 4px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     min-width: 300px;
@@ -828,7 +816,7 @@ a { text-decoration: none; color: var(--primary); }
 .testimonial-avatar {
     width: 60px;
     height: 60px;
-    border-radius: 50%;
+    border-radius: 0;
     background: var(--accent);
     display: flex;
     align-items: center;
@@ -1227,7 +1215,7 @@ header {
     color: white;
     text-decoration: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 0.9rem;
     font-weight: bold;
     white-space: nowrap;
@@ -1253,7 +1241,7 @@ header {
     gap: 4px;
     text-decoration: none;
     padding: 10px 18px;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 0.85rem;
     font-weight: bold;
     white-space: nowrap;
@@ -1320,7 +1308,7 @@ header {
     font-size: 0.95rem;
     font-weight: 500;
     padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: 0;
     transition: all 0.2s;
     white-space: nowrap;
 }
@@ -1421,7 +1409,7 @@ header {
     color: var(--white);
     text-decoration: none;
     font-weight: bold;
-    border-radius: 2px;
+    border-radius: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     text-align: center;
     font-size: 1rem;
@@ -1471,7 +1459,7 @@ header {
 .calendar-container {
     background-color: var(--white);
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 0;
     margin-bottom: 20px;
 }
 .calendar-header {
@@ -1496,7 +1484,7 @@ header {
     color: white;
     border: none;
     padding: 8px 15px;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 0.85rem;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -1533,7 +1521,7 @@ header {
     align-items: center;
     justify-content: center;
     border: 2px solid #E0E0E0;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
@@ -1582,7 +1570,7 @@ header {
 .date-section {
     background-color: var(--white);
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 0;
     margin-bottom: 15px;
     display: none;
 }
@@ -1602,7 +1590,7 @@ header {
     background-color: var(--accent);
     color: white;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 0.75rem;
     font-weight: normal;
 }
@@ -1614,7 +1602,7 @@ header {
 .time-slot {
     background-color: var(--white);
     border: 2px solid #E0E0E0;
-    border-radius: 4px;
+    border-radius: 0;
     padding: 10px;
     text-align: center;
     cursor: pointer;
@@ -1656,7 +1644,7 @@ header {
 .submit-section {
     background-color: var(--white);
     padding: 20px;
-    border-radius: 4px;
+    border-radius: 0;
     margin-top: 20px;
     text-align: center;
 }
@@ -1664,7 +1652,7 @@ header {
     margin-bottom: 15px;
     padding: 10px;
     background-color: #F0F7FF;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 0.9rem;
     color: var(--primary);
     display: none;
@@ -1677,7 +1665,7 @@ header {
     color: white;
     border: none;
     padding: 15px 40px;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
@@ -1710,7 +1698,7 @@ header {
 .profile-image {
     width: 60px;
     height: 60px;
-    border-radius: 50%;
+    border-radius: 0;
     object-fit: cover;
     background-color: #E0E0E0;
 }

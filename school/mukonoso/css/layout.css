@@ -1,0 +1,277 @@
+/* =====================================
+   [LAYOUT.CSS] サイト共通ナビゲーション
+   PC（1024px以上）：左固定サイドバー
+   モバイル・タブレット：上部バー＋ハンバーガーで開くドロワー
+   各ページの <style> や style.css より後に読み込むこと。
+   角丸・グラデーション・多重シャドウは使わない（school/mukonoso/CLAUDE.md）。
+   ===================================== */
+:root {
+    --sidebar-w: 232px;
+    --topbar-h: 56px;
+    --nav-text: #333333;
+    --nav-muted: #666666;
+    --nav-line: #e6e6e6;
+    --nav-primary: #4A90E2;
+    --nav-accent: #F5A623;
+    --nav-line-green: #06C755;
+}
+
+/* 既存ヘッダー用の上余白を打ち消す */
+html.has-sidebar {
+    scroll-padding-top: 16px;
+}
+html.has-sidebar body {
+    padding-top: 0;
+}
+
+/* ---------- サイドバー本体（PC） ---------- */
+.site-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-w);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-right: 1px solid var(--nav-line);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+.site-sidebar *,
+.site-topbar * {
+    box-sizing: border-box;
+    border-radius: 0;
+}
+.site-sidebar a {
+    text-decoration: none;
+}
+
+.sb-brand {
+    display: block;
+    padding: 28px 24px 20px;
+    color: var(--nav-text);
+}
+.sb-brand img {
+    display: block;
+    width: 120px;
+    height: auto;
+    max-height: none;
+    margin: 0;
+}
+.sb-brand span {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--nav-muted);
+    letter-spacing: 0.08em;
+}
+
+.sb-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    margin: 0;
+    background: none;
+    border: 0;
+}
+.sb-nav a {
+    display: block;
+    padding: 9px 24px;
+    font-size: 0.95rem;
+    color: var(--nav-text);
+    background: none;
+    white-space: normal;
+}
+.sb-nav a:hover {
+    color: var(--nav-primary);
+    background: #f5f7fa;
+}
+.sb-nav a[aria-current="page"] {
+    color: var(--nav-primary);
+    font-weight: bold;
+}
+
+.sb-actions {
+    margin-top: auto;
+    padding: 20px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sb-tel {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--nav-text);
+    letter-spacing: 0.02em;
+}
+.sb-tel small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: normal;
+    color: var(--nav-muted);
+}
+.sb-btn {
+    display: block;
+    padding: 11px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid transparent;
+}
+.sb-btn-primary {
+    background: var(--nav-accent);
+    color: #ffffff;
+}
+.sb-btn-primary:hover {
+    background: #e09400;
+}
+.sb-btn-outline {
+    background: #ffffff;
+    color: var(--nav-text);
+    border-color: #cccccc;
+}
+.sb-btn-outline:hover {
+    border-color: var(--nav-text);
+}
+.sb-btn-line {
+    background: var(--nav-line-green);
+    color: #ffffff;
+}
+.sb-btn-line:hover {
+    background: #05b04a;
+}
+
+/* ---------- 上部バー（モバイル） ---------- */
+header.site-topbar {
+    display: none;
+}
+
+/* ---------- PC：本文をサイドバー分ずらす ---------- */
+@media (min-width: 1024px) {
+    html.has-sidebar body {
+        padding-left: var(--sidebar-w);
+    }
+    html.has-sidebar .fixed-cta-btn {
+        left: calc(50% + var(--sidebar-w) / 2);
+    }
+    .sb-overlay {
+        display: none !important;
+    }
+}
+
+/* ---------- モバイル・タブレット：ドロワー ---------- */
+@media (max-width: 1023px) {
+    html.has-sidebar {
+        scroll-padding-top: calc(var(--topbar-h) + 12px);
+    }
+    html.has-sidebar body {
+        padding-top: var(--topbar-h);
+        padding-left: 0;
+    }
+
+    header.site-topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: none;
+        height: var(--topbar-h);
+        margin: 0;
+        padding: 0 8px 0 16px;
+        box-sizing: border-box;
+        z-index: 1100;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        border-bottom: 1px solid var(--nav-line);
+        box-shadow: none;
+        overflow: visible;
+    }
+    .site-topbar .tb-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--nav-text);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    .site-topbar .tb-brand img {
+        display: block;
+        height: 30px;
+        width: auto;
+        max-height: none;
+        margin: 0;
+    }
+    .sb-toggle {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .sb-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--nav-text);
+        transition: transform 0.2s, opacity 0.2s;
+    }
+    .sb-toggle[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .sb-toggle[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+    .sb-toggle[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .site-sidebar {
+        width: min(84vw, 300px);
+        z-index: 1200;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        visibility: hidden;
+    }
+    .site-sidebar.is-open {
+        transform: translateX(0);
+        visibility: visible;
+        box-shadow: 0 0 24px rgba(0,0,0,0.12);
+    }
+    .sb-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1150;
+        background: rgba(0,0,0,0.4);
+    }
+    .sb-overlay[hidden] {
+        display: none;
+    }
+    html.sb-locked,
+    html.sb-locked body {
+        overflow: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-sidebar,
+    .sb-toggle span {
+        transition: none;
+    }
+}

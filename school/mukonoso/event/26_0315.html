@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="has-sidebar">
 <head>
     <!-- Google tag (gtag.js) -->
     <script src="/ga4-tracking.js"></script>
@@ -109,7 +109,7 @@
             color: white;
             text-decoration: none;
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 0;
             font-size: 0.9rem;
             font-weight: bold;
             white-space: nowrap;
@@ -138,7 +138,7 @@
             font-size: 0.95rem;
             font-weight: 500;
             padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 0;
             transition: all 0.2s;
             white-space: nowrap;
         }
@@ -166,7 +166,7 @@
         }
         .event-card {
             background: var(--white);
-            border-radius: 15px;
+            border-radius: 0;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
@@ -201,7 +201,7 @@
         .event-highlight {
             background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 0;
             margin-top: 20px;
         }
         .event-highlight p {
@@ -212,7 +212,7 @@
         .event-info-box {
             background: #f0f8ff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 0;
             margin: 20px 0;
         }
         .event-info-box h4 {
@@ -268,7 +268,7 @@
         .time-slot-button {
             background-color: var(--white);
             border: 2px solid #E0E0E0;
-            border-radius: 8px;
+            border-radius: 0;
             padding: 15px 20px;
             text-align: left;
             cursor: pointer;
@@ -314,7 +314,7 @@
             font-size: 0.8rem;
             font-weight: bold;
             padding: 3px 10px;
-            border-radius: 4px;
+            border-radius: 0;
         }
         
         /* フォーム入力 */
@@ -343,7 +343,7 @@
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #E0E0E0;
-            border-radius: 8px;
+            border-radius: 0;
             font-size: 1rem;
             transition: border-color 0.2s;
             box-sizing: border-box;
@@ -360,7 +360,7 @@
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #E0E0E0;
-            border-radius: 8px;
+            border-radius: 0;
             font-size: 1rem;
             transition: border-color 0.2s;
             box-sizing: border-box;
@@ -384,7 +384,7 @@
         .form-notice {
             background: #f0f8ff;
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 0;
             margin-bottom: 20px;
             font-size: 0.9rem;
             color: var(--text);
@@ -401,7 +401,7 @@
             color: white;
             border: none;
             padding: 15px 40px;
-            border-radius: 25px;
+            border-radius: 0;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
@@ -439,7 +439,7 @@
         }
         .reservation-info-box {
             background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
+            border-radius: 0;
             padding: 20px;
             margin-bottom: 30px;
             text-align: left;
@@ -454,25 +454,37 @@
             font-size: 1rem;
         }
     </style>
+    <link rel="stylesheet" href="../css/layout.css">
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <div class="header-brand">
-                <a href="../index.html"><img src="../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
-                <div class="header-school-name">武庫之荘校</div>
-                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
-            </div>
-            <div class="header-cta-group">
-                <a href="../html/reserve.html" class="header-cta-btn header-cta-request">資料請求</a>
-                <a href="../html/reserve.html" class="header-cta-btn header-cta-apply">お申込み</a>
-                <a href="../html/contact.html" class="header-cta-btn header-cta-contact">お問い合わせ</a>
-                <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
-                    💬 LINEで質問
-                </a>
-            </div>
-        </div>
+    <header class="site-topbar">
+        <a href="../index.html" class="tb-brand"><img src="../images/iteen_logo.png" alt="iTeen"><span>武庫之荘校</span></a>
+        <button type="button" class="sb-toggle" id="sb-toggle" aria-controls="site-sidebar" aria-expanded="false" aria-label="メニューを開く"><span></span><span></span><span></span></button>
     </header>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="サイトメニュー">
+        <a href="../index.html" class="sb-brand"><img src="../images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
+        <nav class="sb-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../html/game-event.html">イベント</a>
+            <a href="../html/blog/index.html">ブログ</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="../html/values.html">大切にしていること</a>
+            <a href="../student/work/index.html">生徒作品</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="../html/contact.html">お問い合わせ</a>
+        </nav>
+        <div class="sb-actions">
+            <a href="tel:06-6438-8277" class="sb-tel">06-6438-8277<small>お電話でのお問い合わせ</small></a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-primary">無料体験を予約する</a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-outline">資料請求</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="sb-btn sb-btn-line">LINEで質問</a>
+        </div>
+    </aside>
+    <div class="sb-overlay" id="sb-overlay" hidden></div>
 
     <!-- イベント情報セクション -->
     <section class="event-section" style="background: linear-gradient(150deg, #fff3e0 0%, var(--white) 100%);">
@@ -658,7 +670,7 @@
                 <div class="reservation-info-item" id="reservation-message-item" style="display: none;"></div>
             </div>
             
-            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 0; padding: 20px; margin-bottom: 30px;">
                 <p style="font-size: 1rem; line-height: 1.8; margin: 0;">
                     <strong style="color: #fff8e1;">🎮 当日をお楽しみに！</strong><br>
                     イベント当日は、尼崎市立武庫西生涯学習プラザ 2F 小会議室にお越しください。<br>
@@ -667,8 +679,8 @@
             </div>
             
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="index.html" style="display: inline-block; padding: 12px 30px; background: white; color: var(--primary); text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">ホームに戻る</a>
-                <a href="tel:070-2327-8083" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">📞 お問い合わせ: 070-2327-8083</a>
+                <a href="index.html" style="display: inline-block; padding: 12px 30px; background: white; color: var(--primary); text-decoration: none; border-radius: 0; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">ホームに戻る</a>
+                <a href="tel:070-2327-8083" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 0; font-weight: bold; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">📞 お問い合わせ: 070-2327-8083</a>
             </div>
         </div>
     </section>
@@ -1086,6 +1098,7 @@ ${messageText ? `\nご質問・ご要望:\n${messageText}` : ''}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
+    <script src="../js/site-nav.js"></script>
 </body>
 </html>
 

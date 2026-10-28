@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="has-sidebar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,33 +13,37 @@
     
     <!-- 共通CSS -->
     <link rel="stylesheet" href="../../css/blog.css">
+    <link rel="stylesheet" href="../../css/layout.css">
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <div class="header-brand">
-                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
-                <div class="header-school-name">武庫之荘校</div>
-                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
-            </div>
-            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
-                💬 LINEで質問
-            </a>
-        </div>
-        <nav class="header-nav">
+    <header class="site-topbar">
+        <a href="../../index.html" class="tb-brand"><img src="../../images/iteen_logo.png" alt="iTeen"><span>武庫之荘校</span></a>
+        <button type="button" class="sb-toggle" id="sb-toggle" aria-controls="site-sidebar" aria-expanded="false" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+    </header>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="サイトメニュー">
+        <a href="../../index.html" class="sb-brand"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
+        <nav class="sb-nav">
             <a href="../../index.html">ホーム</a>
             <a href="../../index.html#news">ニュース</a>
-            <a href="index.html">ブログ</a>
+            <a href="../../html/game-event.html">イベント</a>
+            <a href="../../html/blog/index.html">ブログ</a>
             <a href="../../index.html#courses">コース</a>
             <a href="../../index.html#teachers">講師</a>
-            <a href="../values.html">大切にしていること</a>
+            <a href="../../html/values.html">大切にしていること</a>
+            <a href="../../student/work/index.html">生徒作品</a>
             <a href="../../index.html#fee">料金</a>
             <a href="../../index.html#faq">よくある質問</a>
             <a href="../../index.html#access">アクセス</a>
-            <a href="../contact.html">お問い合わせ</a>
-            <a href="../reserve.html">無料体験予約</a>
+            <a href="../../html/contact.html">お問い合わせ</a>
         </nav>
-    </header>
+        <div class="sb-actions">
+            <a href="tel:06-6438-8277" class="sb-tel">06-6438-8277<small>お電話でのお問い合わせ</small></a>
+            <a href="../../html/reserve.html" class="sb-btn sb-btn-primary">無料体験を予約する</a>
+            <a href="../../html/reserve.html" class="sb-btn sb-btn-outline">資料請求</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="sb-btn sb-btn-line">LINEで質問</a>
+        </div>
+    </aside>
+    <div class="sb-overlay" id="sb-overlay" hidden></div>
 
     <section class="blog-article-section">
         <div class="container">
@@ -91,5 +95,6 @@
         <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
         <p>&copy; 2025 iTeen 武庫之荘校</p>
     </footer>
+    <script src="../../js/site-nav.js"></script>
 </body>
 </html>

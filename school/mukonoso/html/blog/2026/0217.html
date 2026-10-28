@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="has-sidebar">
 <head>
     <!-- Google tag (gtag.js) -->
     <script src="/ga4-tracking.js"></script>
@@ -96,7 +96,7 @@
             color: white;
             text-decoration: none;
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 0;
             font-size: 0.9rem;
             font-weight: bold;
             white-space: nowrap;
@@ -125,7 +125,7 @@
             font-size: 0.95rem;
             font-weight: 500;
             padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 0;
             transition: all 0.2s;
             white-space: nowrap;
         }
@@ -136,37 +136,27 @@
         
         /* メインセクション */
         .blog-article-section {
-            padding: 50px 0;
-            background: linear-gradient(150deg, #e0f2ff 0%, var(--white) 100%);
+            padding: 56px 0;
+            background: var(--white);
         }
         .article-header {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+            padding: 0;
+            margin-bottom: 40px;
         }
         .article-meta {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
         }
         .article-date {
-            background: var(--primary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+            color: #777;
             font-size: 0.9rem;
-            font-weight: bold;
             white-space: nowrap;
         }
         .article-category {
-            background: var(--accent);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+            color: var(--primary);
             font-size: 0.9rem;
             font-weight: bold;
             white-space: nowrap;
@@ -174,15 +164,12 @@
         .article-title {
             font-size: 2rem;
             color: var(--text);
-            margin-bottom: 20px;
+            margin: 0;
             font-weight: bold;
-            line-height: 1.4;
+            line-height: 1.45;
         }
         .article-content {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 0;
             margin-bottom: 30px;
         }
         .article-content h2 {
@@ -217,9 +204,8 @@
         .article-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            margin: 20px 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 0;
+            margin: 20px 0;
         }
         .article-content blockquote {
             padding-left: 20px;
@@ -241,7 +227,7 @@
             background: var(--white);
             color: var(--primary);
             border: 2px solid var(--primary);
-            border-radius: 25px;
+            border-radius: 0;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.2s;
@@ -295,13 +281,13 @@
                 padding: 5px 8px;
             }
             .article-header {
-                padding: 25px 20px;
+                margin-bottom: 28px;
             }
             .article-title {
                 font-size: 1.5rem;
             }
             .article-content {
-                padding: 25px 20px;
+                padding: 0;
             }
             .article-content h2 {
                 font-size: 1.4rem;
@@ -311,33 +297,37 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../../css/layout.css">
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <div class="header-brand">
-                <a href="../../index.html"><img src="../../images/iteen_logo.png" alt="iTeen ロゴ" class="header-logo"></a>
-                <div class="header-school-name">武庫之荘校</div>
-                <a href="tel:06-6438-8277" class="header-phone">☎06-6438-8277</a>
-            </div>
-            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="header-line-button">
-                💬 LINEで質問
-            </a>
-        </div>
-        <nav class="header-nav">
-            <a href="../../index.html">ホーム</a>
-            <a href="../../index.html#news">ニュース</a>
-            <a href="index.html">ブログ</a>
-            <a href="../../index.html#courses">コース</a>
-            <a href="../../index.html#teachers">講師</a>
-            <a href="../values.html">大切にしていること</a>
-            <a href="../../index.html#fee">料金</a>
-            <a href="../../index.html#faq">よくある質問</a>
-            <a href="../../index.html#access">アクセス</a>
-            <a href="../contact.html">お問い合わせ</a>
-            <a href="../reserve.html">無料体験予約</a>
-        </nav>
+    <header class="site-topbar">
+        <a href="../../../index.html" class="tb-brand"><img src="../../../images/iteen_logo.png" alt="iTeen"><span>武庫之荘校</span></a>
+        <button type="button" class="sb-toggle" id="sb-toggle" aria-controls="site-sidebar" aria-expanded="false" aria-label="メニューを開く"><span></span><span></span><span></span></button>
     </header>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="サイトメニュー">
+        <a href="../../../index.html" class="sb-brand"><img src="../../../images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
+        <nav class="sb-nav">
+            <a href="../../../index.html">ホーム</a>
+            <a href="../../../index.html#news">ニュース</a>
+            <a href="../../../html/game-event.html">イベント</a>
+            <a href="../../../html/blog/index.html">ブログ</a>
+            <a href="../../../index.html#courses">コース</a>
+            <a href="../../../index.html#teachers">講師</a>
+            <a href="../../../html/values.html">大切にしていること</a>
+            <a href="../../../student/work/index.html">生徒作品</a>
+            <a href="../../../index.html#fee">料金</a>
+            <a href="../../../index.html#faq">よくある質問</a>
+            <a href="../../../index.html#access">アクセス</a>
+            <a href="../../../html/contact.html">お問い合わせ</a>
+        </nav>
+        <div class="sb-actions">
+            <a href="tel:06-6438-8277" class="sb-tel">06-6438-8277<small>お電話でのお問い合わせ</small></a>
+            <a href="../../../html/reserve.html" class="sb-btn sb-btn-primary">無料体験を予約する</a>
+            <a href="../../../html/reserve.html" class="sb-btn sb-btn-outline">資料請求</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="sb-btn sb-btn-line">LINEで質問</a>
+        </div>
+    </aside>
+    <div class="sb-overlay" id="sb-overlay" hidden></div>
 
     <section class="blog-article-section">
         <div class="container">
@@ -389,6 +379,7 @@
         <p><a href="../../index.html#access">アクセス・営業時間はこちら</a></p>
         <p>&copy; 2025 iTeen 武庫之荘校</p>
     </footer>
+    <script src="../../../js/site-nav.js"></script>
 </body>
 </html>
 
