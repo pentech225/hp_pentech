@@ -105,8 +105,25 @@
         if (d > cond.dist) return null;
         var why = [];
         var limit = cond.dist >= 99 ? 12 : cond.dist;
-        var pDist = Math.max(0, 40 * (1 - d / limit));
+        var pDist = Math.max(0, 30 * (1 - d / limit));
         why.push(homeLabel + 'から約' + d.toFixed(1) + 'km');
+
+        // 通いやすさ：車なら駐車場、徒歩・自転車なら駐輪場。送迎バスがあればどちらでも満点
+        var a = s.access || {};
+        var pAccess = 5; // 未確認は真ん中
+        if (a.bus) {
+            pAccess = 10;
+            why.push('送迎バスあり');
+        } else if (cond.mode === 'car') {
+            pAccess = { '専用駐車場': 10, 'コインパーキング': 6, 'なし': 0 }[a.parking];
+            if (pAccess === undefined) pAccess = 5;
+            if (a.parking === '専用駐車場') why.push('専用の駐車場あり');
+            if (a.parking === 'コインパーキング') why.push('近くにコインパーキング');
+        } else {
+            pAccess = { 'あり': 10, 'なし': 0 }[a.bicycle];
+            if (pAccess === undefined) pAccess = 5;
+            if (a.bicycle === 'あり') why.push('駐輪場あり');
+        }
 
         var pGoal = 20; // 力を選んでいないときは全教室に同じ点を与える
         if (cond.goals.length) {
@@ -121,16 +138,31 @@
         // 口コミが30件未満の評価は母数が小さく当てにならないので点にしない
         var pRate = s.coeteco && s.coeteco.reviews >= 30 ? Math.max(0, (s.coeteco.rating - 3.5) / 1.5 * 10) : 0;
         if (pRate > 10) pRate = 10;
-        return { total: Math.round(pDist + pGoal + pInt + pRate), dist: d, why: why };
+        return { total: Math.round(pDist + pAccess + pGoal + pInt + pRate), dist: d, why: why };
     }
 
     function readCond() {
         return {
             age: Number(form.age.value),
             dist: Number(form.dist.value),
+            mode: form.mode.value,
             goals: checked('goal'),
             cats: checked('cat')
         };
+    }
+
+    function parkingText(s) {
+        var a = s.access || {};
+        var t = [];
+        t.push('駐車場：' + (a.parking || '未確認') + (a.parkingNote ? '（' + a.parkingNote + '）' : ''));
+        t.push('駐輪場：' + (a.bicycle || '未確認'));
+        t.push('送迎バス：' + (a.bus === true ? 'あり' : a.bus === false ? 'なし' : '未確認'));
+        return t.join('｜');
+    }
+
+    // 教室のまわりの駐車場をGoogleマップで探す
+    function gmapsParking(s) {
+        return 'https://www.google.com/maps/search/' + encodeURIComponent('駐車場') + '/@' + s.lat + ',' + s.lng + ',17z';
     }
 
     function gmaps(s) {
@@ -165,8 +197,10 @@
                 '<p class="r-name">' + esc(s.name) + (s.own ? ' <span class="own">（運営者の教室）</span>' : '') + '</p>' +
                 '<p class="r-meta">対象 ' + esc(s.agesText) + '｜' + rate + '｜取材：' + esc(s.interview.status) + '</p>' +
                 '<p class="r-meta">' + esc(s.address) + '</p>' +
+                '<p class="r-meta">' + esc(parkingText(s)) + '</p>' +
                 '<p class="r-why">' + esc(x.r.why.join('／')) + '</p>' +
-                '<div class="r-links"><a href="' + gmaps(s) + '" target="_blank" rel="noopener">Googleマップ</a>' + src + '</div>' +
+                '<div class="r-links"><a href="' + gmaps(s) + '" target="_blank" rel="noopener">Googleマップ</a>' +
+                '<a href="' + gmapsParking(s) + '" target="_blank" rel="noopener">近くの駐車場</a>' + src + '</div>' +
                 '</div>' +
                 '<div class="r-score"><b>' + x.r.total + '</b>点' +
                 '<label><input type="checkbox" class="cmp-box" value="' + esc(s.id) + '"' +
@@ -307,6 +341,9 @@
             row('対象年齢', function (s) { return esc(s.agesText); }) +
             row('住所', function (s) { return esc(s.address); }) +
             row(homeLabel + 'から', function (s) { return '約' + km(home, [s.lat, s.lng]).toFixed(1) + 'km'; }) +
+            row('駐車場', function (s) { var a = s.access || {}; return a.parking ? esc(a.parking + (a.parkingNote ? '（' + a.parkingNote + '）' : '')) : unk; }) +
+            row('駐輪場', function (s) { var a = s.access || {}; return a.bicycle ? esc(a.bicycle) : unk; }) +
+            row('送迎バス', function (s) { var a = s.access || {}; return a.bus === true ? 'あり' : a.bus === false ? 'なし' : unk; }) +
             row('育てやすい力', function (s) { return esc((CAT_GOALS[s.category] || []).join('・')); }) +
             row('口コミ評価', function (s) {
                 return s.coeteco ? 'コエテコ ' + s.coeteco.rating + '（' + s.coeteco.reviews + '件・' + esc(s.coeteco.scope) + '）' : '<span class="unk">なし</span>';
