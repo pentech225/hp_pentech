@@ -211,12 +211,33 @@
         drawMap(list);
     }
 
+    // ピンからの距離の帯。中心の赤から外側の濃い青へ（2026-10-28本人の指定）
+    var RINGS = [
+        { km: 0.5, color: '#d7191c' },
+        { km: 1, color: '#f46d43' },
+        { km: 1.5, color: '#fdae61' },
+        { km: 3, color: '#74add1' },
+        { km: 5, color: '#2c5fa8' }
+    ];
+    var FAR = '#08306b';
+
+    function ringColor(d) {
+        for (var i = 0; i < RINGS.length; i++) { if (d <= RINGS[i].km) return RINGS[i].color; }
+        return FAR;
+    }
+
     function drawMap(list) {
         if (!map) return;
         layer.clearLayers();
+        // 外側から描いて、内側の円が上に重なるようにする
+        RINGS.slice().reverse().forEach(function (r) {
+            L.circle(home, { radius: r.km * 1000, color: r.color, weight: 1, fillColor: r.color, fillOpacity: .08, interactive: false })
+                .addTo(layer);
+        });
         list.forEach(function (x, i) {
             var s = x.s;
-            L.circleMarker([s.lat, s.lng], { radius: 7, color: '#0b5d4b', weight: 2, fillOpacity: .8 })
+            var c = ringColor(x.r.dist);
+            L.circleMarker([s.lat, s.lng], { radius: 8, color: '#ffffff', weight: 2, fillColor: c, fillOpacity: 1 })
                 .bindPopup('<b>' + (i + 1) + '. ' + esc(s.name) + '</b><br>' + esc(s.category) + '｜約' + x.r.dist.toFixed(1) +
                     'km<br><a href="' + gmaps(s) + '" target="_blank" rel="noopener">Googleマップで開く</a>')
                 .addTo(layer);
@@ -230,6 +251,9 @@
         }).addTo(map);
         layer = L.layerGroup().addTo(map);
         homeMarker = L.marker(home, { title: '自宅の位置' }).addTo(map);
+        document.getElementById('mapLegend').innerHTML = RINGS.map(function (r, i) {
+            return '<span><i style="background:' + r.color + '"></i>' + (i ? RINGS[i - 1].km + '〜' : '') + r.km + 'km</span>';
+        }).join('') + '<span><i style="background:' + FAR + '"></i>' + RINGS[RINGS.length - 1].km + 'kmより遠い</span>';
         map.on('click', function (e) {
             setHome([e.latlng.lat, e.latlng.lng], '自宅');
             form.school.value = '';
@@ -386,7 +410,7 @@
         b.addEventListener('click', function () {
             var toMap = b.dataset.view === 'map';
             document.querySelectorAll('.view-switch button').forEach(function (x) { x.classList.toggle('on', x === b); });
-            document.getElementById('map').hidden = !toMap;
+            document.getElementById('mapWrap').hidden = !toMap;
             if (toMap && !map) { initMap(); render(); }
             if (toMap) map.invalidateSize();
         });
