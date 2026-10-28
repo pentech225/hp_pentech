@@ -59,7 +59,12 @@
   },
   "lng": 135.393143,
   "lat": 34.745701,
-  "geoMatch": "兵庫県尼崎市南武庫之荘三丁目３０番１２号"
+  "geoMatch": "兵庫県尼崎市南武庫之荘三丁目３０番１２号",
+  "website": {
+   "url": "https://hallo.jp/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p003",
@@ -555,7 +560,12 @@
   },
   "lng": 135.398804,
   "lat": 34.738316,
-  "geoMatch": "兵庫県尼崎市立花町一丁目４番１７号"
+  "geoMatch": "兵庫県尼崎市立花町一丁目４番１７号",
+  "website": {
+   "url": "https://kids.athuman.com/robo/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p019",
@@ -586,7 +596,12 @@
   },
   "lng": 135.434998,
   "lat": 34.734852,
-  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号"
+  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号",
+  "website": {
+   "url": "https://kids.athuman.com/robo/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p020",
@@ -617,7 +632,12 @@
   },
   "lng": 135.387146,
   "lat": 34.752735,
-  "geoMatch": "兵庫県尼崎市武庫之荘西二丁目４１番１８号"
+  "geoMatch": "兵庫県尼崎市武庫之荘西二丁目４１番１８号",
+  "website": {
+   "url": "https://kids.athuman.com/robo/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p021",
@@ -648,7 +668,12 @@
   },
   "lng": 135.398254,
   "lat": 34.712391,
-  "geoMatch": "兵庫県尼崎市道意町七丁目１番地"
+  "geoMatch": "兵庫県尼崎市道意町七丁目１番地",
+  "website": {
+   "url": "https://kids.athuman.com/robo/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p022",
@@ -679,7 +704,12 @@
   },
   "lng": 135.431778,
   "lat": 34.729343,
-  "geoMatch": "兵庫県尼崎市長洲本通一丁目７番３５号"
+  "geoMatch": "兵庫県尼崎市長洲本通一丁目７番３５号",
+  "website": {
+   "url": "https://kids.athuman.com/robo/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p023",
@@ -710,7 +740,12 @@
   },
   "lng": 135.434998,
   "lat": 34.734852,
-  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号"
+  "geoMatch": "兵庫県尼崎市潮江一丁目２０番２１号",
+  "website": {
+   "url": "https://kids.athuman.com/programming/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p024",
@@ -741,7 +776,12 @@
   },
   "lng": 135.398254,
   "lat": 34.712391,
-  "geoMatch": "兵庫県尼崎市道意町七丁目１番地"
+  "geoMatch": "兵庫県尼崎市道意町七丁目１番地",
+  "website": {
+   "url": "https://kids.athuman.com/programming/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p025",
@@ -922,7 +962,12 @@
   },
   "lng": 135.43399,
   "lat": 34.731262,
-  "geoMatch": "兵庫県尼崎市潮江一丁目１番"
+  "geoMatch": "兵庫県尼崎市潮江一丁目１番",
+  "website": {
+   "url": "https://www.robo-done.com/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p031",
@@ -953,7 +998,12 @@
   },
   "lng": 135.388855,
   "lat": 34.757996,
-  "geoMatch": "兵庫県尼崎市武庫之荘五丁目６番１号"
+  "geoMatch": "兵庫県尼崎市武庫之荘五丁目６番１号",
+  "website": {
+   "url": "https://iteen.jp/schools/mukonosou",
+   "scope": "教室",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p032",
@@ -979,7 +1029,12 @@
   },
   "lng": 135.418304,
   "lat": 34.720505,
-  "geoMatch": "兵庫県尼崎市昭和通三丁目９６番地"
+  "geoMatch": "兵庫県尼崎市昭和通三丁目９６番地",
+  "website": {
+   "url": "https://www.e-kagaku.com/",
+   "scope": "ブランド",
+   "checked": "2026-10-28"
+  }
  },
  {
   "id": "p033",
@@ -1284,8 +1339,8 @@
  },
  {
   "id": "s003",
-  "name": "塚口スイミングスクール",
-  "brand": "塚口スイミングスクール",
+  "name": "コパンスイミングスクール塚口（旧 塚口スイミングスクール）",
+  "brand": "コパンスイミングスクール",
   "category": "スイミング",
   "address": "兵庫県尼崎市南塚口町1-8-23",
   "area": "塚口",
@@ -1297,6 +1352,11 @@
    {
     "label": "FITMAP 尼崎市の子ども向けスイミングスクール",
     "url": "https://fitmap.jp/magazine/school/swiming/112890/",
+    "checked": "2026-10-28"
+   },
+   {
+    "label": "尼崎市立長洲小学校の配布文書（施設名の表記）",
+    "url": "https://ama-net.ed.jp/school/e07/docs/d35cc93fa3907d7e3f0719f2df71fee56e8db4ca.pdf",
     "checked": "2026-10-28"
    }
   ],

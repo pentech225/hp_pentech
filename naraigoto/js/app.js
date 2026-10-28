@@ -37,11 +37,13 @@
     // No.1の指標（2026-10-28に取材前に決めたもの）。値は schools.json の facts から取る
     // dir: 1 = 大きいほど上、-1 = 小さいほど上
     var METRICS = [
-        { key: 'students', label: '生徒数が多い', unit: '名', dir: 1 },
+        { key: 'students', label: '在籍人数が多い', unit: '名', dir: 1 },
         { key: 'teachers', label: '講師数が多い', unit: '名', dir: 1 },
         { key: 'kidsPerTeacher', label: '講師1人が見る子どもが少ない（1回の授業）', unit: '名', dir: -1 },
         { key: 'avgYears', label: '生徒が長く続けている（平均の在籍年数）', unit: '年', dir: 1 },
         { key: 'foundedYear', label: '歴史が長い（開校年）', unit: '年', dir: -1 },
+        { key: 'avgMonthly', label: '月平均単価が高い（生徒1人が1か月に払う平均）', unit: '円', dir: 1 },
+        { key: 'avgMonthlyLow', from: 'avgMonthly', label: '月平均単価が安い', unit: '円', dir: -1 },
         { key: 'monthlyFee', label: '月謝が高い', unit: '円', dir: 1 },
         { key: 'monthlyFeeLow', from: 'monthlyFee', label: '月謝が安い', unit: '円', dir: -1 },
         { key: 'perHour', label: '1時間あたりの月謝が安い（ジャンルをまたいで比べる用）', unit: '円', dir: -1 }
@@ -151,12 +153,25 @@
         };
     }
 
+    // 公式サイト。確認できたURLがなければ、Google検索へのリンクにする
+    function siteLink(s) {
+        if (s.website) {
+            return '<a href="' + esc(s.website.url) + '" target="_blank" rel="noopener">公式サイト' +
+                (s.website.scope === 'ブランド' ? '（ブランド全体）' : '') + '</a>';
+        }
+        return '<a href="https://www.google.com/search?q=' + encodeURIComponent(s.name + ' 公式') +
+            '" target="_blank" rel="noopener">公式サイトを探す</a>';
+    }
+
     function parkingText(s) {
         var a = s.access || {};
         var t = [];
         t.push('駐車場：' + (a.parking || '未確認') + (a.parkingNote ? '（' + a.parkingNote + '）' : ''));
         t.push('駐輪場：' + (a.bicycle || '未確認'));
         t.push('送迎バス：' + (a.bus === true ? 'あり' : a.bus === false ? 'なし' : '未確認'));
+        var f = s.facts || {};
+        t.push('在籍人数：' + (f.students ? f.students + '名' : '未確認'));
+        t.push('月平均単価：' + (f.avgMonthly ? f.avgMonthly.toLocaleString() + '円' : '未確認'));
         return t.join('｜');
     }
 
@@ -199,7 +214,7 @@
                 '<p class="r-meta">' + esc(s.address) + '</p>' +
                 '<p class="r-meta">' + esc(parkingText(s)) + '</p>' +
                 '<p class="r-why">' + esc(x.r.why.join('／')) + '</p>' +
-                '<div class="r-links"><a href="' + gmaps(s) + '" target="_blank" rel="noopener">Googleマップ</a>' +
+                '<div class="r-links">' + siteLink(s) + '<a href="' + gmaps(s) + '" target="_blank" rel="noopener">Googleマップ</a>' +
                 '<a href="' + gmapsParking(s) + '" target="_blank" rel="noopener">近くの駐車場</a>' + src + '</div>' +
                 '</div>' +
                 '<div class="r-score"><b>' + x.r.total + '</b>点' +
@@ -252,7 +267,7 @@
         layer = L.layerGroup().addTo(map);
         homeMarker = L.marker(home, { title: '自宅の位置' }).addTo(map);
         document.getElementById('mapLegend').innerHTML = RINGS.map(function (r, i) {
-            return '<span><i style="background:' + r.color + '"></i>' + (i ? RINGS[i - 1].km + '〜' : '') + r.km + 'km</span>';
+            return '<span><i style="background:' + r.color + '"></i>' + (i ? RINGS[i - 1].km : 0) + '〜' + r.km + 'km</span>';
         }).join('') + '<span><i style="background:' + FAR + '"></i>' + RINGS[RINGS.length - 1].km + 'kmより遠い</span>';
         map.on('click', function (e) {
             setHome([e.latlng.lat, e.latlng.lng], '自宅');
@@ -368,6 +383,9 @@
             row('駐車場', function (s) { var a = s.access || {}; return a.parking ? esc(a.parking + (a.parkingNote ? '（' + a.parkingNote + '）' : '')) : unk; }) +
             row('駐輪場', function (s) { var a = s.access || {}; return a.bicycle ? esc(a.bicycle) : unk; }) +
             row('送迎バス', function (s) { var a = s.access || {}; return a.bus === true ? 'あり' : a.bus === false ? 'なし' : unk; }) +
+            row('公式サイト', siteLink) +
+            row('在籍人数', function (s) { var f = s.facts || {}; return f.students ? f.students + '名' : unk; }) +
+            row('月平均単価', function (s) { var f = s.facts || {}; return f.avgMonthly ? f.avgMonthly.toLocaleString() + '円' : unk; }) +
             row('育てやすい力', function (s) { return esc((CAT_GOALS[s.category] || []).join('・')); }) +
             row('口コミ評価', function (s) {
                 return s.coeteco ? 'コエテコ ' + s.coeteco.rating + '（' + s.coeteco.reviews + '件・' + esc(s.coeteco.scope) + '）' : '<span class="unk">なし</span>';
