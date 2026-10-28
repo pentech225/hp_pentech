@@ -1,0 +1,1300 @@
+[
+ {
+  "id": "e01",
+  "name": "尼崎市立明城小学校",
+  "short": "明城",
+  "type": "小学校",
+  "address": "兵庫県尼崎市南城内10番地の1",
+  "opened": "平成16年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.420227,
+  "lat": 34.714664,
+  "geoMatch": "兵庫県尼崎市南城内１０番地",
+  "area": "阪神尼崎"
+ },
+ {
+  "id": "e02",
+  "name": "尼崎市立難波小学校",
+  "short": "難波",
+  "type": "小学校",
+  "address": "兵庫県尼崎市東難波町4丁目3番40号",
+  "opened": "大正9年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.410217,
+  "lat": 34.723675,
+  "geoMatch": "兵庫県尼崎市東難波町四丁目３番４０号",
+  "area": "阪神尼崎"
+ },
+ {
+  "id": "e03",
+  "name": "尼崎市立難波の梅小学校",
+  "short": "難波の梅",
+  "type": "小学校",
+  "address": "兵庫県尼崎市西難波町6丁目14番57号",
+  "opened": "平成26年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.407227,
+  "lat": 34.731857,
+  "geoMatch": "兵庫県尼崎市西難波町六丁目１４番５７号",
+  "area": "立花"
+ },
+ {
+  "id": "e04",
+  "name": "尼崎市立竹谷小学校",
+  "short": "竹谷",
+  "type": "小学校",
+  "address": "兵庫県尼崎市北竹谷町2丁目36番地",
+  "opened": "昭和10年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.405823,
+  "lat": 34.720734,
+  "geoMatch": "兵庫県尼崎市北竹谷町二丁目３６番地",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "e05",
+  "name": "尼崎市立下坂部小学校",
+  "short": "下坂部",
+  "type": "小学校",
+  "address": "兵庫県尼崎市下坂部1丁目12番1号",
+  "opened": "明治10年12月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.434555,
+  "lat": 34.739124,
+  "geoMatch": "兵庫県尼崎市下坂部一丁目１２番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e06",
+  "name": "尼崎市立潮小学校",
+  "short": "潮",
+  "type": "小学校",
+  "address": "兵庫県尼崎市潮江2丁目2番20号",
+  "opened": "昭和34年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.430405,
+  "lat": 34.737553,
+  "geoMatch": "兵庫県尼崎市潮江二丁目２番２０号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e07",
+  "name": "尼崎市立長洲小学校",
+  "short": "長洲",
+  "type": "小学校",
+  "address": "兵庫県尼崎市長洲東通3丁目7番1号",
+  "opened": "明治6年12月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.432251,
+  "lat": 34.721825,
+  "geoMatch": "兵庫県尼崎市長洲東通三丁目７番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e08",
+  "name": "尼崎市立清和小学校",
+  "short": "清和",
+  "type": "小学校",
+  "address": "兵庫県尼崎市長洲本通1丁目8番1号",
+  "opened": "昭和30年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.431824,
+  "lat": 34.729244,
+  "geoMatch": "兵庫県尼崎市長洲本通一丁目８番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e09",
+  "name": "尼崎市立杭瀬小学校",
+  "short": "杭瀬",
+  "type": "小学校",
+  "address": "兵庫県尼崎市杭瀬北新町2丁目6番1号",
+  "opened": "大正14年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.439102,
+  "lat": 34.721539,
+  "geoMatch": "兵庫県尼崎市杭瀬北新町二丁目６番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e10",
+  "name": "尼崎市立浦風小学校",
+  "short": "浦風",
+  "type": "小学校",
+  "address": "兵庫県尼崎市杭瀬南新町4丁目1番34号",
+  "opened": "昭和35年1月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.433975,
+  "lat": 34.718952,
+  "geoMatch": "兵庫県尼崎市杭瀬南新町四丁目１番３４号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e11",
+  "name": "尼崎市立金楽寺小学校",
+  "short": "金楽寺",
+  "type": "小学校",
+  "address": "兵庫県尼崎市金楽寺町2丁目3番1号",
+  "opened": "昭和10年9月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.42572,
+  "lat": 34.727245,
+  "geoMatch": "兵庫県尼崎市金楽寺町二丁目３番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e12",
+  "name": "尼崎市立浜小学校",
+  "short": "浜",
+  "type": "小学校",
+  "address": "兵庫県尼崎市浜2丁目21番1号",
+  "opened": "昭和23年9月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.439835,
+  "lat": 34.732716,
+  "geoMatch": "兵庫県尼崎市浜二丁目２１番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e13",
+  "name": "尼崎市立大庄小学校",
+  "short": "大庄",
+  "type": "小学校",
+  "address": "兵庫県尼崎市大庄中通4丁目43番地の１",
+  "opened": "明治6年10月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.391617,
+  "lat": 34.721809,
+  "geoMatch": "兵庫県尼崎市大庄中通四丁目４３番地",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "e14",
+  "name": "尼崎市立成文小学校",
+  "short": "成文",
+  "type": "小学校",
+  "address": "兵庫県尼崎市大島2丁目33番1号",
+  "opened": "昭和30年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.385529,
+  "lat": 34.726673,
+  "geoMatch": "兵庫県尼崎市大島二丁目３３番１号",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "e15",
+  "name": "尼崎市立成徳小学校",
+  "short": "成徳",
+  "type": "小学校",
+  "address": "兵庫県尼崎市蓬川町302番地の2",
+  "opened": "昭和28年1月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.399399,
+  "lat": 34.7201,
+  "geoMatch": "兵庫県尼崎市蓬川町３０２番地",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "e16",
+  "name": "尼崎市立わかば西小学校",
+  "short": "わかば西",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫川町1丁目25番地",
+  "opened": "平成28年４月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.38916,
+  "lat": 34.715691,
+  "geoMatch": "兵庫県尼崎市武庫川町一丁目２５番地",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "e17",
+  "name": "尼崎市立大島小学校",
+  "short": "大島",
+  "type": "小学校",
+  "address": "兵庫県尼崎市稲葉荘2丁目10番7号",
+  "opened": "昭和16年3月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.385544,
+  "lat": 34.732986,
+  "geoMatch": "兵庫県尼崎市稲葉荘二丁目１０番７号",
+  "area": "立花"
+ },
+ {
+  "id": "e18",
+  "name": "尼崎市立浜田小学校",
+  "short": "浜田",
+  "type": "小学校",
+  "address": "兵庫県尼崎市浜田町3丁目110番地",
+  "opened": "昭和26年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.3965,
+  "lat": 34.728893,
+  "geoMatch": "兵庫県尼崎市浜田町三丁目１１０番地",
+  "area": "立花"
+ },
+ {
+  "id": "e19",
+  "name": "尼崎市立立花小学校",
+  "short": "立花",
+  "type": "小学校",
+  "address": "兵庫県尼崎市栗山町2丁目26番1号",
+  "opened": "明治6年3月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.405106,
+  "lat": 34.744556,
+  "geoMatch": "兵庫県尼崎市栗山町二丁目２６番１号",
+  "area": "立花"
+ },
+ {
+  "id": "e20",
+  "name": "尼崎市立立花南小学校",
+  "short": "立花南",
+  "type": "小学校",
+  "address": "兵庫県尼崎市三反田町2丁目16番1号",
+  "opened": "昭和47年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.40834,
+  "lat": 34.739063,
+  "geoMatch": "兵庫県尼崎市三反田町二丁目１６番１号",
+  "area": "立花"
+ },
+ {
+  "id": "e21",
+  "name": "尼崎市立立花西小学校",
+  "short": "立花西",
+  "type": "小学校",
+  "address": "兵庫県尼崎市南武庫之荘3丁目14番9号",
+  "opened": "昭和42年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.396423,
+  "lat": 34.746124,
+  "geoMatch": "兵庫県尼崎市南武庫之荘三丁目１４番９号",
+  "area": "立花"
+ },
+ {
+  "id": "e22",
+  "name": "尼崎市立立花北小学校",
+  "short": "立花北",
+  "type": "小学校",
+  "address": "兵庫県尼崎市栗山町2丁目6番1号",
+  "opened": "昭和53年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.404358,
+  "lat": 34.747414,
+  "geoMatch": "兵庫県尼崎市栗山町二丁目６番１号",
+  "area": "立花"
+ },
+ {
+  "id": "e23",
+  "name": "尼崎市立名和小学校",
+  "short": "名和",
+  "type": "小学校",
+  "address": "兵庫県尼崎市名神町3丁目1番51号",
+  "opened": "昭和31年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.419403,
+  "lat": 34.739243,
+  "geoMatch": "兵庫県尼崎市名神町三丁目１番５１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "e24",
+  "name": "尼崎市立塚口小学校",
+  "short": "塚口",
+  "type": "小学校",
+  "address": "兵庫県尼崎市塚口町4丁目38番地の1",
+  "opened": "昭和9年2月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.410172,
+  "lat": 34.759342,
+  "geoMatch": "兵庫県尼崎市塚口町四丁目３８番地",
+  "area": "塚口"
+ },
+ {
+  "id": "e25",
+  "name": "尼崎市立尼崎北小学校",
+  "short": "尼崎北",
+  "type": "小学校",
+  "address": "兵庫県尼崎市塚口町6丁目21番地の1",
+  "opened": "昭和42年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.404709,
+  "lat": 34.758446,
+  "geoMatch": "兵庫県尼崎市塚口町六丁目２１番地",
+  "area": "塚口"
+ },
+ {
+  "id": "e26",
+  "name": "尼崎市立水堂小学校",
+  "short": "水堂",
+  "type": "小学校",
+  "address": "兵庫県尼崎市水堂町1丁目32番8号",
+  "opened": "昭和18年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.393494,
+  "lat": 34.742218,
+  "geoMatch": "兵庫県尼崎市水堂町一丁目３２番８号",
+  "area": "立花"
+ },
+ {
+  "id": "e27",
+  "name": "尼崎市立七松小学校",
+  "short": "七松",
+  "type": "小学校",
+  "address": "兵庫県尼崎市南七松町1丁目4番49号",
+  "opened": "昭和29年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.401978,
+  "lat": 34.732723,
+  "geoMatch": "兵庫県尼崎市南七松町一丁目４番４９号",
+  "area": "立花"
+ },
+ {
+  "id": "e28",
+  "name": "尼崎市立武庫小学校",
+  "short": "武庫",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫元町2丁目25番34号",
+  "opened": "明治6年2月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.381683,
+  "lat": 34.759308,
+  "geoMatch": "兵庫県尼崎市武庫元町二丁目２５番３４号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e29",
+  "name": "尼崎市立武庫南小学校",
+  "short": "武庫南",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫町4丁目11番1号",
+  "opened": "昭和45年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.378433,
+  "lat": 34.750019,
+  "geoMatch": "兵庫県尼崎市武庫町四丁目１１番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e30",
+  "name": "尼崎市立武庫北小学校",
+  "short": "武庫北",
+  "type": "小学校",
+  "address": "兵庫県尼崎市常松2丁目14番1号",
+  "opened": "昭和43年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.377625,
+  "lat": 34.767994,
+  "geoMatch": "兵庫県尼崎市常松二丁目１４番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e31",
+  "name": "尼崎市立武庫東小学校",
+  "short": "武庫東",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫之荘6丁目15番1号",
+  "opened": "昭和37年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.388611,
+  "lat": 34.760998,
+  "geoMatch": "兵庫県尼崎市武庫之荘六丁目１５番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e32",
+  "name": "尼崎市立武庫庄小学校",
+  "short": "武庫庄",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫之荘本町3丁目21番1号",
+  "opened": "昭和49年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.396973,
+  "lat": 34.757862,
+  "geoMatch": "兵庫県尼崎市武庫之荘本町三丁目２１番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e33",
+  "name": "尼崎市立武庫の里小学校",
+  "short": "武庫の里",
+  "type": "小学校",
+  "address": "兵庫県尼崎市武庫の里1丁目4番1号",
+  "opened": "昭和56年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.384033,
+  "lat": 34.758934,
+  "geoMatch": "兵庫県尼崎市武庫の里一丁目４番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "e34",
+  "name": "尼崎市立園田小学校",
+  "short": "園田",
+  "type": "小学校",
+  "address": "兵庫県尼崎市食満1丁目1番2号",
+  "opened": "明治6年10月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.431274,
+  "lat": 34.759022,
+  "geoMatch": "兵庫県尼崎市食満一丁目１番２号",
+  "area": "園田"
+ },
+ {
+  "id": "e35",
+  "name": "尼崎市立園田北小学校",
+  "short": "園田北",
+  "type": "小学校",
+  "address": "兵庫県尼崎市猪名寺2丁目4番1号",
+  "opened": "昭和48年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.423218,
+  "lat": 34.763725,
+  "geoMatch": "兵庫県尼崎市猪名寺二丁目４番１号",
+  "area": "塚口"
+ },
+ {
+  "id": "e36",
+  "name": "尼崎市立園和小学校",
+  "short": "園和",
+  "type": "小学校",
+  "address": "兵庫県尼崎市東園田町4丁目73番地の2",
+  "opened": "明治26年9月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.446884,
+  "lat": 34.75386,
+  "geoMatch": "兵庫県尼崎市東園田町四丁目７３番地",
+  "area": "園田"
+ },
+ {
+  "id": "e37",
+  "name": "尼崎市立園和北小学校",
+  "short": "園和北",
+  "type": "小学校",
+  "address": "兵庫県尼崎市田能1丁目7番1号",
+  "opened": "昭和45年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.443054,
+  "lat": 34.761734,
+  "geoMatch": "兵庫県尼崎市田能一丁目７番１号",
+  "area": "園田"
+ },
+ {
+  "id": "e38",
+  "name": "尼崎市立園田東小学校",
+  "short": "園田東",
+  "type": "小学校",
+  "address": "兵庫県尼崎市東園田町8丁目7番地",
+  "opened": "昭和37年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.456207,
+  "lat": 34.745193,
+  "geoMatch": "兵庫県尼崎市東園田町八丁目７番地",
+  "area": "園田"
+ },
+ {
+  "id": "e39",
+  "name": "尼崎市立上坂部小学校",
+  "short": "上坂部",
+  "type": "小学校",
+  "address": "兵庫県尼崎市東塚口町1丁目15番36号",
+  "opened": "昭和11年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.423981,
+  "lat": 34.749603,
+  "geoMatch": "兵庫県尼崎市東塚口町一丁目１５番３６号",
+  "area": "塚口"
+ },
+ {
+  "id": "e40",
+  "name": "尼崎市立小園小学校",
+  "short": "小園",
+  "type": "小学校",
+  "address": "兵庫県尼崎市若王寺3丁目23番1号",
+  "opened": "昭和43年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.437866,
+  "lat": 34.745464,
+  "geoMatch": "兵庫県尼崎市若王寺三丁目２３番１号",
+  "area": "園田"
+ },
+ {
+  "id": "e41",
+  "name": "尼崎市立園田南小学校",
+  "short": "園田南",
+  "type": "小学校",
+  "address": "兵庫県尼崎市若王寺1丁目1番1号",
+  "opened": "昭和55年4月",
+  "sources": [
+   {
+    "label": "尼崎市立小学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8syogakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.43306,
+  "lat": 34.752308,
+  "geoMatch": "兵庫県尼崎市若王寺一丁目１番１号",
+  "area": "園田"
+ },
+ {
+  "id": "j01",
+  "name": "尼崎市立成良中学校",
+  "short": "成良",
+  "type": "中学校",
+  "address": "兵庫県尼崎市西長洲町2丁目33番22号",
+  "opened": "平成17年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.422028,
+  "lat": 34.721447,
+  "geoMatch": "兵庫県尼崎市西長洲町二丁目３３番２２号",
+  "area": "阪神尼崎"
+ },
+ {
+  "id": "j02",
+  "name": "尼崎市立中央中学校",
+  "short": "中央",
+  "type": "中学校",
+  "address": "兵庫県尼崎市東七松町2丁目5番67号",
+  "opened": "平成17年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.40892,
+  "lat": 34.734127,
+  "geoMatch": "兵庫県尼崎市東七松町二丁目５番６７号",
+  "area": "立花"
+ },
+ {
+  "id": "j03",
+  "name": "尼崎市立日新中学校",
+  "short": "日新",
+  "type": "中学校",
+  "address": "兵庫県尼崎市東七松町2丁目1番44号",
+  "opened": "昭和35年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.40921,
+  "lat": 34.734898,
+  "geoMatch": "兵庫県尼崎市東七松町二丁目１番４４号",
+  "area": "立花"
+ },
+ {
+  "id": "j04",
+  "name": "尼崎市立小田中学校",
+  "short": "小田",
+  "type": "中学校",
+  "address": "兵庫県尼崎市長洲中通1丁目10番1号",
+  "opened": "平成28年４月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.4328,
+  "lat": 34.729904,
+  "geoMatch": "兵庫県尼崎市長洲中通一丁目１０番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "j05",
+  "name": "尼崎市立小田北中学校",
+  "short": "小田北",
+  "type": "中学校",
+  "address": "兵庫県尼崎市神崎町24番1号",
+  "opened": "昭和24年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.446243,
+  "lat": 34.740948,
+  "geoMatch": "兵庫県尼崎市神崎町２４番１号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "j06",
+  "name": "尼崎市立大成中学校",
+  "short": "大成",
+  "type": "中学校",
+  "address": "兵庫県尼崎市久々知西町2丁目8番48号",
+  "opened": "昭和36年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.424271,
+  "lat": 34.740555,
+  "geoMatch": "兵庫県尼崎市久々知西町二丁目８番４８号",
+  "area": "JR尼崎"
+ },
+ {
+  "id": "j07",
+  "name": "尼崎市立大庄中学校",
+  "short": "大庄",
+  "type": "中学校",
+  "address": "兵庫県尼崎市菜切山町37番地の1",
+  "opened": "平成18年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.394592,
+  "lat": 34.72377,
+  "geoMatch": "兵庫県尼崎市菜切山町３７番地",
+  "area": "出屋敷・南部"
+ },
+ {
+  "id": "j08",
+  "name": "尼崎市立大庄北中学校",
+  "short": "大庄北",
+  "type": "中学校",
+  "address": "兵庫県尼崎市大庄北1丁目8番1号",
+  "opened": "昭和36年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.395782,
+  "lat": 34.731602,
+  "geoMatch": "兵庫県尼崎市大庄北一丁目８番１号",
+  "area": "立花"
+ },
+ {
+  "id": "j09",
+  "name": "尼崎市立立花中学校",
+  "short": "立花",
+  "type": "中学校",
+  "address": "兵庫県尼崎市上ノ島町3丁目1番1号",
+  "opened": "昭和22年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.399246,
+  "lat": 34.747169,
+  "geoMatch": "兵庫県尼崎市上ノ島町三丁目１番１号",
+  "area": "立花"
+ },
+ {
+  "id": "j10",
+  "name": "尼崎市立塚口中学校",
+  "short": "塚口",
+  "type": "中学校",
+  "address": "兵庫県尼崎市富松町4丁目31番1号",
+  "opened": "昭和22年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.403381,
+  "lat": 34.763123,
+  "geoMatch": "兵庫県尼崎市富松町四丁目３１番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "j11",
+  "name": "尼崎市立武庫中学校",
+  "short": "武庫",
+  "type": "中学校",
+  "address": "兵庫県尼崎市武庫元町2丁目24番30号",
+  "opened": "昭和22年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.379669,
+  "lat": 34.760334,
+  "geoMatch": "兵庫県尼崎市武庫元町二丁目２４番３０号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "j12",
+  "name": "尼崎市立南武庫之荘中学校",
+  "short": "南武庫之荘",
+  "type": "中学校",
+  "address": "兵庫県尼崎市南武庫之荘4丁目11番1号",
+  "opened": "昭和47年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.38974,
+  "lat": 34.746956,
+  "geoMatch": "兵庫県尼崎市南武庫之荘四丁目１１番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "j13",
+  "name": "尼崎市立武庫東中学校",
+  "short": "武庫東",
+  "type": "中学校",
+  "address": "兵庫県尼崎市武庫之荘7丁目35番1号",
+  "opened": "昭和51年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.395828,
+  "lat": 34.762054,
+  "geoMatch": "兵庫県尼崎市武庫之荘七丁目３５番１号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "j14",
+  "name": "尼崎市立常陽中学校",
+  "short": "常陽",
+  "type": "中学校",
+  "address": "兵庫県尼崎市西昆陽1丁目26番26号",
+  "opened": "昭和57年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.38028,
+  "lat": 34.768082,
+  "geoMatch": "兵庫県尼崎市西昆陽一丁目２６番２６号",
+  "area": "武庫之荘"
+ },
+ {
+  "id": "j15",
+  "name": "尼崎市立園田中学校",
+  "short": "園田",
+  "type": "中学校",
+  "address": "兵庫県尼崎市食満1丁目1番1号",
+  "opened": "昭和22年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.431625,
+  "lat": 34.758663,
+  "geoMatch": "兵庫県尼崎市食満一丁目１番１号",
+  "area": "園田"
+ },
+ {
+  "id": "j16",
+  "name": "尼崎市立園田東中学校",
+  "short": "園田東",
+  "type": "中学校",
+  "address": "兵庫県尼崎市東園田町5丁目79番地",
+  "opened": "昭和38年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.449829,
+  "lat": 34.754475,
+  "geoMatch": "兵庫県尼崎市東園田町五丁目７９番地",
+  "area": "園田"
+ },
+ {
+  "id": "j17",
+  "name": "尼崎市立小園中学校",
+  "short": "小園",
+  "type": "中学校",
+  "address": "兵庫県尼崎市小中島2丁目12番27号",
+  "opened": "昭和51年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.441498,
+  "lat": 34.747139,
+  "geoMatch": "兵庫県尼崎市小中島二丁目１２番２７号",
+  "area": "園田"
+ },
+ {
+  "id": "j18",
+  "name": "尼崎市立尼崎琴葉中学校",
+  "short": "尼崎琴葉",
+  "type": "中学校",
+  "address": "兵庫県尼崎市南城内10番地の2",
+  "opened": "令和8年4月",
+  "sources": [
+   {
+    "label": "尼崎市立中学校一覧（令和8年4月1日現在）",
+    "url": "https://www.city.amagasaki.hyogo.jp/_res/projects/default_project/_page_/001/005/412/R8tyugakko.pdf",
+    "checked": "2026-10-28"
+   }
+  ],
+  "interview": {
+   "status": "未取材"
+  },
+  "lng": 135.420227,
+  "lat": 34.714664,
+  "geoMatch": "兵庫県尼崎市南城内１０番地",
+  "area": "阪神尼崎"
+ }
+]

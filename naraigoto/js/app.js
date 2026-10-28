@@ -49,6 +49,8 @@
     var RANK_MIN = 3;
 
     var schools = [];
+    var gakko = [];
+    var homeLabel = '自宅';
     var home = AREAS['武庫之荘'];
     var homeMarker = null;
     var map = null, layer = null;
@@ -81,6 +83,11 @@
         document.getElementById('goals').innerHTML = GOALS.map(function (g) {
             return '<label><input type="checkbox" name="goal" value="' + esc(g) + '">' + esc(g) + '</label>';
         }).join('');
+        var schoolSel = document.getElementById('schoolSel');
+        ['小学校', '中学校'].forEach(function (t) {
+            schoolSel.insertAdjacentHTML('beforeend', '<optgroup label="' + t + '">' + gakko.filter(function (g) { return g.type === t; })
+                .map(function (g) { return '<option value="' + esc(g.id) + '">' + esc(g.short + (t === '小学校' ? '小' : '中')) + '</option>'; }).join('') + '</optgroup>');
+        });
         var counts = {};
         schools.forEach(function (s) { counts[s.category] = (counts[s.category] || 0) + 1; });
         document.getElementById('cats').innerHTML = Object.keys(CAT_GOALS).map(function (c) {
@@ -99,7 +106,7 @@
         var why = [];
         var limit = cond.dist >= 99 ? 12 : cond.dist;
         var pDist = Math.max(0, 40 * (1 - d / limit));
-        why.push('自宅から約' + d.toFixed(1) + 'km');
+        why.push(homeLabel + 'から約' + d.toFixed(1) + 'km');
 
         var pGoal = 20; // 力を選んでいないときは全教室に同じ点を与える
         if (cond.goals.length) {
@@ -190,8 +197,8 @@
         layer = L.layerGroup().addTo(map);
         homeMarker = L.marker(home, { title: '自宅の位置' }).addTo(map);
         map.on('click', function (e) {
-            home = [e.latlng.lat, e.latlng.lng];
-            homeMarker.setLatLng(home);
+            setHome([e.latlng.lat, e.latlng.lng], '自宅');
+            form.school.value = '';
             render();
         });
     }
@@ -251,6 +258,40 @@
     document.getElementById('rankMetric').addEventListener('change', renderRank);
     document.getElementById('rankScope').addEventListener('change', renderRank);
 
+    function setHome(latlng, label) {
+        home = latlng;
+        homeLabel = label;
+        if (homeMarker) { homeMarker.setLatLng(home); map.setView(home, 14); }
+    }
+
+    function gakkoById(id) {
+        return gakko.filter(function (g) { return g.id === id; })[0];
+    }
+
+    function renderGakko() {
+        var order = Object.keys(AREAS);
+        var list = gakko.slice().sort(function (a, b) {
+            return order.indexOf(a.area) - order.indexOf(b.area) || (a.type > b.type ? 1 : a.type < b.type ? -1 : 0) || (a.id > b.id ? 1 : -1);
+        });
+        document.getElementById('gakkoTable').innerHTML =
+            '<thead><tr><th>地域</th><th>学校</th><th>取材</th><th></th></tr></thead><tbody>' +
+            list.map(function (g) {
+                return '<tr><td>' + esc(g.area) + '</td><td>' + esc(g.name.replace('尼崎市立', '')) + '<br><span class="unk">' + esc(g.address.replace('兵庫県尼崎市', '')) + '</span></td>' +
+                    '<td>' + esc(g.interview.status) + (g.interview.summary ? '<br>' + esc(g.interview.summary) : '') + '</td>' +
+                    '<td><a href="#find" class="near" data-id="' + esc(g.id) + '">近くの習い事</a></td></tr>';
+            }).join('') + '</tbody>';
+    }
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.classList.contains('near')) return;
+        var g = gakkoById(e.target.dataset.id);
+        form.school.value = g.id;
+        form.area.value = g.area;
+        setHome([g.lat, g.lng], g.short + (g.type === '小学校' ? '小' : '中'));
+        form.dist.value = '1.5';
+        render();
+    });
+
     function renderCompare() {
         var rows = compare.map(function (id) { return schools.filter(function (s) { return s.id === id; })[0]; });
         var table = document.getElementById('cmp');
@@ -265,7 +306,7 @@
             row('ジャンル', function (s) { return esc(s.category); }) +
             row('対象年齢', function (s) { return esc(s.agesText); }) +
             row('住所', function (s) { return esc(s.address); }) +
-            row('自宅から', function (s) { return '約' + km(home, [s.lat, s.lng]).toFixed(1) + 'km'; }) +
+            row(homeLabel + 'から', function (s) { return '約' + km(home, [s.lat, s.lng]).toFixed(1) + 'km'; }) +
             row('育てやすい力', function (s) { return esc((CAT_GOALS[s.category] || []).join('・')); }) +
             row('口コミ評価', function (s) {
                 return s.coeteco ? 'コエテコ ' + s.coeteco.rating + '（' + s.coeteco.reviews + '件・' + esc(s.coeteco.scope) + '）' : '<span class="unk">なし</span>';
@@ -289,8 +330,17 @@
             return;
         }
         if (e.target.name === 'area') {
-            home = AREAS[e.target.value];
-            if (homeMarker) { homeMarker.setLatLng(home); map.setView(home, 13); }
+            setHome(AREAS[e.target.value], '自宅');
+            form.school.value = '';
+        }
+        if (e.target.name === 'school') {
+            var g = gakkoById(e.target.value);
+            if (g) {
+                setHome([g.lat, g.lng], g.short + (g.type === '小学校' ? '小' : '中'));
+                form.area.value = g.area;
+            } else {
+                setHome(AREAS[form.area.value], '自宅');
+            }
         }
         if (e.target.form === form && e.target.name) render();
     });
@@ -305,10 +355,13 @@
         });
     });
 
-    fetch('data/schools.json')
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
+    Promise.all([fetch('data/schools.json'), fetch('data/gakko.json')])
+        .then(function (rs) { return Promise.all(rs.map(function (r) { return r.json(); })); })
+        .then(function (both) {
+            var data = both[0];
             schools = data;
+            gakko = both[1];
+            renderGakko();
             var done = data.filter(function (s) { return s.interview.status === '取材済み'; }).length;
             var cats = {};
             data.forEach(function (s) { cats[s.category] = 1; });

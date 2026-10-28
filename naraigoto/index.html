@@ -19,7 +19,7 @@
 <header class="top">
     <div class="wrap">
         <p class="site-name">尼崎の習い事ガイド</p>
-        <nav><a href="#find">探す</a><a href="#rank">No.1</a><a href="#compare">比べる</a><a href="#about">このガイドについて</a></nav>
+        <nav><a href="#find">探す</a><a href="#rank">No.1</a><a href="#gakko">学校</a><a href="#compare">比べる</a><a href="#about">このガイドについて</a></nav>
     </div>
 </header>
 
@@ -33,7 +33,7 @@
 <section id="find" class="wrap">
     <h2>条件を入れる</h2>
     <form id="cond" class="cond">
-        <label>学年
+        <label>学年（年齢）
             <select name="age">
                 <option value="3">年少</option><option value="4">年中</option><option value="5">年長</option>
                 <option value="6">小学1年</option><option value="7" selected>小学2年</option><option value="8">小学3年</option>
@@ -43,6 +43,9 @@
         </label>
         <label>住んでいる地域
             <select name="area" id="areaSel"></select>
+        </label>
+        <label>通っている学校（距離の起点になります）
+            <select name="school" id="schoolSel"><option value="">えらばない</option></select>
         </label>
         <label>通える距離
             <select name="dist">
@@ -80,6 +83,13 @@
     </div>
     <ol id="rankList" class="rank-list"></ol>
     <p class="hint" id="rankNote"></p>
+</section>
+
+<section id="gakko" class="wrap">
+    <h2>学校</h2>
+    <p class="lead">尼崎の小学校・中学校にも取材に行きます。学校のいいところ、行事、放課後の子どもの過ごし方を、取材できた学校から載せていきます。いまは市立の小学校41校・中学校18校を載せています。私立・国立の学校、幼稚園・保育園は集めているところです。</p>
+    <div class="table-scroll"><table class="cmp gakko-table" id="gakkoTable"></table></div>
+    <p class="hint">学校名・住所の出典：尼崎市「尼崎市立小学校一覧」「尼崎市立中学校一覧」（令和8年4月1日現在）。地域は、最寄りの駅の地域を運営者が住所から振り分けた目安です。</p>
 </section>
 
 <section id="compare" class="wrap">
