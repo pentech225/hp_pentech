@@ -19,7 +19,7 @@
 <header class="top">
     <div class="wrap">
         <p class="site-name">尼崎の習い事ガイド</p>
-        <nav><a href="#find">探す</a><a href="#compare">比べる</a><a href="#about">このガイドについて</a></nav>
+        <nav><a href="#find">探す</a><a href="#rank">No.1</a><a href="#compare">比べる</a><a href="#about">このガイドについて</a></nav>
     </div>
 </header>
 
@@ -71,6 +71,17 @@
     <ol id="results" class="results"></ol>
 </section>
 
+<section id="rank" class="wrap">
+    <h2>尼崎No.1</h2>
+    <p class="lead">取材で聞いた数字だけで、一番を決めます。口コミの点数ではなく、教室ごとの生徒数・講師数・月謝などの数字です。ジャンルをまたいで比べられるように、1時間あたりの月謝も出します。</p>
+    <div class="cond rank-cond">
+        <label>指標<select id="rankMetric"></select></label>
+        <label>範囲<select id="rankScope"><option value="">習い事全体</option></select></label>
+    </div>
+    <ol id="rankList" class="rank-list"></ol>
+    <p class="hint" id="rankNote"></p>
+</section>
+
 <section id="compare" class="wrap">
     <h2>比べる</h2>
     <p class="hint" id="cmpHint">リストで「比べる」にチェックを入れた教室（最大3つ）を、ここで横に並べます。</p>
@@ -88,6 +99,14 @@
         <li>伸ばしたい力との一致：最大40点（選んだ力のうち、そのジャンルで育てやすい力の割合）</li>
         <li>取材済み：10点（このガイドが実際に教室を見たもの）</li>
         <li>口コミ評価：最大10点（コエテコの評価。教室ごとではなくブランド全体の値のため、比重を小さくしています。評価3.5で0点、5.0で10点。口コミが30件未満のものは点にしません）</li>
+    </ul>
+    <h3>No.1の決め方</h3>
+    <p>指標は、取材を始める前の2026年10月28日に決めました。結果を見てから指標を足したり外したりはしません。変えるときは、変えた日と理由をここに書きます。</p>
+    <ul>
+        <li>数字は取材のときに教室から聞いた値（申告値）で、聞いた日を添えます。講師数など、その場で数えられるものは数えます。</li>
+        <li>教室が公開してよいと言った数字だけを載せます。</li>
+        <li>その範囲で数字がそろった教室が3つ未満のときは、No.1を出しません。</li>
+        <li>運営者の教室（iTeen武庫之荘校）も同じ指標で並べます。数字は運営者以外の人が聞き取ります。</li>
     </ul>
     <h3>情報の出どころ</h3>
     <p>各教室の名前・住所・対象年齢は、教室カードに書いた出典（コエテコ、FITMAPなど）から2026年10月28日に集めました。月謝や曜日は教室ごとに違い、まだ確認できていないため「未確認」としています。最新の情報は各教室にお問い合わせください。座標は国土地理院の住所検索で付けています。</p>

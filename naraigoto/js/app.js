@@ -34,6 +34,20 @@
         '学習塾': ['考える力', '集中力']
     };
 
+    // No.1の指標（2026-10-28に取材前に決めたもの）。値は schools.json の facts から取る
+    // dir: 1 = 大きいほど上、-1 = 小さいほど上
+    var METRICS = [
+        { key: 'students', label: '生徒数が多い', unit: '名', dir: 1 },
+        { key: 'teachers', label: '講師数が多い', unit: '名', dir: 1 },
+        { key: 'kidsPerTeacher', label: '講師1人が見る子どもが少ない（1回の授業）', unit: '名', dir: -1 },
+        { key: 'avgYears', label: '生徒が長く続けている（平均の在籍年数）', unit: '年', dir: 1 },
+        { key: 'foundedYear', label: '歴史が長い（開校年）', unit: '年', dir: -1 },
+        { key: 'monthlyFee', label: '月謝が高い', unit: '円', dir: 1 },
+        { key: 'monthlyFeeLow', from: 'monthlyFee', label: '月謝が安い', unit: '円', dir: -1 },
+        { key: 'perHour', label: '1時間あたりの月謝が安い（ジャンルをまたいで比べる用）', unit: '円', dir: -1 }
+    ];
+    var RANK_MIN = 3;
+
     var schools = [];
     var home = AREAS['武庫之荘'];
     var homeMarker = null;
@@ -182,6 +196,61 @@
         });
     }
 
+    function factValue(s, m) {
+        var f = s.facts;
+        if (!f) return null;
+        if (m.key === 'perHour') {
+            return f.monthlyFee && f.minutesPerMonth ? Math.round(f.monthlyFee / (f.minutesPerMonth / 60)) : null;
+        }
+        var v = f[m.from || m.key];
+        return typeof v === 'number' ? v : null;
+    }
+
+    function buildRank() {
+        document.getElementById('rankMetric').innerHTML = METRICS.map(function (m, i) {
+            return '<option value="' + i + '">' + esc(m.label) + '</option>';
+        }).join('');
+        var cats = {};
+        schools.forEach(function (s) { cats[s.category] = 1; });
+        Object.keys(cats).forEach(function (c) {
+            document.getElementById('rankScope').insertAdjacentHTML('beforeend', '<option>' + esc(c) + '</option>');
+        });
+    }
+
+    function renderRank() {
+        var m = METRICS[Number(document.getElementById('rankMetric').value)];
+        var scope = document.getElementById('rankScope').value;
+        var list = [];
+        schools.forEach(function (s) {
+            if (scope && s.category !== scope) return;
+            var v = factValue(s, m);
+            if (v !== null) list.push({ s: s, v: v });
+        });
+        var note = document.getElementById('rankNote');
+        var ol = document.getElementById('rankList');
+        if (list.length < RANK_MIN) {
+            ol.innerHTML = '';
+            note.textContent = 'この範囲で数字がそろった教室は、いま' + list.length + 'つです。' + RANK_MIN +
+                'つそろったらNo.1を発表します（取材が進むと増えます）。';
+            return;
+        }
+        list.sort(function (a, b) { return (b.v - a.v) * m.dir; });
+        note.textContent = '数字は取材のときに各教室から聞いた値です。教室が公開してよいと言ったものだけを載せています。';
+        ol.innerHTML = list.slice(0, 10).map(function (x, i) {
+            // 同じ値は同じ順位にする
+            var rank = i + 1;
+            while (rank > 1 && list[rank - 2].v === x.v) rank--;
+            var val = m.key === 'foundedYear' ? x.v + '年' : x.v.toLocaleString() + m.unit;
+            return '<li><span class="rank">' + rank + '</span>' +
+                '<div><p class="r-name">' + esc(x.s.name) + (x.s.own ? ' <span class="own">（運営者の教室）</span>' : '') + '</p>' +
+                '<p class="r-meta">' + esc(x.s.category) + '｜' + esc(x.s.area) + '｜' + esc(x.s.facts.date) + ' 取材時の値</p></div>' +
+                '<span class="val">' + esc(val) + '</span></li>';
+        }).join('');
+    }
+
+    document.getElementById('rankMetric').addEventListener('change', renderRank);
+    document.getElementById('rankScope').addEventListener('change', renderRank);
+
     function renderCompare() {
         var rows = compare.map(function (id) { return schools.filter(function (s) { return s.id === id; })[0]; });
         var table = document.getElementById('cmp');
@@ -223,7 +292,7 @@
             home = AREAS[e.target.value];
             if (homeMarker) { homeMarker.setLatLng(home); map.setView(home, 13); }
         }
-        if (e.target.form === form) render();
+        if (e.target.form === form && e.target.name) render();
     });
 
     Array.prototype.forEach.call(document.querySelectorAll('.view-switch button'), function (b) {
@@ -246,6 +315,8 @@
             document.getElementById('stats').innerHTML =
                 '<b>' + data.length + '</b>教室 ／ <b>' + Object.keys(cats).length + '</b>ジャンル ／ 取材済み <b>' + done + '</b>教室';
             buildForm();
+            buildRank();
             render();
+            renderRank();
         });
 })();

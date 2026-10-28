@@ -75,6 +75,13 @@ h3 { font-size: 16px; margin: 28px 0 6px; }
 .r-score label { display: block; margin-top: 8px; cursor: pointer; }
 .own { font-size: 12px; color: var(--sub); }
 
+.rank-cond { grid-template-columns: repeat(2, minmax(0, 320px)); margin-top: 24px; }
+.rank-list { padding-left: 0; list-style: none; margin: 20px 0 8px; }
+.rank-list li { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.rank-list .rank { font-size: 22px; }
+.rank-list .val { font-size: 20px; font-weight: 700; }
+.rank-list .r-meta { margin: 0; }
+
 .table-scroll { overflow-x: auto; }
 .cmp { border-collapse: collapse; min-width: 100%; font-size: 14px; }
 .cmp th, .cmp td { text-align: left; vertical-align: top; padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); }
@@ -82,7 +89,7 @@ h3 { font-size: 16px; margin: 28px 0 6px; }
 .cmp thead th { color: var(--ink); font-weight: 700; }
 .unk { color: var(--sub); }
 
-.about { max-width: 760px; }
+.about > * { max-width: 760px; }
 .about ul { padding-left: 1.2em; }
 .foot { font-size: 12px; color: var(--sub); padding-bottom: 40px; }
 
