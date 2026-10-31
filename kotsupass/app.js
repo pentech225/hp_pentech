@@ -1,5 +1,5 @@
-// コツパス（仮） ― 毎日10分のITパスポート学習（試作 v0.2）
-// 保存はこの端末のブラウザ（localStorage）だけ。サーバーなし。
+// コツパス ― 毎日10分のITパスポート学習（試作 v0.5）
+// 保存はこの端末（localStorage）。ログインしたときは Firebase（Firestore）にも保存して、ほかの端末と同期する。
 (function () {
   "use strict";
 
@@ -52,7 +52,17 @@
   }
   let S;
   try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) { S = fresh(); }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* 保存できない環境でも動かす */ } }
+  function save() {
+    S.updatedAt = Date.now();
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* 保存できない環境でも動かす */ }
+    syncSoon();
+  }
+  // 前の版（日にちだけを決めていた設定）からの引っ越し
+  if (S.settings && !S.settings.targetMonth) {
+    S.settings.targetMonth = S.settings.examDate.slice(0, 7);
+    S.settings.examExact = false; S.settings.ngDays = S.settings.ngDays || [];
+  }
+  if (S.settings && !S.auth) S.auth = { mode: "guest" }; // 前の版から使っている人はゲストとして続ける
 
   // ───── 連続記録とおやすみ券 ─────
   function checkStreak() {
@@ -201,6 +211,7 @@
 
   function render() {
     window.scrollTo(0, 0);
+    if (!S.auth) return renderLogin();
     $badge.hidden = !S.settings;
     $badge.textContent = `連続 ${S.streak.count}日`;
     if (!S.settings) return renderSetup();
@@ -234,31 +245,59 @@
     return wd >= 1 && wd <= 5 && sched.includes("平日");
   };
 
+  // ───── 試験日程（IPA「試験開催状況一覧」の取り込み） ─────
+  const SCH = window.SCHEDULE || { prefs: {}, venues: {} };
+  const APPLY_URL = "https://www3.jitec.ipa.go.jp/JitesCbt/html/application/applies.html";
+  const monthEnd = ym => { const [y, m] = ym.split("-").map(Number); return fmt(new Date(y, m, 0)); };
+  const jpYm = ym => { const [y, m] = ym.split("-").map(Number); return `${y}年${m}月`; };
+  const asOfText = s => { const m = (s || "").match(/^(\d{4})-(\d{2})-(\d{2})(?: (\d+)時)?/); return m ? `${+m[1]}年${+m[2]}月${+m[3]}日${m[4] ? " " + m[4] + "時" : ""}` : ""; };
+  // その県の会場：会場一覧（venues.js）＋日程にだけ出てくる会場
+  function venuesFor(pref) {
+    const list = venuesOf(pref).map(v => ({ name: v[2], city: v[1], access: v[4], sched: v[5] }));
+    Object.entries(SCH.venues).forEach(([name, x]) => {
+      if (x.p === pref && !list.some(v => v.name === name)) list.push({ name, city: "", access: "", sched: "" });
+    });
+    return list;
+  }
+  // 会場の、その月の回（受けられない曜日をのぞく）
+  function slotsFor(venue, ym, ng) {
+    const x = SCH.venues[venue];
+    if (!x) return [];
+    return x.s.filter(r => r[0].startsWith(ym) && r[0] >= addDays(today(), 1) && !(ng || []).includes(parse(r[0]).getDay()));
+  }
+  const lastPublished = venue => { const x = SCH.venues[venue]; return x && x.s.length ? x.s[x.s.length - 1][0] : null; };
+
   function renderSetup(editing) {
     const st = S.settings || {};
-    const minD = addDays(today(), 7), maxD = addDays(today(), 365);
-    let exam = st.examDate && st.examDate >= minD && st.examDate <= maxD ? st.examDate : null;
-    let ym = (exam || addDays(today(), 90)).slice(0, 7);
+    const firstYm = today().slice(0, 7);
+    let ym = st.targetMonth || addDays(today(), 90).slice(0, 7);
+    let ng = (st.ngDays || []).slice();
     let pref = st.pref || "";
     let venue = st.venue || "";
+    let slot = st.examExact ? { d: st.examDate, t: st.examTime } : null;
     let mIdx = Math.max(0, MINUTE_STEPS.indexOf(st.minutes || 10));
 
     $view.innerHTML = `
-      <h1>${editing ? "設定" : "はじめに3つだけ決めます"}</h1>
-      <p class="sub">決めた日から逆算して、毎日のメニューを自動でつくります。どれもあとで変えられます。</p>
+      <h1>${editing ? "設定" : "はじめに決めること"}</h1>
+      <p class="sub">決めたことから逆算して、毎日のメニューを自動でつくります。どれもあとで変えられます。</p>
 
-      <h2>1. 試験を受ける日</h2>
+      <h2>1. いつまでに受けますか？</h2>
+      <p class="sub">日にちはまだ決めなくて大丈夫です。「何月までに受けるか」だけ決めましょう。</p>
       <div class="months" id="months"></div>
-      <div id="cal"></div>
-      <p id="examOut" class="pick"></p>
+      <p id="monthOut" class="pick"></p>
 
-      <h2>2. 住んでいるところ（受ける会場）</h2>
+      <h2>2. 受けられない曜日</h2>
+      <p class="sub">授業や仕事で受けられない曜日をタップしてください（日程さがしのときに外します）。</p>
+      <div class="days" id="ng"></div>
+
+      <h2>3. 住んでいるところ（受ける会場）</h2>
       <select id="pref"><option value="">都道府県をえらぶ</option>
         ${REGIONS.map(([r, ps]) => `<optgroup label="${r}">${ps.split(" ").map(p => `<option ${p === pref ? "selected" : ""}>${p}</option>`).join("")}</optgroup>`).join("")}
       </select>
       <div id="venues"></div>
+      <div id="slots"></div>
 
-      <h2>3. 1日に使う時間</h2>
+      <h2>4. 1日に使う時間</h2>
       <div class="slider">
         <input id="min" type="range" min="0" max="${MINUTE_STEPS.length - 1}" step="1" value="${mIdx}">
         <div class="ticks">${MINUTE_STEPS.map(m => `<span>${m}</span>`).join("")}</div>
@@ -266,83 +305,220 @@
       <p id="minOut" class="pick"></p>
 
       <p style="margin-top:20px"><button class="primary go" id="go">${editing ? "保存する" : "この計画ではじめる"}</button></p>
-      <p id="err" class="danger"></p>
       ${editing ? `<div class="links"><button id="back">もどる</button><button id="reset">データを全部消す</button></div>` : ""}
     `;
 
     const drawMonths = () => {
       const start = parse(today()); start.setDate(1);
       let html = "";
-      for (let i = 0; i < 13; i++) {
+      for (let i = 0; i < 12; i++) {
         const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
         const key = fmt(d).slice(0, 7);
-        if (key > maxD.slice(0, 7)) break;
+        if (key === firstYm && diffDays(monthEnd(key), today()) < 7) continue; // 今月が残り1週間を切っていたら出さない
         const label = (i === 0 || d.getMonth() === 0) ? `${d.getFullYear()}年<br>${d.getMonth() + 1}月` : `${d.getMonth() + 1}月`;
         html += `<button data-ym="${key}" class="${key === ym ? "on" : ""}">${label}</button>`;
       }
       $view.querySelector("#months").innerHTML = html;
-      $view.querySelectorAll("#months button").forEach(b => b.onclick = () => { ym = b.dataset.ym; drawMonths(); drawCal(); });
+      $view.querySelectorAll("#months button").forEach(b => b.onclick = () => { ym = b.dataset.ym; slot = null; drawMonths(); drawVenues(); drawSlots(); });
+      const left = diffDays(monthEnd(ym), today());
+      $view.querySelector("#monthOut").innerHTML = `<b>${jpYm(ym)}中</b>に受ける　月末まであと <b>${left}日</b>${ym >= NEW_SYSTEM.slice(0, 7) ? `<br><span class="sub">※ 2027年4月から新しい試験制度になる予定です（IPA）。範囲が変わるかもしれません。</span>` : ""}`;
     };
-    const drawCal = () => {
-      const [y, m] = ym.split("-").map(Number);
-      const first = new Date(y, m - 1, 1), days = new Date(y, m, 0).getDate();
-      let cells = WD.map((w, i) => `<span class="wd ${i === 0 ? "sun" : i === 6 ? "sat" : ""}">${w}</span>`).join("");
-      for (let i = 0; i < first.getDay(); i++) cells += "<span></span>";
-      for (let d = 1; d <= days; d++) {
-        const s = `${y}-${pad(m)}-${pad(d)}`, wd = (first.getDay() + d - 1) % 7;
-        const off = s < minD || s > maxD;
-        cells += `<button data-d="${s}" class="${wd === 0 ? "sun" : wd === 6 ? "sat" : ""} ${s === exam ? "on" : ""}" ${off ? "disabled" : ""}>${d}</button>`;
-      }
-      $view.querySelector("#cal").innerHTML = `<div class="cal">${cells}</div>`;
-      $view.querySelectorAll("#cal button").forEach(b => b.onclick = () => { exam = b.dataset.d; drawCal(); drawExam(); drawVenues(); });
-    };
-    const drawExam = () => {
-      $view.querySelector("#examOut").innerHTML = exam
-        ? `<b>${jpDate(exam)}</b>　あと <b>${diffDays(exam, today())}日</b>`
-        : `<span class="sub">月をえらんで、日にちをタップ。受けられるのは1週間後〜1年後まで。土日は色つき。</span>`;
+    const drawNg = () => {
+      $view.querySelector("#ng").innerHTML = WD.map((w, i) => `<button data-w="${i}" class="${ng.includes(i) ? "ng" : ""} ${i === 0 ? "sun" : i === 6 ? "sat" : ""}">${w}${ng.includes(i) ? "<small>×</small>" : ""}</button>`).join("");
+      $view.querySelectorAll("#ng button").forEach(b => b.onclick = () => {
+        const w = Number(b.dataset.w);
+        ng = ng.includes(w) ? ng.filter(x => x !== w) : ng.concat(w);
+        if (slot && ng.includes(parse(slot.d).getDay())) slot = null;
+        drawNg(); drawVenues(); drawSlots();
+      });
     };
     const drawVenues = () => {
       const box = $view.querySelector("#venues");
-      if (!pref) { box.innerHTML = `<p class="sub">えらぶと、その県の試験会場と、だいたいの開催日がわかります。</p>`; return; }
-      const vs = venuesOf(pref);
+      if (!pref) { box.innerHTML = `<p class="sub">えらぶと、その県の試験会場と、発表ずみの試験日がわかります。</p>`; return; }
+      const vs = venuesFor(pref);
       box.innerHTML = `
-        <p class="sub">${pref}の会場は${vs.length}か所。受ける予定の会場をタップ。</p>
+        <p class="sub">${pref}の会場は${vs.length}か所です。受ける予定の会場をタップしてください。</p>
         <div class="venues">${vs.map(v => {
-          const open = exam ? venueOpenOn(v[5], exam) : null;
-          return `<button class="venue ${v[2] === venue ? "on" : ""}" data-v="${esc(v[2])}">
-            <b>${esc(v[2])}</b><span>${esc(v[1])}・${esc(v[4])}</span>
-            <span>開催の目安：${esc(v[5])}</span>
-            ${open === false ? `<span class="danger">選んだ日（${WD[parse(exam).getDay()]}曜日）は、基本の開催曜日に入っていません</span>` : ""}
+          const n = new Set(slotsFor(v.name, ym, ng).map(r => r[0])).size;
+          return `<button class="venue ${v.name === venue ? "on" : ""}" data-v="${esc(v.name)}">
+            <b>${esc(v.name)}</b>
+            ${v.access ? `<span>${esc(v.city)}・${esc(v.access)}</span>` : ""}
+            ${v.sched ? `<span>開催の目安：${esc(v.sched)}</span>` : ""}
+            <span class="${n ? "okc" : ""}">${n ? `${jpYm(ym)}の試験日：${n}日分 発表ずみ` : `${jpYm(ym)}の試験日：まだ発表されていません`}</span>
           </button>`;
-        }).join("")}</div>
-        <div class="note">
-          <p>ITパスポートはCBT方式（会場のパソコンで解く）で、一年中、会場ごとの日程で受けられます。実際の空きと日時は、県ごとの公式の一覧（3か月先まで）で確かめてください：<a href="${prefPdf(pref)}" target="_blank" rel="noopener">${pref}の試験開催状況一覧（IPA）</a></p>
-          <p>※ 会場と「開催の目安」は、IPA「CBT試験会場一覧」<b>${jpYmd(V.asOf)}時点</b>の情報です（${jpYmd(V.fetched)}に取り込み）。会場・日程は変わることがあります。申し込む前に必ず<a href="https://www3.jitec.ipa.go.jp/JitesCbt/html/examhall/examhall_info.html" target="_blank" rel="noopener">IPAの公式サイト</a>で確認してください。</p>
+        }).join("")}</div>`;
+      box.querySelectorAll(".venue").forEach(b => b.onclick = () => { venue = b.dataset.v; slot = null; drawVenues(); drawSlots(); });
+    };
+    const drawSlots = () => {
+      const box = $view.querySelector("#slots");
+      if (!pref || !venue) { box.innerHTML = ""; return; }
+      const rows = slotsFor(venue, ym, ng);
+      const asOf = asOfText(SCH.prefs[pref]);
+      const note = `<div class="note">
+          <p>※ 試験日・開始時刻・空席は、IPA「試験開催状況一覧」<b>${asOf}時点</b>の情報です。空席はすぐに変わります。申し込む前に必ず<a href="${APPLY_URL}" target="_blank" rel="noopener">IPAの受験申込みのページ</a>で確認してください。</p>
+          <p>県ごとの最新の一覧：<a href="${prefPdf(pref)}" target="_blank" rel="noopener">${pref}の試験開催状況一覧（IPA）</a>／会場の情報は「CBT試験会場一覧」${jpYmd(V.asOf)}時点</p>
         </div>`;
-      box.querySelectorAll(".venue").forEach(b => b.onclick = () => { venue = b.dataset.v; drawVenues(); });
+      if (!rows.length) {
+        const last = lastPublished(venue);
+        box.innerHTML = `<h3 class="slot-h">${esc(venue)}の${jpYm(ym)}の日程</h3>
+          <p>まだ発表されていません。${last ? `いまは${jpYmd(last)}の回まで出ています。` : ""}発表されたら、ホームでお知らせします。それまでは「${jpYm(ym)}中に受ける」で計画を立てます。</p>${note}`;
+        return;
+      }
+      const byDay = {};
+      rows.forEach(r => (byDay[r[0]] = byDay[r[0]] || []).push(r));
+      box.innerHTML = `<h3 class="slot-h">${esc(venue)}の${jpYm(ym)}の日程</h3>
+        <p class="sub">受ける回をタップすると、その日に向けて計画を立てます。まだ決めないなら、えらばなくて大丈夫です。</p>
+        <div class="slotlist">${Object.entries(byDay).map(([d, rs]) => `
+          <div class="slotday"><b>${jpDate(d).replace(/^\d+年/, "")}</b>
+            <div class="slottimes">${rs.map(r => {
+              const on = slot && slot.d === r[0] && slot.t === r[1];
+              return `<button class="${on ? "on" : ""}" data-d="${r[0]}" data-t="${r[1]}" ${r[3] === 0 ? "disabled" : ""}>${r[1]}〜<small>${r[3] === 0 ? "満席" : `空席${r[3]}`}</small></button>`;
+            }).join("")}</div>
+          </div>`).join("")}</div>
+        ${slot ? `<p class="pick">えらんだ回：<b>${jpDate(slot.d)} ${slot.t}〜</b>　<a href="#" id="unslot">日にちはまだ決めない</a></p>` : ""}
+        ${note}`;
+      box.querySelectorAll(".slottimes button").forEach(b => b.onclick = () => { slot = { d: b.dataset.d, t: b.dataset.t }; drawSlots(); });
+      const un = box.querySelector("#unslot");
+      if (un) un.onclick = e => { e.preventDefault(); slot = null; drawSlots(); };
     };
     const drawMin = () => {
       const m = MINUTE_STEPS[mIdx];
-      $view.querySelector("#minOut").innerHTML = `<b>${m}分</b>＝1日${PER_DAY[m]}問と、その解説。${m === 10 ? "（おすすめ）" : m < 10 ? "まずは続けることが一番。" : ""}`;
+      $view.querySelector("#minOut").innerHTML = `<b>${m}分</b>＝1日${PER_DAY[m]}問と、その解説です。${m === 10 ? "（おすすめ）" : m < 10 ? "まずは続けることがいちばんです。" : ""}`;
     };
-    drawMonths(); drawCal(); drawExam(); drawVenues(); drawMin();
-    $view.querySelector("#pref").onchange = e => { pref = e.target.value; venue = ""; drawVenues(); };
+    drawMonths(); drawNg(); drawVenues(); drawSlots(); drawMin();
+    $view.querySelector("#pref").onchange = e => { pref = e.target.value; venue = ""; slot = null; drawVenues(); drawSlots(); };
     $view.querySelector("#min").oninput = e => { mIdx = Number(e.target.value); drawMin(); };
 
     $view.querySelector("#go").onclick = () => {
-      const err = $view.querySelector("#err");
-      if (!exam) { err.textContent = "試験を受ける日をえらんでください（とりあえずの日でOK）。"; return; }
-      S.settings = { examDate: exam, minutes: MINUTE_STEPS[mIdx], pref, venue, start: (S.settings && S.settings.start) || today() };
+      S.settings = Object.assign({}, st, {
+        targetMonth: ym, ngDays: ng, pref, venue,
+        examExact: !!slot, examDate: slot ? slot.d : monthEnd(ym), examTime: slot ? slot.t : "",
+        applied: slot && st.examExact && st.examDate === slot.d && st.examTime === slot.t ? !!st.applied : false,
+        minutes: MINUTE_STEPS[mIdx], start: st.start || today()
+      });
       save(); render();
     };
     if (editing) {
       $view.querySelector("#back").onclick = render;
       const rb = $view.querySelector("#reset");
       rb.onclick = () => {
-        if (rb.dataset.sure) { S = fresh(); save(); render(); return; }
+        if (rb.dataset.sure) { const a = S.auth; S = fresh(); S.auth = a; save(); render(); return; }
         rb.dataset.sure = "1"; rb.textContent = "本当に消す（もう一度押す）";
       };
     }
+  }
+
+  // ホームの「試験」カード
+  function examHtml() {
+    const st = S.settings;
+    const place = st.venue ? `${esc(st.venue)}（${esc(st.pref)}）` : st.pref ? `${esc(st.pref)}・会場はまだ` : "会場はまだ";
+    if (st.examExact) {
+      return `<div class="card exam">
+        <div class="sub">試験の日</div>
+        <b>${jpDate(st.examDate)} ${esc(st.examTime)}〜</b>
+        <div>${place}</div>
+        ${st.applied
+          ? `<p class="okc">申し込みずみ</p>`
+          : `<div class="choicebtns"><a class="btnlink" href="${APPLY_URL}" target="_blank" rel="noopener">IPAのページで申し込む</a><button id="applied">申し込みました</button></div>
+             <p class="sub">空席は ${asOfText(SCH.prefs[st.pref])}時点の情報です。</p>`}
+      </div>`;
+    }
+    const n = st.venue ? new Set(slotsFor(st.venue, st.targetMonth, st.ngDays).map(r => r[0])).size : 0;
+    return `<div class="card exam">
+      <div class="sub">試験</div>
+      <b>${jpYm(st.targetMonth)}中に受ける</b>
+      <div>${place}</div>
+      ${n ? `<p class="okc">${jpYm(st.targetMonth)}の試験日が${n}日分 発表されています。</p><button id="pickDay">受ける日をえらぶ</button>`
+          : st.venue ? `<p class="sub">${jpYm(st.targetMonth)}の試験日は、まだ発表されていません（${asOfText(SCH.prefs[st.pref])}時点）。</p>` : ""}
+    </div>`;
+  }
+
+  // ───── 学習の道（分野ごとの単元を1本の道に並べる） ─────
+  function units() {
+    const out = [];
+    FIELD_ORDER.forEach(f => {
+      const cats = [];
+      QS.filter(q => q.field === f).forEach(q => { const c = q.category.replace(/（.*$/, ""); if (!cats.includes(c)) cats.push(c); });
+      cats.forEach(c => {
+        const qs = QS.filter(q => q.field === f && q.category.replace(/（.*$/, "") === c);
+        const mastered = qs.filter(q => S.rec[q.id] && S.rec[q.id].box >= 2).length;   // ヒントなしで2回正解＝身についた
+        const seen = qs.filter(q => S.rec[q.id]).length;
+        out.push({ f, c, ids: qs.map(q => q.id), n: qs.length, mastered, seen });
+      });
+    });
+    return out;
+  }
+  function pathHtml() {
+    const us = units();
+    const cur = us.findIndex(u => u.mastered < u.n);
+    let lastF = "";
+    const zig = [0, 1, 2, 1];
+    return `<div class="card path">
+      <h2 style="margin-top:0">学習の道</h2>
+      <p class="sub">単元をタップすると、その単元の問題を5問つづけて解けます（毎日の連続記録とは別です）。</p>
+      ${us.map((u, i) => {
+        const head = u.f !== lastF ? `<div class="path-field ${u.f}">${FIELDS[u.f].name}</div>` : "";
+        lastF = u.f;
+        const state = u.mastered === u.n ? "done" : i === cur ? "now" : u.seen ? "some" : "";
+        return `${head}<div class="path-row z${zig[i % 4]}">
+          <button class="node ${u.f} ${state}" data-u="${i}" aria-label="${esc(u.c)}">${state === "done" ? "済" : i === cur ? "▶" : i + 1}</button>
+          <div class="node-label"><b>${esc(u.c)}</b><span>${u.mastered}/${u.n}問 身についた${i === cur ? "・いまここ" : ""}</span></div>
+        </div>`;
+      }).join("")}
+    </div>`;
+  }
+  // 単元（または道の続き）から n 問：身についていない問題を先に
+  function buildPractice(unitIdx, count) {
+    const us = units();
+    const start = unitIdx == null ? Math.max(0, us.findIndex(u => u.mastered < u.n)) : unitIdx;
+    const picked = [];
+    for (let i = start; i < us.length && picked.length < count; i++) {
+      us[i].ids.slice().sort((x, y) => ((S.rec[x] || {}).box || 0) - ((S.rec[y] || {}).box || 0))
+        .forEach(id => { if (picked.length < count) picked.push(id); });
+    }
+    if (!picked.length) return false;
+    S.session = { day: today(), ids: picked, i: 0, answered: null, results: [], extra: true, practice: true };
+    save(); render();
+    return true;
+  }
+
+  function renderHome() {
+    const done = !!S.days[today()];
+    const n = PER_DAY[S.settings.minutes] || 5;
+    const notice = S.notice; delete S.notice; save();
+    const ph = phaseInfo();
+    $view.innerHTML = `
+      ${notice ? `<div class="card">${esc(notice)}</div>` : ""}
+      ${done
+        ? `<div class="card"><b>今日のぶんは終わりました。</b><p class="sub">もっと解きたいときは、ここから続けられます（連続記録とは別です）。</p>
+             <button class="primary go" id="more"><span class="play">▶</span>道の続きを5問</button></div>`
+        : `<button class="primary go pulse" id="start"><span class="play">▶</span>今日の${n}問をはじめる<small>約${S.settings.minutes}分</small></button>`}
+      <div class="row">
+        <div class="card"><div class="sub">${S.settings.examExact ? "試験まで" : "月末まで"}</div><div class="big">${Math.max(0, ph.left)}<small style="font-size:16px">日</small></div></div>
+        <div class="card"><div class="sub">連続</div><div class="big">${S.streak.count}<small style="font-size:16px">日</small></div>
+          <div class="sub">おやすみ券 ${S.freeze.left}枚</div></div>
+      </div>
+      ${examHtml()}
+      ${paceHtml()}
+      ${pathHtml()}
+      <div class="card">
+        <div class="sub">いまの段階</div>
+        <div class="phase">${PHASES.map((p, i) => `<div class="${i === ph.idx ? "now" : ""}">${p.name}</div>`).join("")}</div>
+        <p class="sub">${phaseHint(ph.idx)}</p>
+      </div>
+      ${meterHtml()}
+      <div class="links"><button id="settings">設定</button>${accountButton()}</div>
+      <p class="sub">収録 ${QS.length}問（試作版）</p>
+    `;
+    const on = (sel, fn) => { const b = $view.querySelector(sel); if (b) b.onclick = e => { e.preventDefault(); fn(); }; };
+    on("#start", () => { buildSession(n, false); render(); });
+    on("#more", () => buildPractice(null, 5));
+    on("#settings", () => renderSetup(true));
+    on("#pickDay", () => renderSetup(true));
+    on("#applied", () => { S.settings.applied = true; save(); render(); });
+    on("#account", renderAccount);
+    $view.querySelectorAll(".node").forEach(b => b.onclick = () => buildPractice(Number(b.dataset.u), 5));
+    bindPace();
   }
 
   function meterHtml() {
@@ -366,44 +542,97 @@
     </div>`;
   }
 
-  function renderHome() {
-    const ph = phaseInfo();
-    const done = !!S.days[today()];
-    const n = PER_DAY[S.settings.minutes] || 5;
-    const notice = S.notice; delete S.notice; save();
+  // ───── ログイン（Firebase Authentication：Googleでログイン。次回からは自動でログイン） ─────
+  // firebase-config.js に window.FIREBASE_CONFIG があるときだけ有効。無いときはゲストだけ。
+  // 学習の記録は Firestore の users/{uid} に1つの文書として保存し、ほかの端末でも続きができる。
+  const FB_VER = "10.12.2";
+  const AUTH = { enabled: !!window.FIREBASE_CONFIG, user: null, db: null, timer: null };
+  const loadScript = src => new Promise((ok, ng) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = ng; document.head.appendChild(s); });
+
+  async function initAuth() {
+    if (!AUTH.enabled) return null;
+    try {
+      const b = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+      await loadScript(b + "firebase-app-compat.js");
+      await Promise.all([loadScript(b + "firebase-auth-compat.js"), loadScript(b + "firebase-firestore-compat.js")]);
+      firebase.initializeApp(window.FIREBASE_CONFIG);
+      AUTH.db = firebase.firestore();
+      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL); // 次回から自動でログイン
+      try { await firebase.auth().getRedirectResult(); } catch (e) { S.notice = "ログインできませんでした：" + e.message; }
+      return await new Promise(ok => { const off = firebase.auth().onAuthStateChanged(u => { off(); ok(u); }); });
+    } catch (e) {
+      AUTH.enabled = false;            // 通信できないときはゲストとして動かす
+      return null;
+    }
+  }
+
+  async function onSignedIn(user) {
+    AUTH.user = user;
+    try {
+      const doc = await AUTH.db.collection("users").doc(user.uid).get();
+      const remote = doc.exists ? JSON.parse(doc.data().state || "null") : null;
+      // 新しい方を使う（はじめての端末なら、サーバーの記録を持ってくる）
+      if (remote && (!S.settings || (remote.updatedAt || 0) > (S.updatedAt || 0))) S = Object.assign(fresh(), remote);
+    } catch (e) { S.notice = "記録を読み込めませんでした。この端末の記録で続けます。"; }
+    S.auth = { mode: "google", uid: user.uid, name: user.displayName || user.email || "" };
+    save();
+  }
+
+  function syncSoon() {
+    if (!AUTH.user || !AUTH.db) return;
+    clearTimeout(AUTH.timer);
+    AUTH.timer = setTimeout(() => {
+      AUTH.db.collection("users").doc(AUTH.user.uid)
+        .set({ state: JSON.stringify(S), updatedAt: S.updatedAt || Date.now() })
+        .catch(() => { /* 通信できないときは次の保存でもう一度 */ });
+    }, 1500);
+  }
+
+  function googleLogin() {
+    const p = new firebase.auth.GoogleAuthProvider();
+    const mobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+    (mobile ? firebase.auth().signInWithRedirect(p) : firebase.auth().signInWithPopup(p))
+      .then(r => r && r.user && onSignedIn(r.user).then(render))
+      .catch(e => { const el = $view.querySelector("#loginErr"); if (el) el.textContent = "ログインできませんでした：" + e.message; });
+  }
+
+  function renderLogin() {
+    $badge.hidden = true;
     $view.innerHTML = `
-      ${notice ? `<div class="card">${esc(notice)}</div>` : ""}
-      ${done ? "" : `<button class="primary go pulse" id="start"><span class="play">▶</span>今日の${n}問をはじめる<small>約${S.settings.minutes}分</small></button>`}
-      <div class="card exam">
-        <div class="sub">試験の日</div>
-        <b>${jpDate(S.settings.examDate)}</b>
-        ${S.settings.venue ? `<div>${esc(S.settings.venue)}（${esc(S.settings.pref)}）</div>` : S.settings.pref ? `<div class="sub">${esc(S.settings.pref)}・会場はまだ（設定でえらべます）</div>` : ""}
-      </div>
-      ${paceHtml()}
-      <div class="row">
-        <div class="card"><div class="sub">試験まで</div><div class="big">${Math.max(0, ph.left)}<small style="font-size:16px">日</small></div></div>
-        <div class="card"><div class="sub">連続</div><div class="big">${S.streak.count}<small style="font-size:16px">日</small></div>
-          <div class="sub">おやすみ券 ${S.freeze.left}枚</div></div>
-      </div>
-      <div class="card">
-        <div class="sub">いまの段階</div>
-        <div class="phase">${PHASES.map((p, i) => `<div class="${i === ph.idx ? "now" : ""}">${p.name}</div>`).join("")}</div>
-        <p class="sub">${phaseHint(ph.idx)}</p>
-      </div>
-      ${done
-        ? `<div class="card"><b>今日のぶんは終わりました。</b><p class="sub">また明日。もう少しやりたい日だけ↓</p>
-           <button id="more">もう3問だけ（連続記録には関係なし）</button></div>`
-        : ""}
-      ${meterHtml()}
-      <div class="links"><button id="settings">設定</button></div>
-      <p class="sub">収録 ${QS.length}問（試作版）</p>
-    `;
-    const st = $view.querySelector("#start");
-    if (st) st.onclick = () => { buildSession(n, false); render(); };
-    const mo = $view.querySelector("#more");
-    if (mo) mo.onclick = () => { buildSession(3, true); render(); };
-    $view.querySelector("#settings").onclick = () => renderSetup(true);
-    bindPace();
+      <div class="login">
+        <h1>コツパス</h1>
+        <p>ITパスポートに、毎日10分で。<br>試験日から逆算して、今日やる問題を出します。</p>
+        ${AUTH.enabled
+          ? `<button class="primary go" id="google">Googleでログイン</button>
+             <p class="sub">ログインすると、記録がほかのスマホやパソコンでも続きから使えます。次回からは自動でログインします。</p>`
+          : `<p class="sub">ログイン機能は準備中です。いまはゲストとして使えます（記録はこの端末に保存されます）。</p>`}
+        <p id="loginErr" class="danger"></p>
+        <button id="guest">${AUTH.enabled ? "ログインせずに使う（記録はこの端末だけ）" : "ゲストではじめる"}</button>
+      </div>`;
+    const g = $view.querySelector("#google");
+    if (g) g.onclick = googleLogin;
+    $view.querySelector("#guest").onclick = () => { S.auth = { mode: "guest" }; save(); render(); };
+  }
+
+  function accountButton() {
+    return `<button id="account">${S.auth && S.auth.mode === "google" ? "アカウント" : "ログイン"}</button>`;
+  }
+
+  function renderAccount() {
+    const a = S.auth || {};
+    $view.innerHTML = `
+      <h1>アカウント</h1>
+      ${a.mode === "google"
+        ? `<div class="card"><p>ログイン中：<b>${esc(a.name)}</b></p><p class="sub">記録は自動で保存され、ほかの端末でも続きから使えます。</p></div>
+           <button id="logout">ログアウト</button>
+           <p class="sub">ログアウトすると、この端末から記録を消します（サーバーには残ります）。</p>`
+        : `<div class="card"><p>いまはゲストです。記録はこの端末だけに保存されています。</p></div>
+           ${AUTH.enabled ? `<button class="primary go" id="google">Googleでログインして記録を引きつぐ</button><p id="loginErr" class="danger"></p>` : `<p class="sub">ログイン機能は準備中です。</p>`}`}
+      <div class="links"><button id="back">もどる</button></div>`;
+    const on = (sel, fn) => { const b = $view.querySelector(sel); if (b) b.onclick = fn; };
+    on("#google", googleLogin);
+    on("#back", render);
+    on("#logout", () => firebase.auth().signOut().then(() => { AUTH.user = null; S = fresh(); save(); render(); }));
   }
 
   function phaseHint(i) {
@@ -438,7 +667,7 @@
       </div>
       ${q.hint && (s.hinted || !answered) ? `<div id="hintArea">${s.hinted
         ? `<div class="box hint"><h3>ヒント</h3><div class="explain">${esc(q.hint)}</div></div>`
-        : `<button id="hintBtn" class="hintbtn">ヒントを見る（使うと「ヒントつき正解」になります）</button>`}</div>` : ""}
+        : `<button id="hintBtn" class="hintbtn">ヒントを見る</button>`}</div>` : ""}
       ${answered ? `
         <div class="result ${ok ? "ok" : "ng"}">${ok ? (s.hinted ? "正解！（ヒントつき）" : "正解！") : `ざんねん。正解は ${MARKS[q.answer]}`}</div>
         ${ok && s.hinted ? `<p class="sub">ヒントつきの正解は、明日もう一度出ます。次はヒントなしで解いてみましょう。</p>` : ""}
@@ -578,19 +807,31 @@
     const okN = s.results.filter(Boolean).length;
     const hintN = (s.hints || []).filter((h, i) => h && s.results[i]).length;
     $view.innerHTML = `
-      <h1>${s.extra ? "おつかれさま！" : "今日はおしまい！"}</h1>
+      <h1>${s.extra ? "おつかれさまでした！" : "今日はおしまい！"}</h1>
       <div class="card">
-        <div class="sub">今日の結果</div>
+        <div class="sub">${s.extra ? "結果" : "今日の結果"}</div>
         <div class="big">${okN} / ${s.results.length}</div>
         ${hintN ? `<p>そのうち ヒントつきの正解 ${hintN}問</p>` : ""}
         ${s.extra ? "" : `<p>連続 <b>${S.streak.count}日</b>（最高 ${S.streak.best}日）</p>`}
         <p class="sub">間違えた問題は明日、正解した問題は数日後にまた出ます。</p>
       </div>
-      <button class="primary" id="home">ホームへ</button>
+      <button class="primary go" id="more"><span class="play">▶</span>もう5問つづける</button>
+      <button id="home">ホームへ</button>
+      <p class="sub">「もう5問」は学習の道の続きから出します。連続記録とは別です。</p>
     `;
+    $view.querySelector("#more").onclick = () => { S.session = null; buildPractice(null, 5); };
     $view.querySelector("#home").onclick = () => { S.session = null; save(); render(); };
   }
 
-  checkStreak();
-  render();
+  // ───── 起動 ─────
+  (async () => {
+    if (AUTH.enabled) {
+      $view.innerHTML = `<p class="sub" style="margin-top:40px;text-align:center">読み込み中…</p>`;
+      const user = await initAuth();
+      if (user) await onSignedIn(user);
+      else if (S.auth && S.auth.mode === "google") S.auth = null;   // ログインが切れていたら、ログイン画面へ
+    }
+    checkStreak();
+    render();
+  })();
 })();
