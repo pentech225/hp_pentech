@@ -68,6 +68,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://www.pentech.info/school/mukonoso/html/blog/26_1101_01.html</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
   <!-- NOTE: html/blog/2026/0217.html は下書きプレースホルダーのため noindex 設定とし、sitemapから除外 -->
   <url>
     <loc>https://www.pentech.info/school/mukonoso/student/work/index.html</loc>
