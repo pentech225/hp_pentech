@@ -136,3 +136,6 @@ button.pulse { animation: pulse 1.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { button.pulse { animation: none; } }
 .choicebtns { display: grid; gap: 8px; margin: 8px 0; }
 .card a, .sub a { color: var(--main); }
+.hintbtn { font-size: 15px; color: var(--warn); border-color: var(--warn); background: transparent; }
+.box.hint { background: #fff6dc; border-color: #e8c46a; color: #3a2e00; }
+@media (prefers-color-scheme: dark) { .box.hint { background: #3a3215; border-color: #6b5a1f; color: #f3e6b5; } }

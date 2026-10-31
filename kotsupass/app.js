@@ -103,7 +103,7 @@
     for (const f of FIELD_ORDER) {
       const recent = S.log.filter(l => l.f === f).slice(-30);
       const n = recent.length;
-      const acc = n ? recent.filter(l => l.ok).length / n : 0;
+      const acc = n ? recent.reduce((a, l) => a + (l.ok ? (l.h ? 0.5 : 1) : 0), 0) / n : 0; // ヒントつき正解は半分
       out[f] = { n, acc, score: Math.round(acc * 1000) };
     }
     const enough = FIELD_ORDER.every(f => out[f].n >= 5);
@@ -160,15 +160,17 @@
     const s = S.session;
     const q = BY_ID[s.ids[s.i]];
     const ok = choice === q.answer;
+    const hinted = !!s.hinted && s.mode !== "placement";
     s.answered = choice;
     s.results.push(ok);
+    (s.hints = s.hints || []).push(hinted);
     const r = S.rec[q.id] || { box: 0, due: today(), n: 0, ok: 0 };
     r.n += 1;
-    if (ok) { r.ok += 1; r.box = Math.min(r.box + 1, INTERVALS.length - 1); }
-    else { r.box = 0; }
-    r.due = addDays(today(), ok ? INTERVALS[r.box] : INTERVALS[0]);
+    if (ok && !hinted) { r.ok += 1; r.box = Math.min(r.box + 1, INTERVALS.length - 1); r.due = addDays(today(), INTERVALS[r.box]); }
+    else if (ok && hinted) { r.ok += 0.5; r.hint = (r.hint || 0) + 1; r.due = addDays(today(), INTERVALS[0]); } // ヒントつき正解：段階は上げず、明日もう一度
+    else { r.box = 0; r.due = addDays(today(), INTERVALS[0]); }
     S.rec[q.id] = r;
-    S.log.push({ d: today(), id: q.id, f: q.field, ok });
+    S.log.push(hinted ? { d: today(), id: q.id, f: q.field, ok, h: 1 } : { d: today(), id: q.id, f: q.field, ok });
     if (S.log.length > 600) S.log = S.log.slice(-600);
     S.qCount = (S.qCount || 0) + 1;
     if (s.mode === "placement") {
@@ -182,7 +184,7 @@
 
   function next() {
     const s = S.session;
-    s.i += 1; s.answered = null;
+    s.i += 1; s.answered = null; s.hinted = false;
     if (s.i >= s.ids.length) {
       if (!s.extra) finishDay();
       s.done = true;
@@ -198,6 +200,7 @@
   const tag = f => `<span class="tag ${f}">${FIELDS[f].name}</span>`;
 
   function render() {
+    window.scrollTo(0, 0);
     $badge.hidden = !S.settings;
     $badge.textContent = `連続 ${S.streak.count}日`;
     if (!S.settings) return renderSetup();
@@ -405,10 +408,10 @@
 
   function phaseHint(i) {
     return [
-      "まずは用語に慣れる時期。わからなくて当たり前、解説を読めば勝ちです。",
-      "3分野を本番の比率で一周する時期。間違えた問題は自動でまた出ます。",
-      "弱い分野を多めに出します。300点の線を全部こえるのが目標。",
-      "間違えたことのある問題を中心に。前日は軽めに、夜ふかししない。"
+      "まずは用語に慣れる時期です。わからなくて当たり前なので、解説を読めば十分です。",
+      "3分野を本番の比率で一周する時期です。間違えた問題は、自動でまた出てきます。",
+      "弱い分野を多めに出します。3分野とも300点の線をこえるのが目標です。",
+      "間違えたことのある問題を中心に出します。前日は軽めにして、夜ふかしはしないでください。"
     ][i] || "";
   }
 
@@ -433,8 +436,12 @@
           return `<button class="choice ${cls}" data-i="${i}" ${answered ? "disabled" : ""}><span class="mark">${MARKS[i]}</span><span>${esc(c)}</span></button>`;
         }).join("")}
       </div>
+      ${q.hint && (s.hinted || !answered) ? `<div id="hintArea">${s.hinted
+        ? `<div class="box hint"><h3>ヒント</h3><div class="explain">${esc(q.hint)}</div></div>`
+        : `<button id="hintBtn" class="hintbtn">ヒントを見る（使うと「ヒントつき正解」になります）</button>`}</div>` : ""}
       ${answered ? `
-        <div class="result ${ok ? "ok" : "ng"}">${ok ? "正解！" : `ざんねん。正解は ${MARKS[q.answer]}`}</div>
+        <div class="result ${ok ? "ok" : "ng"}">${ok ? (s.hinted ? "正解！（ヒントつき）" : "正解！") : `ざんねん。正解は ${MARKS[q.answer]}`}</div>
+        ${ok && s.hinted ? `<p class="sub">ヒントつきの正解は、明日もう一度出ます。次はヒントなしで解いてみましょう。</p>` : ""}
         <div class="box"><h3>ひとこと解説</h3><div class="explain">${esc(q.short)}</div></div>
         ${q.whyWrong ? `<div class="box"><h3>ほかの選択肢</h3><ul class="why">
           ${q.whyWrong.map((w, i) => i === q.answer ? "" : `<li><b>${MARKS[i]}</b> ${esc(w)}</li>`).join("")}</ul></div>` : ""}
@@ -444,6 +451,11 @@
         <button class="primary" id="next">${s.i + 1 >= s.ids.length ? (s.extra ? "おわる" : "今日はおしまい") : "つぎへ"}</button>
       ` : ""}
     `;
+    const hb = $view.querySelector("#hintBtn");
+    if (hb) hb.onclick = () => {                // 画面を描き直さず、その場でヒントを開く（スクロール位置を保つ）
+      s.hinted = true; save();
+      $view.querySelector("#hintArea").innerHTML = `<div class="box hint"><h3>ヒント</h3><div class="explain">${esc(q.hint)}</div></div>`;
+    };
     if (!answered) $view.querySelectorAll(".choice").forEach(b => b.onclick = () => answer(Number(b.dataset.i)));
     else { $view.querySelector("#next").onclick = next; $view.querySelector(".result").scrollIntoView({ block: "start", behavior: "smooth" }); }
   }
@@ -564,11 +576,13 @@
   function renderDone() {
     const s = S.session;
     const okN = s.results.filter(Boolean).length;
+    const hintN = (s.hints || []).filter((h, i) => h && s.results[i]).length;
     $view.innerHTML = `
       <h1>${s.extra ? "おつかれさま！" : "今日はおしまい！"}</h1>
       <div class="card">
         <div class="sub">今日の結果</div>
         <div class="big">${okN} / ${s.results.length}</div>
+        ${hintN ? `<p>そのうち ヒントつきの正解 ${hintN}問</p>` : ""}
         ${s.extra ? "" : `<p>連続 <b>${S.streak.count}日</b>（最高 ${S.streak.best}日）</p>`}
         <p class="sub">間違えた問題は明日、正解した問題は数日後にまた出ます。</p>
       </div>
