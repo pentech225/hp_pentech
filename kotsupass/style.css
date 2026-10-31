@@ -134,3 +134,5 @@ button.go .play { font-size: 22px; }
 @keyframes pulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.25); } }
 button.pulse { animation: pulse 1.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { button.pulse { animation: none; } }
+.choicebtns { display: grid; gap: 8px; margin: 8px 0; }
+.card a, .sub a { color: var(--main); }

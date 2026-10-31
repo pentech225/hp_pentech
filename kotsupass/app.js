@@ -22,6 +22,12 @@
     { end: 1.0, name: "仕上げ" }
   ];
   const MARKS = ["ア", "イ", "ウ", "エ"];
+  // 必要な勉強時間の目安（ユーキャン：初学者 約180時間／ITの知識がある人 約30〜50時間）
+  // 腕試しの実力 k（0〜1）から 30 + 150×(1−k) 時間と見積もる
+  const HOURS_BEGINNER = 180, HOURS_MIN = 30;
+  const MIN_PER_Q = 2;                          // 解説こみで1問あたり約2分
+  const NEW_SYSTEM = "2027-04-01";             // 2027年度から新しい試験制度（IPA）
+  const PLACE_PER_FIELD = 4;                    // 腕試し：分野ごとに4問（計12問）
 
   // ───── 日付 ─────
   const pad = n => String(n).padStart(2, "0");
@@ -164,6 +170,12 @@
     S.rec[q.id] = r;
     S.log.push({ d: today(), id: q.id, f: q.field, ok });
     if (S.log.length > 600) S.log = S.log.slice(-600);
+    S.qCount = (S.qCount || 0) + 1;
+    if (s.mode === "placement") {
+      s.marks.push(choice === -1 ? "u" : ok ? "c" : "w");
+      s.i += 1; s.answered = null;
+      if (s.i >= s.ids.length) finishPlacement();
+    }
     save();
     render();
   }
@@ -190,6 +202,7 @@
     $badge.textContent = `連続 ${S.streak.count}日`;
     if (!S.settings) return renderSetup();
     const s = S.session;
+    if (s && s.mode === "placement") return s.done ? renderPlacementResult() : renderPlacement();
     if (s && s.day === today() && !s.done) return renderQuiz();
     if (s && s.day === today() && s.done) return renderDone();
     return renderHome();
@@ -363,6 +376,7 @@
         <b>${jpDate(S.settings.examDate)}</b>
         ${S.settings.venue ? `<div>${esc(S.settings.venue)}（${esc(S.settings.pref)}）</div>` : S.settings.pref ? `<div class="sub">${esc(S.settings.pref)}・会場はまだ（設定でえらべます）</div>` : ""}
       </div>
+      ${paceHtml()}
       <div class="row">
         <div class="card"><div class="sub">試験まで</div><div class="big">${Math.max(0, ph.left)}<small style="font-size:16px">日</small></div></div>
         <div class="card"><div class="sub">連続</div><div class="big">${S.streak.count}<small style="font-size:16px">日</small></div>
@@ -386,6 +400,7 @@
     const mo = $view.querySelector("#more");
     if (mo) mo.onclick = () => { buildSession(3, true); render(); };
     $view.querySelector("#settings").onclick = () => renderSetup(true);
+    bindPace();
   }
 
   function phaseHint(i) {
@@ -431,6 +446,119 @@
     `;
     if (!answered) $view.querySelectorAll(".choice").forEach(b => b.onclick = () => answer(Number(b.dataset.i)));
     else { $view.querySelector("#next").onclick = next; $view.querySelector(".result").scrollIntoView({ block: "start", behavior: "smooth" }); }
+  }
+
+  // ───── 腕試し → 必要な勉強時間 ─────
+  function startPlacement() {
+    const seenFirst = (a, b) => (S.rec[a.id] ? 1 : 0) - (S.rec[b.id] ? 1 : 0);
+    const per = FIELD_ORDER.map(f => QS.filter(q => q.field === f).sort(seenFirst).slice(0, PLACE_PER_FIELD).map(q => q.id));
+    const ids = [];
+    for (let i = 0; i < PLACE_PER_FIELD; i++) per.forEach(list => { if (list[i]) ids.push(list[i]); });
+    S.session = { mode: "placement", day: today(), ids, i: 0, answered: null, results: [], marks: [] };
+    save(); render();
+  }
+
+  function finishPlacement() {
+    const s = S.session;
+    const per = {};
+    for (const f of FIELD_ORDER) {
+      const idx = s.ids.map((id, i) => i).filter(i => BY_ID[s.ids[i]].field === f);
+      const n = idx.length || 1;
+      const c = idx.filter(i => s.marks[i] === "c").length;
+      const w = idx.filter(i => s.marks[i] === "w").length;
+      // 4択の当てずっぽうを差し引く（まちがい3つにつき1つは偶然の正解とみなす）
+      per[f] = { n: idx.length, c, k: Math.max(0, (c - w / 3) / n) };
+    }
+    const k = FIELD_ORDER.reduce((a, f) => a + per[f].k * FIELDS[f].ratio, 0);
+    const hours = Math.round(HOURS_MIN + (HOURS_BEGINNER - HOURS_MIN) * (1 - k));
+    S.placement = { date: today(), per, k, hours, q0: S.qCount || 0 };
+    s.done = true;
+  }
+
+  function paceNumbers() {
+    const p = S.placement;
+    const studied = Math.max(0, ((S.qCount || 0) - p.q0) * MIN_PER_Q / 60);
+    const remain = Math.max(0, p.hours - studied);
+    const days = Math.max(1, diffDays(S.settings.examDate, today()));
+    const perDay = Math.ceil(remain * 60 / days);
+    const mins = S.settings.minutes;
+    const daysAtMine = Math.ceil(remain * 60 / mins);
+    return { studied, remain, days, perDay, mins, daysAtMine, altDate: addDays(today(), daysAtMine) };
+  }
+
+  const hm = m => m >= 60 ? `${Math.floor(m / 60)}時間${m % 60 ? (m % 60) + "分" : ""}` : `${m}分`;
+
+  function paceHtml() {
+    if (!S.placement) {
+      return `<div class="card"><b>合格までに、何時間の勉強が必要？</b>
+        <p class="sub">腕試し12問（約5分）で今の実力をはかり、試験日までに1日何分やればいいかを出します。</p>
+        <button id="placeStart">腕試しをする</button></div>`;
+    }
+    const x = paceNumbers();
+    const ok = x.perDay <= x.mins;
+    const step = MINUTE_STEPS.find(m => m >= x.perDay);
+    return `<div class="card">
+      <div class="sub">合格までの勉強時間（目安）</div>
+      <p>残り <b>約${Math.round(x.remain)}時間</b> ÷ 試験まで ${x.days}日 ＝ <b class="${ok ? "" : "danger"}">1日 約${hm(x.perDay)}</b></p>
+      ${ok
+        ? `<p>いまの1日${x.mins}分で間に合うペースです。</p>`
+        : `<p class="danger">いまの1日${x.mins}分だと足りません。</p>
+           <div class="choicebtns">
+             ${step ? `<button id="applyMin">1日${step}分にする</button>` : `<button id="applyMin">アプリを1日30分にする</button>`}
+             ${x.daysAtMine <= 365 ? `<button id="applyDate">1日${x.mins}分のまま、試験日を${jpDate(x.altDate)}にする</button>` : ""}
+           </div>
+           ${x.daysAtMine <= 365 && x.altDate >= NEW_SYSTEM ? `<p class="sub">※ 2027年4月からITパスポートは新しい試験制度になる予定です（IPA）。範囲が変わるかもしれないので、できれば3月までに受けるのがおすすめです。</p>` : ""}
+           ${step ? "" : `<p class="sub">1日30分をこえる分（約${hm(x.perDay - 30)}）は、参考書や過去問道場でおぎなってください。</p>`}`}
+      <p class="sub">腕試し（${jpYmd(S.placement.date)}）の結果から出した目安。初学者は約180時間、ITの知識がある人は約30〜50時間という目安（ユーキャン）をもとにしています。<a href="#" id="placeAgain">腕試しをやり直す</a></p>
+    </div>`;
+  }
+
+  function bindPace() {
+    const on = (id, fn) => { const b = $view.querySelector(id); if (b) b.onclick = e => { e.preventDefault(); fn(); }; };
+    on("#placeStart", startPlacement);
+    on("#placeAgain", startPlacement);
+    on("#applyMin", () => {
+      const x = paceNumbers();
+      S.settings.minutes = MINUTE_STEPS.find(m => m >= x.perDay) || 30;
+      save(); render();
+    });
+    on("#applyDate", () => { S.settings.examDate = paceNumbers().altDate; save(); render(); });
+  }
+
+  function renderPlacement() {
+    const s = S.session;
+    const q = BY_ID[s.ids[s.i]];
+    $view.innerHTML = `
+      <div class="sub">腕試し ${s.i + 1} / ${s.ids.length}問　わからなければ「わからない」でOK（当てずっぽうより正確に出ます）</div>
+      <div class="progress"><i style="width:${Math.round(s.i / s.ids.length * 100)}%"></i></div>
+      <div>${tag(q.field)}<span class="sub">${esc(q.category)}</span></div>
+      <p style="font-weight:600">${esc(q.q)}</p>
+      <div class="choices">
+        ${q.choices.map((c, i) => `<button class="choice" data-i="${i}"><span class="mark">${MARKS[i]}</span><span>${esc(c)}</span></button>`).join("")}
+        <button class="choice" data-i="-1"><span class="mark">？</span><span>わからない</span></button>
+      </div>
+      <p class="sub">腕試しでは解説を出しません。まちがえた問題は、明日からの毎日の問題に解説つきで出てきます。</p>
+    `;
+    $view.querySelectorAll(".choice").forEach(b => b.onclick = () => answer(Number(b.dataset.i)));
+  }
+
+  function renderPlacementResult() {
+    const p = S.placement;
+    $view.innerHTML = `
+      <h1>腕試しの結果</h1>
+      <div class="card">
+        ${FIELD_ORDER.map(f => `<p>${tag(f)} ${p.per[f].c} / ${p.per[f].n}問 正解</p>`).join("")}
+        <p class="sub">いちばん時間をかけたいのは <b>${FIELDS[FIELD_ORDER.slice().sort((a, b) => p.per[a].k - p.per[b].k)[0]].name}</b>（3分野とも300点以上が合格の条件）</p>
+      </div>
+      <div class="card">
+        <div class="sub">合格までに必要な勉強時間（目安）</div>
+        <div class="big">約${p.hours}<small style="font-size:16px">時間</small></div>
+      </div>
+      ${paceHtml()}
+      <button class="primary go" id="home">ホームへ</button>
+    `;
+    bindPace();
+    $view.querySelector("#home").onclick = () => { S.session = null; save(); render(); };
   }
 
   function renderDone() {
