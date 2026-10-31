@@ -1730,3 +1730,45 @@ header {
     }
 }
 
+
+/* ===== 作るって、楽しい（教室の芯・2026-10-31） =====
+   角丸0・背景色の箱なし・左ボーダーなし。余白と文字の大小だけで区切る（CLAUDE.md指針） */
+.hero-eyebrow {
+    display: block;
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+}
+.tsukuru-section { padding: 80px 0 70px; background: var(--white); }
+.tsukuru-section .container { max-width: 960px; }
+.tsukuru-lead { color: #666; font-size: 0.95rem; margin: 0 0 8px; }
+.tsukuru-title {
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    font-weight: bold;
+    color: var(--text);
+    line-height: 1.2;
+    margin: 0 0 48px;
+    letter-spacing: 0.02em;
+}
+.tsukuru-body {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 40px;
+}
+.tsukuru-point h3 {
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+.tsukuru-point:first-child h3 { font-size: 1.4rem; color: var(--accent); }
+.tsukuru-point p { font-size: 0.98rem; line-height: 1.95; color: var(--text); margin: 0; }
+.tsukuru-more { margin: 44px 0 0; font-weight: bold; }
+.tsukuru-more a { color: var(--primary); text-decoration: none; margin-right: 18px; }
+.tsukuru-more a:hover { text-decoration: underline; }
+@media (max-width: 800px) {
+    .tsukuru-section { padding: 56px 0 48px; }
+    .tsukuru-body { grid-template-columns: 1fr; gap: 32px; }
+    .tsukuru-title { margin-bottom: 32px; }
+}
