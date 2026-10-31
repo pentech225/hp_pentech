@@ -1189,7 +1189,7 @@
                 </div>
                 
                 
-                <!-- 子供の名前入力セクション -->
+                <!-- 子どもの名前入力セクション -->
                 <div class="child-name-section" id="child-name-section">
                     <div class="child-name-notice">
                         <strong>※個人情報の取り扱いについて</strong><br>
@@ -1402,7 +1402,7 @@
         let selectedSchoolType = null;
         let selectedGrade = null;
         
-        // 子供の名前
+        // 子どもの名前
         let childName = '';
         
         // 電話番号
@@ -1913,7 +1913,7 @@
             
             // 1つ以上選択されたら次のステップに進める
             if (selectedDateTimes.length > 0) {
-                // 1つ以上選択されたら子供の名前入力フィールドを表示
+                // 1つ以上選択されたら子どもの名前入力フィールドを表示
                 document.getElementById('child-name-section').classList.add('show');
                 // 名前入力フィールドにスクロール（ヘッダーの高さを考慮）
                 if (selectedDateTimes.length === 1) {
@@ -2037,7 +2037,7 @@
             }
         }
         
-        // 子供の名前をチェックして送信ボタンの有効/無効を切り替え
+        // 子どもの名前をチェックして送信ボタンの有効/無効を切り替え
         function checkChildName() {
             const nameInput = document.getElementById('child-name-input');
             childName = nameInput.value.trim();
@@ -2562,7 +2562,7 @@ iTeen 武庫之荘校
                 btn.classList.remove('selected');
             });
             document.getElementById('selected-info').classList.remove('show');
-            // 子供の名前入力フィールドをリセット
+            // 子どもの名前入力フィールドをリセット
             document.getElementById('child-name-input').value = '';
             document.getElementById('child-name-section').classList.remove('show');
             // 電話番号入力フィールドをリセット
