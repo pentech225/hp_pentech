@@ -187,3 +187,11 @@ a.btnlink { display: block; text-align: center; padding: 12px; background: var(-
 .node-label { display: flex; flex-direction: column; font-size: 14px; line-height: 1.4; min-width: 0; }
 .node-label span { color: var(--sub); font-size: 12px; }
 .venue.on .okc { color: var(--main-ink); }
+
+/* 問題文（過去問の表・プログラムにも対応） */
+.qtext { font-weight: 600; }
+.qtext p { margin: 0 0 6px; white-space: pre-wrap; }
+.qtable { overflow-x: auto; margin: 8px 0; }
+.qtable table { border-collapse: collapse; font-weight: 400; font-size: 14px; }
+.qtable th, .qtable td { border: 1px solid #999; padding: 4px 8px; text-align: left; white-space: nowrap; border-radius: 0; }
+.qtable th { background: rgba(127,127,127,.15); }

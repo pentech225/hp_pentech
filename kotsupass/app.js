@@ -644,6 +644,26 @@
     ][i] || "";
   }
 
+  // 問題文：改行はそのまま、"|" で始まる行のかたまりは表にする（過去問の表・プログラムを読めるように）
+  function qHtml(text) {
+    const lines = String(text).split("\n");
+    let html = "", rows = [];
+    const flush = () => {
+      if (!rows.length) return;
+      const cells = rows.filter(r => !/^\|[\s|:-]+\|?$/.test(r))
+        .map(r => r.replace(/^\||\|\s*$/g, "").split("|").map(c => esc(c.trim())));
+      html += `<div class="qtable"><table>${cells.map((r, i) => `<tr>${r.map(c => i === 0 ? `<th>${c}</th>` : `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`;
+      rows = [];
+    };
+    lines.forEach(l => {
+      if (/^\s*\|/.test(l)) { rows.push(l.trim()); return; }
+      flush();
+      html += `<p>${esc(l)}</p>`;
+    });
+    flush();
+    return html.replace(/<p><\/p>/g, "");
+  }
+
   function renderQuiz() {
     const s = S.session;
     const q = BY_ID[s.ids[s.i]];
@@ -656,7 +676,7 @@
       <div class="sub">${s.i + 1} / ${s.ids.length}問 ${isReview ? "・復習" : ""}</div>
       <div class="progress"><i style="width:${pct}%"></i></div>
       <div>${tag(q.field)}<span class="sub">${esc(q.category)}</span></div>
-      <p style="font-weight:600">${esc(q.q)}</p>
+      <div class="qtext">${qHtml(q.q)}</div>
       <div class="choices">
         ${q.choices.map((c, i) => {
           let cls = "";
@@ -773,7 +793,7 @@
       <div class="sub">腕試し ${s.i + 1} / ${s.ids.length}問　わからなければ「わからない」でOK（当てずっぽうより正確に出ます）</div>
       <div class="progress"><i style="width:${Math.round(s.i / s.ids.length * 100)}%"></i></div>
       <div>${tag(q.field)}<span class="sub">${esc(q.category)}</span></div>
-      <p style="font-weight:600">${esc(q.q)}</p>
+      <div class="qtext">${qHtml(q.q)}</div>
       <div class="choices">
         ${q.choices.map((c, i) => `<button class="choice" data-i="${i}"><span class="mark">${MARKS[i]}</span><span>${esc(c)}</span></button>`).join("")}
         <button class="choice" data-i="-1"><span class="mark">？</span><span>わからない</span></button>
