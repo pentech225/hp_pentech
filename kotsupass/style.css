@@ -195,3 +195,37 @@ a.btnlink { display: block; text-align: center; padding: 12px; background: var(-
 .qtable table { border-collapse: collapse; font-weight: 400; font-size: 14px; }
 .qtable th, .qtable td { border: 1px solid #999; padding: 4px 8px; text-align: left; white-space: nowrap; border-radius: 0; }
 .qtable th { background: rgba(127,127,127,.15); }
+
+/* 育てるAI（buddy.js）。角丸なし・左だけの色線なし */
+.buddy-say { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0; }
+.buddy-say.small { margin: 10px 0; }
+.buddy-face { flex: 0 0 auto; }
+.buddy-face.big { display: flex; justify-content: center; }
+.buddy-bubble { position: relative; flex: 1; min-width: 0; background: var(--bg); border: 1px solid var(--line); padding: 8px 12px; }
+.buddy-bubble::before { content: ""; position: absolute; left: -7px; top: 18px; width: 12px; height: 12px; background: var(--bg);
+  border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); transform: rotate(45deg); }
+.buddy-name { font-size: 13px; color: var(--sub); font-weight: 700; }
+.buddy-card h2 { margin: 6px 0; }
+.buddy-card input { width: 100%; font-size: 18px; padding: 8px; margin: 6px 0 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.buddy-grow { margin-top: 8px; }
+.buddy-grow .track { height: 10px; background: var(--line); }
+.buddy-grow .fill { height: 100%; background: var(--main); }
+.bd-svg { display: block; overflow: visible; animation: bd-bob 2.4s ease-in-out infinite; }
+.bd-svg.egg { animation: bd-wobble 3s ease-in-out infinite; transform-origin: 50% 85%; }
+.bd-body { fill: var(--main); stroke: var(--ink); stroke-width: 2; }
+.bd-face { fill: #eaf6f0; stroke: var(--ink); stroke-width: 1.5; }
+.bd-eye { fill: #1d1d1b; }
+.bd-line { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linecap: square; }
+.bd-mem { fill: var(--card); stroke: var(--ink); stroke-width: 1; }
+.bd-mem.on { fill: #f0b04a; }
+.bd-light { fill: #f0b04a; stroke: var(--ink); stroke-width: 1; animation: bd-blink 1.6s steps(2) infinite; }
+.bd-cap { fill: #1d1d1b; stroke: var(--ink); stroke-width: 1.5; }
+.bd-egg { fill: #f4efe0; stroke: var(--ink); stroke-width: 2; }
+.bd-bits { font: 700 10px monospace; fill: var(--main); text-anchor: middle; }
+.bd-crack { fill: none; stroke: #1d1d1b; stroke-width: 1.5; }
+.bd-shadow { stroke: var(--line); stroke-width: 3; }
+@keyframes bd-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes bd-wobble { 0%, 80%, 100% { transform: rotate(0); } 85% { transform: rotate(-6deg); } 90% { transform: rotate(6deg); } 95% { transform: rotate(-3deg); } }
+@keyframes bd-blink { 50% { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .bd-svg, .bd-light { animation: none; } }
+.bd-feat { fill: none; stroke: #1d1d1b; stroke-width: 2.5; stroke-linecap: square; }

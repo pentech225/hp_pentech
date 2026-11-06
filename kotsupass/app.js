@@ -175,6 +175,7 @@
     s.results.push(ok);
     (s.hints = s.hints || []).push(hinted);
     const r = S.rec[q.id] || { box: 0, due: today(), n: 0, ok: 0 };
+    const wasMastered = r.box >= 2, review = r.n > 0;
     r.n += 1;
     if (ok && !hinted) { r.ok += 1; r.box = Math.min(r.box + 1, INTERVALS.length - 1); r.due = addDays(today(), INTERVALS[r.box]); }
     else if (ok && hinted) { r.ok += 0.5; r.hint = (r.hint || 0) + 1; r.due = addDays(today(), INTERVALS[0]); } // ヒントつき正解：段階は上げず、明日もう一度
@@ -183,6 +184,10 @@
     S.log.push(hinted ? { d: today(), id: q.id, f: q.field, ok, h: 1 } : { d: today(), id: q.id, f: q.field, ok });
     if (S.log.length > 600) S.log = S.log.slice(-600);
     S.qCount = (S.qCount || 0) + 1;
+    if (s.mode !== "placement" && window.BUDDY) {
+      s.react = BUDDY.react({ ok, hinted, review, mastered: !wasMastered && r.box >= 2, count: masteredCount(),
+        stage: buddyStage(), seed: S.qCount });
+    }
     if (s.mode === "placement") {
       s.marks.push(choice === -1 ? "u" : ok ? "c" : "w");
       s.i += 1; s.answered = null;
@@ -194,7 +199,7 @@
 
   function next() {
     const s = S.session;
-    s.i += 1; s.answered = null; s.hinted = false;
+    s.i += 1; s.answered = null; s.hinted = false; s.react = null;
     if (s.i >= s.ids.length) {
       if (!s.extra) finishDay();
       s.done = true;
@@ -209,12 +214,73 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const tag = f => `<span class="tag ${f}">${FIELDS[f].name}</span>`;
 
+  // ───── 育てるAI（buddy.js） ─────
+  const masteredCount = () => Object.values(S.rec).filter(r => r.box >= 2).length;   // ヒントなしで2回正解＝身についた
+  const buddyStage = () => BUDDY.stageOf(masteredCount(), QS.length);
+  const buddyName = () => (S.buddy && S.buddy.name) || BUDDY.DEFAULT_NAME;
+  // 段階が上がったかを調べ、上がっていれば記録して前の段階を返す
+  function buddyCheck() {
+    const st = buddyStage();
+    const before = S.buddy.stage || 0;
+    if (st.i !== before) { S.buddy.stage = st.i; save(); }
+    return { st, before };
+  }
+  const bubble = (mood, text, opts) => `<div class="buddy-say${opts && opts.small ? " small" : ""}">
+      <div class="buddy-face">${BUDDY.svg(buddyStage().key, mood, opts && opts.small ? 56 : 80)}</div>
+      <div class="buddy-bubble">${opts && opts.head ? `<div class="buddy-name">${esc(opts.head)}</div>` : ""}${esc(text)}</div>
+    </div>`;
+  function renderNaming() {
+    $view.innerHTML = `
+      <div class="card buddy-card">
+        <div class="buddy-face big">${BUDDY.svg("egg", "normal", 120)}</div>
+        <h2>AIの卵が届きました</h2>
+        <p>この卵の中には、まだ何も知らない小さなAIがいます。あなたが問題を解いて身についた問題が増えるほど、このAIも覚えて育ちます。</p>
+        <p class="sub">卵 → ビット → バイト → キロ → メガ → ギガ（ギガが合格の目安）</p>
+        <label class="sub" for="bdName">名前をつけてください</label>
+        <input id="bdName" maxlength="10" value="${esc(BUDDY.DEFAULT_NAME)}">
+        <button class="primary go" id="bdOk">この名前にする</button>
+      </div>`;
+    $view.querySelector("#bdOk").onclick = () => {
+      const v = $view.querySelector("#bdName").value.trim() || BUDDY.DEFAULT_NAME;
+      S.buddy = { name: v.slice(0, 10), born: today(), stage: buddyStage().i, greeted: false };
+      save(); render();
+    };
+  }
+  function buddyHomeHtml() {
+    const { st, before } = buddyCheck();
+    const t = today();
+    const past = Object.keys(S.days).filter(d => d < t).sort();
+    const last = past[past.length - 1];
+    const y = addDays(t, -1);
+    const ph = phaseInfo();
+    const firstTime = !S.buddy.greeted;
+    if (firstTime) { S.buddy.greeted = true; save(); }
+    const away = last && !S.days[t] ? diffDays(t, last) : 0;
+    const text = st.i > before
+      ? BUDDY.finish({ okN: 0, total: 0, stage: st, before })
+      : BUDDY.greet({
+          stage: st, today: t, firstTime, n: PER_DAY[S.settings.minutes] || 5,
+          left: ph.left, examExact: !!S.settings.examExact, doneToday: !!S.days[t], away,
+          wrongYesterday: new Set(S.log.filter(l => l.d === y && !l.ok).map(l => l.id)).size
+        });
+    const mood = st.i > before ? "wow" : away >= 3 ? "sad" : S.days[t] ? "happy" : "normal";
+    const span = Math.max(1, st.nextAt - st.from), got = masteredCount() - st.from;
+    return `<div class="card buddy-card">
+      ${bubble(mood, text, { head: `${buddyName()}（${st.name}）` })}
+      <div class="buddy-grow">
+        <div class="sub">${st.next ? `${st.next}まで あと${st.toNext}問` : "ギガ（合格の目安）に到達"}　・　身についた問題 ${masteredCount()} / ${QS.length}</div>
+        <div class="track"><div class="fill" style="width:${st.next ? Math.min(100, Math.round(got / span * 100)) : 100}%"></div></div>
+      </div>
+    </div>`;
+  }
+
   function render() {
     window.scrollTo(0, 0);
     if (!S.auth) return renderLogin();
     $badge.hidden = !S.settings;
     $badge.textContent = `連続 ${S.streak.count}日`;
     if (!S.settings) return renderSetup();
+    if (!S.buddy) return renderNaming();
     const s = S.session;
     if (s && s.mode === "placement") return s.done ? renderPlacementResult() : renderPlacement();
     if (s && s.day === today() && !s.done) return renderQuiz();
@@ -489,6 +555,7 @@
     const ph = phaseInfo();
     $view.innerHTML = `
       ${notice ? `<div class="card">${esc(notice)}</div>` : ""}
+      ${buddyHomeHtml()}
       ${done
         ? `<div class="card"><b>今日のぶんは終わりました。</b><p class="sub">もっと解きたいときは、ここから続けられます（連続記録とは別です）。</p>
              <button class="primary go" id="more"><span class="play">▶</span>道の続きを5問</button></div>`
@@ -691,7 +758,10 @@
       ${answered ? `
         <div class="result ${ok ? "ok" : "ng"}">${ok ? (s.hinted ? "正解！（ヒントつき）" : "正解！") : `ざんねん。正解は ${MARKS[q.answer]}`}</div>
         ${ok && s.hinted ? `<p class="sub">ヒントつきの正解は、明日もう一度出ます。次はヒントなしで解いてみましょう。</p>` : ""}
-        <div class="box"><h3>ひとこと解説</h3><div class="explain">${esc(q.short)}</div></div>
+        ${s.react ? bubble(ok ? "happy" : "sad", s.react, { small: true }) : ""}
+        <div class="box buddy-explain"><h3>ひとこと解説 <span class="sub">（${esc(buddyName())}のまとめ）</span></h3>
+          <p class="sub">${esc(BUDDY.explainLead(buddyStage().key))}</p>
+          <div class="explain">${esc(q.talk || q.short)}</div></div>
         ${q.whyWrong ? `<div class="box"><h3>ほかの選択肢</h3><ul class="why">
           ${q.whyWrong.map((w, i) => i === q.answer ? "" : `<li><b>${MARKS[i]}</b> ${esc(w)}</li>`).join("")}</ul></div>` : ""}
         ${q.society ? `<div class="box society"><h3>社会でどう役立つ？</h3><div class="explain">${esc(q.society)}</div></div>` : ""}
@@ -828,6 +898,8 @@
     const hintN = (s.hints || []).filter((h, i) => h && s.results[i]).length;
     $view.innerHTML = `
       <h1>${s.extra ? "おつかれさまでした！" : "今日はおしまい！"}</h1>
+      ${(() => { const { st, before } = buddyCheck(); return `<div class="card buddy-card">${bubble(st.i > before ? "wow" : okN === s.results.length ? "happy" : "normal",
+          BUDDY.finish({ okN, total: s.results.length, stage: st, before }), { head: `${buddyName()}（${st.name}）` })}</div>`; })()}
       <div class="card">
         <div class="sub">${s.extra ? "結果" : "今日の結果"}</div>
         <div class="big">${okN} / ${s.results.length}</div>
