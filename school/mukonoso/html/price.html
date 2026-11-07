@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja" class="has-sidebar">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>料金 | iTeen 武庫之荘校</title>
+    <meta name="description" content="iTeen武庫之荘校の料金です。月2回・月4回・月8回の3つから選ぶだけ。管理費こみの月額でご案内します。">
+    <link rel="canonical" href="https://www.pentech.info/school/mukonoso/html/price.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="iTeen武庫之荘校">
+    <meta property="og:title" content="料金 | iTeen武庫之荘校">
+    <meta property="og:description" content="月2回・月4回・月8回の3つから選ぶだけ。">
+    <meta property="og:url" content="https://www.pentech.info/school/mukonoso/html/price.html">
+    <meta property="og:image" content="https://www.pentech.info/school/mukonoso/images/school_image.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- パスワード保護 -->
+    <script src="config.js"></script>
+    <script src="password-check.js"></script>
+    <script src="matomo-tracking.js"></script>
+
+    <!--
+      料金の出どころ（2026-11-08）
+      - 月2回 11,000円・月4回 17,710円（授業料＋教室管理費2,090円、税込）:
+        edu/iteen/comiru/comiru請求書マニュアル.md「金額（2026-11時点）」
+      - 月8回 29,700円（授業料27,610円＋管理費2,090円）: 2026-11-08 Claudeの案。本人確認前。
+    -->
+
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-dark: #2F6FBF;
+            --accent: #F5A623;
+            --text: #333333;
+            --bg: #FAFAFA;
+            --white: #FFFFFF;
+            --muted: #666666;
+            --line: #DDDDDD;
+            --pick-bg: #EEF5FD;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+
+        .price-section { padding: 48px 0 56px; background: var(--white); }
+        .step { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.05em; margin: 0 0 4px; }
+        h1 { font-size: 1.9rem; margin: 0 0 12px; line-height: 1.4; }
+        .lead { margin: 0 0 6px; font-size: 1rem; }
+        .lead-list { list-style: none; padding: 0; margin: 0 0 28px; }
+        .lead-list li { padding-left: 1.4em; position: relative; margin: 4px 0; }
+        .lead-list li::before { content: "✓"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        /* プランの3つの箱（角丸なし・左ボーダーなし） */
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .plan {
+            position: relative;
+            border: 2px solid var(--line);
+            border-radius: 0;
+            background: var(--white);
+            padding: 30px 12px 18px;
+            text-align: center;
+            cursor: pointer;
+            font: inherit;
+            color: inherit;
+            transition: border-color .15s, background .15s;
+        }
+        .plan:hover { border-color: #9DC1EC; }
+        .plan[aria-checked="true"] {
+            border-color: var(--primary);
+            background: var(--pick-bg);
+        }
+        .plan .badge {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 0;
+        }
+        .plan .name { display: block; font-size: 1.35rem; font-weight: bold; }
+        .plan .freq { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+        .plan .yen { display: block; font-size: 1.6rem; font-weight: bold; color: var(--primary-dark); line-height: 1.2; }
+        .plan .yen small { font-size: 0.8rem; font-weight: normal; color: var(--muted); }
+        .plan .per { display: block; font-size: 0.85rem; margin-top: 6px; }
+        .plan .check {
+            display: block;
+            margin: 12px auto 0;
+            width: 22px; height: 22px;
+            border: 2px solid var(--line);
+            border-radius: 0;
+            line-height: 18px;
+            font-size: 0.9rem;
+            color: transparent;
+        }
+        .plan[aria-checked="true"] .check { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .plan.mid { transform: translateY(-6px); }
+
+        /* 比べる表 */
+        table.compare {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 26px 0 8px;
+            font-size: 0.95rem;
+        }
+        table.compare th, table.compare td {
+            border-bottom: 1px solid var(--line);
+            padding: 12px 6px;
+            text-align: center;
+        }
+        table.compare th[scope="row"] { text-align: left; font-weight: normal; color: var(--muted); width: 28%; }
+        table.compare td.on { color: var(--primary-dark); font-weight: bold; background: var(--pick-bg); }
+        .note { font-size: 0.82rem; color: var(--muted); margin: 8px 0 0; }
+
+        .cta { text-align: center; margin-top: 30px; }
+        .cta a {
+            display: block;
+            max-width: 440px;
+            margin: 0 auto;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.15rem;
+            padding: 16px 20px;
+            border-radius: 0;
+        }
+        .cta a:hover { background: #E0951A; }
+        .cta p { font-size: 0.9rem; color: var(--muted); margin: 10px 0 0; }
+
+        footer { padding: 20px; text-align: center; background: #444; color: #fff; font-size: 0.8rem; }
+        footer a { color: #fff; text-decoration: none; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.45rem; }
+            .plans { gap: 6px; }
+            .plan { padding: 28px 4px 14px; }
+            .plan .name { font-size: 1.1rem; }
+            .plan .yen { font-size: 1.15rem; }
+            .plan .per { font-size: 0.75rem; }
+            .plan .badge { font-size: 0.7rem; }
+            table.compare { font-size: 0.82rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/layout.css">
+</head>
+<body>
+    <header class="site-topbar">
+        <a href="../index.html" class="tb-brand"><img src="../images/iteen_logo.png" alt="iTeen"><span>武庫之荘校</span></a>
+        <button type="button" class="sb-toggle" id="sb-toggle" aria-controls="site-sidebar" aria-expanded="false" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+    </header>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="サイトメニュー">
+        <a href="../index.html" class="sb-brand"><img src="../images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
+        <nav class="sb-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../html/game-event.html">イベント</a>
+            <a href="../html/blog/index.html">ブログ</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="../html/values.html">大切にしていること</a>
+            <a href="../student/work/index.html">生徒作品</a>
+            <a href="../html/price.html">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="../html/contact.html">お問い合わせ</a>
+        </nav>
+        <div class="sb-actions">
+            <a href="tel:06-6438-8277" class="sb-tel">06-6438-8277<small>お電話でのお問い合わせ</small></a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-primary">無料体験を予約する</a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-outline">資料請求</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="sb-btn sb-btn-line">LINEで質問</a>
+        </div>
+    </aside>
+    <div class="sb-overlay" id="sb-overlay" hidden></div>
+
+    <section class="price-section">
+        <div class="container">
+            <p class="step">料金</p>
+            <h1>通う回数を選ぶだけ。</h1>
+            <ul class="lead-list">
+                <li>1回60分・講師1人に生徒3人まで</li>
+                <li>教室管理費こみの月額（税込）。ほかの月謝はかかりません</li>
+                <li>回数はあとから変えられます</li>
+            </ul>
+
+            <div class="plans" role="radiogroup" aria-label="プランを選ぶ">
+                <button type="button" class="plan" role="radio" aria-checked="false" data-plan="2">
+                    <span class="name">月2回</span>
+                    <span class="freq">2週に1回</span>
+                    <span class="yen">11,000<small>円/月</small></span>
+                    <span class="per">1回 5,500円</span>
+                    <span class="check" aria-hidden="true">✓</span>
+                </button>
+                <button type="button" class="plan mid" role="radio" aria-checked="true" data-plan="4">
+                    <span class="badge">おすすめ</span>
+                    <span class="name">月4回</span>
+                    <span class="freq">毎週1回</span>
+                    <span class="yen">17,710<small>円/月</small></span>
+                    <span class="per">1回 約4,430円</span>
+                    <span class="check" aria-hidden="true">✓</span>
+                </button>
+                <button type="button" class="plan" role="radio" aria-checked="false" data-plan="8">
+                    <span class="name">月8回</span>
+                    <span class="freq">毎週2回</span>
+                    <span class="yen">29,700<small>円/月</small></span>
+                    <span class="per">1回 約3,710円</span>
+                    <span class="check" aria-hidden="true">✓</span>
+                </button>
+            </div>
+
+            <table class="compare" aria-label="プランの比較">
+                <tbody>
+                    <tr><th scope="row">通う回数</th><td data-col="2">月2回</td><td data-col="4" class="on">月4回</td><td data-col="8">月8回</td></tr>
+                    <tr><th scope="row">こんな方に</th><td data-col="2">まず慣れたい</td><td data-col="4" class="on">作品を作りきりたい</td><td data-col="8">検定・大会をめざす</td></tr>
+                    <tr><th scope="row">毎回の指導報告書</th><td data-col="2">✓</td><td data-col="4" class="on">✓</td><td data-col="8">✓</td></tr>
+                    <tr><th scope="row">振替</th><td data-col="2">✓</td><td data-col="4" class="on">✓</td><td data-col="8">✓</td></tr>
+                    <tr><th scope="row">月額（税込）</th><td data-col="2">11,000円</td><td data-col="4" class="on">17,710円</td><td data-col="8">29,700円</td></tr>
+                </tbody>
+            </table>
+            <p class="note">※ 月額は授業料と教室管理費（月2,090円）の合計です。お支払いは毎月の口座引き落とし（ComiruPay）です。</p>
+
+            <div class="cta">
+                <a id="cta-btn" href="reserve.html?plan=4">月4回で無料体験を予約する</a>
+                <p>まずは体験だけでも大丈夫です。回数は体験のあとに決められます。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+    <script>
+        (function () {
+            var plans = document.querySelectorAll('.plan');
+            var cells = document.querySelectorAll('table.compare td[data-col]');
+            var btn = document.getElementById('cta-btn');
+            function pick(p) {
+                plans.forEach(function (el) { el.setAttribute('aria-checked', el.dataset.plan === p ? 'true' : 'false'); });
+                cells.forEach(function (td) { td.classList.toggle('on', td.dataset.col === p); });
+                btn.textContent = '月' + p + '回で無料体験を予約する';
+                btn.href = 'reserve.html?plan=' + p;
+            }
+            plans.forEach(function (el) { el.addEventListener('click', function () { pick(el.dataset.plan); }); });
+        })();
+    </script>
+    <script src="../js/site-nav.js"></script>
+</body>
+</html>
