@@ -469,6 +469,81 @@ a { text-decoration: none; color: var(--primary); }
     line-height: 1.6;
 }
 
+/* --- 学べること：Instagramの写真で見せる（2026-11-08） --- */
+.learn-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.learn-photo { margin: 0; }
+.learn-photo img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 0;
+}
+.learn-photo figcaption {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+}
+.learn-photo figcaption strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--primary);
+}
+.learn-more {
+    max-width: 900px;
+    margin: 20px auto 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+.learn-more strong { color: var(--text); margin-right: 10px; }
+
+/* 特長：写真つきの行 */
+.usp-card-photo {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+.usp-card-photo > div { flex: 1; }
+.usp-card-photo img {
+    width: 38%;
+    max-width: 240px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
+/* 生徒の実績：EXPO */
+.result-highlight {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto 36px;
+}
+.result-highlight img {
+    width: 260px;
+    height: auto;
+    border-radius: 0;
+    flex-shrink: 0;
+}
+.result-highlight h3 { font-size: 1.2rem; color: var(--primary); margin: 0 0 8px; }
+.result-highlight p { margin: 0 0 8px; line-height: 1.8; }
+.result-highlight .result-source { font-size: 0.8rem; color: #666; }
+
+@media (max-width: 768px) {
+    .learn-photos { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .usp-card-photo, .result-highlight { flex-direction: column; align-items: stretch; }
+    .usp-card-photo img, .result-highlight img { width: 100%; }
+}
+
 /* --- ブログ最新記事プレビュー --- */
 .blog-preview-grid {
     display: grid;
