@@ -80,6 +80,27 @@ function addSlots0922() {
   Logger.log('9/22枠を追加しました');
 }
 
+// ---- 11/29「第4回プログラミング体験会（3Dプリンターで作る名前入りキーホルダー）」の時間帯枠を追加（1回だけ手動実行） ----
+// 他イベントと枠管理シート上でキーが衝突しないよう「（11/29）」付きのキーを使う（261129.html の TIME_SLOTS と同じ文字列）
+function addSlots1129() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const slotSheet = ss.getSheetByName(SHEET_SLOTS);
+  const slots = [
+    ['1部：13:30〜14:00（11/29）', 8, 0],
+    ['2部：14:30〜15:00（11/29）', 8, 0],
+    ['3部：15:30〜16:00（11/29）', 8, 0],
+  ];
+
+  const existing = slotSheet.getDataRange().getValues().map(row => row[0]);
+  slots.forEach(slot => {
+    if (!existing.includes(slot[0])) {
+      slotSheet.appendRow(slot);
+    }
+  });
+
+  Logger.log('11/29枠を追加しました');
+}
+
 // ---- GET: 枠管理データを返す ----
 function doGet(e) {
   try {
