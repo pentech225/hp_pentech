@@ -275,3 +275,135 @@ header.site-topbar {
         transition: none;
     }
 }
+
+/* ---------- サイト内検索（右上の虫眼鏡、2026-11-08） ----------
+   ボタンと検索窓は js/site-nav.js が差し込む。目録は search-index.json。 */
+.site-search-btn {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    z-index: 1120;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: var(--nav-text);
+    border: 1px solid var(--nav-line);
+    border-radius: 0;
+    cursor: pointer;
+}
+.site-search-btn:hover,
+.site-search-btn[aria-expanded="true"] {
+    color: var(--nav-primary);
+    border-color: var(--nav-primary);
+}
+.site-search-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1300;
+    background: rgba(0, 0, 0, 0.35);
+}
+.site-search-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1310;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-bottom: 1px solid var(--nav-line);
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+    line-height: 1.6;
+}
+.site-search-panel[hidden],
+.site-search-backdrop[hidden] {
+    display: none;
+}
+.site-search-panel * {
+    box-sizing: border-box;
+    border-radius: 0;
+}
+.ss-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px;
+}
+.ss-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--nav-primary);
+    padding-bottom: 8px;
+    color: var(--nav-muted);
+}
+.ss-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    font-size: 1.1rem;
+    padding: 8px 0;
+    color: var(--nav-text);
+    background: transparent;
+}
+.ss-close {
+    border: 0;
+    background: none;
+    color: var(--nav-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 8px;
+}
+.ss-close:hover {
+    color: var(--nav-text);
+}
+.ss-status {
+    margin: 12px 0 4px;
+    font-size: 0.85rem;
+    color: var(--nav-muted);
+}
+.ss-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ss-results li {
+    border-bottom: 1px solid var(--nav-line);
+}
+.ss-results a {
+    display: block;
+    padding: 12px 0;
+    text-decoration: none;
+    color: var(--nav-text);
+}
+.ss-results a:hover strong {
+    color: var(--nav-primary);
+    text-decoration: underline;
+}
+.ss-results strong {
+    display: block;
+    font-size: 1rem;
+}
+.ss-results span {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: var(--nav-muted);
+}
+.ss-results mark {
+    background: #fff3c4;
+    color: inherit;
+}
+@media (max-width: 1023px) {
+    /* 上部バーの中、ハンバーガーの左に置く */
+    .site-search-btn {
+        top: 6px;
+        right: 60px;
+        border-color: transparent;
+    }
+}
