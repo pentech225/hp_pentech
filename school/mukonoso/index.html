@@ -95,7 +95,6 @@
         <a href="#top" class="sb-brand"><img src="images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
         <nav class="sb-nav">
             <a href="index.html" aria-current="page">ホーム</a>
-            <a href="#news">ニュース</a>
             <a href="html/game-event.html">イベント</a>
             <a href="html/blog/index.html">ブログ</a>
             <a href="#courses">コース</a>
@@ -103,7 +102,7 @@
             <a href="html/values.html">大切にしていること</a>
             <a href="student/work/index.html">生徒作品</a>
             <a href="html/price.html">料金</a>
-            <a href="#faq">よくある質問</a>
+            <a href="html/faq.html">よくある質問</a>
             <a href="#access">アクセス</a>
             <a href="html/contact.html">お問い合わせ</a>
         </nav>
@@ -169,75 +168,45 @@
         </div>
     </section>
 
-    <!-- 教室の芯：作るって、楽しい（2026-10-31 本人指示で最上段に） -->
-    <section class="tsukuru-section" id="tsukuru">
+    <!-- 教室の芯（2026-10-31 本人指示で最上段に。2026-11-09 トップ簡素化で3行に短縮、全文は html/values.html） -->
+    <section class="tsukuru-section tsukuru-short" id="tsukuru">
         <div class="container">
-            <p class="tsukuru-lead">iTeen武庫之荘校が、いちばん大切にしていること</p>
             <h2 class="tsukuru-title">夢中になれたら、それでいい。</h2>
-            <div class="tsukuru-body">
-                <div class="tsukuru-point">
-                    <h3>成功も失敗も、ありません</h3>
-                    <p>思いどおりに動かない。だから、ためしてみる。直してみる。そして、動いた！――作るときに起きることは、全部が次の一歩の材料です。うまくいかなかった回も、ちゃんと作品の一部。教室では「失敗」という言葉を、点数のようには使いません。</p>
-                </div>
-                <div class="tsukuru-point">
-                    <h3>時間を忘れて、没頭する</h3>
-                    <p>「もう終わりの時間？」――夢中になっている子は、よくそう言います。ロボットカーを用意していた日に、3Dプリンターから目が離せなくなった子もいました。予定どおりでなくていい。いま心が動いているものに、とことん付き合います。</p>
-                </div>
-                <div class="tsukuru-point">
-                    <h3>「これ、自分で作ったんだよ」</h3>
-                    <p>ゲームやアニメを遊ぶ側から、作る側へ。検定や点数は、あくまで途中の目印です。いちばんの成果は、お子さまが胸を張って見せてくれる、自分のアイデアから生まれた作品です。</p>
-                </div>
-            </div>
-            <p class="tsukuru-more"><a href="student/work/index.html">生徒たちの作品を見る →</a>　<a href="html/values.html">教室長の想いを読む →</a></p>
+            <p class="tsukuru-one">成功も失敗もない。時間を忘れて没頭する。いちばんの成果は、お子さまが胸を張って見せてくれる「これ、自分で作ったんだよ」です。</p>
+            <p class="tsukuru-more"><a href="html/values.html">教室長の想いを読む →</a></p>
         </div>
     </section>
 
-    <!-- 教室長からのごあいさつ -->
-    <section class="greeting-intro-section" style="padding: 50px 0; background: var(--white);">
+    <!-- ひと目でわかる教室の基本（2026-11-09） -->
+    <section class="p-facts" aria-label="教室の基本">
         <div class="container">
-            <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: center; max-width: 900px; margin: 0 auto;">
-                <img src="images/hikosaka_photo.png" alt="教室長 彦阪吉海" style="width: 160px; height: 160px; object-fit: cover; border-radius: 0; flex-shrink: 0;">
-                <div style="flex: 1; min-width: 260px;">
-                    <h2 style="font-size: 1.3rem; color: var(--primary); margin-bottom: 4px;">教室長からのごあいさつ</h2>
-                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">彦阪吉海（iTeen武庫之荘校 教室長）</p>
-                    <p style="font-size: 1rem; line-height: 1.9; color: var(--text); margin: 0 0 15px;">
-                        子どものころ、レゴとお絵描きに夢中でした。作ったものを家族に見せて、「次はもっとすごいのを作ろう」とまた手を動かす。気がつけば夕方、ということがよくありました。<br>
-                        作るって、楽しい。その気持ちを、いまの子どもたちにも思いきり味わってほしい。うまくできたかどうかより、<strong>夢中になれたかどうか</strong>を大切にする教室です。
-                    </p>
-                    <a href="html/values.html" style="font-weight: bold; color: var(--accent); text-decoration: none;">大切にしていることを読む →</a>
-                </div>
-            </div>
+            <dl class="p-facts-list">
+                <div><dt>対象</dt><dd>5歳〜高校生</dd></div>
+                <div><dt>授業</dt><dd>1回60分・個別指導<br>講師1人に生徒3人まで</dd></div>
+                <div><dt>月謝</dt><dd>月11,000円から<br><a href="html/price.html">料金を見る →</a></dd></div>
+                <div><dt>場所</dt><dd>阪急武庫之荘駅から<br>北へ徒歩10分</dd></div>
+            </dl>
+            <nav class="p-jump" aria-label="保護者様の気になること">
+                <a href="#courses">何をするの？</a>
+                <a href="#fit">ついていける？</a>
+                <a href="#growth">成長はわかる？</a>
+                <a href="#fee">いくら？</a>
+                <a href="#continue">続けやすい？</a>
+            </nav>
         </div>
     </section>
 
-    <section class="usp">
+    <!-- ① 何をするの？ -->
+    <section class="p-block" id="courses">
         <div class="container">
-            <h2 class="usp-title">特長</h2>
-
-            <div class="usp-card"><h3>作りたいものから始める個別指導</h3><p>決まった手順をなぞるだけの授業にはしません。お子様の「これを作りたい」を出発点に、講師が横で一緒に考えます。<strong>置いてけぼりになりません。</strong></p></div>
-            <div class="usp-card"><h3>毎回届く「指導報告書」</h3><p>授業後、保護者様のスマホに、今日作ったもの・夢中になっていたこと・つまずいて乗り越えたことをお届けします。</p></div>
-            <div class="usp-card"><h3>いつでも利用できる自習室</h3><p>授業がない日も、続きを作りに来られます。学校の宿題等も持ち込み可能です。</p></div>
-            <div class="usp-card usp-card-photo"><div><h3>3Dプリンター・ドローン・レゴも</h3><p>画面の中だけで終わらず、作ったものが手に取れる・飛ぶ・走る。「作るって楽しい」を体ごと味わえる道具をそろえています。中学2年生がBlenderで作った工事現場のコーンも、その場で3Dプリンターで形になりました。</p></div><img src="images/instagram/feature_3dprint.jpg" alt="3Dプリンターで造形した工事現場のコーン" loading="lazy"></div>
-        </div>
-    </section>
-
-    <!-- 学べることセクション（対象学年・タイプ ＋ カリキュラムを統合） -->
-    <section class="learn-section" style="padding: 40px 0; background: var(--white);">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 2rem; color: var(--primary); margin-bottom: 20px; font-weight: bold;">
-                学べること
-            </h2>
-            <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: center; max-width: 900px; margin: 0 auto 35px;">
-                <img src="images/lessonImage.png" alt="小学1年生から始められるプログラミング教室の様子" style="width: 280px; max-width: 100%; height: auto; border-radius: 0; flex-shrink: 0;">
-                <p style="flex: 1; min-width: 260px; color: var(--text); font-size: 1rem; line-height: 1.9; margin: 0;">
-                    小学1年生から始められます。ゲームで遊ぶのが好きなお子さんも、プログラミング未経験のお子さんも大歓迎。個別指導だから、お子様のペースに合わせて基礎から丁寧にサポートします。まずは<strong style="color: var(--primary);">無料体験</strong>で、お子様の反応を見てください。相談だけでも大歓迎です。
-                </p>
-            </div>
+            <p class="p-q">何をするの？</p>
+            <h2>ゲーム・アニメ・3D作品を、自分で作ります</h2>
+            <p class="p-lead">ブロックを組み立てるScratchから、本格的なPythonまで。お子さまの「これを作りたい」に合わせて選びます。</p>
             <!-- 写真は教室のInstagram（https://www.instagram.com/iteen_mukonosou/）の投稿から 2026-11-08 -->
             <div class="learn-photos">
                 <figure class="learn-photo">
                     <img src="images/instagram/learn_scratch.jpg" alt="スクラッチJr.で年中さんが作ったペンギンダンスの作品" loading="lazy">
-                    <figcaption><strong>Scratch</strong>ブロックを組み立てて、ゲームやアニメを作る。年中さんから</figcaption>
+                    <figcaption><strong>Scratch</strong>ブロックを組み立てて、ゲームやアニメを作る</figcaption>
                 </figure>
                 <figure class="learn-photo">
                     <img src="images/instagram/learn_python.jpg" alt="中学1年生がPythonで作ったゲームの画面" loading="lazy">
@@ -248,344 +217,47 @@
                     <figcaption><strong>Roblox Studio</strong>3Dの世界に教室を作る</figcaption>
                 </figure>
                 <figure class="learn-photo">
-                    <img src="images/instagram/learn_typing.jpg" alt="手元を紙で隠してタイピング練習をする生徒の手元" loading="lazy">
-                    <figcaption><strong>タイピング</strong>毎回の授業のはじめに練習</figcaption>
+                    <img src="images/instagram/feature_3dprint.jpg" alt="3Dプリンターで造形した工事現場のコーン" loading="lazy">
+                    <figcaption><strong>Blender・3Dプリンター</strong>作ったものが手に取れる</figcaption>
                 </figure>
             </div>
-            <p class="learn-more"><strong>ほかにも</strong>マインクラフト ／ JavaScript・HTML ／ Blender（3D）と3Dプリンター ／ ドローン</p>
+            <p class="learn-more"><strong>ほかにも</strong>マインクラフト ／ JavaScript・HTML ／ ドローン ／ レゴ ／ タイピング</p>
+            <p class="p-link"><a href="student/work/index.html">生徒の作品を見る →</a></p>
         </div>
     </section>
 
-    <!-- ニュースセクション -->
-    <section id="news" class="news-section">
+    <!-- ② ついていける？ -->
+    <section class="p-block" id="fit">
         <div class="container">
-            <h2 class="news-title">📢 お知らせ・ニュース</h2>
-            <div class="news-list">
-                <div class="news-item">
-                    <div class="news-header">
-                        <span class="news-date">2026.02.01</span>
-                        <span class="news-category">イベント</span>
-                        <h3 class="news-title-item">節分ゲーム大会開催！</h3>
-                    </div>
-                    <div class="news-content">
-                        2月1日に第6回ゲーム大会を開催！生徒たちが作成したScratchゲームで遊ぶことができます。
-                    </div>
-                    <a href="https://forms.gle/PuM59bmA9e61TToF7" class="news-link">参加申し込み →</a>
-                </div>
-                <div class="news-item">
-                    <div class="news-header">
-                        <span class="news-date">2025.01.05</span>
-                        <span class="news-category">お知らせ</span>
-                        <h3 class="news-title-item">2026年の受講生募集中</h3>
-                    </div>
-                    <div class="news-content">
-                        新規受講生を募集しています。プログラミング初心者の方も大歓迎です。個別指導でお子様のペースに合わせて丁寧にサポートいたします。
-                    </div>
-                    <a href="html/reserve.html" class="news-link">無料体験を予約する →</a>
-                </div>
+            <p class="p-q">ついていける？</p>
+            <h2>決まった手順をなぞる授業ではありません</h2>
+            <div class="p-two">
+                <img src="images/jugyo.png" alt="講師が横について教える個別指導の様子" loading="lazy">
+                <ul class="p-points">
+                    <li><strong>個別指導</strong>講師1人に生徒3人まで。お子さまのペースで進めるので、置いてけぼりになりません。</li>
+                    <li><strong>はじめてでも大丈夫</strong>ふだんパソコンにさわらない子も、最後まで作りきっています。</li>
+                    <li><strong>作りたいものから始める</strong>「これを作りたい」を出発点に、講師が横で一緒に考えます。</li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- ブログ最新記事セクション -->
-    <section class="blog-preview-section" style="padding: 40px 0; background: var(--white);">
+    <!-- ③ 成長はわかる？ -->
+    <section class="p-block" id="growth">
         <div class="container">
-            <h2 style="text-align: center; font-size: 2rem; color: var(--primary); margin-bottom: 30px; font-weight: bold;">
-                📝 ブログ最新記事
-            </h2>
-            <div class="blog-preview-grid" id="blog-preview-grid">
-                <p style="text-align: center; color: #666; grid-column: 1 / -1;">記事を読み込み中...</p>
+            <p class="p-q">成長はわかる？</p>
+            <h2>毎回、指導報告書がスマホに届きます</h2>
+            <p class="p-lead">今日作ったもの・夢中になっていたこと・つまずいて乗り越えたことを、授業のたびにお届けします。</p>
+            <div class="p-reports">
+                <figure>
+                    <img src="images/1.png" alt="指導報告書の例1（小学4年生・スクラッチの授業内容）" loading="lazy">
+                    <figcaption>小学4年生・Scratchの報告例</figcaption>
+                </figure>
+                <figure>
+                    <img src="images/2.png" alt="指導報告書の例2（小学5年生・Pythonの授業内容）" loading="lazy">
+                    <figcaption>小学5年生・Pythonの報告例</figcaption>
+                </figure>
             </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="html/blog/index.html" class="btn-lg btn-accent">ブログ一覧を見る →</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 教室・設備紹介セクション -->
-    <section class="facility-section" style="padding: 40px 0; background: var(--white);">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 2rem; color: var(--primary); margin-bottom: 10px; font-weight: bold;">
-                教室・設備紹介
-            </h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 0.95rem;">
-                実際の教室の様子です
-            </p>
-            <div class="facility-grid">
-                <div class="facility-item">
-                    <img src="images/school_scenes/18.png" alt="教室の入口・看板">
-                    <p>教室の入口</p>
-                </div>
-                <div class="facility-item">
-                    <img src="images/jugyo.png" alt="個別指導の様子">
-                    <p>個別指導の様子</p>
-                </div>
-                <div class="facility-item">
-                    <img src="images/school_scenes/7.png" alt="設備：3Dプリンター">
-                    <p>設備：3Dプリンター</p>
-                </div>
-                <div class="facility-item">
-                    <img src="images/school_scenes/13.png" alt="自習スペース">
-                    <p>自習スペース</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 教室の雰囲気と生徒の表情セクション -->
-    <section class="atmosphere-section">
-        <div class="container">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 10px; flex-wrap: wrap;">
-                <h2 class="atmosphere-title" style="margin: 0;">✨ ふだんの様子</h2>
-                <a href="https://www.instagram.com/iteen_mukonosou" target="_blank" rel="noopener noreferrer" class="atmosphere-instagram-link" style="display: inline-block; transition: transform 0.2s, opacity 0.2s;">
-                    <img src="images/Instagram_Glyph_Gradient.png" alt="Instagram" style="width: 32px; height: 32px; opacity: 0.9;">
-                </a>
-            </div>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 0.95rem;">
-                お子様が楽しく通える環境を、実際の教室の様子でご確認ください
-            </p>
-            <div class="atmosphere-grid" id="atmosphere-carousel">
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/1.png" alt="授業風景1">
-                    <div class="atmosphere-card-content">
-                        <p>Scratch検定に向けて集中して取り組んでくれています。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/2.png" alt="授業風景2">
-                    <div class="atmosphere-card-content">
-                        <p>生徒に寄り添って丁寧に指導いたします。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/3.png" alt="授業風景3">
-                    <div class="atmosphere-card-content">
-                        <p>プログラミングでドローンを飛ばしました。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/4.png" alt="授業風景4">
-                    <div class="atmosphere-card-content">
-                        <p>百合学院小学校に毎週出張教室に行っています。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/5.png" alt="授業風景5">
-                    <div class="atmosphere-card-content">
-                        <p>レゴとモーターでマイカーを作成しました。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/6.png" alt="授業風景6">
-                    <div class="atmosphere-card-content">
-                        <p>生徒同士も教えあって切磋琢磨できます。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/7.png" alt="授業風景7">
-                    <div class="atmosphere-card-content">
-                        <p>大人気3Dプリンター</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/8.png" alt="授業風景8">
-                    <div class="atmosphere-card-content">
-                        <p>Unityで3Dゲームを作成しました。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/9.png" alt="授業風景9">
-                    <div class="atmosphere-card-content">
-                        <p>自分の好きが形になるので、生徒に喜んでもらっています。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/10.png" alt="授業風景10">
-                    <div class="atmosphere-card-content">
-                        <p>レゴで一休み</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/11.png" alt="授業風景11">
-                    <div class="atmosphere-card-content">
-                        <p>掃除は教室長の仕事</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/12.png" alt="授業風景12">
-                    <div class="atmosphere-card-content">
-                        <p>ささやかな緑を育てています。</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/13.png" alt="授業風景13">
-                    <div class="atmosphere-card-content">
-                        <p>自習時間に宿題持ち込み可能</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/15.png" alt="授業風景15">
-                    <div class="atmosphere-card-content">
-                        <p>三人寄れば文殊の知恵</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/16.png" alt="授業風景16">
-                    <div class="atmosphere-card-content">
-                        <p>ドローン祭り</p>
-                    </div>
-                </div>
-                <div class="atmosphere-card">
-                    <img src="images/school_scenes/17.png" alt="授業風景17">
-                    <div class="atmosphere-card-content">
-                        <p>はじめての飛行体験にワクワク</p>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="html/reserve.html" class="btn-lg btn-accent">実際に教室を見学する</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="teachers" class="teachers-section">
-        <div class="container">
-            <h2 class="teachers-title">👨‍🏫 講師紹介</h2>
-            <div class="teacher-list-wrapper">
-            <div class="teacher-list">
-                <div class="teacher-item">
-                    <img src="images/hikosaka_photo.png" alt="教室長 彦阪吉海">
-                    <h3>教室長 彦阪吉海</h3>
-                        <p><strong>【学歴】</strong>大阪府立大学大学院</p>
-                        <p><strong>【前職】</strong>大手メーカーエンジニア</p>
-                        <p><strong>【資格】</strong>TOEIC 765点・弓道参段</p>
-                        <p><strong>【趣味】</strong>バスケット・読書</p>
-                        <p style="background: var(--white); padding: 8px 0; margin: 10px 0; font-size: 0.9rem;"><strong>💝 子ども達の成長が一番のやりがい</strong><br>お子様一人ひとりの成長を心から応援しています</p>
-                        <p>現場を知るエンジニアが直接指導 論理的思考力と最先端のノウハウを伝授します。「自分の頭で考え、行動できる力」を育てることを大切にしています。10年後、「あの教室に通って本当によかった」と言ってもらえる教室を目指します。</p>
-                </div>
-                <div class="teacher-item">
-                    <img src="images/sasamori.jpg" alt="講師 笹森 圭太">
-                    <h3>講師 笹森</h3>
-                    <p><strong>【職業】</strong>学生</p>
-                    <p><strong>【趣味】</strong>ゲーム制作・アニメ</p>
-                        <p style="background: var(--white); padding: 8px 0; margin: 10px 0; font-size: 0.9rem;"><strong>💝 元生徒だから分かる！</strong><br>お子様の気持ちに寄り添える指導を心がけています</p>
-                    <p>元々iTeen の生徒だったので同じ目線に立って授業ができると思います。楽しい授業ができるよう頑張ります！</p>
-                </div>
-                <div class="teacher-item">
-                    <img src="images/kamimura.png" alt="講師 K">
-                    <h3>講師 上村</h3>
-                    <p><strong>【前職】</strong>ソフトウェアエンジニア</p>
-                    <p><strong>【趣味】</strong>料理</p>
-                        <p style="background: var(--white); padding: 8px 0; margin: 10px 0; font-size: 0.9rem;"><strong>💝 ものづくりが大好き！</strong><br>お子様の「できた！」を一緒に喜びます</p>
-                    <p>生徒様に優しく寄り添いながら、ものづくりを楽しんでいきます。検定対策が得意です。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 料金・コースセクション -->
-    <section id="courses" class="pricing-section">
-        <div class="container">
-            <span id="fee"></span>
-            <h2 class="pricing-title">コース紹介</h2>
-            <p class="pricing-subtitle">学校の進度や生活リズムに合わせて最適なコースをご提案します。</p>
-            <p style="text-align: center; color: var(--primary); font-size: 1.1rem; font-weight: bold; margin: 20px 0;">
-                ✅ プログラミング初心者・低学年・ゲーム好きのお子さん、大歓迎です！
-            </p>
-
-            <div class="pricing-card">
-                <h3>🎯 学年別推奨コース 1回60分</h3>
-                <div class="course-recommendation">
-                    <h4>小学1〜3年生</h4>
-                    <ul>
-                        <li><strong>Scratch</strong>：視覚的に分かりやすいブロックプログラミング</li>
-                        <li><strong>マインクラフト</strong>：ゲーム感覚で楽しく学習</li>
-                    </ul>
-                </div>
-                <div class="course-recommendation">
-                    <h4>小学4〜6年生</h4>
-                    <ul>
-                        <li><strong>Scratch上級</strong>：より複雑なゲーム制作に挑戦</li>
-                        <li><strong>Python基礎</strong>：本格的なプログラミング言語の入門</li>
-                        <li><strong>HTML/CSS</strong>：Webサイト制作の基礎</li>
-                    </ul>
-                </div>
-                <div class="course-recommendation">
-                    <h4>中学生</h4>
-                    <ul>
-                        <li><strong>Python応用</strong>：実用的なアプリケーション開発</li>
-                        <li><strong>JavaScript</strong>：動的なWebサイト制作</li>
-                        <li><strong>3Dモデリング（Blender）</strong>：創造性を高める</li>
-                    </ul>
-                </div>
-                <p style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
-                    ※お子様の興味やレベルに合わせて、柔軟にコースを選択・変更できます
-                </p>
-            </div>
-
-            <div class="pricing-card">
-                <h3>💰 料金について</h3>
-                <p style="font-size: 0.95rem; color: var(--text); line-height: 1.8;">
-                    月2回・月4回・月8回の3つから選ぶだけです（教室管理費こみ・税込）。
-                </p>
-                <p style="font-weight: bold; margin: 0;">
-                    <a href="html/price.html" style="color: var(--primary);">料金を見る →</a>
-                </p>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="html/reserve.html" class="btn-lg btn-accent">無料体験で詳しく聞く</a>
-                <p style="margin-top: 15px; font-size: 0.95rem; color: #666;">
-                    まずは<strong>相談だけでもOK</strong>です。お気軽にお問い合わせください。
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 指導報告書の実例セクション -->
-    <section class="report-example-section" style="padding: 40px 0; background: var(--white);">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 2rem; color: var(--primary); margin-bottom: 15px; font-weight: bold;">
-                📋 指導報告書の実例
-            </h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 1rem; line-height: 1.8;">
-                「毎回の授業でどんなことをしているのかな？」というご不安の声にお応えして、<br>
-                講師が授業内容を毎回丁寧に指導報告書へまとめ、保護者様にお届けしています。<br>
-                安心してお子様をお預けください。授業内容へのご質問などもお気軽にどうぞ。
-            </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto;">
-                <div style="text-align: center;">
-                    <img src="images/1.png" alt="指導報告書の例1（小学4年生・スクラッチの授業内容）" style="width: 100%; height: auto; border: 1px solid #eee;">
-                    <p style="margin-top: 12px; font-size: 0.9rem; color: #666;">小学4年生・スクラッチの授業報告例</p>
-                </div>
-                <div style="text-align: center;">
-                    <img src="images/2.png" alt="指導報告書の例2（小学5年生・Pythonの授業内容）" style="width: 100%; height: auto; border: 1px solid #eee;">
-                    <p style="margin-top: 12px; font-size: 0.9rem; color: #666;">小学5年生・Pythonの授業報告例</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="student-works-section">
-        <div class="container">
-            <h2 class="usp-title" style="color:var(--primary);">🎨 生徒作品紹介</h2>
-            <div class="student-works-content">
-                <p style="font-size: 1.1rem; margin-bottom: 15px;">
-                    「これ、自分で作ったんだよ」――子どもたちが夢中になって作った作品をご覧ください。
-                </p>
-                <a href="student/work/index.html" class="student-works-btn">作品を見る →</a>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- 保護者の声セクション -->
-    <section class="testimonials-section">
-        <div class="container">
-            <h2 class="testimonials-title">💬 保護者の声・生徒の実績</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 0.95rem;">
-                実際に通っているお子様と保護者様の声をご紹介します
-            </p>
             <div class="result-highlight">
                 <img src="images/instagram/expo2026_first_round.jpg" alt="iTeen EXPO 2026 一次審査 3名通過" loading="lazy">
                 <div>
@@ -594,186 +266,88 @@
                     <p class="result-source">出典：<a href="https://www.instagram.com/p/DeFRTQVD9_K/" target="_blank" rel="noopener noreferrer">教室のInstagram</a>（2026年11月8日確認）</p>
                 </div>
             </div>
-            <div class="testimonial-list">
-                <div class="testimonial-item">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">👩</div>
-                        <div class="testimonial-info">
-                            <h4>武庫の里小学校 高学年 お母様</h4>
-                            <p>2025年入塾</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-content">
-                        「もともとタイピングは好きだったのですが、家でも進んでタイピング練習やスクラッチでゲームを作るようになりました。」
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">👨</div>
-                        <div class="testimonial-info">
-                            <h4>武庫東小学校 高学年 お母様</h4>
-                            <p>2026年入塾</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-content">
-                        「サッカーや水泳など習わせてきましたが、自分から通いたいと子どもの方から初めて言ってきた習い事でした。」
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">👩</div>
-                        <div class="testimonial-info">
-                            <h4>武庫之荘中学校 お母様</h4>
-                            <p>2023年入塾</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-content">
-                        「いつも楽しく通わせてもらっています。」
-                    </div>
-                </div>
+        </div>
+    </section>
+
+    <!-- ④ いくら？（料金の正本は html/price.html） -->
+    <section class="p-block" id="fee">
+        <div class="container">
+            <p class="p-q">いくら？</p>
+            <h2>通う回数を選ぶだけ</h2>
+            <div class="p-price">
+                <a href="html/price.html"><span>月2回</span><strong>11,000円</strong></a>
+                <a href="html/price.html" class="is-rec"><em>おすすめ</em><span>月4回</span><strong>17,710円</strong></a>
+                <a href="html/price.html"><span>月8回</span><strong>28,930円</strong></a>
             </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="html/reserve.html" class="btn-lg btn-accent">無料体験でお子様の反応を見る</a>
+            <p class="p-note">教室管理費こみ・税込の月額です。回数はあとから変えられます。</p>
+            <p class="p-link"><a href="html/price.html">料金をくわしく見る →</a></p>
+        </div>
+    </section>
+
+    <!-- ⑤ 続けやすい？ -->
+    <section class="p-block" id="continue">
+        <div class="container">
+            <p class="p-q">続けやすい？</p>
+            <h2>休んでも、ほかの習い事があっても大丈夫</h2>
+            <ul class="p-points p-points-row">
+                <li><strong>振替できます</strong>前日までにご連絡いただければ、月内なら何回でも別の日に振替できます。</li>
+                <li><strong>自習室が使えます</strong>授業がない日も、続きを作りに来られます。学校の宿題の持ち込みもできます。</li>
+                <li><strong>時間割を相談できます</strong>個別指導なので、ほかの習い事と重ならないように時間を決められます。</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 保護者の声 -->
+    <section class="p-block" id="voice">
+        <div class="container">
+            <h2>保護者様の声</h2>
+            <div class="p-voices">
+                <blockquote><p>「もともとタイピングは好きだったのですが、家でも進んでタイピング練習やスクラッチでゲームを作るようになりました。」</p><cite>武庫の里小学校 高学年 お母様（2025年入塾）</cite></blockquote>
+                <blockquote><p>「サッカーや水泳など習わせてきましたが、自分から通いたいと子どもの方から初めて言ってきた習い事でした。」</p><cite>武庫東小学校 高学年 お母様（2026年入塾）</cite></blockquote>
+                <blockquote><p>「いつも楽しく通わせてもらっています。」</p><cite>武庫之荘中学校 お母様（2023年入塾）</cite></blockquote>
             </div>
         </div>
     </section>
 
-    <section id="faq" class="faq">
+    <!-- 講師 -->
+    <section class="p-block" id="teachers">
         <div class="container">
-            <h2 class="usp-title">❓ よくあるご質問</h2>
-            <div class="faq-item">
-                <div class="faq-question">Q1. 月謝や費用について知りたいです。</div>
-                <div class="faq-answer">A. 詳細な料金体系については、資料請求いただくか、無料体験時に個別にご説明させていただきます。</div>
+            <h2>講師</h2>
+            <div class="p-teachers">
+                <div><img src="images/hikosaka_photo.png" alt="教室長 彦阪吉海" loading="lazy"><h3>教室長 彦阪</h3><p>大阪府立大学大学院を出て、大手メーカーのエンジニアに。「自分の頭で考え、行動できる力」を育てます。</p></div>
+                <div><img src="images/sasamori.jpg" alt="講師 笹森" loading="lazy"><h3>講師 笹森</h3><p>学生。もとiTeenの生徒なので、子どもと同じ目線で教えます。ゲーム制作が好き。</p></div>
+                <div><img src="images/kamimura.png" alt="講師 上村" loading="lazy"><h3>講師 上村</h3><p>もとソフトウェアエンジニア。検定対策が得意です。</p></div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question">Q2. 他の習い事との両立は可能ですか？</div>
-                <div class="faq-answer">A. はい。個別指導なので、時間割を柔軟に調整し、無理なく続けられるようサポートします。</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Q3. 急な用事で休んだ場合、振替はできますか？</div>
-                <div class="faq-answer">A. はい、可能です。前日までにご連絡いただければ、別日に振替できます。月内であれば何回でも振替可能ですので、共働きのご家庭にも安心です。</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Q4. 無料体験では何をしますか？</div>
-                <div class="faq-answer">A. お子様の年齢や興味に合わせて、簡単なプログラミング体験をしていただきます。手ぶらでOK、堅苦しい説明はありません。上手にできなくても大丈夫。「作るって楽しい」と感じてもらえたら、それがいちばんの成果です。</div>
-            </div>
-            <p style="text-align:center; margin-top:20px;"><a href="html/faq.html">→ その他の質問はこちら</a></p>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="html/reserve.html" class="btn-lg btn-accent">無料体験を予約する</a>
+            <p class="p-link"><a href="html/greeting.html">教室長のごあいさつ →</a></p>
+        </div>
+    </section>
+
+    <!-- 教室・アクセス -->
+    <section class="p-block" id="access">
+        <div class="container">
+            <h2>教室・アクセス</h2>
+            <div class="p-access">
+                <dl>
+                    <dt>住所</dt><dd>〒661-0035 兵庫県尼崎市武庫之荘5-6-1<br>阪急武庫之荘駅から北へ徒歩10分</dd>
+                    <dt>時間</dt><dd>平日 14:00〜20:30 ／ 土曜 10:30〜19:20<br>日曜・月曜・祝日はお休み</dd>
+                    <dt>自転車</dt><dd>教室の前に停められます（車は近くの有料駐車場をご利用ください）</dd>
+                    <dt>電話</dt><dd><a href="tel:06-6438-8277">06-6438-8277</a></dd>
+                </dl>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.9020649940176!2d135.38622512695957!3d34.75805977289932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000f12ccc72376b%3A0xd6f38b0f5199434d!2z5bC85bSO44Gu44OX44Ot44Kw44Op44Of44Oz44Kw5pWZ5a6kIGlUZWVu5q2m5bqr5LmL6I2Y5qCh!5e0!3m2!1sja!2sjp!4v1763012280845!5m2!1sja!2sjp" title="教室の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
             </div>
         </div>
     </section>
 
-    <section id="access" class="access-section">
+    <!-- 無料体験 -->
+    <section class="p-block p-cta" id="reservation">
         <div class="container">
-            <h2 class="access-title">📍 教室情報・アクセス</h2>
-            <div class="access-wrapper">
-                <div class="access-info">
-                    <h3>住所</h3>
-                    <p>〒661-0035 兵庫県尼崎市武庫之荘5-6-1</p>
-                    <p>阪急武庫之荘駅から北へ徒歩10分</p>
-                    
-                </div>
-                <div class="map-container">
-                    
-                    <h3 style="margin-bottom: 15px; color: var(--accent);">地図</h3>
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.9020649940176!2d135.38622512695957!3d34.75805977289932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000f12ccc72376b%3A0xd6f38b0f5199434d!2z5bC85bSO44Gu44OX44Ot44Kw44Op44Of44Oz44Kw5pWZ5a6kIGlUZWVu5q2m5bqr5LmL6I2Y5qCh!5e0!3m2!1sja!2sjp!4v1763012280845!5m2!1sja!2sjp"
-                        width="100%" 
-                        height="300" 
-                        style="border:0;"
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                    <p><a href="https://www.google.com/maps?q=34.75805977289932,135.38622512695957" target="_blank">Google Mapで確認する</a></p>
-                </div>
-                <div class="access-info">
-                    <h3>駐輪場</h3>
-                    <p>自転車・バイクは教室前にお停めいただけます。</p>
-                </div>
-                <div class="access-info">
-                    <h3>駐車場</h3>
-                    <p>近隣の有料駐車場をご利用ください</p>
-                </div>
-                <div class="access-info">
-                    <h3>営業時間</h3>
-                    <p><strong>平日</strong>：14：00～20：30</p>
-                    <p><strong>土曜</strong>：10：30～19：20</p>
-                    <p>※日・月曜日、祝日は休校です</p>
-                </div>
-                <div class="access-info">
-                    <h3>電話番号</h3>
-                    <p>06-6438-8277</p>
-                </div>
-                <div class="access-info">
-                    <h3>🔄 振替制度について</h3>
-                    <p><strong>急な病気や学校行事でも安心！</strong></p>
-                    <p>お休みされる場合は、前日までにご連絡いただければ、別日に振替が可能です。</p>
-                    <ul style="margin: 10px 0; padding-left: 20px; font-size: 0.95rem;">
-                        <li>前日までにご連絡いただければ振替可能</li>
-                        <li>月内であれば何回でも振替OK</li>
-                        <li>共働きのご家庭にも優しい制度です</li>
-                    </ul>
-                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
-                        ※振替の詳細については、無料体験時にお伝えします
-                    </p>
-                </div>
+            <h2>まずは無料体験へ</h2>
+            <p>手ぶらで大丈夫です。費用はかかりません。相談だけでも歓迎です。</p>
+            <div class="p-cta-btns">
+                <a href="html/reserve.html" class="p-btn-main">無料体験を予約する →</a>
+                <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="p-btn-sub">LINEで質問する</a>
             </div>
-        </div>
-    </section>
-
-    <!-- 無料体験予約セクション（リンクのみ） -->
-    <section id="reservation" class="reservation-section" style="padding: 50px 0; background: var(--white);">
-        <div class="container">
-            <h2 class="reservation-title">📋 無料体験予約</h2>
-            <p class="reservation-subtitle">ご希望の日時を選択して、無料体験を予約してください</p>
-
-            <!-- 今体験する意味 -->
-            <div style="padding: 25px 0; margin-bottom: 20px; border-top: 1px solid #eee; text-align: center;">
-                <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 15px; font-weight: bold;">💡 今体験する意味</h3>
-                <p style="font-size: 1.1rem; color: var(--text); line-height: 1.8; margin: 0;">
-                    春まで待つ必要はありません。今体験することで、<strong style="color: var(--accent);">お子様の興味や適性を早く見つけられます</strong>。<br>
-                    早く始めるほど、お子様の「やりたい！」という気持ちを大切にできます。まずは<strong>相談だけでもOK</strong>です。お気軽にお問い合わせください。
-                </p>
-            </div>
-
-            <!-- ハードルを下げるメッセージ -->
-            <div style="padding: 25px 0; margin-bottom: 20px; border-top: 1px solid #eee; text-align: center;">
-                <h3 style="color: var(--accent); font-size: 1.2rem; margin-bottom: 15px;">✨ 無料体験はこんなに簡単！</h3>
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 手ぶらでOK</strong> - 筆記用具やPCは教室で用意します</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 当日予約OK</strong> - 空きがあれば当日でも予約可能です</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ まずは楽しむだけでOK</strong> - 堅苦しい説明はありません</p>
-                    <p style="font-size: 1rem; margin: 0;"><strong>✅ 完全無料</strong> - 一切費用はかかりません</p>
-                    <p style="font-size: 1rem; margin: 0; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;"><strong>💬 相談だけでも大歓迎</strong> - まずはお話を聞かせてください</p>
-                </div>
-            </div>
-
-            <!-- お申込みにあたって -->
-            <div style="background: var(--white); padding: 25px 0; margin-bottom: 20px; border-top: 1px solid #eee;">
-                <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 15px; text-align: center;">お申込みにあたって</h3>
-                <div style="background: var(--white); padding: 12px 0; border-top: 1px solid #eee; margin-bottom: 15px;">
-                    <p style="font-weight: bold; margin-bottom: 10px; color: var(--primary);">ご用意いただくもの</p>
-                    <ul style="margin: 0; padding-left: 20px; font-size: 0.95rem;">
-                        <li>お子様のお名前</li>
-                        <li>保護者様のお名前</li>
-                        <li>電話番号</li>
-                        <li>メールアドレス</li>
-                    </ul>
-                </div>
-                <p style="font-size: 0.9rem; color: #666; text-align: center; margin: 0;">
-                    ※無料体験は完全無料です。お気軽にお申し込みください。
-                </p>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="html/reserve.html" class="btn-lg btn-accent" style="font-size: 1.2rem; padding: 18px 50px; display: inline-block;">無料体験を予約する →</a>
-                <a href="html/contact.html" class="btn-lg" style="font-size: 1.1rem; padding: 18px 40px; display: inline-block; background: var(--white); color: var(--primary); border: 2px solid var(--primary); border-radius: 0; text-decoration: none; font-weight: bold; transition: all 0.2s;">まずは相談する</a>
-            </div>
-            <p style="text-align: center; margin-top: 20px; font-size: 0.95rem; color: #666;">
-                無料体験の予約がまだ決まらない方も、<strong>お気軽にご相談ください</strong>。お電話やLINEでも対応可能です。
-            </p>
+            <p class="p-link"><a href="html/faq.html">よくあるご質問 →</a>　<a href="html/blog/index.html">ブログ →</a>　<a href="html/game-event.html">イベント →</a></p>
         </div>
     </section>
 
@@ -783,7 +357,7 @@
             <div class="footer-sitemap">
                 <div class="footer-sitemap-column">
                     <div class="footer-sitemap-title">メニュー</div>
-                    <a href="#news" class="footer-sitemap-link">ニュース</a>
+                    <a href="html/game-event.html" class="footer-sitemap-link">イベント</a>
                     <a href="html/blog/index.html" class="footer-sitemap-link">ブログ</a>
                     <a href="#courses" class="footer-sitemap-link">コース</a>
                     <a href="#teachers" class="footer-sitemap-link">講師紹介</a>
@@ -794,12 +368,12 @@
                     <a href="html/price.html" class="footer-sitemap-link">料金</a>
                     <a href="html/reserve.html" class="footer-sitemap-link">無料体験予約</a>
                     <a href="html/values.html" class="footer-sitemap-link">教室長挨拶・大切にしていること</a>
-                    <a href="#faq" class="footer-sitemap-link">よくある質問</a>
+                    <a href="html/faq.html" class="footer-sitemap-link">よくある質問</a>
                 </div>
                 <div class="footer-sitemap-column">
                     <div class="footer-sitemap-title">アクセス</div>
                     <a href="#access" class="footer-sitemap-link">アクセス・営業時間</a>
-                    <a href="#contact" class="footer-sitemap-link">お問い合わせ</a>
+                    <a href="html/contact.html" class="footer-sitemap-link">お問い合わせ</a>
                     <a href="tel:06-6438-8277" class="footer-sitemap-link">☎ 06-6438-8277</a>
                 </div>
                 <div class="footer-sitemap-column">

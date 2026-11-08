@@ -1847,3 +1847,122 @@ header {
     .tsukuru-body { grid-template-columns: 1fr; gap: 32px; }
     .tsukuru-title { margin-bottom: 32px; }
 }
+
+/* =====================================
+   トップページ：保護者の気になること順（2026-11-09 簡素化）
+   角丸0・左だけの縦棒なし・色付きの箱を増やさない（school/mukonoso/CLAUDE.md）
+   ===================================== */
+.tsukuru-short { padding: 56px 0 40px; }
+.tsukuru-short .tsukuru-title { margin-bottom: 14px; }
+.tsukuru-one { max-width: 640px; font-size: 1.05rem; line-height: 1.9; margin: 0 0 12px; }
+
+.p-facts { padding: 8px 0 40px; background: var(--white); }
+.p-facts-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 0 0 24px;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+}
+.p-facts-list > div { padding: 16px 14px; }
+.p-facts-list > div + div { border-left: 1px solid #e6e6e6; }
+.p-facts-list dt { font-size: 0.8rem; color: #666; margin-bottom: 4px; }
+.p-facts-list dd { margin: 0; font-weight: bold; line-height: 1.6; }
+.p-facts-list dd a { font-weight: normal; font-size: 0.85rem; color: var(--primary); }
+.p-jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.p-jump a {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-radius: 0;
+}
+.p-jump a:hover { border-color: var(--primary); color: var(--primary); }
+
+.p-block { padding: 56px 0; background: var(--white); border-top: 1px solid #eee; }
+.p-block h2 { font-size: 1.6rem; line-height: 1.5; margin: 0 0 14px; color: var(--text); text-align: left; }
+.p-q { margin: 0 0 4px; font-size: 0.95rem; font-weight: bold; color: var(--accent); }
+.p-lead { margin: 0 0 24px; line-height: 1.9; max-width: 720px; }
+.p-link { margin: 18px 0 0; }
+.p-link a { color: var(--primary); font-weight: bold; text-decoration: none; margin-right: 14px; }
+.p-link a:hover { text-decoration: underline; }
+.p-note { font-size: 0.85rem; color: #666; margin: 10px 0 0; }
+
+.p-two { display: flex; gap: 28px; align-items: center; }
+.p-two img { width: 42%; max-width: 380px; height: auto; border-radius: 0; flex-shrink: 0; }
+.p-points { list-style: none; margin: 0; padding: 0; }
+.p-points li { margin: 0 0 16px; line-height: 1.8; }
+.p-points li strong { display: block; font-size: 1.05rem; color: var(--primary); }
+.p-points-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.p-points-row li { margin: 0; }
+
+.p-reports { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 36px; }
+.p-reports figure { margin: 0; }
+.p-reports img { width: 100%; height: auto; border: 1px solid #eee; border-radius: 0; }
+.p-reports figcaption { font-size: 0.85rem; color: #666; margin-top: 6px; }
+#growth .result-highlight { margin: 0; max-width: none; }
+
+.p-price { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 640px; }
+.p-price a {
+    position: relative;
+    display: block;
+    padding: 26px 8px 16px;
+    border: 2px solid #ddd;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    border-radius: 0;
+}
+.p-price a:hover { border-color: var(--primary); }
+.p-price a.is-rec { border-color: var(--primary); }
+.p-price em {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: var(--accent); color: #fff; font-style: normal; font-size: 0.75rem; font-weight: bold; padding: 2px 0;
+}
+.p-price span { display: block; font-size: 1.05rem; font-weight: bold; }
+.p-price strong { display: block; font-size: 1.3rem; color: var(--primary); }
+
+.p-voices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.p-voices blockquote { margin: 0; }
+.p-voices p { margin: 0 0 8px; line-height: 1.9; }
+.p-voices cite { font-style: normal; font-size: 0.85rem; color: #666; }
+
+.p-teachers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.p-teachers img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 0; }
+.p-teachers h3 { font-size: 1.05rem; margin: 10px 0 4px; color: var(--text); }
+.p-teachers p { margin: 0; font-size: 0.9rem; line-height: 1.7; color: #555; }
+
+.p-access { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.p-access dl { margin: 0; display: grid; grid-template-columns: 5em 1fr; row-gap: 12px; }
+.p-access dt { color: #666; font-size: 0.9rem; }
+.p-access dd { margin: 0; line-height: 1.7; }
+.p-access iframe { width: 100%; height: 300px; border: 0; }
+
+.p-cta { text-align: center; }
+.p-cta h2 { text-align: center; }
+.p-cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 20px 0 6px; }
+.p-btn-main, .p-btn-sub {
+    display: inline-block; padding: 16px 32px; font-weight: bold; font-size: 1.1rem; text-decoration: none; border-radius: 0;
+}
+.p-btn-main { background: var(--accent); color: #fff; }
+.p-btn-main:hover { background: #E0951A; }
+.p-btn-sub { background: #06C755; color: #fff; }
+.p-btn-sub:hover { background: #05B04A; }
+
+@media (max-width: 768px) {
+    .p-facts-list { grid-template-columns: 1fr 1fr; }
+    .p-facts-list > div + div { border-left: 0; }
+    .p-facts-list > div:nth-child(even) { border-left: 1px solid #e6e6e6; }
+    .p-facts-list > div:nth-child(n+3) { border-top: 1px solid #e6e6e6; }
+    .p-block { padding: 40px 0; }
+    .p-block h2 { font-size: 1.3rem; }
+    .p-two { flex-direction: column; align-items: stretch; }
+    .p-two img { width: 100%; max-width: none; }
+    .p-points-row, .p-voices, .p-access { grid-template-columns: 1fr; }
+    .p-reports { grid-template-columns: 1fr; }
+    .p-teachers { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .p-teachers p { font-size: 0.8rem; }
+    .p-price strong { font-size: 1.05rem; }
+}
