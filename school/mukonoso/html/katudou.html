@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja" class="has-sidebar">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script src="/ga4-tracking.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活動の様子 | iTeen 武庫之荘校</title>
+    <meta name="description" content="iTeen武庫之荘校のゲーム大会・体験会・発表会などの活動記録です。年度ごと・月ごとに、写真と動画でご覧いただけます。">
+    <link rel="canonical" href="https://www.pentech.info/school/mukonoso/html/katudou.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="iTeen武庫之荘校">
+    <meta property="og:title" content="活動の様子 | iTeen武庫之荘校">
+    <meta property="og:description" content="ゲーム大会・体験会・発表会など、教室の活動記録です。">
+    <meta property="og:url" content="https://www.pentech.info/school/mukonoso/html/katudou.html">
+    <meta property="og:image" content="https://www.pentech.info/school/mukonoso/images/school_image.png">
+    <meta property="og:locale" content="ja_JP">
+
+    <!-- パスワード保護 -->
+    <script src="config.js"></script>
+    <script src="password-check.js"></script>
+    <script src="matomo-tracking.js"></script>
+
+    <link rel="stylesheet" href="../css/layout.css">
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --accent: #F5A623;
+            --text: #333333;
+            --muted: #777777;
+            --line: #e6e6e6;
+            --bg: #FFFFFF;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Arial, sans-serif;
+            line-height: 1.7;
+        }
+        .katudou {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 48px 16px 80px;
+        }
+        .katudou h1 {
+            font-size: 1.8rem;
+            margin: 0 0 8px;
+        }
+        .katudou .lead {
+            color: var(--muted);
+            margin: 0 0 48px;
+        }
+        .year {
+            margin: 0 0 56px;
+        }
+        .year h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 0 0 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--line);
+        }
+        .item {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--line);
+        }
+        .thumb {
+            display: block;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #f2f2f2;
+        }
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .thumb .play {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+        }
+        .meta {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .meta .status {
+            color: var(--accent);
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .meta .status.off { color: var(--muted); }
+        .item h3 {
+            font-size: 1.05rem;
+            margin: 2px 0 6px;
+        }
+        .item h3 a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        .item h3 a:hover { color: var(--primary); text-decoration: underline; }
+        .item p {
+            margin: 0 0 8px;
+            font-size: 0.95rem;
+        }
+        .links a {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-right: 16px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .links a:hover { text-decoration: underline; }
+        .is-plan .thumb img { opacity: 0.55; }
+        .cta {
+            margin-top: 24px;
+        }
+        .cta a {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            padding: 24px 16px;
+        }
+        footer a { color: var(--primary); }
+        @media (max-width: 600px) {
+            .katudou { padding-top: 32px; }
+            .item {
+                grid-template-columns: 120px 1fr;
+                gap: 12px;
+            }
+            .item p { font-size: 0.88rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-topbar">
+        <a href="../index.html" class="tb-brand"><img src="../images/iteen_logo.png" alt="iTeen"><span>武庫之荘校</span></a>
+        <button type="button" class="sb-toggle" id="sb-toggle" aria-controls="site-sidebar" aria-expanded="false" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+    </header>
+    <aside class="site-sidebar" id="site-sidebar" aria-label="サイトメニュー">
+        <a href="../index.html" class="sb-brand"><img src="../images/iteen_logo.png" alt="iTeen ロゴ"><span>武庫之荘校</span></a>
+        <nav class="sb-nav">
+            <a href="../index.html">ホーム</a>
+            <a href="../index.html#news">ニュース</a>
+            <a href="../html/game-event.html">イベント</a>
+            <a href="../html/katudou.html" aria-current="page">活動の様子</a>
+            <a href="../html/blog/index.html">ブログ</a>
+            <a href="../index.html#courses">コース</a>
+            <a href="../index.html#teachers">講師</a>
+            <a href="../html/values.html">大切にしていること</a>
+            <a href="../student/work/index.html">生徒作品</a>
+            <a href="../index.html#fee">料金</a>
+            <a href="../index.html#faq">よくある質問</a>
+            <a href="../index.html#access">アクセス</a>
+            <a href="../html/contact.html">お問い合わせ</a>
+        </nav>
+        <div class="sb-actions">
+            <a href="tel:06-6438-8277" class="sb-tel">06-6438-8277<small>お電話でのお問い合わせ</small></a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-primary">無料体験を予約する</a>
+            <a href="../html/reserve.html" class="sb-btn sb-btn-outline">資料請求</a>
+            <a href="https://page.line.me/555qxcak?oat_content=url&openQrModal=true" target="_blank" rel="noopener noreferrer" class="sb-btn sb-btn-line">LINEで質問</a>
+        </div>
+    </aside>
+    <div class="sb-overlay" id="sb-overlay" hidden></div>
+
+    <main class="katudou">
+        <h1>活動の様子</h1>
+        <p class="lead">ゲーム大会・体験会・発表会など、教室の活動の記録です。これからの予定も載せています。</p>
+
+        <div id="katudou-list"></div>
+        <noscript><p>活動の一覧を表示するには、JavaScriptを有効にしてください。</p></noscript>
+
+        <div class="cta">
+            <a href="reserve.html">無料体験を予約する</a>
+        </div>
+    </main>
+
+    <footer>
+        <p><a href="../index.html#access">アクセス・営業時間はこちら</a></p>
+        <p>&copy; 2025 iTeen 武庫之荘校</p>
+    </footer>
+
+    <script src="../js/katudou-data.js"></script>
+    <script>
+    (function () {
+        var BASE = '../';                       // データのパスは school/mukonoso/ から
+        var FALLBACK = BASE + 'images/school_image.png';
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function youtubeId(url) {
+            if (!url) return '';
+            var m = url.match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/);
+            return m ? m[1] : '';
+        }
+        function href(path) {
+            if (!path) return '';
+            return /^https?:\/\//.test(path) ? path : BASE + path;
+        }
+        // 4月始まりの年度
+        function fiscalYear(d) {
+            return d.getMonth() >= 3 ? d.getFullYear() : d.getFullYear() - 1;
+        }
+
+        var items = (typeof KATUDOU !== 'undefined' ? KATUDOU : []).slice();
+        items.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+
+        var groups = {}, order = [];
+        items.forEach(function (it) {
+            var p = it.date.split('-');
+            var d = new Date(+p[0], +p[1] - 1, +(p[2] || 1));
+            it._noDay = !p[2];
+            it._d = d;
+            var fy = fiscalYear(d);
+            if (!groups[fy]) { groups[fy] = []; order.push(fy); }
+            groups[fy].push(it);
+        });
+
+        var html = '';
+        order.forEach(function (fy) {
+            html += '<section class="year"><h2>' + fy + '年度</h2>';
+            groups[fy].forEach(function (it) {
+                var yid = youtubeId(it.youtube);
+                var thumb = it.thumb ? href(it.thumb)
+                          : yid ? 'https://i.ytimg.com/vi/' + yid + '/hqdefault.jpg'
+                          : FALLBACK;
+                var main = it.youtube || href(it.link);
+                var ext = /^https?:\/\//.test(main);
+                var target = ext ? ' target="_blank" rel="noopener noreferrer"' : '';
+                var date = (it._d.getMonth() + 1) + "月" + (it._noDay ? "" : it._d.getDate() + "日");
+                var st = it.status || '';
+                var stCls = (st === '中止' || st === 'お休み') ? 'status off' : 'status';
+
+                var img = '<img src="' + esc(thumb) + '" alt="' + esc(it.title) + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + FALLBACK + '\'">';
+                var thumbHtml = main
+                    ? '<a class="thumb" href="' + esc(main) + '"' + target + '>' + img + (yid ? '<span class="play">▶ 動画</span>' : '') + '</a>'
+                    : '<div class="thumb">' + img + '</div>';
+                var titleHtml = main
+                    ? '<a href="' + esc(main) + '"' + target + '>' + esc(it.title) + '</a>'
+                    : esc(it.title);
+
+                var links = [];
+                if (it.link) links.push('<a href="' + esc(href(it.link)) + '">詳しく見る</a>');
+                if (it.youtube) links.push('<a href="' + esc(it.youtube) + '" target="_blank" rel="noopener noreferrer">YouTubeで見る</a>');
+
+                html += '<article class="item' + (st === '予定' ? ' is-plan' : '') + '">'
+                     +   thumbHtml
+                     +   '<div>'
+                     +     '<div class="meta">' + date + (st ? '<span class="' + stCls + '">' + esc(st) + '</span>' : '') + '</div>'
+                     +     '<h3>' + titleHtml + '</h3>'
+                     +     (it.note ? '<p>' + esc(it.note) + '</p>' : '')
+                     +     (links.length ? '<div class="links">' + links.join('') + '</div>' : '')
+                     +   '</div>'
+                     + '</article>';
+            });
+            html += '</section>';
+        });
+        document.getElementById('katudou-list').innerHTML = html || '<p>まだ記録がありません。</p>';
+    })();
+    </script>
+    <script src="../js/site-nav.js"></script>
+</body>
+</html>
