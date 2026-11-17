@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <script src="/ga4-tracking.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マイクラ教科書 | iTeen武庫之荘校</title>
+  <meta name="description" content="教育版マインクラフトでプログラミングを学ぶための教科書。コマンドブロックが止まらなくなったときの止め方など、こまったときの直し方をまとめています。">
+  <link rel="canonical" href="https://www.pentech.info/school/cource/minecraft/index.html">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: #cbd2d9;
+      --accent: #2f6f3e;
+      --panel: #f3f6f4;
+      --warn-bg: #fff4e5;
+      --warn-line: #e0a040;
+      --code-bg: #1f2933;
+      --code-text: #f5f7fa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.9;
+      font-size: 17px;
+    }
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 32px 16px;
+      text-align: center;
+    }
+    header h1 { font-size: 1.7rem; font-weight: 900; }
+    header p { font-size: 0.95rem; opacity: 0.9; margin-top: 4px; }
+    nav {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 20px;
+      font-size: 0.9rem;
+    }
+    nav a { color: var(--accent); }
+    main { max-width: 820px; margin: 0 auto; padding: 24px 16px 80px; }
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 4px;
+      margin: 48px 0 16px;
+    }
+    h2:first-child { margin-top: 8px; }
+    h3 { font-size: 1.1rem; font-weight: 700; margin: 28px 0 8px; }
+    p { margin-bottom: 12px; }
+    ol, ul { margin: 0 0 12px 1.4em; }
+    li { margin-bottom: 6px; }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px 16px;
+      margin: 8px 0 14px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Menlo', monospace;
+      font-size: 1rem;
+    }
+    code {
+      font-family: 'Consolas', 'Menlo', monospace;
+      background: var(--panel);
+      padding: 1px 5px;
+    }
+    pre code { background: none; padding: 0; }
+    .box {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .warn {
+      background: var(--bg);
+      border: 2px solid var(--warn-line);
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .label { font-weight: 700; display: block; margin-bottom: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 8px 0 16px; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--panel); }
+    footer { border-top: 1px solid var(--line); padding: 16px; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>マイクラ教科書</h1>
+    <p>教育版マインクラフトで、プログラミングを学ぼう</p>
+  </header>
+  <nav>
+    <a href="#stop">止まらなくなったとき</a>
+    <a href="#why">どうして止まらないの？</a>
+    <a href="#better">止まらないコマンドの作り方</a>
+  </nav>
+
+  <main>
+    <h2 id="stop">こまったとき：コマンドブロックが止まらない！</h2>
+    <p>コマンドブロックで動物を出しつづけていると、どんどん増えて、ブロックのところまで行けなくなることがあります。そのときは、<strong>上から順番に</strong>やってみましょう。</p>
+
+    <h3>1. 全部のコマンドブロックを止める</h3>
+    <p>キーボードの <code>T</code> を押してチャット欄を開き、これを打ちます。</p>
+    <pre><code>/gamerule commandblocksenabled false</code></pre>
+    <p>打ったしゅんかんに、すべてのコマンドブロックが止まります。画面が重くても、<strong>これだけは一番さいしょに</strong>打ちましょう。</p>
+
+    <h3>2. 出しすぎた動物を消す</h3>
+    <p>たとえば馬を出しすぎたときは、これを打ちます。</p>
+    <pre><code>/kill @e[type=horse]</code></pre>
+    <div class="warn">
+      <span class="label">気をつけよう</span>
+      <code>[type=horse]</code> をつけわすれると、自分や、ほかの生き物までぜんぶ消えてしまいます。かならずつけましょう。ひつじなら <code>sheep</code>、ぶたなら <code>pig</code> に変えます。
+    </div>
+
+    <h3>3. コマンドブロックを直す</h3>
+    <p>止まっているあいだに、コマンドブロックのところへ行き、つぎのどれかをします。</p>
+    <ul>
+      <li>ブロックをこわす</li>
+      <li>「反復」を「インパルス」（1回だけ動く）に変える</li>
+      <li>「常にアクティブ」を「レッドストーンが必要」に変える</li>
+    </ul>
+
+    <h3>4. コマンドブロックを元にもどす</h3>
+    <p>直しおわったら、これを打ちます。打たないと、コマンドブロックがずっと動かないままです。</p>
+    <pre><code>/gamerule commandblocksenabled true</code></pre>
+
+    <div class="box">
+      <span class="label">先生へ</span>
+      コマンドを使うには、ワールドの設定で「チート（コマンド）」をオンにしておきます。教育版はバージョンによってコマンドが通らないことがあるので、授業の前に一度打ってたしかめてください。
+    </div>
+
+    <h2 id="why">どうして止まらないの？</h2>
+    <p>たとえば、こんなコマンドを「反復」のコマンドブロックに入れたとします。</p>
+    <pre><code>/execute at @p run summon horse ^ ^ ^3</code></pre>
+    <table>
+      <tr><th>ことば</th><th>いみ</th></tr>
+      <tr><td><code>execute at @p</code></td><td>一番近くにいるプレイヤーの場所で</td></tr>
+      <tr><td><code>summon horse</code></td><td>馬を出す</td></tr>
+      <tr><td><code>^ ^ ^3</code></td><td>自分の目の前、3マス先に</td></tr>
+      <tr><td>「反復」のブロック</td><td>1秒に20回くりかえす</td></tr>
+    </table>
+    <p>つまり、<strong>自分がどこへ歩いても、目の前に1秒で20頭</strong>の馬が出つづけます。コマンドブロックに近づこうとするほど、目の前が馬でうまってしまいます。だから、さいしょに「1. 全部のコマンドブロックを止める」をするのが近道です。</p>
+
+    <h2 id="better">止まらないコマンドの作り方</h2>
+    <p>止まらなくなったら、それは失敗ではなく<strong>直すチャンス</strong>です。「どうして止まらないの？」を考えて直すことを、プログラミングでは<strong>デバッグ</strong>といいます。</p>
+    <h3>ボタンを押したときだけ出す</h3>
+    <ol>
+      <li>コマンドブロックを「インパルス」にする</li>
+      <li>「レッドストーンが必要」にする</li>
+      <li>ブロックの横にボタンをつける</li>
+    </ol>
+    <p>ボタンを1回押すと、1頭だけ出ます。</p>
+    <h3>出す場所を決める</h3>
+    <p><code>@p</code>（自分の場所）のかわりに、場所を数字（ざひょう）で決めると、自分についてきません。</p>
+    <pre><code>/summon horse 100 64 100</code></pre>
+    <p>数字は、画面に出ている「位置」を見て、自分のワールドに合わせて変えましょう。</p>
+    <h3>回数を決めてくりかえす（Code Builder）</h3>
+    <p>Code Builder（<code>C</code> キー）では、「ずっと」ではなく「<strong>10回くりかえす</strong>」を使うと、10回で止まります。数を変えるとどうなるか、予想してからためしてみましょう。</p>
+  </main>
+
+  <footer>iTeen武庫之荘校（PenTech）</footer>
+</body>
+</html>
