@@ -28,6 +28,7 @@ EXCLUDE = {
     "html/blog/article-viewer.html",
     "html/coming-soon.html",
     "html/blog.html",
+    "html/recruit.html",  # 準備中・パスワード付き
 }
 SKIP_TAGS = {"script", "style", "noscript", "svg", "header", "aside", "nav", "footer", "template"}
 BODY_LIMIT = 4000  # 1ページあたりの本文の文字数の上限
