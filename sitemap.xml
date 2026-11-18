@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- PenTech トップ・ホームページ制作 -->
+  <url>
+    <loc>https://www.pentech.info/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.pentech.info/hp/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- iTeen 武庫之荘校（プログラミング教室） -->
   <url>
     <loc>https://www.pentech.info/school/mukonoso/index.html</loc>
