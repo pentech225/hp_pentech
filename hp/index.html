@@ -52,6 +52,9 @@
   .bar a { display:inline-flex; align-items:center; gap:8px; padding:12px 16px; color:var(--ink); text-decoration:none; font-weight:700; }
   .bar img { width:28px; height:28px; object-fit:contain; }
   @media print { .bar { display:none; } }
+  .go { display:inline-block; margin-top:10px; padding:12px 24px; background:var(--ink); color:#fff; text-decoration:none; font-weight:700; font-size:11pt; }
+  .go:hover { background:var(--accent); }
+  @media print { .go { display:none; } }
   footer { margin-top:16px; padding-top:8px; border-top:1px solid var(--line); font-size:9.5pt; color:var(--sub); }
   @media (max-width:640px){
     .steps{ grid-template-columns:1fr; } .steps div + div{ border-left:1px solid var(--line); border-top:none; }
@@ -69,6 +72,7 @@
     <div class="kicker">ホームページ制作のご提案</div>
     <h1>まずは無料のサンプルで、<br>御社のホームページを見てください。</h1>
     <p class="lead">御社のお名前とお仕事の内容で、トップページを1枚お作りしてお送りします。気に入っていただけたら、そのまま仕上げます。気に入らなければ、お代はいただきません。</p>
+    <a class="go" href="/hp/mitsumori/">お見積りを作る</a>
   </header>
 
   <h2>こんなお悩みはありませんか</h2>
@@ -97,7 +101,8 @@
 
 <section class="sheet">
   <h2>料金表</h2>
-  <p>料金表は準備中です。サンプルをご覧いただいたあと、必要なものをうかがってお見積りします。</p>
+  <p>プランと料金は、お見積りページでご覧いただけます。選ぶだけで金額がわかり、見積書（PDF）もその場でお作りできます。</p>
+  <a class="go" href="/hp/mitsumori/">お見積りページへ</a>
 
   <h2>ご依頼の流れ</h2>
   <div class="steps">
